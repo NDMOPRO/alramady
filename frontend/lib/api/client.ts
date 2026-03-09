@@ -5,12 +5,12 @@ import axios, {
   type AxiosResponse,
 } from "axios";
 
+const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+
 const BASE_URL =
   typeof window === "undefined"
-    ? process.env.INTERNAL_API_URL ||
-      process.env.NEXT_PUBLIC_API_URL ||
-      "http://localhost:80"
-    : "";
+    ? process.env.INTERNAL_API_URL || PUBLIC_API_URL || "http://localhost:80"
+    : PUBLIC_API_URL;
 
 let isRefreshing = false;
 let failedQueue: Array<{

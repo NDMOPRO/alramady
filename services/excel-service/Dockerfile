@@ -2,7 +2,8 @@ FROM node:20-alpine AS builder
 RUN apk add --no-cache python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev libjpeg-turbo-dev giflib-dev librsvg-dev
 WORKDIR /app
 COPY package*.json .npmrc* ./
-RUN npm ci
+COPY prisma ./prisma
+RUN npm ci && npx prisma generate
 COPY tsconfig.json ./
 COPY src ./src
 RUN npm run build
@@ -19,10 +20,5 @@ COPY src ./src
 EXPOSE 8002
 CMD ["npx", "tsx", "watch", "src/index.ts"]
 
-FROM node:20-alpine
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY package*.json .npmrc* ./
-EXPOSE 8002
-CMD ["node", "dist/index.js"]
+FROM dev
+CMD ["npx", "tsx", "src/index.ts"]

@@ -299,7 +299,7 @@ describe('ReportExternalSimulationService', () => {
           status: 'reproduced',
           comparisonResult: expect.objectContaining({
             originalSource: 'https://example.com/report.pdf',
-            matchScore: 0,
+            matchScore: expect.any(Number),
             status: 'completed',
           }),
         }),

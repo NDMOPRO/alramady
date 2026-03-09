@@ -24,10 +24,14 @@ jest.mock('winston', () => {
 });
 
 // Mock fs
-jest.mock('fs', () => ({
-  createReadStream: jest.fn(),
-  statSync: jest.fn().mockReturnValue({ size: 1024 }),
-}));
+jest.mock('fs', () => {
+  const actualFs = jest.requireActual('fs') as typeof import('fs');
+  return {
+    ...actualFs,
+    createReadStream: jest.fn(),
+    statSync: jest.fn().mockReturnValue({ size: 1024 }),
+  };
+});
 
 // Mock Prisma
 const mockAuditLogCreate = jest.fn().mockResolvedValue({ id: 'audit-1' } as never);

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { createLogger, format, transports } from 'winston';
 
@@ -45,6 +45,13 @@ interface DistributedQueryResult {
 }
 
 export class DistributedQueryService {
+  private normalizeRowCount(value: bigint | number | null | undefined): number {
+    if (typeof value === 'bigint') {
+      return Number(value);
+    }
+    return value ?? 0;
+  }
+
   async executeDistributedQuery(
     datasetId: string,
     tenantId: string,
@@ -57,6 +64,7 @@ export class DistributedQueryService {
       offset?: number;
       aggregates?: Array<{ function: 'sum' | 'avg' | 'min' | 'max' | 'count'; column: string }>;
     },
+    userId = 'system',
   ): Promise<DistributedQueryResult> {
     const queryId = randomUUID();
     const startTime = Date.now();
@@ -70,7 +78,7 @@ export class DistributedQueryService {
 
     if (!dataset) throw new Error(`Dataset not found: ${datasetId}`);
 
-    const totalRows = dataset.rowCount || 0;
+    const totalRows = this.normalizeRowCount(dataset.rowCount);
     const partitionSize = Math.min(50000, Math.max(10000, Math.ceil(totalRows / 8)));
     const numPartitions = Math.ceil(totalRows / partitionSize);
 
@@ -135,18 +143,19 @@ export class DistributedQueryService {
 
     await prisma.auditLog.create({
       data: {
+        tenantId,
+        userId,
         action: 'distributed_query_executed',
         entityType: 'dataset',
         entityId: datasetId,
-        details: JSON.stringify({
+        detailsJson: {
           queryId,
           tenantId,
           partitions: numPartitions,
           totalRows,
           resultRows: allRows.length,
           executionTimeMs,
-        }),
-        performedAt: new Date(),
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -172,7 +181,7 @@ export class DistributedQueryService {
 
     if (!dataset) throw new Error(`Dataset not found: ${datasetId}`);
 
-    const rows = dataset.rowCount || 0;
+    const rows = this.normalizeRowCount(dataset.rowCount);
     const cols = dataset.columnCount || 10;
     const partitions = Math.ceil(rows / 50000);
     const estimatedTimeMs = Math.round(rows * 0.001 * cols * 0.1 + partitions * 50);
@@ -192,15 +201,29 @@ export class DistributedQueryService {
     selectColumns?: string[],
   ): Promise<PartitionResult> {
     const startTime = Date.now();
+    const rowRepository = (
+      prisma as unknown as {
+        dataRow?: { findMany: (args: Record<string, unknown>) => Promise<Array<{ data: Prisma.JsonValue }>> };
+        datasetRow?: { findMany: (args: Record<string, unknown>) => Promise<Array<{ data: Prisma.JsonValue }>> };
+      }
+    ).dataRow ?? (
+      prisma as unknown as {
+        datasetRow?: { findMany: (args: Record<string, unknown>) => Promise<Array<{ data: Prisma.JsonValue }>> };
+      }
+    ).datasetRow;
 
-    const rows = await prisma.datasetRow.findMany({
+    if (!rowRepository) {
+      throw new Error('Data row repository is not available');
+    }
+
+    const rows = await rowRepository.findMany({
       where: { datasetId },
       skip: partition.offset,
       take: partition.limit,
       select: { data: true },
     });
 
-    const parsedRows = rows.map((row) => {
+    const parsedRows = rows.map((row: { data: Prisma.JsonValue }) => {
       const data = row.data as Record<string, unknown>;
       return data;
     });

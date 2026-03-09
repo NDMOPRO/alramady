@@ -46,9 +46,9 @@ const EstimateQueryCostSchema = z.object({
  * Execute a distributed query against a dataset
  */
 router.post('/execute', asyncHandler(async (req: Request, res: Response) => {
-  const { tenantId } = req.tenant!;
+  const { tenantId, userId } = req.tenant!;
   const { datasetId, query } = ExecuteQuerySchema.parse(req.body);
-  const result = await service.executeDistributedQuery(datasetId, tenantId, query);
+  const result = await service.executeDistributedQuery(datasetId, tenantId, query, userId);
   res.json({ success: true, data: result });
 }));
 

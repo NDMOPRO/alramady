@@ -94,7 +94,7 @@ router.post('/ingestion', asyncHandler(async (req: Request, res: Response) => {
   const { tenantId, userId } = req.tenant!;
   const { filePath, datasetId, config } = IngestionSchema.parse(req.body);
 
-  const stages = service.createIngestionPipeline(tenantId, datasetId);
+  const stages = service.createIngestionPipeline(tenantId, datasetId, userId);
   const result = await service.processLargeFile(filePath, tenantId, userId, stages, config);
   res.json({ success: true, data: result });
 }));

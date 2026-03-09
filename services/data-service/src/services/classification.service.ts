@@ -120,7 +120,7 @@ async function callOpenAIClassification(
   const columnSample = columnNames.slice(0, 50);
   const rowSample = sampleRows.slice(0, 20);
 
-  const sampleDataText = rowSample
+  const rowPreviewText = rowSample
     .map((row, idx) => {
       const entries = Object.entries(row)
         .slice(0, 20)
@@ -170,7 +170,7 @@ Include 2-4 alternative domains in alternativeDomains (can be empty array if ver
 Columns (${columnSample.length}): ${columnSample.join(', ')}
 
 Sample data (${rowSample.length} rows):
-${sampleDataText}
+${rowPreviewText}
 
 Classify this dataset into the most appropriate business domain.`;
 

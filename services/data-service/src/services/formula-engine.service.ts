@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { logger } from '../utils/logger';
 import crypto from 'crypto';
 
@@ -355,6 +355,9 @@ class FormulaEvaluator {
 
     // Cell/column reference
     if (tok.type === 'CELL_REF') {
+      if (this.tokens[this.pos + 1]?.type === 'LPAREN') {
+        throw new Error(`#NAME? Unknown function: ${tok.value}`);
+      }
       this.advance();
       return this.resolveReference(tok.value);
     }
@@ -972,7 +975,7 @@ export class FormulaEngineService {
         const updatedData = { ...(rows[i].data as Record<string, unknown>), [name]: result.value };
         await this.prisma.dataRow.update({
           where: { id: rows[i].id },
-          data: { data: updatedData },
+          data: { data: updatedData as Prisma.InputJsonValue },
         });
         computedCount++;
       }

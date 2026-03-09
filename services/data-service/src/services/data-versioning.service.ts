@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { createHash } from 'crypto';
 import { logger } from '../utils/logger';
 
@@ -205,7 +205,7 @@ export class DataVersioningService {
           data: batch.map(r => ({
             datasetId,
             rowIndex: r.rowIndex,
-            data: r.data,
+            data: r.data as Prisma.InputJsonValue,
           })),
         });
       }
@@ -388,7 +388,7 @@ export class DataVersioningService {
         data: batch.map(r => ({
           datasetId: branchDataset.id,
           rowIndex: r.rowIndex,
-          data: r.data as unknown as Record<string, unknown>,
+          data: r.data as Prisma.InputJsonValue,
         })),
       });
     }

@@ -190,7 +190,7 @@ describe('DistributionService', () => {
         data: expect.objectContaining({
           reportId: 'rpt-1',
           name: 'Weekly Distribution',
-          format: 'pdf',
+          format: 'PDF',
           enabled: true,
           createdBy: 'user-1',
         }),

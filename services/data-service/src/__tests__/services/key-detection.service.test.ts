@@ -35,7 +35,7 @@ describe('KeyDetectionService', () => {
     columns: Array<{ name: string; dataType: string }>,
     rows: Array<Record<string, unknown>>
   ): void {
-    mockDatasetFindFirst.mockImplementation((args: { where: { id: string } }) => {
+    mockDatasetFindFirst.mockImplementation((args: any) => {
       if (args.where.id === datasetId) {
         return Promise.resolve({
           id: datasetId,
@@ -47,7 +47,7 @@ describe('KeyDetectionService', () => {
       return Promise.resolve(null);
     });
 
-    mockDataRowFindMany.mockImplementation((args: { where: { datasetId: string } }) => {
+    mockDataRowFindMany.mockImplementation((args: any) => {
       if (args.where.datasetId === datasetId) {
         return Promise.resolve(
           rows.map((r, i) => ({ id: `row-${i}`, datasetId, rowIndex: i, data: r }))
@@ -65,7 +65,7 @@ describe('KeyDetectionService', () => {
       rows: Array<Record<string, unknown>>;
     }>
   ): void {
-    mockDatasetFindFirst.mockImplementation((args: { where: { id: string } }) => {
+    mockDatasetFindFirst.mockImplementation((args: any) => {
       const ds = datasets.find((d) => d.id === args.where.id);
       if (!ds) return Promise.resolve(null);
       return Promise.resolve({
@@ -77,7 +77,7 @@ describe('KeyDetectionService', () => {
       });
     });
 
-    mockDataRowFindMany.mockImplementation((args: { where: { datasetId: string } }) => {
+    mockDataRowFindMany.mockImplementation((args: any) => {
       const ds = datasets.find((d) => d.id === args.where.datasetId);
       if (!ds) return Promise.resolve([]);
       return Promise.resolve(
@@ -128,9 +128,12 @@ describe('KeyDetectionService', () => {
       );
 
       const candidates = await service.detectPrimaryKeys('ds-1', tenantId);
-      const uidCandidate = candidates.find((c) => !c.isComposite && c.column === 'user_id');
+      const uidCandidate = candidates.find(
+        (c): c is Extract<(typeof candidates)[number], { isComposite: false }> =>
+          !c.isComposite && c.column === 'user_id'
+      );
       expect(uidCandidate).toBeDefined();
-      expect(uidCandidate!.namePatternScore).toBe(1.0);
+      expect(uidCandidate?.namePatternScore).toBe(1.0);
     });
 
     it('should reject columns with null values', async () => {

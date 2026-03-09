@@ -209,10 +209,15 @@ export class ReportExternalSimulationService {
 
     const existingReportData: Record<string, unknown> = {};
     if (input.reportId) {
-      const report = await prisma.report.findUnique({
-        where: { id: input.reportId },
-        include: { sections: true },
-      }).catch(() => null);
+      let report: Awaited<ReturnType<typeof prisma.report.findUnique>> | null = null;
+      try {
+        report = await prisma.report.findUnique({
+          where: { id: input.reportId },
+          include: { sections: true },
+        });
+      } catch {
+        report = null;
+      }
       if (report) {
         existingReportData.title = report.title;
         existingReportData.sectionsCount = report.sections?.length ?? 0;
@@ -302,7 +307,25 @@ export class ReportExternalSimulationService {
     const resultData = simulation.resultData as Record<string, unknown> ?? {};
     const inputParameters = simulation.inputParameters as Record<string, unknown> ?? {};
 
-    const originalSections = ((resultData.sections ?? []) as Array<{ title: string; type: string; order: number; estimatedWordCount: number }>);
+    const originalSections = ((resultData.sections ?? []) as Array<
+      string | { title: string; type?: string; order?: number; estimatedWordCount?: number }
+    >).map((section, index) => {
+      if (typeof section === 'string') {
+        return {
+          title: section,
+          type: 'narrative',
+          order: index + 1,
+          estimatedWordCount: 0,
+        };
+      }
+
+      return {
+        title: section.title,
+        type: section.type ?? 'narrative',
+        order: section.order ?? index + 1,
+        estimatedWordCount: section.estimatedWordCount ?? 0,
+      };
+    });
     const reproducedSections: Array<{ title: string; type: string; order: number; matchScore: number; wordCount: number }> = [];
     let totalMatchScore = 0;
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { createReadStream, statSync } from 'fs';
 import { Transform, Readable, pipeline as streamPipeline } from 'stream';
 import { promisify } from 'util';
@@ -173,16 +173,17 @@ export class StreamingPipelineService {
 
     await prisma.auditLog.create({
       data: {
+        tenantId,
+        userId,
         action: 'streaming_pipeline_complete',
-        entityType: 'pipeline',
-        entityId: pipelineId,
-        details: JSON.stringify({
+        entityType: 'dataset',
+        entityId: null,
+        detailsJson: {
           tenantId,
           userId,
           filePath,
           ...stats,
-        }),
-        performedAt: new Date(),
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -265,6 +266,7 @@ export class StreamingPipelineService {
   createIngestionPipeline(
     tenantId: string,
     datasetId: string,
+    userId = 'system',
   ): PipelineStage[] {
     return [
       {
@@ -290,11 +292,12 @@ export class StreamingPipelineService {
           const batchId = randomUUID();
           await prisma.auditLog.create({
             data: {
+              tenantId,
+              userId,
               action: 'batch_ingested',
               entityType: 'dataset',
               entityId: datasetId,
-              details: JSON.stringify({ batchId, rowCount: batch.length, tenantId }),
-              performedAt: new Date(),
+              detailsJson: { batchId, rowCount: batch.length, tenantId } as Prisma.InputJsonValue,
             },
           });
           return batch;

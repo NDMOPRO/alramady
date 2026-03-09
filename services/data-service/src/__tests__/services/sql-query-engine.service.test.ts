@@ -14,7 +14,7 @@ jest.mock('../../utils/logger', () => ({
 const mockDatasetFindFirst = jest.fn();
 const mockDataRowFindMany = jest.fn();
 const mockAuditLogCreate = jest.fn().mockResolvedValue({ id: 'audit-1' } as never);
-const mockSavedQueryCreate = jest.fn().mockImplementation(({ data }: { data: Record<string, unknown> }) =>
+const mockSavedQueryCreate = jest.fn().mockImplementation(({ data }: any) =>
   Promise.resolve({ id: 'sq-1', ...data, createdAt: new Date(), lastRunAt: null, runCount: 0 } as never)
 );
 const mockSavedQueryFindMany = jest.fn().mockResolvedValue([] as never);

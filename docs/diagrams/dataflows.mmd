@@ -1,0 +1,138 @@
+%% Rasid Platform - Data Flow Diagrams
+
+%% 1. Request Lifecycle Flow
+sequenceDiagram
+    participant C as Client
+    participant N as Nginx Gateway
+    participant S as Service
+    participant A as Auth Middleware
+    participant T as Tenant Middleware
+    participant V as Validation (Zod)
+    participant SVC as Service Layer
+    participant DB as PostgreSQL
+    participant R as Redis Cache
+
+    C->>N: HTTP Request
+    N->>N: Rate Limit Check (100r/s)
+    N->>S: Proxy to Service
+    S->>A: JWT Verification
+    A->>A: Decode & Verify Token
+    A->>T: Attach User Context
+    T->>T: Extract tenantId
+    T->>V: Attach Tenant Context
+    V->>V: Zod Schema Validation
+    V->>SVC: Validated Request
+    SVC->>R: Check Cache
+    alt Cache Hit
+        R-->>SVC: Cached Response
+    else Cache Miss
+        SVC->>DB: Query (scoped by tenantId)
+        DB-->>SVC: Result
+        SVC->>R: Store in Cache
+    end
+    SVC-->>C: JSON Response
+
+---
+
+%% 2. Document Ingestion Pipeline
+sequenceDiagram
+    participant U as User
+    participant DS as Data Service
+    participant FI as File Ingestion
+    participant CL as Classification
+    participant RD as Reading Engine
+    participant OCR as OCR/Vision
+    participant MN as MinIO Storage
+    participant PG as PostgreSQL
+    participant ES as Elasticsearch
+
+    U->>DS: Upload File(s)
+    DS->>MN: Store Raw File
+    DS->>FI: Ingest File
+    FI->>CL: Classify File Type
+    CL->>CL: Detect: PDF/Excel/Word/Image/...
+    alt Image/Scanned PDF
+        CL->>OCR: OCR Processing (Tesseract)
+        OCR-->>CL: Extracted Text
+    end
+    CL->>RD: Parse Content
+    RD->>RD: Extract Tables/Text/Metadata
+    RD->>PG: Store Parsed Data
+    RD->>ES: Index for Search
+    RD-->>U: Processing Complete
+
+---
+
+%% 3. Document Replication Pipeline
+sequenceDiagram
+    participant U as User
+    participant REP as Replication Service
+    participant VIS as Visual Analyzer
+    participant STY as Style Extractor
+    participant LAY as Layout Generator
+    participant REN as Rendering Environment
+    participant PIX as Pixel Validation
+    participant MN as MinIO
+
+    U->>REP: Upload Source Document
+    REP->>MN: Store Original
+    REP->>VIS: Analyze Visual Layout
+    VIS->>VIS: Extract Bounding Boxes
+    VIS->>STY: Extract Styles
+    STY->>STY: Fonts, Colors, Spacing
+    STY->>LAY: Generate Layout HTML
+    LAY->>REN: Render to Image (Chromium)
+    REN-->>PIX: Rendered Image
+    PIX->>PIX: Pixel-by-Pixel Compare
+    alt Match < Threshold
+        PIX->>LAY: Adjust & Re-render
+        LAY->>REN: Re-render
+    end
+    PIX-->>U: Validated Replica
+
+---
+
+%% 4. Translation Pipeline
+sequenceDiagram
+    participant U as User
+    participant LOC as Localization Service
+    participant TE as Translation Engine
+    participant GLO as Glossary Manager
+    participant QA as Quality Assurance
+    participant RTL as RTL Engine
+    participant AI as OpenAI GPT-4o
+
+    U->>LOC: Submit Document for Translation
+    LOC->>TE: Extract Translatable Content
+    TE->>GLO: Lookup Glossary Terms
+    GLO-->>TE: Domain-Specific Terms
+    TE->>AI: Translate with Context
+    AI-->>TE: Translated Text
+    TE->>QA: Quality Check
+    QA->>QA: Consistency/Grammar/Terminology
+    QA->>RTL: Apply RTL Layout
+    RTL->>RTL: Adjust Direction/Alignment
+    RTL-->>U: Localized Document
+
+---
+
+%% 5. Export Generation Pipeline
+sequenceDiagram
+    participant U as User
+    participant SVC as Any Engine Service
+    participant EXP as Export Engine
+    participant TPL as Template Service
+    participant REN as Rendering Environment
+    participant MN as MinIO Storage
+
+    U->>SVC: Request Export (PDF/PPTX/XLSX/...)
+    SVC->>TPL: Get Template/Theme
+    TPL-->>SVC: Template Config
+    SVC->>EXP: Generate Document
+    EXP->>EXP: Build Content Structure
+    alt Needs Rendering
+        EXP->>REN: HTML-to-Image/PDF
+        REN-->>EXP: Rendered Output
+    end
+    EXP->>MN: Store Generated File
+    EXP-->>U: Download URL

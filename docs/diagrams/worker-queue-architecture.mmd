@@ -1,0 +1,85 @@
+%% Rasid Platform - Worker and Queue Architecture
+graph TB
+    subgraph Redis["Redis 7 (:6379)"]
+        direction TB
+        Q1["data:ingestion queue"]
+        Q2["data:sync queue"]
+        Q3["data:pipeline queue"]
+        Q4["excel:formula-batch queue"]
+        Q5["report:generation queue"]
+        Q6["report:distribution queue"]
+        Q7["conversion:batch queue"]
+        Q8["ai:embedding queue"]
+        Q9["replication:pipeline queue"]
+        Q10["localization:translation queue"]
+        CACHE["Cache Store<br/>LRU 512MB"]
+        SESSION["Session Store"]
+        RATELIMIT["Rate Limit Counters"]
+    end
+
+    subgraph DataService["Data Service :8001"]
+        DW1["Ingestion Worker"]
+        DW2["Sync Worker"]
+        DW3["Pipeline Worker"]
+        DS["data-scheduler.service"]
+    end
+
+    subgraph ExcelService["Excel Service :8002"]
+        EW1["Formula Batch Worker"]
+    end
+
+    subgraph ReportService["Reporting Service :8004"]
+        RW1["Report Generation Worker"]
+        RW2["Distribution Worker"]
+        RS["scheduled-reports.service"]
+    end
+
+    subgraph ConversionService["Conversion Service :8013"]
+        CW1["Batch Conversion Worker"]
+    end
+
+    subgraph AIService["AI Service :8009"]
+        AW1["Embedding Worker"]
+        AW2["Training Worker"]
+    end
+
+    subgraph ReplicationService["Replication Service :8007"]
+        PW1["Pipeline Worker"]
+    end
+
+    subgraph LocalizationService["Localization Service :8008"]
+        LW1["Translation Worker"]
+    end
+
+    Q1 --> DW1
+    Q2 --> DW2
+    Q3 --> DW3
+    Q4 --> EW1
+    Q5 --> RW1
+    Q6 --> RW2
+    Q7 --> CW1
+    Q8 --> AW1
+    Q9 --> PW1
+    Q10 --> LW1
+
+    DS -.->|cron trigger| Q2
+    DS -.->|cron trigger| Q3
+    RS -.->|cron trigger| Q5
+    RS -.->|cron trigger| Q6
+
+    DW1 -->|"process"| MinIO["MinIO Storage"]
+    DW1 -->|"index"| ES["Elasticsearch"]
+    DW1 -->|"store"| PG["PostgreSQL"]
+    RW2 -->|"send"| SMTP["SMTP Server"]
+    AW1 -->|"embed"| OpenAI["OpenAI API"]
+    PW1 -->|"render"| REN["Rendering :8014"]
+
+    classDef queue fill:#E74C3C,stroke:#C0392B,color:#fff
+    classDef worker fill:#3498DB,stroke:#2980B9,color:#fff
+    classDef infra fill:#2ECC71,stroke:#27AE60,color:#fff
+    classDef external fill:#E67E22,stroke:#D35400,color:#fff
+
+    class Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,CACHE,SESSION,RATELIMIT queue
+    class DW1,DW2,DW3,EW1,RW1,RW2,CW1,AW1,AW2,PW1,LW1 worker
+    class MinIO,ES,PG infra
+    class SMTP,OpenAI,REN external

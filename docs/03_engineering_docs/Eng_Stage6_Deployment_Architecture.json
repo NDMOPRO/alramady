@@ -1,0 +1,831 @@
+{
+  "layers": [
+    {
+      "name": "Edge Layer",
+      "name_ar": "طبقة الحافة",
+      "components": [
+        {
+          "name": "CDN",
+          "tech": "CloudFront / Cloudflare",
+          "purpose": "توزيع المحتوى الثابت والتخزين المؤقت"
+        },
+        {
+          "name": "WAF",
+          "tech": "AWS WAF / Cloudflare WAF",
+          "purpose": "جدار حماية تطبيقات الويب"
+        },
+        {
+          "name": "DDoS Protection",
+          "tech": "AWS Shield / Cloudflare",
+          "purpose": "حماية من هجمات الحرمان من الخدمة"
+        }
+      ]
+    },
+    {
+      "name": "Load Balancing Layer",
+      "name_ar": "طبقة موازنة الأحمال",
+      "components": [
+        {
+          "name": "Application Load Balancer",
+          "tech": "AWS ALB / Nginx",
+          "purpose": "توزيع الطلبات على الخدمات"
+        },
+        {
+          "name": "API Gateway",
+          "tech": "Kong / AWS API Gateway",
+          "purpose": "إدارة وتوجيه طلبات API"
+        },
+        {
+          "name": "Rate Limiter",
+          "tech": "Redis-based",
+          "purpose": "تحديد معدل الطلبات"
+        }
+      ]
+    },
+    {
+      "name": "Application Layer",
+      "name_ar": "طبقة التطبيقات",
+      "components": [
+        {
+          "name": "Frontend SPA",
+          "tech": "React / Next.js",
+          "purpose": "واجهة المستخدم التفاعلية"
+        },
+        {
+          "name": "BFF Service",
+          "tech": "Node.js / NestJS",
+          "purpose": "Backend for Frontend — تجميع البيانات للواجهة"
+        },
+        {
+          "name": "Service Mesh",
+          "tech": "Istio / Linkerd",
+          "purpose": "إدارة الاتصالات بين الخدمات"
+        }
+      ]
+    },
+    {
+      "name": "Microservices Layer",
+      "name_ar": "طبقة الخدمات المصغرة",
+      "components": [
+        {
+          "name": "rasid-data-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "استيعاب ومعالجة وتحليل جميع أنواع البيانات والملفات مع دعم OCR والتنظيف والتحويل والفهرسة"
+        },
+        {
+          "name": "rasid-excel-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "معالجة ملفات Excel بقدرات احترافية شاملة المعادلات والجداول المحورية والتنسيق والتحليل"
+        },
+        {
+          "name": "rasid-dashboard-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "إنشاء وإدارة لوحات المؤشرات التفاعلية مع الرسوم البيانية والفلاتر والتحديث الحي"
+        },
+        {
+          "name": "rasid-reporting-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "توليد التقارير الاحترافية الدورية مع القوالب والجدولة والتصدير المتعدد"
+        },
+        {
+          "name": "rasid-presentation-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "إنشاء العروض التقديمية الاحترافية مع الشرائح والتأثيرات والقوالب والتصدير"
+        },
+        {
+          "name": "rasid-infographic-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "تصميم وتوليد الإنفوجرافيك الاحترافي مع القوالب والعناصر البصرية"
+        },
+        {
+          "name": "rasid-replication-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "المطابقة الحرفية الهندسية الدقيقة واحد لواحد مع التحقق والمقارنة"
+        },
+        {
+          "name": "rasid-localization-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "التعريب الاحترافي المتقدم شاملاً RTL والخطوط العربية والتنسيق الثقافي"
+        },
+        {
+          "name": "rasid-ai-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "الذكاء الاصطناعي والاستجواب الحر والتحليل الذكي والتوصيات والفهم اللغوي"
+        },
+        {
+          "name": "rasid-governance-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "الحوكمة والصلاحيات والعمل الجماعي والتدقيق والتكامل وإدارة المستخدمين"
+        },
+        {
+          "name": "rasid-library-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "إدارة مكتبة الأصول والملفات والوسائط المشتركة"
+        },
+        {
+          "name": "rasid-template-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "إدارة القوالب الجاهزة والمخصصة لجميع المحركات"
+        },
+        {
+          "name": "rasid-conversion-service",
+          "tech": "Python / FastAPI + Docker",
+          "purpose": "التحويل الشامل بين جميع صيغ الملفات والبيانات"
+        }
+      ]
+    },
+    {
+      "name": "Message Queue Layer",
+      "name_ar": "طبقة قوائم الرسائل",
+      "components": [
+        {
+          "name": "Event Bus",
+          "tech": "Apache Kafka",
+          "purpose": "ناقل الأحداث بين الخدمات"
+        },
+        {
+          "name": "Task Queue",
+          "tech": "Celery + Redis",
+          "purpose": "قائمة المهام غير المتزامنة"
+        },
+        {
+          "name": "Notification Queue",
+          "tech": "RabbitMQ",
+          "purpose": "قائمة الإشعارات"
+        }
+      ]
+    },
+    {
+      "name": "Data Layer",
+      "name_ar": "طبقة البيانات",
+      "components": [
+        {
+          "name": "Primary Database",
+          "tech": "PostgreSQL (Multi-tenant)",
+          "purpose": "قاعدة البيانات الرئيسية"
+        },
+        {
+          "name": "Document Store",
+          "tech": "MongoDB",
+          "purpose": "تخزين المستندات والـ JSON"
+        },
+        {
+          "name": "Cache Layer",
+          "tech": "Redis Cluster",
+          "purpose": "التخزين المؤقت"
+        },
+        {
+          "name": "Search Engine",
+          "tech": "Elasticsearch",
+          "purpose": "البحث النصي الكامل"
+        },
+        {
+          "name": "Vector Store",
+          "tech": "Pinecone / Milvus",
+          "purpose": "تخزين التمثيلات المتجهية"
+        },
+        {
+          "name": "Object Storage",
+          "tech": "AWS S3 / MinIO",
+          "purpose": "تخزين الملفات والأصول"
+        },
+        {
+          "name": "Time-Series DB",
+          "tech": "TimescaleDB",
+          "purpose": "بيانات السلاسل الزمنية"
+        }
+      ]
+    },
+    {
+      "name": "AI Infrastructure Layer",
+      "name_ar": "طبقة بنية الذكاء الاصطناعي",
+      "components": [
+        {
+          "name": "LLM Gateway",
+          "tech": "LiteLLM / Custom",
+          "purpose": "بوابة نماذج اللغة الكبيرة"
+        },
+        {
+          "name": "Model Registry",
+          "tech": "MLflow",
+          "purpose": "سجل النماذج"
+        },
+        {
+          "name": "GPU Cluster",
+          "tech": "NVIDIA A100 / H100",
+          "purpose": "معالجة GPU للنماذج"
+        },
+        {
+          "name": "Embedding Service",
+          "tech": "Custom + OpenAI",
+          "purpose": "خدمة التمثيلات المتجهية"
+        }
+      ]
+    },
+    {
+      "name": "Observability Layer",
+      "name_ar": "طبقة المراقبة والرصد",
+      "components": [
+        {
+          "name": "Metrics",
+          "tech": "Prometheus + Grafana",
+          "purpose": "مقاييس الأداء"
+        },
+        {
+          "name": "Logging",
+          "tech": "ELK Stack",
+          "purpose": "تجميع وتحليل السجلات"
+        },
+        {
+          "name": "Tracing",
+          "tech": "Jaeger / OpenTelemetry",
+          "purpose": "تتبع الطلبات"
+        },
+        {
+          "name": "Alerting",
+          "tech": "PagerDuty / Grafana Alerts",
+          "purpose": "التنبيهات"
+        }
+      ]
+    },
+    {
+      "name": "CI/CD Layer",
+      "name_ar": "طبقة التكامل والنشر المستمر",
+      "components": [
+        {
+          "name": "Source Control",
+          "tech": "GitHub / GitLab",
+          "purpose": "إدارة الكود المصدري"
+        },
+        {
+          "name": "CI Pipeline",
+          "tech": "GitHub Actions / GitLab CI",
+          "purpose": "خط التكامل المستمر"
+        },
+        {
+          "name": "Container Registry",
+          "tech": "ECR / Harbor",
+          "purpose": "سجل الحاويات"
+        },
+        {
+          "name": "Orchestrator",
+          "tech": "Kubernetes (EKS)",
+          "purpose": "تنسيق الحاويات"
+        },
+        {
+          "name": "IaC",
+          "tech": "Terraform / Pulumi",
+          "purpose": "البنية التحتية كرمز"
+        }
+      ]
+    }
+  ],
+  "k8s_specs": [
+    {
+      "service": "rasid-data-service",
+      "engine": "Data Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 3,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-data-service:latest",
+        "port": 8001,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8001,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8001
+      },
+      "hpa": {
+        "minReplicas": 3,
+        "maxReplicas": 9,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 1259
+    },
+    {
+      "service": "rasid-excel-service",
+      "engine": "Excel Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-excel-service:latest",
+        "port": 8002,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8002,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8002
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 333
+    },
+    {
+      "service": "rasid-dashboard-service",
+      "engine": "Dashboard Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 3,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-dashboard-service:latest",
+        "port": 8003,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8003,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8003
+      },
+      "hpa": {
+        "minReplicas": 3,
+        "maxReplicas": 9,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 445
+    },
+    {
+      "service": "rasid-reporting-service",
+      "engine": "Reporting Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 3,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-reporting-service:latest",
+        "port": 8004,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8004,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8004
+      },
+      "hpa": {
+        "minReplicas": 3,
+        "maxReplicas": 9,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 491
+    },
+    {
+      "service": "rasid-presentation-service",
+      "engine": "Presentation Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 3,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-presentation-service:latest",
+        "port": 8005,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8005,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8005
+      },
+      "hpa": {
+        "minReplicas": 3,
+        "maxReplicas": 9,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 1025
+    },
+    {
+      "service": "rasid-infographic-service",
+      "engine": "Infographic Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-infographic-service:latest",
+        "port": 8006,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8006,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8006
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 154
+    },
+    {
+      "service": "rasid-replication-service",
+      "engine": "Replication Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-replication-service:latest",
+        "port": 8007,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8007,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8007
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 137
+    },
+    {
+      "service": "rasid-localization-service",
+      "engine": "Localization Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-localization-service:latest",
+        "port": 8008,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8008,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8008
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 237
+    },
+    {
+      "service": "rasid-ai-service",
+      "engine": "AI Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 4,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-ai-service:latest",
+        "port": 8009,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8009,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8009
+      },
+      "hpa": {
+        "minReplicas": 4,
+        "maxReplicas": 12,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 548
+    },
+    {
+      "service": "rasid-governance-service",
+      "engine": "Governance Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 3,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-governance-service:latest",
+        "port": 8010,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8010,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8010
+      },
+      "hpa": {
+        "minReplicas": 3,
+        "maxReplicas": 9,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 588
+    },
+    {
+      "service": "rasid-library-service",
+      "engine": "Library Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-library-service:latest",
+        "port": 8011,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8011,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8011
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 53
+    },
+    {
+      "service": "rasid-template-service",
+      "engine": "Template Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-template-service:latest",
+        "port": 8012,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8012,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8012
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 100
+    },
+    {
+      "service": "rasid-conversion-service",
+      "engine": "Conversion Engine",
+      "namespace": "rasid-production",
+      "deployment": {
+        "replicas": 2,
+        "strategy": "RollingUpdate",
+        "maxSurge": 1,
+        "maxUnavailable": 0
+      },
+      "container": {
+        "image": "rasid-registry/rasid-conversion-service:latest",
+        "port": 8013,
+        "resources": {
+          "requests": {
+            "cpu": "500m",
+            "memory": "1Gi"
+          },
+          "limits": {
+            "cpu": "2000m",
+            "memory": "4Gi"
+          }
+        },
+        "healthCheck": {
+          "path": "/health",
+          "port": 8013,
+          "initialDelay": 30,
+          "period": 10
+        }
+      },
+      "service_k8s": {
+        "type": "ClusterIP",
+        "port": 8013
+      },
+      "hpa": {
+        "minReplicas": 2,
+        "maxReplicas": 6,
+        "targetCPU": 70,
+        "targetMemory": 80
+      },
+      "features": 42
+    }
+  ]
+}

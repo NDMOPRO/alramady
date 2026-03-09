@@ -1,0 +1,593 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Dataset & Data Models ─────────────────────────────────────
+
+model Dataset {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  name        String   @db.VarChar(500)
+  description String?  @db.Text
+  status      String?  @db.VarChar(50)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  rows        DatasetRow[]
+
+  @@map("datasets")
+}
+
+model DatasetRow {
+  id        String   @id @default(uuid()) @db.Uuid
+  datasetId String   @map("dataset_id") @db.Uuid
+  data      Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  dataset   Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@map("dataset_rows")
+}
+
+// ─── AI Query & Session ─────────────────────────────────────────
+
+model AiQuery {
+  id               String        @id @default(uuid()) @db.Uuid
+  sessionId        String?       @map("session_id")
+  query            String?       @map("query_text") @db.Text
+  response         String?       @map("response_text") @db.Text
+  queryType        String?       @map("query_type") @db.VarChar(100)
+  inputText        String?       @map("input_text") @db.Text
+  outputText       String?       @map("output_text") @db.Text
+  model            String?       @db.VarChar(100)
+  tokensUsed       Int?          @map("tokens_used")
+  promptTokens     Int?          @map("prompt_tokens")
+  completionTokens Int?          @map("completion_tokens")
+  totalTokens      Int?          @map("total_tokens")
+  processingTimeMs Int?          @map("processing_time_ms")
+  durationMs       Int?          @map("duration_ms")
+  latencyMs        Int?          @map("latency_ms")
+  status           AiQueryStatus @default(PENDING)
+  metadata         String?       @db.Text
+  tenantId         String?       @map("tenant_id")
+  userId           String?       @map("user_id")
+  createdAt        DateTime      @default(now()) @map("created_at")
+
+  @@index([sessionId])
+  @@map("ai_queries")
+}
+
+enum AiQueryStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model AiSession {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String?  @map("tenant_id")
+  userId        String?  @map("user_id")
+  title         String?  @db.VarChar(500)
+  messageCount  Int?     @map("message_count")
+  totalTokens   Int?     @map("total_tokens")
+  lastActivity  DateTime? @map("last_activity")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("ai_sessions")
+}
+
+// ─── Audit Log ──────────────────────────────────────────────────
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  action      String   @db.VarChar(200)
+  entityType  String   @map("entity_type") @db.VarChar(100)
+  entityId    String?  @map("entity_id")
+  details     String?  @db.Text
+  performedAt DateTime? @map("performed_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([action])
+  @@map("audit_logs")
+}
+
+// ─── Knowledge Base ─────────────────────────────────────────────
+
+model KnowledgeBase {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(500)
+  description    String?  @db.Text
+  tenantId       String?  @map("tenant_id")
+  createdBy      String?  @map("created_by")
+  indexName      String?  @map("index_name") @db.VarChar(200)
+  documentCount  Int      @default(0) @map("document_count")
+  chunkCount     Int      @default(0) @map("chunk_count")
+  status         String?  @db.VarChar(50)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  chunks         KnowledgeChunk[]
+
+  @@index([tenantId])
+  @@map("knowledge_bases")
+}
+
+model KnowledgeChunk {
+  id              String        @id @default(uuid()) @db.Uuid
+  knowledgeBaseId String        @map("knowledge_base_id") @db.Uuid
+  documentId      String?       @map("document_id")
+  content         String        @db.Text
+  embedding       Json?
+  chunkIndex      Int           @map("chunk_index")
+  tokenCount      Int?          @map("token_count")
+  metadata        String?       @db.Text
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  knowledgeBase   KnowledgeBase @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+
+  @@index([knowledgeBaseId])
+  @@map("knowledge_chunks")
+}
+
+// ─── Prompt Management ──────────────────────────────────────────
+
+model Prompt {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(500)
+  description String?  @db.Text
+  template    String   @db.Text
+  variables   String?  @db.Text
+  category    String?  @db.VarChar(100)
+  tenantId    String?  @map("tenant_id")
+  createdBy   String?  @map("created_by")
+  version     Int      @default(1)
+  isActive    Boolean  @default(true) @map("is_active")
+  usageCount  Int      @default(0) @map("usage_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  versions    PromptVersion[]
+
+  @@map("prompts")
+}
+
+model PromptVersion {
+  id          String   @id @default(uuid()) @db.Uuid
+  promptId    String   @map("prompt_id") @db.Uuid
+  version     Int
+  template    String   @db.Text
+  variables   String?  @db.Text
+  description String?  @db.Text
+  createdBy   String?  @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  prompt      Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  @@index([promptId])
+  @@map("prompt_versions")
+}
+
+// ─── AI Roles ───────────────────────────────────────────────────
+
+model AiRole {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(200)
+  roleKey      String   @map("role_key") @db.VarChar(100)
+  description  String?  @db.Text
+  systemPrompt String?  @map("system_prompt") @db.Text
+  capabilities String?  @db.Text
+  isActive     Boolean  @default(true) @map("is_active")
+  createdBy    String?  @map("created_by")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("ai_roles")
+}
+
+model AiRoleAssignment {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id")
+  roleId    String   @map("role_id")
+  roleKey   String   @map("role_key") @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("ai_role_assignments")
+}
+
+model AiRoleExecution {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id")
+  sessionId    String   @map("session_id")
+  roleId       String   @map("role_id")
+  roleKey      String   @map("role_key") @db.VarChar(100)
+  input        String   @db.Text
+  output       String   @db.Text
+  confidence   Float?
+  tokensUsed   Int?     @map("tokens_used")
+  processingMs Int?     @map("processing_ms")
+  model        String?  @db.VarChar(100)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([sessionId])
+  @@map("ai_role_executions")
+}
+
+// ─── Analysis Results ───────────────────────────────────────────
+
+model AnalysisResult {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(200)
+  level     String   @db.VarChar(50)
+  datasetId String?  @map("dataset_id") @db.Uuid
+  status    String   @default("pending") @db.VarChar(50)
+  result    Json?
+  createdBy String?  @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("analysis_results")
+}
+
+// ─── File Understanding ─────────────────────────────────────────
+
+model FileUnderstanding {
+  id               String   @id @default(uuid()) @db.Uuid
+  fileId           String   @map("file_id") @db.Uuid
+  name             String   @db.VarChar(500)
+  content          String   @db.Text
+  contentType      String?  @map("content_type") @db.VarChar(200)
+  mimeType         String?  @map("mime_type") @db.VarChar(200)
+  domain           String?  @db.VarChar(200)
+  language         String?  @db.VarChar(20)
+  summary          String?  @db.Text
+  keyTopics        String?  @map("key_topics") @db.Text
+  columns          String?  @db.Text
+  relationships    String?  @db.Text
+  suggestedActions String?  @map("suggested_actions") @db.Text
+  qualityIssues    String?  @map("quality_issues") @db.Text
+  confidence       Float?
+  status           String   @default("pending") @db.VarChar(50)
+  metadata         Json?
+  result           Json?
+  createdBy        String?  @map("created_by")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("file_understandings")
+}
+
+// ─── Free Query ─────────────────────────────────────────────────
+
+model FreeQuery {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id")
+  sessionId    String   @map("session_id")
+  question     String   @db.Text
+  answer       String   @db.Text
+  sources      Json?    @default("[]")
+  confidence   Float    @default(0)
+  processingMs Int      @default(0) @map("processing_ms")
+  tokensUsed   Int      @default(0) @map("tokens_used")
+  language     String?  @db.VarChar(10)
+  datasetIds   Json?    @default("[]") @map("dataset_ids")
+  fileIds      Json?    @default("[]") @map("file_ids")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([sessionId])
+  @@index([userId])
+  @@map("free_queries")
+}
+
+// ─── KPI Records ────────────────────────────────────────────────
+
+model KpiRecord {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(200)
+  kpiKey    String   @map("kpi_key") @db.VarChar(100)
+  formula   String?  @db.Text
+  unit      String?  @db.VarChar(50)
+  target    Float?
+  datasetId String?  @map("dataset_id") @db.Uuid
+  createdBy String?  @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("kpi_records")
+}
+
+model KpiTrend {
+  id         String   @id @default(uuid()) @db.Uuid
+  kpiId      String?  @map("kpi_id") @db.Uuid
+  value      Float?
+  recordedAt DateTime @map("recorded_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("kpi_trends")
+}
+
+// ─── File & FileChunk ───────────────────────────────────────────
+
+model File {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id")
+  name      String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  chunks    FileChunk[]
+
+  @@map("files")
+}
+
+model FileChunk {
+  id         String   @id @default(uuid()) @db.Uuid
+  fileId     String   @map("file_id") @db.Uuid
+  content    String   @db.Text
+  chunkIndex Int      @map("chunk_index")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([fileId])
+  @@map("file_chunks")
+}
+
+// ─── Document Intelligence ──────────────────────────────────────
+
+model Document {
+  id        String   @id @default(uuid()) @db.Uuid
+  content   String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("documents")
+}
+
+model DocumentClassification {
+  id                      String   @id @default(uuid()) @db.Uuid
+  documentId              String   @map("document_id")
+  category                String   @db.VarChar(200)
+  subcategory             String?  @db.VarChar(200)
+  confidence              Float
+  alternativeCategories   String?  @map("alternative_categories") @db.Text
+  language                String?  @db.VarChar(10)
+  processedAt             DateTime @map("processed_at")
+
+  @@map("document_classifications")
+}
+
+model DocumentExtraction {
+  id              String   @id @default(uuid()) @db.Uuid
+  documentId      String   @map("document_id")
+  fields          String?  @db.Text
+  tables          String?  @db.Text
+  confidence      Float?
+  processingTimeMs Int?    @map("processing_time_ms")
+  processedAt     DateTime @map("processed_at")
+
+  @@map("document_extractions")
+}
+
+model DocumentSummary {
+  id               String   @id @default(uuid()) @db.Uuid
+  documentId       String   @map("document_id")
+  summary          String   @db.Text
+  keyPoints        String?  @map("key_points") @db.Text
+  wordCount        Int?     @map("word_count")
+  originalWordCount Int?    @map("original_word_count")
+  compressionRatio Float?   @map("compression_ratio")
+  language         String?  @db.VarChar(10)
+  processedAt      DateTime @map("processed_at")
+
+  @@map("document_summaries")
+}
+
+model DocumentSentiment {
+  id               String   @id @default(uuid()) @db.Uuid
+  documentId       String   @map("document_id")
+  overallSentiment String   @map("overall_sentiment") @db.VarChar(20)
+  sentimentScore   Float    @map("sentiment_score")
+  sentences        String?  @db.Text
+  aspects          String?  @db.Text
+  processedAt      DateTime @map("processed_at")
+
+  @@map("document_sentiments")
+}
+
+model DocumentEntities {
+  id            String   @id @default(uuid()) @db.Uuid
+  documentId    String   @map("document_id")
+  entities      String?  @db.Text
+  entityCounts  String?  @map("entity_counts") @db.Text
+  totalEntities Int?     @map("total_entities")
+  processedAt   DateTime @map("processed_at")
+
+  @@map("document_entities")
+}
+
+model DocumentSimilarity {
+  id                  String   @id @default(uuid()) @db.Uuid
+  documentId1         String   @map("document_id_1")
+  documentId2         String   @map("document_id_2")
+  overallSimilarity   Float    @map("overall_similarity")
+  contentSimilarity   Float    @map("content_similarity")
+  structureSimilarity Float    @map("structure_similarity")
+  topicSimilarity     Float    @map("topic_similarity")
+  sharedEntities      String?  @map("shared_entities") @db.Text
+  computedAt          DateTime @map("computed_at")
+
+  @@map("document_similarities")
+}
+
+// ─── Vector / Embedding ─────────────────────────────────────────
+
+model VectorDocument {
+  id        String   @id @default(uuid()) @db.Uuid
+  content   String   @db.Text
+  embedding Json
+  metadata  Json?
+  namespace String   @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([namespace])
+  @@map("vector_documents")
+}
+
+model ClusterResult {
+  id              String   @id @default(uuid()) @db.Uuid
+  namespace       String   @db.VarChar(200)
+  config          Json?
+  clusterCount    Int      @map("cluster_count")
+  totalDocuments  Int      @map("total_documents")
+  iterations      Int
+  converged       Boolean
+  inertia         Float
+  silhouetteScore Float    @map("silhouette_score")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("cluster_results")
+}
+
+// ─── Fine-tuning ────────────────────────────────────────────────
+
+model TrainingFile {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id")
+  openaiFileId String   @map("openai_file_id")
+  exampleCount Int      @map("example_count")
+  fileHash     String?  @map("file_hash")
+  status       String?  @db.VarChar(50)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("training_files")
+}
+
+model FineTuneJob {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id")
+  openaiJobId     String    @map("openai_job_id")
+  baseModel       String    @map("base_model") @db.VarChar(200)
+  trainingFileId  String    @map("training_file_id")
+  suffix          String?   @db.VarChar(200)
+  hyperparameters String?   @db.Text
+  status          String    @db.VarChar(50)
+  resultModelId   String?   @map("result_model_id")
+  trainedTokens   Int?      @map("trained_tokens")
+  finishedAt      DateTime? @map("finished_at")
+  error           String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  @@map("fine_tune_jobs")
+}
+
+// ─── Training Pipeline ──────────────────────────────────────────
+
+model TrainingJob {
+  id                  String    @id @default(uuid()) @db.Uuid
+  tenantId            String    @map("tenant_id")
+  datasetId           String    @map("dataset_id")
+  openaiJobId         String    @map("openai_job_id")
+  openaiFileId        String    @map("openai_file_id")
+  baseModel           String    @map("base_model") @db.VarChar(200)
+  fineTunedModel      String?   @map("fine_tuned_model")
+  status              String    @db.VarChar(50)
+  trainLoss           Json?     @map("train_loss")
+  trainAccuracy       Json?     @map("train_accuracy")
+  validationLoss      Json?     @map("validation_loss")
+  validationAccuracy  Json?     @map("validation_accuracy")
+  currentEpoch        Int       @default(0) @map("current_epoch")
+  totalEpochs         Int       @default(0) @map("total_epochs")
+  error               String?   @db.Text
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+  completedAt         DateTime? @map("completed_at")
+
+  @@map("training_jobs")
+}
+
+model TrainingDataset {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  samples   TrainingSample[]
+
+  @@map("training_datasets")
+}
+
+model TrainingSample {
+  id             String   @id @default(uuid()) @db.Uuid
+  datasetId      String   @map("dataset_id") @db.Uuid
+  input          String   @db.Text
+  expectedOutput String   @map("expected_output") @db.Text
+  quality        Float?   @default(1.0)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  dataset        TrainingDataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@map("training_samples")
+}
+
+// ─── What-If Scenarios ──────────────────────────────────────────
+
+model Scenario {
+  id          String   @id @default(uuid())
+  projectId   String   @map("project_id")
+  name        String   @db.VarChar(500)
+  description String?  @db.Text
+  variables   String   @db.Text
+  formula     String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  runs        ScenarioRun[]
+
+  @@map("scenarios")
+}
+
+model ScenarioRun {
+  id               String   @id @default(uuid())
+  scenarioId       String   @map("scenario_id")
+  baselineOutcome  Float    @map("baseline_outcome")
+  scenarioOutcome  Float    @map("scenario_outcome")
+  deltaAbsolute    Float    @map("delta_absolute")
+  deltaPercent     Float    @map("delta_percent")
+  variableImpacts  String?  @map("variable_impacts") @db.Text
+  executedAt       DateTime @map("executed_at")
+
+  scenario         Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
+  @@index([scenarioId])
+  @@map("scenario_runs")
+}
+
+// ─── Monitoring ─────────────────────────────────────────────────
+
+model MonitoringEvent {
+  id              String   @id @default(uuid()) @db.Uuid
+  datasetId       String   @map("dataset_id")
+  eventType       String   @map("event_type") @db.VarChar(100)
+  severity        String   @db.VarChar(20)
+  changesDetected Int      @map("changes_detected")
+  details         String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("monitoring_events")
+}
+
+// ─── Role (for Prisma references) ───────────────────────────────
+
+model Role {
+  id   String @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(200)
+
+  @@map("roles")
+}

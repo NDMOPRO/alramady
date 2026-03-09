@@ -1,0 +1,289 @@
+##
+## Rasid Platform - Development Overrides
+##
+## This file is automatically loaded by docker-compose alongside docker-compose.yml.
+## It adds volume mounts for hot-reload, debug ports, and dev-friendly settings.
+##
+## Usage:
+##   docker-compose up           # Loads both docker-compose.yml + override
+##   docker-compose up --build   # Rebuild with dev settings
+##
+
+version: "3.9"
+
+services:
+  # ---- Infrastructure ----
+
+  postgres:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: rasid
+      POSTGRES_PASSWORD: rasid_secret_2024
+      POSTGRES_DB: rasid_db
+
+  redis:
+    ports:
+      - "6379:6379"
+    command: redis-server --loglevel verbose
+
+  elasticsearch:
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+
+  minio:
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  # ---- Gateway ----
+
+  gateway:
+    ports:
+      - "80:80"
+    volumes:
+      - ./services/gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+
+  # ---- Frontend ----
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/app:/app/app
+      - ./frontend/components:/app/components
+      - ./frontend/lib:/app/lib
+      - ./frontend/public:/app/public
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost
+      - INTERNAL_API_URL=http://gateway:80
+      - WATCHPACK_POLLING=true
+    ports:
+      - "3000:3000"
+
+  # ---- Service 1: Data Engine ----
+
+  data-service:
+    build:
+      context: ./services/data-service
+      target: dev
+    volumes:
+      - ./services/data-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8001:8001"
+      - "9221:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 2: Excel Engine ----
+
+  excel-service:
+    build:
+      context: ./services/excel-service
+      target: dev
+    volumes:
+      - ./services/excel-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8002:8002"
+      - "9222:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 3: Dashboard Engine ----
+
+  dashboard-service:
+    build:
+      context: ./services/dashboard-service
+      target: dev
+    volumes:
+      - ./services/dashboard-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8003:8003"
+      - "9223:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 4: Reporting Engine ----
+
+  reporting-service:
+    build:
+      context: ./services/reporting-service
+      target: dev
+    volumes:
+      - ./services/reporting-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8004:8004"
+      - "9224:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 5: Presentation Engine ----
+
+  presentation-service:
+    build:
+      context: ./services/presentation-service
+      target: dev
+    volumes:
+      - ./services/presentation-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8005:8005"
+      - "9225:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 6: Infographic Engine ----
+
+  infographic-service:
+    build:
+      context: ./services/infographic-service
+      target: dev
+    volumes:
+      - ./services/infographic-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8006:8006"
+      - "9226:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 7: Replication Engine ----
+
+  replication-service:
+    build:
+      context: ./services/replication-service
+      target: dev
+    volumes:
+      - ./services/replication-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8007:8007"
+      - "9227:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 8: Localization Engine ----
+
+  localization-service:
+    build:
+      context: ./services/localization-service
+      target: dev
+    volumes:
+      - ./services/localization-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8008:8008"
+      - "9228:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 9: AI Engine ----
+
+  ai-service:
+    build:
+      context: ./services/ai-service
+      target: dev
+    volumes:
+      - ./services/ai-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8009:8009"
+      - "9229:9229"
+    command: sh -c "cd /app/packages/shared/services && npx -y tsc --target es2022 --module commonjs --esModuleInterop --skipLibCheck --downlevelIteration --declaration --outDir . cross-engine-bridge.ts 2>/dev/null; cd /app && npx tsx watch --inspect=0.0.0.0:9229 src/index.ts"
+
+  # ---- Service 10: Governance Engine ----
+
+  governance-service:
+    build:
+      context: ./services/governance-service
+      target: dev
+    volumes:
+      - ./services/governance-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8010:8010"
+      - "9230:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 11: Library Engine ----
+
+  library-service:
+    build:
+      context: ./services/library-service
+      target: dev
+    volumes:
+      - ./services/library-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8011:8011"
+      - "9231:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 12: Template Engine ----
+
+  template-service:
+    build:
+      context: ./services/template-service
+      target: dev
+    volumes:
+      - ./services/template-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8012:8012"
+      - "9232:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts
+
+  # ---- Service 13: Conversion Engine ----
+
+  conversion-service:
+    build:
+      context: ./services/conversion-service
+      target: dev
+    volumes:
+      - ./services/conversion-service/src:/app/src
+      - ./packages/shared:/app/packages/shared
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+    ports:
+      - "8013:8013"
+      - "9233:9229"
+    command: npx tsx watch --inspect=0.0.0.0:9229 src/index.ts

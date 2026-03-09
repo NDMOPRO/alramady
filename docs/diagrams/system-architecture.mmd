@@ -1,0 +1,128 @@
+%% Rasid Platform - High-Level System Architecture
+graph TB
+    subgraph Clients["Clients"]
+        Browser["Web Browser"]
+        MobileApp["Mobile App"]
+        ExternalAPI["External API Consumers"]
+    end
+
+    subgraph Gateway["API Gateway (Nginx :80)"]
+        NGINX["Nginx Reverse Proxy<br/>Rate Limiting: 100r/s<br/>Max Upload: 500MB<br/>Gzip Compression"]
+    end
+
+    subgraph Frontend["Frontend (:3000)"]
+        NextJS["Next.js 14+<br/>TypeScript | Tailwind | shadcn/ui<br/>RTL-First | Arabic UI"]
+    end
+
+    subgraph CoreEngines["Core Engines"]
+        E01["E01: Data & Files<br/>:8001"]
+        E02["E02: Excel<br/>:8002"]
+        E03["E03: Dashboards<br/>:8003"]
+        E04["E04: Reports<br/>:8004"]
+        E05["E05: Presentations<br/>:8005"]
+        E07["E07: Localization<br/>:8008"]
+        E08["E08: Conversion<br/>:8013"]
+        E09["E09: AI Intelligence<br/>:8009"]
+        E10["E10: Governance<br/>:8010"]
+    end
+
+    subgraph SupportServices["Support Services"]
+        INF["Infographic<br/>:8006"]
+        REP["Replication<br/>:8007"]
+        LIB["Library<br/>:8011"]
+        TPL["Template<br/>:8012"]
+        REN["Rendering Env<br/>:8014"]
+    end
+
+    subgraph Infrastructure["Infrastructure"]
+        PG["PostgreSQL 16<br/>Primary Database"]
+        RD["Redis 7<br/>Cache + Queues"]
+        ES["Elasticsearch 8.12<br/>Search Engine"]
+        MN["MinIO<br/>Object Storage"]
+    end
+
+    subgraph External["External Integrations"]
+        OpenAI["OpenAI API<br/>GPT-4o / Vision / Whisper"]
+        SMTP["SMTP Server<br/>Email Delivery"]
+        LDAP["LDAP / Active Directory"]
+        MS365["Microsoft 365"]
+    end
+
+    Browser --> NGINX
+    MobileApp --> NGINX
+    ExternalAPI --> NGINX
+
+    NGINX --> NextJS
+    NGINX -->|/api/data/| E01
+    NGINX -->|/api/excel/| E02
+    NGINX -->|/api/dashboard/| E03
+    NGINX -->|/api/reporting/| E04
+    NGINX -->|/api/presentation/| E05
+    NGINX -->|/api/localization/| E07
+    NGINX -->|/api/conversion/| E08
+    NGINX -->|/api/ai/| E09
+    NGINX -->|/api/governance/| E10
+    NGINX -->|/api/infographic/| INF
+    NGINX -->|/api/replication/| REP
+    NGINX -->|/api/library/| LIB
+    NGINX -->|/api/template/| TPL
+
+    E01 --> PG
+    E01 --> RD
+    E01 --> ES
+    E01 --> MN
+    E02 --> PG
+    E02 --> RD
+    E03 --> PG
+    E03 --> RD
+    E04 --> PG
+    E04 --> RD
+    E05 --> PG
+    E05 --> RD
+    E07 --> PG
+    E07 --> RD
+    E08 --> PG
+    E08 --> RD
+    E08 --> MN
+    E09 --> PG
+    E09 --> RD
+    E09 --> ES
+    E09 --> MN
+    E10 --> PG
+    E10 --> RD
+
+    INF --> PG
+    INF --> RD
+    REP --> PG
+    REP --> RD
+    REP --> REN
+    LIB --> PG
+    LIB --> RD
+    LIB --> MN
+    LIB --> ES
+    TPL --> PG
+    TPL --> RD
+
+    E05 --> OpenAI
+    E07 --> OpenAI
+    E09 --> OpenAI
+    INF --> OpenAI
+    REP --> OpenAI
+    E04 --> SMTP
+    E10 --> SMTP
+    E10 --> LDAP
+    E10 --> MS365
+
+    classDef engine fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    classDef support fill:#7B68EE,stroke:#5A4FCF,color:#fff
+    classDef infra fill:#2ECC71,stroke:#27AE60,color:#fff
+    classDef external fill:#E67E22,stroke:#D35400,color:#fff
+    classDef gateway fill:#E74C3C,stroke:#C0392B,color:#fff
+    classDef frontend fill:#9B59B6,stroke:#8E44AD,color:#fff
+
+    class E01,E02,E03,E04,E05,E07,E08,E09,E10 engine
+    class INF,REP,LIB,TPL,REN support
+    class PG,RD,ES,MN infra
+    class OpenAI,SMTP,LDAP,MS365 external
+    class NGINX gateway
+    class NextJS frontend

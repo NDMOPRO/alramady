@@ -1,0 +1,107 @@
+{
+  "homeCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي الصفحة الرئيسية أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: حدّث مؤشرات الصفحة الرئيسية، ابدأ جلسة جديدة، افتح آخر مجموعة بيانات.\n\nحدّث مؤشرات الصفحة الرئيسية\nابدأ جلسة جديدة\nافتح آخر مجموعة بيانات",
+    "response": null,
+    "route": "http://localhost:3000/home"
+  },
+  "homeAction": {
+    "question": "حدّث مؤشرات الصفحة الرئيسية",
+    "answer": "نتيجة التنفيذ\n\nتم تحديث مؤشرات الصفحة الرئيسية من الخدمات الفعلية.\n\nالبيانات 60\nالتقارير 20\nالعروض 24\nلوحات المؤشرات 7",
+    "response": {
+      "url": "http://localhost:3000/api/v1/data/sources?page=1&limit=6",
+      "status": 200
+    },
+    "route": "http://localhost:3000/home"
+  },
+  "dataCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي مساحة البيانات أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: تحديث مجموعات البيانات، تحديث الموصلات السحابية، افتح أحدث مجموعة، افتح المكتبة.\n\nتحديث مجموعات البيانات\nتحديث الموصلات السحابية\nافتح أحدث مجموعة\nافتح المكتبة",
+    "response": null,
+    "route": "http://localhost:3000/data"
+  },
+  "dataAction": {
+    "question": "حدّث البيانات",
+    "answer": "نتيجة التنفيذ\n\nتم تحديث قائمة البيانات. المجموع الحالي 60 مجموعة، والمعروض الآن 10.\n\nالإجمالي 60\nالمعروض 10",
+    "response": {
+      "url": "http://localhost:3000/api/v1/data/sources?page=1&limit=10",
+      "status": 200
+    },
+    "route": "http://localhost:3000/data"
+  },
+  "analysisCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي التحليل والذكاء الاصطناعي أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: تحديث التحليل والبيانات، شغّل التحليل الحالي، افتح Surface البيانات.\n\nتحديث التحليل والبيانات\nشغّل التحليل الحالي\nافتح Surface البيانات",
+    "response": null,
+    "route": "http://localhost:3000/analysis"
+  },
+  "analysisAction": {
+    "question": "شغل التحليل الحالي",
+    "answer": "نتيجة التنفيذ\n\nتم تشغيل التحليل على phase4-home-sample.\n\n3 صف\n4 عمود",
+    "response": {
+      "url": "http://localhost:3000/api/v1/dashboard/analyze-data",
+      "status": 200
+    },
+    "route": "http://localhost:3000/analysis"
+  },
+  "reportsCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي مساحة التقارير التنفيذية أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: تحديث التقارير، أنشئ وابنِ التقرير الحالي، أعد بناء التقرير المحدد، صدّر PDF للتقرير المحدد، احفظ الجدولة الحالية.\n\nتحديث التقارير\nأنشئ وابنِ التقرير الحالي\nأعد بناء التقرير المحدد\nصدّر PDF للتقرير المحدد",
+    "response": null,
+    "route": "http://localhost:3000/reports"
+  },
+  "reportsAction": {
+    "question": "حدث التقارير",
+    "answer": "نتيجة التنفيذ\n\nتم تحديث Surface التقارير. يوجد الآن 12 تقرير و12 مصدر متاح.\n\nالتقارير 12\nالمصادر 12",
+    "response": {
+      "url": "http://localhost:3000/api/v1/reporting/reports?page=1&limit=12",
+      "status": 200
+    },
+    "route": "http://localhost:3000/reports"
+  },
+  "presentationsCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي العروض التقديمية أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: تحديث العروض، ولّد العرض الحالي، أنشئ عرضًا فارغًا، افتح أحدث عرض.\n\nتحديث العروض\nولّد العرض الحالي\nأنشئ عرضًا فارغًا\nافتح أحدث عرض",
+    "response": null,
+    "route": "http://localhost:3000/presentations"
+  },
+  "presentationsAction": {
+    "question": "حدث العروض",
+    "answer": "نتيجة التنفيذ\n\nتم تحديث قائمة العروض. يوجد الآن 20 عرض بإجمالي 75 شريحة.\n\nالعروض 20\nالشرائح 75",
+    "response": {
+      "url": "http://localhost:3000/api/v1/presentation/presentations?page=1&limit=20",
+      "status": 200
+    },
+    "route": "http://localhost:3000/presentations"
+  },
+  "libraryCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي المكتبة الذكية أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: تحديث المكتبة، اعرض أحدث أصل، استورد الأصل المحدد إلى البيانات، أنشئ عرضًا من الأصل المحدد، احفظ آخر إجراء ناجح.\n\nتحديث المكتبة\nاعرض أحدث أصل\nاستورد الأصل المحدد إلى البيانات\nأنشئ عرضًا من الأصل المحدد",
+    "response": null,
+    "route": "http://localhost:3000/library"
+  },
+  "libraryAction": {
+    "question": "اعرض أحدث أصل",
+    "answer": "نتيجة التنفيذ\n\nتم تحميل تفاصيل الأصل hosts.\n\nother\nbin",
+    "response": {
+      "url": "http://localhost:3000/api/v1/library/assets/e368376c-6d83-4144-a80d-e6d701a3c3ba",
+      "status": 200
+    },
+    "route": "http://localhost:3000/library"
+  },
+  "settingsCapability": {
+    "question": "ماذا يمكنك أن تفعل هنا؟",
+    "answer": "الإجراءات المتاحة الآن\n\nفي الإعدادات أستطيع تنفيذ هذه الإجراءات الحقيقية الآن: حدّث الإعدادات، افتح أول مستخدم، صدّر سجل التدقيق.\n\nحدّث الإعدادات\nافتح أول مستخدم\nصدّر سجل التدقيق",
+    "response": null,
+    "route": "http://localhost:3000/settings"
+  },
+  "settingsAction": {
+    "question": "صدر سجل التدقيق",
+    "answer": "نتيجة التنفيذ\n\nتم تمرير طلب تصدير سجل التدقيق.",
+    "response": {
+      "url": "http://localhost:3000/api/v1/governance/audit/export?format=csv",
+      "status": 200
+    },
+    "route": "http://localhost:3000/settings"
+  }
+}

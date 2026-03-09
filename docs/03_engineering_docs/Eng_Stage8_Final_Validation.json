@@ -1,0 +1,97 @@
+{
+  "master_count": 5412,
+  "id_check": true,
+  "hash_check": 5412,
+  "documents": [
+    {
+      "document": "Engine Module Mapping",
+      "file": "Eng_Stage1_Engine_Module_Mapping.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    },
+    {
+      "document": "Service Mapping",
+      "file": "Eng_Stage2_Service_Mapping.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    },
+    {
+      "document": "API Architecture",
+      "file": "Eng_Stage3_API_Architecture.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    },
+    {
+      "document": "Database Schema",
+      "file": "Eng_Stage4_Database_Schema.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    },
+    {
+      "document": "Pipeline Architecture",
+      "file": "Eng_Stage5_Pipeline_Architecture.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    },
+    {
+      "document": "Deployment Architecture",
+      "file": "Eng_Stage6_Deployment_Architecture.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    },
+    {
+      "document": "Development Roadmap",
+      "file": "Eng_Stage7_Development_Roadmap.md",
+      "expected": 5412,
+      "found": 5412,
+      "covered": 5412,
+      "missing": 0,
+      "extra": 0,
+      "hash_matches": 5412,
+      "hash_mismatches": 0,
+      "status": "PASS"
+    }
+  ],
+  "cross_coverage": {
+    "full": 5412,
+    "partial": 0,
+    "none": 0
+  },
+  "overall": "ALL PASS"
+}

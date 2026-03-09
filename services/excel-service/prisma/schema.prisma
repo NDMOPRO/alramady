@@ -1,0 +1,314 @@
+// ─── Prisma Schema for @rasid/excel-service ──────────────────────────────────
+// Matches actual DB structure. Shared DB with other services.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Core / Shared Models
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+
+  users          User[]
+  workbooks      Workbook[]
+  excelWorkbooks ExcelWorkbook[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String?  @db.VarChar(255)
+  tenantId  String   @map("tenant_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+  cellEditHistory CellEditHistory[]
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Workbook Model (JSON-based approach)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Workbook {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  name          String   @db.VarChar(500)
+  datasetId     String?  @map("dataset_id") @db.Uuid
+  sheetsJson    Json?    @map("sheets_json")
+  formulasJson  Json?    @map("formulas_json")
+  sheets        Json?    @map("sheets_data")
+  createdBy     String   @map("created_by") @db.Uuid
+  ownerId       String?  @map("owner_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @default(now()) @map("updated_at")
+
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  sheetRecords Sheet[]
+
+  @@index([tenantId])
+  @@index([datasetId])
+  @@index([createdBy])
+  @@map("workbooks")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ExcelWorkbook Model (binary / file-based approach)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model ExcelWorkbook {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(255)
+  tenantId   String   @map("tenant_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  fileSize   Int      @map("file_size")
+  sheetCount Int      @map("sheet_count")
+  metadata   String?  @db.Text
+  fileData   Bytes?   @map("file_data")
+  status     String   @default("active") @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant      @relation(fields: [tenantId], references: [id])
+  cells  ExcelCell[]
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([status])
+  @@map("excel_workbooks")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ExcelCell Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model ExcelCell {
+  id         String  @id @default(uuid()) @db.Uuid
+  workbookId String  @map("workbook_id") @db.Uuid
+  sheetIndex Int     @map("sheet_index")
+  row        Int
+  col        Int
+  value      String? @db.Text
+  formula    String? @db.Text
+  formatting String? @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  workbook ExcelWorkbook @relation(fields: [workbookId], references: [id], onDelete: Cascade)
+
+  @@index([workbookId])
+  @@index([workbookId, sheetIndex])
+  @@index([workbookId, sheetIndex, row, col])
+  @@map("excel_cells")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Sheet Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Sheet {
+  id           String  @id @default(uuid()) @db.Uuid
+  workbookId   String  @map("workbook_id") @db.Uuid
+  name         String  @db.VarChar(255)
+  mergedCells  String? @map("merged_cells") @db.Text
+  columnWidths String? @map("column_widths") @db.Text
+  rowHeights   String? @map("row_heights") @db.Text
+  frozenRows   Int?    @default(0) @map("frozen_rows")
+  frozenCols   Int?    @default(0) @map("frozen_cols")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  workbook Workbook @relation(fields: [workbookId], references: [id], onDelete: Cascade, map: "fk_sheet_workbook")
+  cells    Cell[]
+
+  @@index([workbookId])
+  @@map("sheets")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Cell Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Cell {
+  id        String  @id @default(uuid()) @db.Uuid
+  sheetId   String  @map("sheet_id") @db.Uuid
+  rowIndex  Int     @map("row_index")
+  colIndex  Int     @map("col_index")
+  value     String? @db.Text
+  dataType  String  @default("string") @map("data_type") @db.VarChar(50)
+  formula   String? @db.Text
+  format    String? @db.Text
+  comment   String? @db.Text
+  hyperlink String? @db.Text
+  isHeader  Boolean @default(false) @map("is_header")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  sheet Sheet @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+
+  @@index([sheetId])
+  @@index([sheetId, rowIndex, colIndex])
+  @@map("cells")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Chart Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Chart {
+  id        String   @id @default(uuid()) @db.Uuid
+  type      String   @db.VarChar(50)
+  title     String   @db.VarChar(500)
+  config    Json
+  theme     String   @db.VarChar(50)
+  width     Int
+  height    Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([type])
+  @@index([theme])
+  @@index([createdAt])
+  @@map("charts")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Macro Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model Macro {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  actions     Json
+  createdBy   String   @map("created_by") @db.Uuid
+  variables   Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([createdBy])
+  @@index([updatedAt])
+  @@map("macros")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CellComment Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model CellComment {
+  id              String    @id @default(uuid()) @db.Uuid
+  workbookId      String    @map("workbook_id") @db.Uuid
+  sheetId         String    @map("sheet_id") @db.VarChar(255)
+  cellRef         String    @map("cell_ref") @db.VarChar(20)
+  threadId        String    @map("thread_id") @db.VarChar(255)
+  userId          String    @map("user_id") @db.Uuid
+  userName        String    @map("user_name") @db.VarChar(255)
+  content         String    @db.Text
+  resolved        Boolean   @default(false)
+  resolvedBy      String?   @map("resolved_by") @db.Uuid
+  resolvedAt      DateTime? @map("resolved_at")
+  parentCommentId String?   @map("parent_comment_id") @db.Uuid
+  mentions        String?   @db.Text
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([workbookId, sheetId])
+  @@index([threadId])
+  @@index([workbookId, sheetId, cellRef])
+  @@map("cell_comments")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CellEditHistory Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model CellEditHistory {
+  id              String   @id @default(uuid()) @db.Uuid
+  workbookId      String   @map("workbook_id") @db.Uuid
+  sheetId         String   @map("sheet_id") @db.VarChar(255)
+  cellRef         String   @map("cell_ref") @db.VarChar(20)
+  userId          String   @map("user_id") @db.Uuid
+  previousValue   String?  @map("previous_value") @db.Text
+  newValue        String?  @map("new_value") @db.Text
+  previousFormula String?  @map("previous_formula") @db.Text
+  newFormula      String?  @map("new_formula") @db.Text
+  operationType   String   @map("operation_type") @db.VarChar(50)
+  version         Int
+  batchId         String?  @map("batch_id") @db.Uuid
+  timestamp       DateTime
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([workbookId])
+  @@index([workbookId, sheetId])
+  @@index([workbookId, sheetId, cellRef])
+  @@index([userId])
+  @@index([timestamp])
+  @@map("cell_edit_history")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ImportLog Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model ImportLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  workbookId      String   @map("workbook_id") @db.Uuid
+  sheetId         String   @map("sheet_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  fileType        String   @map("file_type") @db.VarChar(50)
+  filePath        String   @map("file_path") @db.Text
+  rowsImported    Int      @map("rows_imported")
+  columnsDetected Int      @map("columns_detected")
+  encoding        String   @db.VarChar(50)
+  warnings        String?  @db.Text
+  errors          String?  @db.Text
+  importedAt      DateTime @map("imported_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([workbookId])
+  @@index([userId])
+  @@index([importedAt])
+  @@map("import_logs")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ExportLog Model
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model ExportLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  workbookId     String   @map("workbook_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  format         String   @db.VarChar(50)
+  filePath       String   @map("file_path") @db.Text
+  fileSize       Int      @map("file_size")
+  sheetsExported Int      @map("sheets_exported")
+  exportedAt     DateTime @map("exported_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([workbookId])
+  @@index([userId])
+  @@index([exportedAt])
+  @@map("export_logs")
+}

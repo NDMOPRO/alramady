@@ -1,0 +1,48 @@
+name: Pixel Parity Gate
+on:
+  pull_request:
+    paths:
+      - 'src/components/**'
+      - 'services/*/src/**'
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run visual regression tests
+        run: npm run test:visual
+        env:
+          CI: true
+      - name: Upload diff artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-results
+          path: test-results/visual-diff/
+          retention-days: 14
+      - name: Comment on PR with results
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'test-results/visual-diff/report.json';
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              const failedCount = report.failed || 0;
+              const body = `## Visual Regression Report\n\n${failedCount} visual difference(s) detected.\n\nDownload the artifacts to review the diffs.`;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              });
+            }

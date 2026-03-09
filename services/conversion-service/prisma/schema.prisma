@@ -1,0 +1,300 @@
+// ============================================================================
+// RASID Conversion Service - Prisma Schema
+// Database: PostgreSQL
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum ConversionJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ConversionSourceFormat {
+  CSV
+  EXCEL
+  JSON
+  XML
+  PARQUET
+  AVRO
+  ORC
+  PDF
+  HTML
+  YAML
+  DOCX
+  XLSX
+  MD
+  IMAGE
+  TEXT
+  BATCH
+  PPTX_IMAGES
+  UDR
+}
+
+enum ConversionTargetFormat {
+  CSV
+  EXCEL
+  JSON
+  XML
+  PARQUET
+  AVRO
+  ORC
+  PDF
+  HTML
+  YAML
+  SQL
+  DOCX
+  XLSX
+  MD
+  RTL_TEXT
+  HTML_RTL
+  STRUCTURED_TEXT
+  PDF_ANALYSIS
+  PPTX
+  PNG
+  JPG
+  WEBP
+  TIFF
+  AVIF
+  MP4
+  WEBM
+  AVI
+  TABLE
+  XLSX_JSON
+  UDR
+}
+
+enum ConversionPipelineStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
+model ConversionJob {
+  id             String                @id @default(uuid()) @db.Uuid
+  tenantId       String?               @map("tenant_id") @db.Uuid
+  userId         String?               @map("user_id") @db.Uuid
+  pipelineId     String?               @map("pipeline_id") @db.Uuid
+  sourceFormat   ConversionSourceFormat @map("source_format")
+  targetFormat   ConversionTargetFormat @map("target_format")
+  status         ConversionJobStatus   @default(PENDING)
+  sourcePath     String?               @map("source_path") @db.Text
+  outputPath     String?               @map("output_path") @db.Text
+  sourceFilePath String?               @map("source_file_path") @db.Text
+  outputFilePath String?               @map("output_file_path") @db.Text
+  sourceFileSize BigInt?               @map("source_file_size")
+  outputFileSize BigInt?               @map("output_file_size")
+  sourceFilename String?               @map("source_filename") @db.VarChar(512)
+  outputFilename String?               @map("output_filename") @db.VarChar(512)
+  sourceSizeBytes BigInt?              @map("source_size_bytes")
+  outputSizeBytes BigInt?              @map("output_size_bytes")
+  pageCount      Int?                  @map("page_count")
+  options        Json?
+  metadata       Json?
+  sourceFile     String?               @map("source_file") @db.Text
+  progress       Float                 @default(0)
+  errorMessage   String?               @map("error_message") @db.Text
+  startedAt      DateTime?             @map("started_at") @db.Timestamptz
+  completedAt    DateTime?             @map("completed_at") @db.Timestamptz
+  durationMs     Int?                  @map("duration_ms")
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime              @updatedAt @map("updated_at") @db.Timestamptz
+
+  pipeline ConversionPipeline? @relation(fields: [pipelineId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([pipelineId])
+  @@index([status])
+  @@index([sourceFormat])
+  @@index([targetFormat])
+  @@index([createdAt])
+  @@map("conversion_jobs")
+}
+
+model ConversionPipeline {
+  id              String                   @id @default(uuid()) @db.Uuid
+  name            String                   @db.VarChar(256)
+  description     String?                  @db.Text
+  tenantId        String?                  @map("tenant_id") @db.Uuid
+  userId          String?                  @map("user_id") @db.Uuid
+  status          ConversionPipelineStatus @default(DRAFT)
+  steps           Json
+  schedule        String?                  @db.VarChar(128)
+  isActive        Boolean                  @default(true) @map("is_active")
+  lastRunAt       DateTime?                @map("last_run_at") @db.Timestamptz
+  lastExecutedAt  DateTime?                @map("last_executed_at") @db.Timestamptz
+  nextRunAt       DateTime?                @map("next_run_at") @db.Timestamptz
+  runCount        Int                      @default(0) @map("run_count")
+  executionCount  Int                      @default(0) @map("execution_count")
+  failCount       Int                      @default(0) @map("fail_count")
+  metadata        Json?
+  settings        Json?                    @default("{}")
+  createdAt       DateTime                 @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime                 @updatedAt @map("updated_at") @db.Timestamptz
+
+  jobs ConversionJob[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([isActive])
+  @@index([nextRunAt])
+  @@map("conversion_pipelines")
+}
+
+model Activity {
+  id        String   @id @default(uuid()) @db.Uuid
+  type      String   @db.VarChar(128)
+  action    String   @db.Text
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([type])
+  @@index([createdAt])
+  @@map("activities")
+}
+
+model MergeOperation {
+  id              String   @id @default(uuid()) @db.Uuid
+  outputPath      String   @map("output_path") @db.Text
+  outputSize      Int      @map("output_size")
+  pageCount       Int      @map("page_count")
+  sourceFileCount Int      @map("source_file_count")
+  bookmarks       String?  @db.Text
+  processingTimeMs Int     @map("processing_time_ms")
+  userId          String?  @map("user_id") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("merge_operations")
+}
+
+model SplitOperation {
+  id              String   @id @default(uuid()) @db.Uuid
+  fileId          String   @map("file_id") @db.Uuid
+  splitMode       String   @map("split_mode") @db.VarChar(64)
+  outputFileCount Int      @map("output_file_count")
+  totalPages      Int      @map("total_pages")
+  processingTimeMs Int     @map("processing_time_ms")
+  userId          String?  @map("user_id") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("split_operations")
+}
+
+model OcrResult {
+  id              String   @id @default(uuid()) @db.Uuid
+  fileId          String   @map("file_id") @db.Uuid
+  fullText        String   @map("full_text") @db.Text
+  confidence      Float
+  languages       String?  @db.Text
+  pageCount       Int      @map("page_count")
+  wordCount       Int      @map("word_count")
+  tables          String?  @db.Text
+  processingTimeMs Int     @map("processing_time_ms")
+  processedAt     DateTime @map("processed_at") @db.Timestamptz
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([fileId])
+  @@map("ocr_results")
+}
+
+model File {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(512)
+  path      String?  @db.Text
+  size      BigInt?
+  mimeType  String?  @map("mime_type") @db.VarChar(256)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("files")
+}
+
+model LegalArchive {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  documentHash   String   @map("document_hash") @db.VarChar(128)
+  metadata       String?  @db.Text
+  fileSize       Int      @map("file_size")
+  classification String?  @db.VarChar(128)
+  archivedAt     DateTime @map("archived_at") @db.Timestamptz
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([tenantId])
+  @@index([documentHash])
+  @@map("legal_archives")
+}
+
+model SocialPost {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  platform    String   @db.VarChar(64)
+  content     String   @db.Text
+  imageUrl    String?  @map("image_url") @db.Text
+  link        String?  @db.Text
+  hashtags    String?  @db.Text
+  altText     String?  @map("alt_text") @db.Text
+  postId      String?  @map("post_id") @db.VarChar(256)
+  postUrl     String?  @map("post_url") @db.Text
+  status      String?  @default("published") @db.VarChar(64)
+  engagement  Json?    @default("{}")
+  metadata    Json?    @default("{}")
+  publishedAt DateTime? @default(now()) @map("published_at") @db.Timestamptz
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([tenantId])
+  @@map("social_posts")
+}
+
+model SocialOAuthConfig {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  platform     String   @db.VarChar(64)
+  accessToken  String?  @map("access_token") @db.Text
+  refreshToken String?  @map("refresh_token") @db.Text
+  expiresAt    DateTime? @map("expires_at") @db.Timestamptz
+  metadata     Json?    @default("{}")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("social_oauth_configs")
+}
+
+model ScheduledPost {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  platform    String   @db.VarChar(64)
+  content     String   @db.Text
+  imageUrl    String?  @map("image_url") @db.Text
+  link        String?  @db.Text
+  hashtags    String?  @db.Text
+  scheduledAt DateTime @map("scheduled_at") @db.Timestamptz
+  status      String?  @default("scheduled") @db.VarChar(64)
+  metadata    Json?    @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("scheduled_posts")
+}

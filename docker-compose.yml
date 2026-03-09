@@ -1,0 +1,680 @@
+version: '3.9'
+
+services:
+  # ═══════════════════════════════════════════════
+  # INFRASTRUCTURE SERVICES
+  # ═══════════════════════════════════════════════
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: rasid-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rasid-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: rasid-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rasid-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: rasid-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.name=rasid-cluster
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - rasid-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: rasid-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - rasid-network
+
+  # ═══════════════════════════════════════════════
+  # GATEWAY
+  # ═══════════════════════════════════════════════
+
+  gateway:
+    image: nginx:1.25-alpine
+    container_name: rasid-gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./services/gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      data-service:
+        condition: service_healthy
+      excel-service:
+        condition: service_healthy
+      dashboard-service:
+        condition: service_healthy
+      reporting-service:
+        condition: service_healthy
+      presentation-service:
+        condition: service_healthy
+      infographic-service:
+        condition: service_healthy
+      replication-service:
+        condition: service_healthy
+      localization-service:
+        condition: service_healthy
+      ai-service:
+        condition: service_healthy
+      governance-service:
+        condition: service_healthy
+      library-service:
+        condition: service_healthy
+      template-service:
+        condition: service_healthy
+      conversion-service:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+    networks:
+      - rasid-network
+
+  # ═══════════════════════════════════════════════
+  # MICROSERVICES
+  # ═══════════════════════════════════════════════
+
+  data-service:
+    build:
+      context: ./services/data-service
+      dockerfile: Dockerfile
+    container_name: rasid-data-service
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      PORT: 8001
+      SERVICE_NAME: data-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: ${NODE_ENV}
+      RATE_LIMIT_MAX: 5000
+      RATE_LIMIT_WINDOW: 60000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8001/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  excel-service:
+    build:
+      context: ./services/excel-service
+      dockerfile: Dockerfile
+    container_name: rasid-excel-service
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      PORT: 8002
+      SERVICE_NAME: excel-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8002/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  dashboard-service:
+    build:
+      context: ./services/dashboard-service
+      dockerfile: Dockerfile
+    container_name: rasid-dashboard-service
+    restart: unless-stopped
+    ports:
+      - "8003:8003"
+    environment:
+      PORT: 8003
+      SERVICE_NAME: dashboard-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8003/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  reporting-service:
+    build:
+      context: ./services/reporting-service
+      dockerfile: Dockerfile
+    container_name: rasid-reporting-service
+    restart: unless-stopped
+    ports:
+      - "8004:8004"
+    environment:
+      PORT: 8004
+      SERVICE_NAME: reporting-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8004/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  presentation-service:
+    build:
+      context: ./services/presentation-service
+      dockerfile: Dockerfile
+    container_name: rasid-presentation-service
+    restart: unless-stopped
+    ports:
+      - "8005:8005"
+    environment:
+      PORT: 8005
+      SERVICE_NAME: presentation-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8005/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  infographic-service:
+    build:
+      context: ./services/infographic-service
+      dockerfile: Dockerfile
+    container_name: rasid-infographic-service
+    restart: unless-stopped
+    ports:
+      - "8006:8006"
+    environment:
+      PORT: 8006
+      SERVICE_NAME: infographic-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8006/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  replication-service:
+    build:
+      context: ./services/replication-service
+      dockerfile: Dockerfile
+    container_name: rasid-replication-service
+    restart: unless-stopped
+    ports:
+      - "8007:8007"
+    environment:
+      PORT: 8007
+      SERVICE_NAME: replication-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      RENDERING_SERVICE_URL: http://rendering-environment:8014
+      NODE_ENV: ${NODE_ENV}
+      RATE_LIMIT_MAX: 10000
+      RATE_LIMIT_WINDOW: 60000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rendering-environment:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8007/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  localization-service:
+    build:
+      context: ./services/localization-service
+      dockerfile: Dockerfile
+    container_name: rasid-localization-service
+    restart: unless-stopped
+    ports:
+      - "8008:8008"
+    environment:
+      PORT: 8008
+      SERVICE_NAME: localization-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8008/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  ai-service:
+    build:
+      context: ./services/ai-service
+      dockerfile: Dockerfile
+    container_name: rasid-ai-service
+    restart: unless-stopped
+    ports:
+      - "8009:8009"
+    environment:
+      PORT: 8009
+      SERVICE_NAME: ai-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8009/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  governance-service:
+    build:
+      context: ./services/governance-service
+      dockerfile: Dockerfile
+    container_name: rasid-governance-service
+    restart: unless-stopped
+    ports:
+      - "8010:8010"
+    environment:
+      PORT: 8010
+      SERVICE_NAME: governance-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRY: ${JWT_EXPIRY}
+      JWT_REFRESH_EXPIRY: ${JWT_REFRESH_EXPIRY}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8010/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  library-service:
+    build:
+      context: ./services/library-service
+      dockerfile: Dockerfile
+    container_name: rasid-library-service
+    restart: unless-stopped
+    ports:
+      - "8011:8011"
+    environment:
+      PORT: 8011
+      SERVICE_NAME: library-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8011/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  template-service:
+    build:
+      context: ./services/template-service
+      dockerfile: Dockerfile
+    container_name: rasid-template-service
+    restart: unless-stopped
+    ports:
+      - "8012:8012"
+    environment:
+      PORT: 8012
+      SERVICE_NAME: template-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8012/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  conversion-service:
+    build:
+      context: ./services/conversion-service
+      dockerfile: Dockerfile
+    container_name: rasid-conversion-service
+    restart: unless-stopped
+    ports:
+      - "8013:8013"
+    environment:
+      PORT: 8013
+      SERVICE_NAME: conversion-service
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_SECRET: ${JWT_SECRET}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8013/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  # ═══════════════════════════════════════════════
+  # RENDERING ENVIRONMENT (Pixel-Perfect Validation)
+  # ═══════════════════════════════════════════════
+
+  rendering-environment:
+    build:
+      context: ./services/rendering-environment
+      dockerfile: Dockerfile
+    container_name: rasid-rendering-environment
+    restart: unless-stopped
+    ports:
+      - "8014:8014"
+    environment:
+      PORT: 8014
+      SERVICE_NAME: rendering-environment
+      DPI: "150"
+      FONT_HINTING: "full"
+      SUBPIXEL_RENDERING: "false"
+      ANTIALIASING: "false"
+      COLOR_SPACE: "srgb"
+      CHROMIUM_PATH: "/usr/bin/chromium"
+      NODE_ENV: ${NODE_ENV}
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8014/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    networks:
+      - rasid-network
+
+  # ═══════════════════════════════════════════════
+  # FRONTEND
+  # ═══════════════════════════════════════════════
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rasid-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost
+      INTERNAL_API_URL: http://gateway:80
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      governance-service:
+        condition: service_healthy
+    networks:
+      - rasid-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  elasticsearch_data:
+  minio_data:
+
+networks:
+  rasid-network:
+    driver: bridge

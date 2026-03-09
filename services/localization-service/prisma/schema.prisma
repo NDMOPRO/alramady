@@ -1,0 +1,276 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Language {
+  ar
+  en
+  fr
+  de
+  es
+  it
+  pt
+  ru
+  zh
+  ja
+  ko
+  tr
+  nl
+  pl
+  sv
+  da
+  no
+  fi
+  he
+  id
+  ms
+  th
+  vi
+  uk
+  cs
+  sk
+  ro
+  hu
+  bg
+  hr
+  lt
+  lv
+  et
+  sl
+  sr
+  fa
+  ur
+  hi
+  bn
+  ta
+  te
+  ml
+  kn
+  gu
+  mr
+  pa
+  ne
+  si
+  km
+  lo
+  my
+  ka
+  am
+  sw
+  zu
+  yo
+  ig
+  ha
+}
+
+model LocalizationJob {
+  id                 String    @id @default(uuid())
+  tenantId           String    @map("tenant_id")
+  documentId         String?   @map("document_id")
+  sourceLanguage     String    @map("source_language")
+  targetLanguage     String    @map("target_language")
+  status             String    @default("pending")
+  totalSegments      Int       @default(0) @map("total_segments")
+  completedSegments  Int       @default(0) @map("completed_segments")
+  translatedSegments Int       @default(0) @map("translated_segments")
+  qualityScore       Float?    @map("quality_score")
+  resultContent      String?   @map("result_content")
+  metadata           String?
+  createdBy          String?   @map("created_by")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  completedAt        DateTime? @map("completed_at")
+
+  @@map("localization_jobs")
+}
+
+model Glossary {
+  id             String         @id @default(uuid())
+  name           String
+  description    String?
+  sourceLanguage String         @map("source_language")
+  targetLanguage String         @map("target_language")
+  tenantId       String         @map("tenant_id")
+  createdBy      String?        @map("created_by")
+  status         String         @default("active")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  glossaryTerms  GlossaryTerm[]
+
+  @@map("glossaries")
+}
+
+model GlossaryTerm {
+  id           String   @id @default(uuid())
+  glossaryId   String   @map("glossary_id")
+  term         String
+  definition   String?
+  partOfSpeech String?  @map("part_of_speech")
+  translations Json     @default("{}")
+  notes        String?
+  context      String?
+  isApproved   Boolean  @default(false) @map("is_approved")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  glossary     Glossary @relation(fields: [glossaryId], references: [id])
+
+  @@map("glossary_terms")
+}
+
+model TranslationMemory {
+  id             String   @id @default(uuid())
+  sourceLanguage Language @map("source_language")
+  targetLanguage Language @map("target_language")
+  sourceText     String   @map("source_text")
+  targetText     String   @map("target_text")
+  usageCount     Int      @default(1) @map("usage_count")
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  lastUsedAt     DateTime? @map("last_used_at")
+
+  @@unique([sourceLanguage, targetLanguage, sourceText], name: "sourceLanguage_targetLanguage_sourceText")
+  @@map("translation_memory")
+}
+
+model LocalizedContent {
+  id          String   @id @default(uuid())
+  contentType String   @map("content_type")
+  contentId   String   @map("content_id")
+  locale      String
+  title       String?
+  content     String?
+  status      String   @default("pending")
+  tenantId    String   @map("tenant_id")
+  createdBy   String?  @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("localized_content")
+}
+
+model Presentation {
+  id        String   @id @default(uuid())
+  title     String?
+  slides    Json?
+  language  String?
+  metadata  Json?
+  tenantId  String   @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("presentations")
+}
+
+model Report {
+  id        String   @id @default(uuid())
+  title     String?
+  sections  Json?
+  language  String?
+  metadata  Json?
+  tenantId  String   @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reports")
+}
+
+model Dashboard {
+  id        String   @id @default(uuid())
+  title     String?
+  widgets   Json?
+  language  String?
+  metadata  Json?
+  tenantId  String   @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("dashboards")
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  title     String?
+  content   Json?
+  language  String?
+  metadata  Json?
+  tenantId  String   @map("tenant_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("documents")
+}
+
+model TranslationUnit {
+  id             String   @id @default(uuid())
+  projectId      String   @map("project_id")
+  sourceLanguage String   @map("source_language")
+  targetLanguage String   @map("target_language")
+  sourceText     String   @map("source_text")
+  targetText     String?  @map("target_text")
+  state          String   @default("new")
+  context        String?
+  notes          String?
+  fileOrigin     String?  @map("file_origin")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@unique([projectId, sourceLanguage, targetLanguage, sourceText], name: "projectId_sourceLanguage_targetLanguage_sourceText")
+  @@map("translation_units")
+}
+
+model Project {
+  id             String   @id @default(uuid())
+  name           String
+  sourceLanguage String   @map("source_language")
+  targetLanguages Json?   @map("target_languages")
+  tenantId       String   @map("tenant_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
+
+model QualityReport {
+  id           String   @id @default(uuid())
+  projectId    String   @map("project_id")
+  locale       String
+  overallScore Float    @map("overall_score")
+  checks       String
+  issues       String
+  issueCount   Int      @map("issue_count")
+  generatedAt  DateTime @default(now()) @map("generated_at")
+
+  @@map("quality_reports")
+}
+
+model TranslationEntry {
+  id             String   @id @default(uuid())
+  projectId      String   @map("project_id")
+  key            String
+  sourceText     String   @map("source_text")
+  translatedText String   @map("translated_text")
+  locale         String
+  status         String   @default("draft")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("translation_entries")
+}
+
+model LengthConstraint {
+  id        String   @id @default(uuid())
+  projectId String   @map("project_id")
+  key       String
+  maxLength Int?     @map("max_length")
+  maxLines  Int?     @map("max_lines")
+  context   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("length_constraints")
+}

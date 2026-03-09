@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Library Asset (used by asset-manager.service.ts and folder-manager.service.ts) ───
+
+enum LibraryAssetType {
+  image
+  video
+  audio
+  font
+  document
+  icon
+  other
+}
+
+model LibraryAsset {
+  id            String            @id @default(uuid())
+  name          String
+  description   String?
+  tags          Json              @default("[]")
+  tenantId      String
+  userId        String?
+  storageKey    String?
+  thumbnailKey  String?
+  mimeType      String?
+  extension     String?
+  fileSize      BigInt?
+  checksum      String?
+  folderId      String?
+  folder        Folder?           @relation(fields: [folderId], references: [id])
+  filePath      String            @default("")
+  type          LibraryAssetType  @default(document)
+  createdBy     String?
+  deletedAt     DateTime?
+  deletedBy     String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@map("library_assets")
+}
+
+// ─── Folder (used by folder-manager.service.ts) ───
+
+model Folder {
+  id        String         @id @default(uuid())
+  name      String
+  parentId  String?
+  parent    Folder?        @relation("FolderHierarchy", fields: [parentId], references: [id])
+  children  Folder[]       @relation("FolderHierarchy")
+  tenantId  String
+  userId    String?
+  path      String?
+  deletedAt DateTime?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  assets    LibraryAsset[]
+
+  @@map("folders")
+}
+
+// ─── Media Asset (used by media-library service) ───
+
+model MediaAsset {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  fileName      String?
+  fileType      String?
+  mimeType      String?
+  fileSize      BigInt?
+  filePath      String?
+  thumbnailPath String?
+  category      String?
+  tags          Json     @default("[]")
+  altText       String?
+  dimensions    Json?
+  colorProfile  String?
+  resolution    String?
+  folderId      String?
+  isPublic      Boolean  @default(false)
+  isArchived    Boolean  @default(false)
+  license       String?
+  attribution   String?
+  metadata      Json?
+  createdBy     String?
+  updatedBy     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("media_assets")
+}
+
+// ─── File (used by metadata-engine and sharing) ───
+
+model File {
+  id        String         @id @default(uuid())
+  name      String
+  size      Int            @default(0)
+  mimeType  String?
+  path      String?
+  metadata  FileMetadata?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("files")
+}
+
+// ─── File Metadata (used by metadata-engine.service.ts) ───
+
+model FileMetadata {
+  id                  String   @id @default(uuid())
+  fileId              String   @unique
+  file                File     @relation(fields: [fileId], references: [id])
+  standardMetadata    String?
+  exifData            String?
+  documentProperties  String?
+  extractedAt         DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("file_metadata")
+}
+
+// ─── Custom Metadata (used by metadata-engine.service.ts) ───
+
+model CustomMetadata {
+  id        String   @id @default(uuid())
+  fileId    String
+  key       String
+  value     String
+  type      String
+  namespace String   @default("default")
+  createdBy String
+  updatedBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([fileId, key, namespace], name: "fileId_key_namespace")
+  @@map("custom_metadata")
+}
+
+// ─── Metadata Template (used by metadata-engine.service.ts) ───
+
+model MetadataTemplate {
+  id                String   @id @default(uuid())
+  name              String
+  description       String?
+  fields            String
+  appliesToMimeTypes String?
+  createdBy         String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("metadata_templates")
+}
+
+// ─── Metadata Index (used by metadata-engine.service.ts) ───
+
+model MetadataIndex {
+  id             String   @id @default(uuid())
+  fileId         String   @unique
+  searchableText String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("metadata_index")
+}
+
+// ─── Search Index (used by search-engine.service.ts) ───
+
+model SearchIndex {
+  id          String   @id @default(uuid())
+  documentId  String   @unique
+  title       String
+  content     String
+  description String?
+  tags        Json     @default("[]")
+  category    String?
+  fileType    String?
+  tokens      Json     @default("[]")
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("search_index")
+}
+
+// ─── Search Analytics (used by search-engine.service.ts) ───
+
+model SearchAnalytics {
+  id          String   @id @default(uuid())
+  query       String
+  userId      String?
+  resultCount Int
+  queryTime   Int
+  filters     Json?
+  timestamp   DateTime @default(now())
+
+  @@map("search_analytics")
+}
+
+// ─── Share (used by sharing.service.ts) ───
+
+model Share {
+  id               String   @id @default(uuid())
+  resourceType     String
+  resourceId       String
+  sharedBy         String
+  recipients       String
+  permission       String
+  notifyRecipients Boolean  @default(true)
+  message          String?
+  publicLink       String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("shares")
+}
+
+// ─── Public Link (used by sharing.service.ts) ───
+
+model PublicLink {
+  id            String    @id @default(uuid())
+  shareId       String
+  token         String    @unique
+  permission    String
+  expiresAt     DateTime?
+  maxUses       Int?
+  currentUses   Int       @default(0)
+  passwordHash  String?
+  allowDownload Boolean   @default(false)
+  enabled       Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("public_links")
+}
+
+// ─── Share Access Log (used by sharing.service.ts) ───
+
+model ShareAccessLog {
+  id        String   @id @default(uuid())
+  shareId   String
+  action    String
+  userId    String?
+  userEmail String?
+  ipAddress String?
+  timestamp DateTime @default(now())
+
+  @@map("share_access_logs")
+}
+
+// ─── Share Notification (used by sharing.service.ts) ───
+
+model ShareNotification {
+  id             String   @id @default(uuid())
+  shareId        String
+  recipientEmail String
+  resourceName   String
+  sharedByName   String
+  message        String?
+  status         String   @default("pending")
+  sentAt         DateTime?
+  errorMessage   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("share_notifications")
+}
+
+// ─── Share Audit Log (used by sharing.service.ts) ───
+
+model ShareAuditLog {
+  id          String   @id @default(uuid())
+  shareId     String
+  action      String
+  performedBy String
+  details     String?
+  timestamp   DateTime @default(now())
+
+  @@map("share_audit_logs")
+}
+
+// ─── Collection (used by sharing.service.ts) ───
+
+model Collection {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String
+  fileIds     String
+  folderIds   String?
+  sharedWith  String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("collections")
+}
+
+// ─── Notification (placeholder for shareNotification Did-you-mean) ───
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String
+  message   String
+  userId    String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+// ─── Metadata (placeholder for fileMetadata Did-you-mean) ───
+
+model Metadata {
+  id        String   @id @default(uuid())
+  key       String
+  value     String
+  entityId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("metadata")
+}

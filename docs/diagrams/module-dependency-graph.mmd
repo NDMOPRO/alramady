@@ -1,0 +1,109 @@
+%% Rasid Platform - Module Dependency Graph
+graph TD
+    subgraph SharedLayer["Shared Infrastructure"]
+        SHARED["@rasid/shared<br/>Types, Utils, Constants"]
+        PG["PostgreSQL 16<br/>(Prisma ORM)"]
+        RD["Redis 7<br/>(ioredis)"]
+        ES["Elasticsearch 8.12"]
+        MN["MinIO (S3)"]
+    end
+
+    subgraph Middleware["Common Middleware"]
+        AUTH["Auth Middleware<br/>JWT Verification"]
+        TENANT["Tenant Middleware<br/>Multi-tenancy"]
+        VALIDATE["Validation<br/>Zod Schemas"]
+        ERROR["Error Handler"]
+    end
+
+    subgraph EngineServices["Engine Services"]
+        E01["E01: Data & Files"]
+        E02["E02: Excel Engine"]
+        E03["E03: Dashboards"]
+        E04["E04: Reports"]
+        E05["E05: Presentations"]
+        E07["E07: Localization"]
+        E08["E08: Conversion"]
+        E09["E09: AI Intelligence"]
+        E10["E10: Governance"]
+    end
+
+    subgraph SupportSvc["Support Services"]
+        INF["Infographic"]
+        REP["Replication"]
+        LIB["Library"]
+        TPL["Template"]
+        REN["Rendering Env"]
+    end
+
+    %% All services depend on shared infra
+    E01 --> SHARED
+    E02 --> SHARED
+    E03 --> SHARED
+    E04 --> SHARED
+    E05 --> SHARED
+    E07 --> SHARED
+    E08 --> SHARED
+    E09 --> SHARED
+    E10 --> SHARED
+    INF --> SHARED
+    REP --> SHARED
+    LIB --> SHARED
+    TPL --> SHARED
+
+    %% All services use middleware
+    AUTH --> SHARED
+    TENANT --> AUTH
+
+    %% Database dependencies
+    E01 --> PG
+    E01 --> RD
+    E01 --> ES
+    E01 --> MN
+
+    E02 --> PG
+    E02 --> RD
+
+    E03 --> PG
+    E03 --> RD
+
+    E04 --> PG
+    E04 --> RD
+
+    E05 --> PG
+    E05 --> RD
+
+    E07 --> PG
+    E07 --> RD
+
+    E08 --> PG
+    E08 --> RD
+    E08 --> MN
+
+    E09 --> PG
+    E09 --> RD
+    E09 --> ES
+    E09 --> MN
+
+    E10 --> PG
+    E10 --> RD
+
+    %% Cross-service dependencies
+    E03 -.->|"data access"| E01
+    E04 -.->|"data access"| E01
+    E05 -.->|"AI generation"| E09
+    E07 -.->|"AI translation"| E09
+    E08 -.->|"file parsing"| E01
+    REP -.->|"rendering"| REN
+    REP -.->|"AI layout"| E09
+    INF -.->|"templates"| TPL
+    LIB -.->|"storage"| MN
+
+    classDef shared fill:#2ECC71,stroke:#27AE60,color:#fff
+    classDef middleware fill:#F39C12,stroke:#E67E22,color:#fff
+    classDef engine fill:#3498DB,stroke:#2980B9,color:#fff
+    classDef support fill:#9B59B6,stroke:#8E44AD,color:#fff
+
+    class SHARED,PG,RD,ES,MN shared
+    class AUTH,TENANT,VALIDATE,ERROR middleware
+    class E01,E02,E03,E04,E05,E07,E08,E09,E10 engine
+    class INF,REP,LIB,TPL,REN support

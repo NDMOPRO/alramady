@@ -1,0 +1,44 @@
+$ Get-ChildItem -Path 'C:\DATA_AI\rasid\frontend\app\(dashboard)' -Recurse -Include page.tsx | Select-String -Pattern 'EmbeddedRasidAssistant' | ForEach-Object { "{0}:{1}:{2}" -f $_.Path, $_.LineNumber, $_.Line.Trim() }
+C:\DATA_AI\rasid\frontend\app\(dashboard)\analysis\page.tsx:17:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\analysis\page.tsx:19:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\analysis\page.tsx:356:<EmbeddedRasidAssistant
+C:\DATA_AI\rasid\frontend\app\(dashboard)\data\page.tsx:18:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\data\page.tsx:20:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\data\page.tsx:260:<EmbeddedRasidAssistant
+C:\DATA_AI\rasid\frontend\app\(dashboard)\home\page.tsx:62:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\home\page.tsx:64:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\home\page.tsx:1040:<EmbeddedRasidAssistant
+C:\DATA_AI\rasid\frontend\app\(dashboard)\library\page.tsx:47:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\library\page.tsx:49:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\library\page.tsx:887:<EmbeddedRasidAssistant
+C:\DATA_AI\rasid\frontend\app\(dashboard)\presentations\page.tsx:15:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\presentations\page.tsx:17:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\presentations\page.tsx:237:<EmbeddedRasidAssistant
+C:\DATA_AI\rasid\frontend\app\(dashboard)\reports\page.tsx:17:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\reports\page.tsx:19:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\reports\page.tsx:429:<EmbeddedRasidAssistant
+C:\DATA_AI\rasid\frontend\app\(dashboard)\settings\page.tsx:16:import EmbeddedRasidAssistant, {
+C:\DATA_AI\rasid\frontend\app\(dashboard)\settings\page.tsx:18:} from "@/components/assistant/EmbeddedRasidAssistant";
+C:\DATA_AI\rasid\frontend\app\(dashboard)\settings\page.tsx:425:<EmbeddedRasidAssistant
+
+$ npm run type-check --prefix frontend
+
+> @rasid/frontend@1.0.0 type-check
+> tsc --noEmit
+
+$ assistant_api_probe
+{
+  "datasetName": "phase4-home-sample",
+  "analysisCharts": 1,
+  "firstReport": "تقرير تحقق تكامل المنصة 1500",
+  "firstPresentation": "Sales Snapshot Analysis",
+  "firstLibraryAsset": "اعتماد-تدفق-عربي-للتحقق-1773058832674.json",
+  "firstUser": "home-test@rasid.demo",
+  "auditExportBytes": 175310
+}
+
+$ playwright_assistant_validation
+See: C:\DATA_AI\rasid\verification_run\raw_outputs\phase6_browser_results.json
+
+$ playwright_screenshot
+Saved: C:\DATA_AI\rasid\verification_run\raw_outputs\phase6_settings_assistant.png

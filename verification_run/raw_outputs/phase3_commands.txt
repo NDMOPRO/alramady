@@ -1,0 +1,2645 @@
+
+PS> Get-ChildItem services/replication-service/src/routes,services/replication-service/src/services,services/conversion-service/src/routes,services/conversion-service/src/services -Recurse -File | Select-Object FullName
+
+
+FullName
+--------
+C:\DATA_AI\rasid\services\replication-service\src\routes\advanced-capabilities.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\canonical-pipeline.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\core-principle.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\dual-verify.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\generate-from-layout.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\image-matching.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\match-phases.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\match-scope.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\pixel-validation.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\print-lock.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\replication.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\strict-replication.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\routes\visual-replication.routes.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\arabic-localization.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\arabic-typography-optimizer.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\canonical-pipeline-orchestrator.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\comparison-engine.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\core-principle.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\data-binding.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\data-extraction.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\dual-verify.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\font-recognition.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\image-matching.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\large-image-processor.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\layout-generation-controller.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\match-phases.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\match-scope.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\pdf-intelligence.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\pixel-validation-loop.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\print-lock.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\quality-validation.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\replica-builder.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\side-by-side-comparison.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\style-extractor.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\visual-analyzer.service.ts
+C:\DATA_AI\rasid\services\replication-service\src\services\visual-replication.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\conversion.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\converter.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\core.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\document-extraction.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\matrix.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\social-media.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\udr.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\routes\universal.routes.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\arabic-rtl-conversion.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\audio-transcription.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\batch-conversion-pipeline.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\batch-converter.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\canonical-document.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\converter.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\core.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\document-extraction-engine.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\document-merger.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\extended-formats.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\format-converter.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\format-preservation.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\image-processor.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\image-to-structured-data.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\legal-archival.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\matrix.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\ocr-engine.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\pdf-intelligence.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\pdf-to-excel.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\presentation-to-video.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\social-media-publisher.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\udr.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\universal.service.ts
+C:\DATA_AI\rasid\services\conversion-service\src\services\word-to-powerpoint.service.ts
+
+
+
+
+$ npx jest src/tests/unified-platform-e2e.test.ts --runInBand --runTestsByPath
+
+$ Invoke-RestMethod http://localhost:8007/health
+
+$ npx jest src/tests/canonical-pipeline-e2e.test.ts --runInBand --runTestsByPath
+{
+  "status": "healthy",
+  "service": "replication-service",
+  "version": "1.0.0",
+  "timestamp": "2026-03-09T12:41:33.609Z",
+  "uptime": 111717.435502461,
+  "memory": {
+    "rss": "134MB",
+    "heapUsed": "41MB",
+    "heapTotal": "47MB"
+  },
+  "connections": {
+    "database": "connected",
+    "redis": "connected"
+  }
+}
+
+$ docker ps --format ""table {{.Names}}`t{{.Status}}`t{{.Ports}}""
+NAMES                         STATUS                       PORTS
+rasid-data-service            Up 23 minutes (healthy)      0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp, 0.0.0.0:9221->9229/tcp, [::]:9221->9229/tcp
+rasid-frontend                Up 2 hours                   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+rasid-governance-service      Up 33 minutes (healthy)      0.0.0.0:8010->8010/tcp, [::]:8010->8010/tcp, 0.0.0.0:9230->9229/tcp, [::]:9230->9229/tcp
+rasid-library-service         Up 21 minutes (healthy)      0.0.0.0:8011->8011/tcp, [::]:8011->8011/tcp, 0.0.0.0:9231->9229/tcp, [::]:9231->9229/tcp
+rasid-reporting-service       Up 4 hours (healthy)         0.0.0.0:8004->8004/tcp, [::]:8004->8004/tcp, 0.0.0.0:9224->9229/tcp, [::]:9224->9229/tcp
+rasid-dashboard-service       Up 6 hours (healthy)         0.0.0.0:8003->8003/tcp, [::]:8003->8003/tcp, 0.0.0.0:9223->9229/tcp, [::]:9223->9229/tcp
+rasid-replication-service     Up 30 hours (healthy)        0.0.0.0:8007->8007/tcp, [::]:8007->8007/tcp, 0.0.0.0:9227->9229/tcp, [::]:9227->9229/tcp
+rasid-ai-service              Up 33 hours (healthy)        0.0.0.0:8009->8009/tcp, [::]:8009->8009/tcp, 0.0.0.0:9229->9229/tcp, [::]:9229->9229/tcp
+rasid-localization-service    Up 3 hours (healthy)         0.0.0.0:8008->8008/tcp, [::]:8008->8008/tcp, 0.0.0.0:9228->9229/tcp, [::]:9228->9229/tcp
+rasid-presentation-service    Up About an hour (healthy)   0.0.0.0:8005->8005/tcp, [::]:8005->8005/tcp, 0.0.0.0:9225->9229/tcp, [::]:9225->9229/tcp
+rasid-conversion-service      Up 33 hours (healthy)        0.0.0.0:8013->8013/tcp, [::]:8013->8013/tcp, 0.0.0.0:9233->9229/tcp, [::]:9233->9229/tcp
+rasid-infographic-service     Up 33 hours (healthy)        0.0.0.0:8006->8006/tcp, [::]:8006->8006/tcp, 0.0.0.0:9226->9229/tcp, [::]:9226->9229/tcp
+rasid-excel-service           Up 33 hours (healthy)        0.0.0.0:8002->8002/tcp, [::]:8002->8002/tcp, 0.0.0.0:9222->9229/tcp, [::]:9222->9229/tcp
+rasid-rendering-environment   Up 33 hours (healthy)        0.0.0.0:8014->8014/tcp, [::]:8014->8014/tcp
+rasid-template-service        Up 33 hours (healthy)        0.0.0.0:8012->8012/tcp, [::]:8012->8012/tcp, 0.0.0.0:9232->9229/tcp, [::]:9232->9229/tcp
+rasid-gateway                 Up 2 hours                   0.0.0.0:80->80/tcp, [::]:80->80/tcp
+rasid-redis                   Up 33 hours (healthy)        0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+rasid-postgres                Up 33 hours (healthy)        0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+rasid-minio                   Up 33 hours (healthy)        0.0.0.0:9000-9001->9000-9001/tcp, [::]:9000-9001->9000-9001/tcp
+rasid-elasticsearch           Up 33 hours (healthy)        0.0.0.0:9200->9200/tcp, [::]:9200->9200/tcp
+No tests found, exiting with code 0
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+
+$ npx ts-node --transpile-only src/tests/canonical-pipeline-e2e.test.ts
+
+$ npx ts-node --transpile-only src/tests/unified-platform-e2e.test.ts
+=== Canonical Pipeline Orchestrator E2E Validation Suite ===
+
+Test runner crashed: Error: Cannot find module 'C:\DATA_AI\rasid\services\replication-service\src\services\canonical-pipeline-orchestrator.service.js' imported from C:\DATA_AI\rasid\services\replication-service\src\tests\canonical-pipeline-e2e.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:991:11)
+    at ModuleLoader.#cachedDefaultResolve (node:internal/modules/esm/loader:719:20)
+    at ModuleLoader.#resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:736:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:765:52)
+    at ModuleLoader.#resolve (node:internal/modules/esm/loader:701:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:621:35)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:650:32)
+    at TracingChannel.tracePromise (node:diagnostics_channel:350:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/DATA_AI/rasid/services/replication-service/src/services/canonical-pipeline-orchestrator.service.js'
+}
+
+=== Final Unified Platform E2E Validation Suite ===
+
+Test runner crashed: Error: Cannot find module 'C:\DATA_AI\rasid\services\replication-service\src\services\data-extraction.service.js' imported from C:\DATA_AI\rasid\services\replication-service\src\tests\unified-platform-e2e.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:991:11)
+    at ModuleLoader.#cachedDefaultResolve (node:internal/modules/esm/loader:719:20)
+    at ModuleLoader.#resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:736:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:765:52)
+    at ModuleLoader.#resolve (node:internal/modules/esm/loader:701:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:621:35)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:650:32)
+    at TracingChannel.tracePromise (node:diagnostics_channel:350:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/DATA_AI/rasid/services/replication-service/src/services/data-extraction.service.js'
+}
+
+
+$ npm run build
+
+$ Get-ChildItem -Recurse -File -Include *.png,*.jpg,*.jpeg,*.pdf,*.docx,*.pptx,*.xlsx | Select-Object -First 50 FullName
+
+> @rasid/replication-service@1.0.0 build
+> tsc
+
+src/controllers/match-scope.ts(78,56): error TS2345: Argument of type 'string' is not assignable to parameter of type '"pdf" | "pptx" | "dashboard" | "image" | "infographic" | "word" | "excel"'.
+src/controllers/match-scope.ts(97,7): error TS2345: Argument of type 'string' is not assignable to parameter of type '"pdf" | "pptx" | "dashboard" | "image" | "infographic" | "word" | "excel"'.
+src/middleware/error.ts(128,23): error TS2352: Conversion of type 'Error' to type '{ code: string; meta?: Record<string, unknown> | undefined; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property 'code' is missing in type 'Error' but required in type '{ code: string; meta?: Record<string, unknown> | undefined; }'.
+src/middleware/validate.ts(15,10): error TS2352: Conversion of type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/middleware/validate.ts(51,12): error TS2352: Conversion of type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/middleware/validate.ts(67,12): error TS2352: Conversion of type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/replication/rendering/declarative-visualization-engine.ts(80,50): error TS2307: Cannot find module 'chartjs-node-canvas' or its corresponding type declarations.
+src/replication/rendering/gpu-accelerated-renderer.ts(59,50): error TS2307: Cannot find module 'chartjs-node-canvas' or its corresponding type declarations.
+src/replication/rendering/gpu-accelerated-renderer.ts(107,50): error TS2307: Cannot find module 'chartjs-node-canvas' or its corresponding type declarations.
+src/replication/rendering/gpu-accelerated-renderer.ts(164,50): error TS2307: Cannot find module 'chartjs-node-canvas' or its corresponding type declarations.
+src/replication/visual-structural-replication-engine.ts(8,24): error TS2307: Cannot find module '../../utils/logger.js' or its corresponding type declarations.
+src/routes/canonical-pipeline.routes.ts(72,7): error TS2740: Type 'Record<string, unknown>' is missing the following properties from type 'CanonicalLayoutGraph': id, version, sourceType, sourceHash, and 5 more.
+src/routes/canonical-pipeline.routes.ts(75,7): error TS2740: Type 'Record<string, unknown>' is missing the following properties from type 'PipelineOptions': preserveFonts, preserveColors, preserveSpacing, rtlSupport, and 4 more.
+src/routes/generate-from-layout.routes.ts(89,9): error TS2740: Type 'Record<string, unknown>' is missing the following properties from type 'CanonicalLayoutGraph': id, version, sourceType, sourceHash, and 5 more.
+src/routes/generate-from-layout.routes.ts(94,7): error TS2740: Type 'Record<string, unknown>' is missing the following properties from type 'GenerationOptions': preserveFonts, preserveColors, preserveSpacing, rtlSupport, and 4 more.
+src/routes/strict-replication.routes.ts(468,50): error TS2339: Property 'id' does not exist on type 'JwtPayload'.
+src/routes/strict-replication.routes.ts(479,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/routes/strict-replication.routes.ts(551,50): error TS2339: Property 'id' does not exist on type 'JwtPayload'.
+src/routes/strict-replication.routes.ts(562,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/routes/strict-replication.routes.ts(595,50): error TS2339: Property 'id' does not exist on type 'JwtPayload'.
+src/routes/strict-replication.routes.ts(606,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/routes/strict-replication.routes.ts(655,50): error TS2339: Property 'id' does not exist on type 'JwtPayload'.
+src/routes/strict-replication.routes.ts(666,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/routes/strict-replication.routes.ts(1356,70): error TS2749: 'CompositeMode' refers to a value, but is being used as a type here. Did you mean 'typeof CompositeMode'?
+src/services/comparison-engine.service.ts(284,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/services/comparison-engine.service.ts(284,22): error TS2352: Conversion of type 'DifferenceDetail[]' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'DifferenceDetail[]'.
+src/services/comparison-engine.service.ts(285,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/services/comparison-engine.service.ts(285,21): error TS2352: Conversion of type 'ComparisonStatistics' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'ComparisonStatistics'.
+src/services/comparison-engine.service.ts(313,13): error TS2322: Type '{ id: {}; type: {}; bounds: {}; content: unknown; style: unknown; children: {}; }[]' is not assignable to type 'PageElement[]'.
+  Type '{ id: {}; type: {}; bounds: {}; content: unknown; style: unknown; children: {}; }' is not assignable to type 'PageElement'.
+    Types of property 'id' are incompatible.
+      Type '{}' is not assignable to type 'string'.
+src/services/comparison-engine.service.ts(830,9): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.
+  Type 'Record<string, unknown>' is missing the following properties from type 'readonly (InputJsonValue | null)[]': length, concat, join, slice, and 20 more.
+src/services/comparison-engine.service.ts(830,21): error TS2352: Conversion of type 'FidelityCategory[]' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'FidelityCategory[]'.
+src/services/core-principle.ts(84,6): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(90,6): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(104,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(112,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(119,27): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(122,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(129,27): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(132,10): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(143,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(201,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/core-principle.ts(371,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(109,6): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(115,6): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(129,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(137,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(144,27): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(147,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(154,27): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/dual-verify.ts(157,10): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/layout-generation-controller.service.ts(362,11): error TS2739: Type 'Record<string, unknown>' is missing the following properties from type 'CanonicalLayoutGraph': id, version, pages, metadata
+src/services/match-scope.ts(282,6): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(288,6): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(302,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(310,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(317,27): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(320,25): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(327,27): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/match-scope.ts(330,10): error TS2352: Conversion of type '{ types: { payload: any; operations: { $executeRaw: { args: [query: TemplateStringsArray | Sql, ...values: any[]]; result: any; }; $executeRawUnsafe: { args: [query: string, ...values: any[]]; result: any; }; $queryRaw: { ...; }; $queryRawUnsafe: { ...; }; }; }; } | ... 30 more ... | BrandStyleGuideDelegate<...>' to type 'Record<string, Function>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'BrandStyleGuideDelegate<DefaultArgs>' is not comparable to type 'Record<string, Function>'.
+    Index signature for type 'string' is missing in type 'BrandStyleGuideDelegate<DefaultArgs>'.
+src/services/replica-builder.service.ts(642,7): error TS2322: Type 'LayoutDescription' is not assignable to type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'LayoutDescription'.
+src/services/replica-builder.service.ts(643,7): error TS2322: Type 'LayoutDescription' is not assignable to type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'LayoutDescription'.
+src/services/replica-builder.service.ts(732,3): error TS2322: Type '{ suggestions: any[]; priority: any[]; estimatedImpact: {}; }' is not assignable to type '{ suggestions: string[]; priority: string[]; estimatedImpact: Record<string, unknown>; }'.
+  Types of property 'estimatedImpact' are incompatible.
+    Type '{}' is not assignable to type 'Record<string, unknown>'.
+      Index signature for type 'string' is missing in type '{}'.
+src/services/visual-analyzer.service.ts(123,5): error TS2322: Type '{} | { gridStructure: string; columns: number; rows: number; elements: never[]; spacing: string; alignment: string; }' is not assignable to type 'LayoutDescription'.
+  Type '{}' is missing the following properties from type 'LayoutDescription': gridStructure, columns, rows, elements, and 2 more.
+src/services/visual-analyzer.service.ts(273,9): error TS2322: Type '{ text: string; position: { x: number; y: number; width: number; height: number; }; fontSize: {}; fontWeight: {}; alignment: {}; }[]' is not assignable to type 'TextBlock[]'.
+  Type '{ text: string; position: { x: number; y: number; width: number; height: number; }; fontSize: {}; fontWeight: {}; alignment: {}; }' is not assignable to type 'TextBlock'.
+    Types of property 'fontSize' are incompatible.
+      Type '{}' is not assignable to type 'string'.
+src/services/visual-analyzer.service.ts(340,5): error TS2322: Type '{}' is not assignable to type 'string'.
+src/services/visual-analyzer.service.ts(343,5): error TS2322: Type '{ type: {}; position: { x: number; y: number; width: number; height: number; }; description: {}; zIndex: number; }[]' is not assignable to type 'LayoutElement[]'.
+  Type '{ type: {}; position: { x: number; y: number; width: number; height: number; }; description: {}; zIndex: number; }' is not assignable to type 'LayoutElement'.
+    Types of property 'type' are incompatible.
+      Type '{}' is not assignable to type 'string'.
+src/services/visual-analyzer.service.ts(356,5): error TS2322: Type '{}' is not assignable to type 'string'.
+src/services/visual-analyzer.service.ts(357,5): error TS2322: Type '{}' is not assignable to type 'string'.
+src/services/visual-analyzer.service.ts(412,9): error TS2322: Type '{ type: {}; title: {}; dataPoints: { label: string; value: number; }[]; position: { x: number; y: number; width: number; height: number; }; colors: any[]; }[]' is not assignable to type 'ChartDetection[]'.
+  Type '{ type: {}; title: {}; dataPoints: { label: string; value: number; }[]; position: { x: number; y: number; width: number; height: number; }; colors: any[]; }' is not assignable to type 'ChartDetection'.
+    Types of property 'type' are incompatible.
+      Type '{}' is not assignable to type 'string'.
+src/services/visual-replication.service.ts(256,18): error TS2339: Property 'auditLog' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(604,36): error TS2339: Property 'dashboard' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(618,20): error TS2339: Property 'dashboardWidget' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(645,18): error TS2339: Property 'auditLog' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(796,39): error TS2339: Property 'presentation' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(811,20): error TS2339: Property 'presentationSlide' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(842,18): error TS2339: Property 'auditLog' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(984,33): error TS2339: Property 'report' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(998,18): error TS2339: Property 'auditLog' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/visual-replication.service.ts(1114,18): error TS2339: Property 'auditLog' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+
+
+$ Add-Type -AssemblyName System.Drawing
+$bmp = New-Object System.Drawing.Bitmap 480,270
+$g = [System.Drawing.Graphics]::FromImage($bmp)
+$g.Clear([System.Drawing.Color]::FromArgb(255,250,250,250))
+$fontTitle = New-Object System.Drawing.Font('Arial',18,[System.Drawing.FontStyle]::Bold)
+$fontBody = New-Object System.Drawing.Font('Arial',11,[System.Drawing.FontStyle]::Regular)
+$blue = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255,26,115,232))
+$green = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255,15,157,88))
+$gray = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255,60,64,67))
+$light = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(255,232,240,254))
+$g.FillRectangle($light,0,0,480,50)
+$g.DrawString('Sales Snapshot',$fontTitle,$gray,20,12)
+$g.FillRectangle($blue,20,70,140,80)
+$g.FillRectangle($green,180,70,140,80)
+$g.DrawString('Revenue',$fontBody,[System.Drawing.Brushes]::White,35,88)
+$g.DrawString('1250000',$fontTitle,[System.Drawing.Brushes]::White,35,108)
+$g.DrawString('Profit',$fontBody,[System.Drawing.Brushes]::White,195,88)
+$g.DrawString('350000',$fontTitle,[System.Drawing.Brushes]::White,195,108)
+$pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(255,95,99,104),2)
+$g.DrawRectangle($pen,20,175,440,70)
+$g.DrawLine($pen,20,210,460,210)
+$g.DrawString('Department',$fontBody,$gray,30,184)
+$g.DrawString('Value',$fontBody,$gray,360,184)
+$g.DrawString('Sales',$fontBody,$gray,30,218)
+$g.DrawString('500000',$fontBody,$gray,360,218)
+$bmp.Save('C:\DATA_AI\rasid\verification_run\phase3_test_input.png',[System.Drawing.Imaging.ImageFormat]::Png)
+$g.Dispose(); $bmp.Dispose();
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$headers = @{ Authorization = "Bearer $token" }
+$analysis = curl.exe -s -X POST http://localhost:8007/api/v1/replication/analyze -H "Authorization: Bearer $token" -F "image=@C:\DATA_AI\rasid\verification_run\phase3_test_input.png;type=image/png"
+$analysis
+{"success":true,"data":{"layout":{"gridStructure":"single column with header, two info boxes, and a table","columns":1,"rows":4,"elements":[{"type":"header","position":{"x":5,"y":5,"width":90,"height":10},"description":"Sales Snapshot","zIndex":1},{"type":"text","position":{"x":10,"y":20,"width":40,"height":20},"description":"Revenue 1250000","zIndex":2},{"type":"text","position":{"x":50,"y":20,"width":40,"height":20},"description":"Profit 350000","zIndex":2},{"type":"table","position":{"x":10,"y":50,"width":80,"height":20},"description":"Department and Value","zIndex":1}],"spacing":"normal","alignment":"left"},"colors":["#000000","#FFFFFF","#0000FF","#008000","#F0F8FF"],"fonts":["Arial","sans-serif"],"textContent":[{"text":"Sales Snapshot","position":{"x":5,"y":5,"width":90,"height":10},"fontSize":"large","fontWeight":"bold","alignment":"left"},{"text":"Revenue 1250000","position":{"x":10,"y":20,"width":40,"height":20},"fontSize":"medium","fontWeight":"bold","alignment":"center"},{"text":"Profit 350000","position":{"x":50,"y":20,"width":40,"height":20},"fontSize":"medium","fontWeight":"bold","alignment":"center"}],"charts":[],"dataTables":[{"headers":["Department","Value"],"rows":[["Sales","500000"]],"position":{"x":10,"y":50,"width":80,"height":20}}],"dimensions":{"width":480,"height":270},"timestamp":"2026-03-09T12:44:43.022Z"},"metadata":{"originalName":"phase3_test_input.png","mimeType":"image/png","size":5944}}
+
+
+$ curl.exe -s -X POST http://localhost:8007/api/v1/replication/generate-from-layout/upload -F "file=@C:\DATA_AI\rasid\verification_run\phase3_test_input.png;type=image/png" -F "inputType=image" -F "outputs=[{\"generator\":\"dashboard\",\"format\":\"html\"},{\"generator\":\"report\",\"format\":\"html\"},{\"generator\":\"spreadsheet\",\"format\":\"html\"}]" -F "options={\"pixelPerfectValidation\":true,\"extractData\":true,\"optimizeArabicTypography\":false}"
+{"success":false,"error":"Expected property name or '}' in JSON at position 2","code":"INTERNAL_ERROR"}
+
+
+$ $form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"dashboard","format":"html"},{"generator":"report","format":"html"},{"generator":"spreadsheet","format":"html"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+{
+  "success": true,
+  "data": {
+    "id": "950d683b-7bf8-4b5d-b662-3753b2c414e7",
+    "graphHash": "4777b92d682ab57f280aa3c79c9cc9b76e5a685a0179b9823e9cbb0baf5066b0",
+    "extractedData": {
+      "tables": [],
+      "charts": [],
+      "kpis": [],
+      "textBlocks": [],
+      "lists": [],
+      "extractedAt": "2026-03-09T12:44:59.897Z",
+      "sourceGraphId": "46312844-2e6c-4775-861c-bd46fa5ee68d",
+      "totalElements": 0
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "dashboard",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 9070,
+        "htmlLength": 9070,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 4
+      },
+      {
+        "generator": "report",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 980,
+        "htmlLength": 980,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 1
+      },
+      {
+        "generator": "spreadsheet",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 147,
+        "htmlLength": 147,
+        "pageCount": 1,
+        "elementsRendered": 0,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 1
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 111,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "0 tables, 0 charts, 0 KPIs, 0 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 6,
+        "detail": "3/3 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 118
+  }
+}
+
+
+$ $env:PORT='8017'
+$env:REDIS_HOST='localhost'
+$env:REDIS_PORT='6379'
+$env:REDIS_DB='0'
+$env:DATABASE_URL='postgresql://postgres:postgres@localhost:5432/rasid?schema=public'
+$logOut='C:\DATA_AI\rasid\verification_run\raw_outputs\phase3_replication_local_8017.log'
+$logErr='C:\DATA_AI\rasid\verification_run\raw_outputs\phase3_replication_local_8017.err.log'
+$proc = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','cd /d C:\DATA_AI\rasid\services\replication-service && npx ts-node --transpile-only src/index.ts' -PassThru -RedirectStandardOutput $logOut -RedirectStandardError $logErr -WindowStyle Hidden
+$proc.Id
+4020
+
+
+$ Start-Sleep -Seconds 6
+try { Invoke-RestMethod http://localhost:8017/health | ConvertTo-Json -Depth 10 } catch { $_ | Out-String }
+Invoke-RestMethod: 
+Line |
+   2 |  try { Invoke-RestMethod http://localhost:8017/health | ConvertTo-Json …
+     |        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | No connection could be made because the target machine actively refused it.
+
+
+
+$ Set-Location 'C:\DATA_AI\rasid\services\replication-service'; node --loader ts-node/esm C:\DATA_AI\rasid\verification_run\commands\phase3_layout_generation_check.ts
+
+$ Set-Location 'C:\DATA_AI\rasid\services\replication-service'; node --loader ts-node/esm C:\DATA_AI\rasid\verification_run\commands\phase3_layout_generation_check.ts
+
+
+$ $form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"dashboard","format":"html"},{"generator":"report","format":"html"},{"generator":"spreadsheet","format":"html"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+{
+  "success": true,
+  "data": {
+    "id": "ffff9ceb-cc3c-4299-ad50-f628aa638bd0",
+    "graphHash": "ae0826371ebcaba7e5ec4a2dc683c4439f50aa30727ce00405bd6460b15076bb",
+    "extractedData": {
+      "tables": [],
+      "charts": [],
+      "kpis": [],
+      "textBlocks": [],
+      "lists": [],
+      "extractedAt": "2026-03-09T12:49:37.048Z",
+      "sourceGraphId": "8eba863d-563e-4e51-85bb-85f6a2e84e02",
+      "totalElements": 0
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "dashboard",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 9070,
+        "htmlLength": 9070,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 0
+      },
+      {
+        "generator": "report",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 980,
+        "htmlLength": 980,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 1
+      },
+      {
+        "generator": "spreadsheet",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 147,
+        "htmlLength": 147,
+        "pageCount": 1,
+        "elementsRendered": 0,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 0
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 9,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "0 tables, 0 charts, 0 KPIs, 0 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "3/3 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 11
+  }
+}
+
+
+$ docker restart rasid-replication-service
+rasid-replication-service
+
+
+$ Start-Sleep -Seconds 8
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"dashboard","format":"html"},{"generator":"report","format":"html"},{"generator":"spreadsheet","format":"html"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+{
+  "success": true,
+  "data": {
+    "id": "4195e094-6021-4971-8797-35ef0956ed5f",
+    "graphHash": "804679a65b96fecf438053cf472faccaca4685f49c540da4b1d1abac14a4b844",
+    "extractedData": {
+      "tables": [
+        {
+          "nodeId": "table-4",
+          "pageNumber": 1,
+          "title": "Sales Snapshot",
+          "headers": [
+            "Department",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Sales",
+              "500000"
+            ]
+          ],
+          "columnTypes": [
+            "text",
+            "number"
+          ],
+          "rowCount": 1,
+          "columnCount": 2
+        }
+      ],
+      "charts": [],
+      "kpis": [
+        {
+          "nodeId": "kpi-2",
+          "pageNumber": 1,
+          "label": "Revenue",
+          "value": "1250000",
+          "numericValue": 1250000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        },
+        {
+          "nodeId": "kpi-3",
+          "pageNumber": 1,
+          "label": "Profit",
+          "value": "350000",
+          "numericValue": 350000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        }
+      ],
+      "textBlocks": [
+        {
+          "nodeId": "text-1",
+          "pageNumber": 1,
+          "role": "subheading",
+          "text": "Sales Snapshot",
+          "fontSize": 22,
+          "fontWeight": 700,
+          "language": "en",
+          "direction": "ltr"
+        }
+      ],
+      "lists": [],
+      "extractedAt": "2026-03-09T12:50:17.254Z",
+      "sourceGraphId": "24538fcd-af18-4365-969c-3d774b3ef6cd",
+      "totalElements": 4
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "dashboard",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 2203,
+        "htmlLength": 2199,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 2
+      },
+      {
+        "generator": "report",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 1438,
+        "htmlLength": 1438,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 2
+      },
+      {
+        "generator": "spreadsheet",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 613,
+        "htmlLength": 613,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": {
+          "pixelDiff": -1,
+          "isPerfect": false,
+          "iterationCount": 0
+        },
+        "processingTimeMs": 1
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 13044,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "1 tables, 0 charts, 2 KPIs, 1 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 6,
+        "detail": "3/3 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 13051
+  }
+}
+
+
+$ docker restart rasid-replication-service
+rasid-replication-service
+
+
+$ Start-Sleep -Seconds 8
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"dashboard","format":"html"},{"generator":"report","format":"html"},{"generator":"spreadsheet","format":"html"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+{
+  "success": true,
+  "data": {
+    "id": "98bd9b42-5cd1-4230-8635-5f27a3ba14ae",
+    "graphHash": "94358e6f40eed9411bd77bdd5ef9ad61f25a2ee8f836835cb15eb8f5b1524ee3",
+    "extractedData": {
+      "tables": [
+        {
+          "nodeId": "table-4",
+          "pageNumber": 1,
+          "title": "Sales Snapshot",
+          "headers": [
+            "Department",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Sales",
+              "500000"
+            ]
+          ],
+          "columnTypes": [
+            "text",
+            "number"
+          ],
+          "rowCount": 1,
+          "columnCount": 2
+        }
+      ],
+      "charts": [],
+      "kpis": [
+        {
+          "nodeId": "kpi-2",
+          "pageNumber": 1,
+          "label": "Revenue",
+          "value": "1250000",
+          "numericValue": 1250000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        },
+        {
+          "nodeId": "kpi-3",
+          "pageNumber": 1,
+          "label": "Profit",
+          "value": "350000",
+          "numericValue": 350000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        }
+      ],
+      "textBlocks": [
+        {
+          "nodeId": "text-1",
+          "pageNumber": 1,
+          "role": "subheading",
+          "text": "Sales Snapshot",
+          "fontSize": 22,
+          "fontWeight": 700,
+          "language": "en",
+          "direction": "ltr"
+        }
+      ],
+      "lists": [],
+      "extractedAt": "2026-03-09T12:51:28.057Z",
+      "sourceGraphId": "9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6",
+      "totalElements": 4
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "dashboard",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 2203,
+        "htmlLength": 2199,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": {
+          "pixelDiff": 0,
+          "isPerfect": true,
+          "iterationCount": 1
+        },
+        "processingTimeMs": 662
+      },
+      {
+        "generator": "report",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 1438,
+        "htmlLength": 1438,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": {
+          "pixelDiff": 0,
+          "isPerfect": true,
+          "iterationCount": 1
+        },
+        "processingTimeMs": 267
+      },
+      {
+        "generator": "spreadsheet",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 613,
+        "htmlLength": 613,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": {
+          "pixelDiff": 0,
+          "isPerfect": true,
+          "iterationCount": 1
+        },
+        "processingTimeMs": 216
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 19414,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 2,
+        "detail": "1 tables, 0 charts, 2 KPIs, 1 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 1146,
+        "detail": "3/3 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 20563
+  }
+}
+
+
+$ $form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"presentation","format":"html"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+{
+  "success": true,
+  "data": {
+    "id": "7aa303bd-eee9-4ba5-9db8-82c7da7e8363",
+    "graphHash": "83799deb616ded01d474988625ef13d559854233a41fb3bb0411ee6e06b71615",
+    "extractedData": {
+      "tables": [
+        {
+          "nodeId": "table-4",
+          "pageNumber": 1,
+          "title": "Sales Snapshot",
+          "headers": [
+            "Department",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Sales",
+              "500000"
+            ]
+          ],
+          "columnTypes": [
+            "text",
+            "number"
+          ],
+          "rowCount": 1,
+          "columnCount": 2
+        }
+      ],
+      "charts": [],
+      "kpis": [
+        {
+          "nodeId": "kpi-2",
+          "pageNumber": 1,
+          "label": "Revenue",
+          "value": "1250000",
+          "numericValue": 1250000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        },
+        {
+          "nodeId": "kpi-3",
+          "pageNumber": 1,
+          "label": "Profit",
+          "value": "350000",
+          "numericValue": 350000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        }
+      ],
+      "textBlocks": [
+        {
+          "nodeId": "text-1",
+          "pageNumber": 1,
+          "role": "subheading",
+          "text": "Sales Snapshot",
+          "fontSize": 22,
+          "fontWeight": 700,
+          "language": "en",
+          "direction": "ltr"
+        }
+      ],
+      "lists": [],
+      "extractedAt": "2026-03-09T12:52:52.027Z",
+      "sourceGraphId": "8244fa64-eb5f-4efc-974d-f5bacb65d8ff",
+      "totalElements": 4
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "presentation",
+        "format": "html",
+        "mimeType": "text/html",
+        "sizeBytes": 2199,
+        "htmlLength": 2195,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": {
+          "pixelDiff": 0,
+          "isPerfect": true,
+          "iterationCount": 1
+        },
+        "processingTimeMs": 250
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 16558,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "1 tables, 0 charts, 2 KPIs, 1 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 250,
+        "detail": "1/1 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 16809
+  }
+}
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$headers = @{ Authorization = "Bearer $token" }
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  options = '{"language":"en","slideCount":1,"style":"strict-replication"}'
+}
+$result = Invoke-RestMethod -Method Post -Uri 'http://localhost:8005/api/v1/presentation/source/from-file' -Headers $headers -Form $form
+$result | ConvertTo-Json -Depth 10
+{
+  "success": true,
+  "data": {
+    "presentationId": "13f22edf-582d-41f4-a572-ab1ca9a41152",
+    "name": "Sales Snapshot Analysis",
+    "theme": {
+      "primaryColor": "#1E90FF",
+      "secondaryColor": "#FFD700",
+      "fontFamily": "Arial",
+      "backgroundColor": "#FFFFFF"
+    },
+    "slideCount": 1,
+    "slides": [
+      {
+        "id": "d43347d1-c4c3-477a-922e-453b4b557669",
+        "slideIndex": 0,
+        "layout": "content",
+        "elements": [
+          {
+            "type": "text",
+            "text": "Overview of Financial Metrics",
+            "options": {
+              "x": 0.5,
+              "y": 0.3,
+              "w": 9,
+              "h": 1,
+              "fontSize": 36,
+              "bold": true,
+              "color": "1E90FF",
+              "fontFace": "Arial"
+            }
+          },
+          {
+            "type": "text",
+            "text": "- Revenue: 1,250,000\n- Profit: 350,000\n- Sales Department Contribution: 500,000",
+            "options": {
+              "x": 0.5,
+              "y": 1.5,
+              "w": 9,
+              "h": 5,
+              "fontSize": 18,
+              "color": "333333",
+              "fontFace": "Arial",
+              "valign": "top",
+              "paraSpaceAfter": 6
+            }
+          }
+        ]
+      }
+    ],
+    "sourceType": "image",
+    "tokensUsed": 609
+  }
+}
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$headers = @{ Authorization = "Bearer $token" }
+$presentationId = '13f22edf-582d-41f4-a572-ab1ca9a41152'
+Invoke-WebRequest -Uri "http://localhost:8005/api/v1/presentation/presentations/$presentationId/export/pptx" -Headers $headers -OutFile 'C:\DATA_AI\rasid\verification_run\phase3_exported_presentation.pptx'
+Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_exported_presentation.pptx' | Select-Object FullName,Length,LastWriteTime | ConvertTo-Json -Depth 5
+{
+  "FullName": "C:\\DATA_AI\\rasid\\verification_run\\phase3_exported_presentation.pptx",
+  "Length": 70329,
+  "LastWriteTime": "2026-03-09T15:53:49.5134913+03:00"
+}
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$headers = @{ Authorization = "Bearer $token"; 'Content-Type' = 'application/json' }
+$xlsx = Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/extract-structure' -Headers $headers -Body '{"fileType":"xlsx","mode":"STRICT_REPLICATION"}'
+$pptx = Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/extract-structure' -Headers $headers -Body '{"fileType":"pptx","mode":"STRICT_REPLICATION"}'
+$verify = Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/verify' -Headers $headers -Body '{"sourceElements":[{"x":0,"y":0,"width":100,"height":50,"type":"table"}],"resultElements":[{"x":0,"y":0,"width":100,"height":50,"type":"table"}]}'
+@{xlsx=$xlsx; pptx=$pptx; verify=$verify} | ConvertTo-Json -Depth 10
+{
+  "pptx": {
+    "success": true,
+    "data": {
+      "id": "ca9569dd-a1da-46b3-883b-fc7d13ab87c4",
+      "tenantId": "a0000000-0000-0000-0000-000000000001",
+      "fileType": "pptx",
+      "mode": "STRICT_REPLICATION",
+      "elements": [],
+      "layout": {
+        "type": "absolute",
+        "width": 1920,
+        "height": 1080,
+        "gridDetected": false,
+        "columns": 1,
+        "rows": 1
+      },
+      "typography": {
+        "fonts": [],
+        "baseFontSize": 16,
+        "lineHeight": 1.5
+      },
+      "hierarchy": {
+        "root": {
+          "type": "container",
+          "children": []
+        },
+        "depth": 0
+      },
+      "extractedAt": "2026-03-09T12:54:04.142Z"
+    }
+  },
+  "verify": {
+    "success": true,
+    "data": {
+      "id": "a3a720eb-7385-47bd-b1a7-1527dcad9fe3",
+      "passed": true,
+      "pixelDiff": {
+        "value": 0,
+        "threshold": 0.001,
+        "passed": true
+      },
+      "structuralHash": {
+        "similarity": 1,
+        "threshold": 0.999,
+        "passed": true
+      },
+      "mode": "STRICT_REPLICATION",
+      "details": {
+        "blockDistribution": 1,
+        "contrast": 1,
+        "visualRelationships": 1,
+        "whitespace": 1
+      },
+      "verifiedAt": "2026-03-09T12:54:04.156Z"
+    }
+  },
+  "xlsx": {
+    "success": true,
+    "data": {
+      "id": "14900034-71c2-4ee4-88de-00521eecd5b4",
+      "tenantId": "a0000000-0000-0000-0000-000000000001",
+      "fileType": "xlsx",
+      "mode": "STRICT_REPLICATION",
+      "elements": [],
+      "layout": {
+        "type": "absolute",
+        "width": 1920,
+        "height": 1080,
+        "gridDetected": false,
+        "columns": 1,
+        "rows": 1
+      },
+      "typography": {
+        "fonts": [],
+        "baseFontSize": 16,
+        "lineHeight": 1.5
+      },
+      "hierarchy": {
+        "root": {
+          "type": "container",
+          "children": []
+        },
+        "depth": 0
+      },
+      "extractedAt": "2026-03-09T12:54:04.128Z"
+    }
+  }
+}
+
+
+
+$ docker restart rasid-presentation-service rasid-replication-service
+
+rasid-presentation-service
+rasid-replication-service
+
+
+
+$ docker ps --format "table {{.Names}}`t{{.Status}}" | Select-String "rasid-presentation-service|rasid-replication-service"
+
+
+rasid-replication-service     Up Less than a second (health: starting)
+rasid-presentation-service    Up Less than a second (health: starting)
+
+
+
+$ docker logs rasid-replication-service --tail 80
+
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","kpis":0,"lists":0,"service":"data-extraction","tables":0,"textBlocks":0,"timestamp":"2026-03-09T12:49:37.048Z","totalElements":0}
+Debugger listening on ws://0.0.0.0:9229/3e08754f-0a98-4fc6-bc58-f219a44ed88a
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","id":"b3634e1a-5f3e-4f33-b967-dabc6200e536","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"dashboard","id":"b3634e1a-5f3e-4f33-b967-dabc6200e536","pages":1,"pixelPerfect":false,"processingTimeMs":0,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","id":"f954d8d3-c319-46b7-9642-33658f7b1dc4","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"report","id":"f954d8d3-c319-46b7-9642-33658f7b1dc4","pages":1,"pixelPerfect":false,"processingTimeMs":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","id":"f9847db5-3233-43fd-8a04-6bf093553c28","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Pipeline execution complete {"elements":0,"format":"html","generator":"spreadsheet","id":"f9847db5-3233-43fd-8a04-6bf093553c28","pages":1,"pixelPerfect":false,"processingTimeMs":0,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"ffff9ceb-cc3c-4299-ad50-f628aa638bd0","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:49:37.049Z","totalMs":11}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T12:49:47.575Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T12:49:47.589Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T12:49:47.590Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:49:51.039Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:49:51"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.025Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.033Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.036Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T12:49:52.038Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T12:49:52.038Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:50:04"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: Generation pipeline started {"id":"4195e094-6021-4971-8797-35ef0956ed5f","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:50:04.209Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:50:17.253Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:50:17.254Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"45dcbcb7-af66-43a4-af24-8e90c422cd2a","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.255Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"dashboard","id":"45dcbcb7-af66-43a4-af24-8e90c422cd2a","pages":1,"pixelPerfect":false,"processingTimeMs":2,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"7ba2485c-f8a9-489c-b181-53219a7dbafa","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+Debugger listening on ws://0.0.0.0:9229/7cdbc652-9a61-40fa-ad44-cacd0fd74e06
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"report","id":"7ba2485c-f8a9-489c-b181-53219a7dbafa","pages":1,"pixelPerfect":false,"processingTimeMs":2,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"6ad3b717-08ac-4fd4-ba55-820be609a796","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.259Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"spreadsheet","id":"6ad3b717-08ac-4fd4-ba55-820be609a796","pages":1,"pixelPerfect":false,"processingTimeMs":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.259Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"4195e094-6021-4971-8797-35ef0956ed5f","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:50:17.260Z","totalMs":13051}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T12:50:52.950Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T12:50:52.956Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T12:50:52.957Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:50:55.635Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:50:55"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.439Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.447Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.450Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T12:50:56.451Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T12:50:56.451Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:08.638Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:51:08"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:51:08.639Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T12:51:08.640Z"}
+[32minfo[39m: Generation pipeline started {"id":"98bd9b42-5cd1-4230-8635-5f27a3ba14ae","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:51:08.640Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:51:28.055Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:51:28.057Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"62074c18-d154-4cdf-a575-202a0f049093","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.057Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"dashboard","id":"62074c18-d154-4cdf-a575-202a0f049093","pages":1,"pixelPerfect":true,"processingTimeMs":662,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.719Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"0e788cf4-4efc-4c9a-a0f9-50139fa25206","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.719Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"report","id":"0e788cf4-4efc-4c9a-a0f9-50139fa25206","pages":1,"pixelPerfect":true,"processingTimeMs":267,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.986Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"c5e2da93-6c4f-40cf-8bba-c5bd3949d8ed","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.987Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"spreadsheet","id":"c5e2da93-6c4f-40cf-8bba-c5bd3949d8ed","pages":1,"pixelPerfect":true,"processingTimeMs":216,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:29.203Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"98bd9b42-5cd1-4230-8635-5f27a3ba14ae","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:51:29.203Z","totalMs":20563}
+[32minfo[39m: Generation pipeline started {"id":"7aa303bd-eee9-4ba5-9db8-82c7da7e8363","inputType":"image","localization":false,"outputs":["presentation:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:52:35.468Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:52:52.026Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:52:52.027Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"presentation","graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","id":"d0dc5810-125b-45b6-9e7d-2ebf80fcebd6","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.027Z"}
+[33mwarn[39m: Presentation service unavailable, falling back to dashboard adapter {"error":"fetch failed","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.029Z"}
+[33mwarn[39m: Presentation service unavailable, falling back to dashboard adapter {"error":"fetch failed","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.030Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"presentation","id":"d0dc5810-125b-45b6-9e7d-2ebf80fcebd6","pages":1,"pixelPerfect":true,"processingTimeMs":250,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.277Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":1,"id":"7aa303bd-eee9-4ba5-9db8-82c7da7e8363","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:52:52.278Z","totalMs":16809}
+[32minfo[39m: Structure extracted {"fileType":"xlsx","id":"14900034-71c2-4ee4-88de-00521eecd5b4","mode":"STRICT_REPLICATION","service":"replication-service","timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Structure extracted {"fileType":"pptx","id":"ca9569dd-a1da-46b3-883b-fc7d13ab87c4","mode":"STRICT_REPLICATION","service":"replication-service","timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Dual fidelity verification {"passed":true,"pixelDiff":0,"service":"replication-service","structuralSimilarity":1,"timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T13:13:58.424Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T13:13:58.433Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T13:13:58.434Z"}
+
+
+
+$ docker restart rasid-presentation-service rasid-replication-service
+
+rasid-presentation-service
+rasid-replication-service
+
+
+rasid-replication-service     Up Less than a second (health: starting)
+rasid-presentation-service    Up Less than a second (health: starting)
+
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$headers = @{ Authorization = "Bearer $token" }
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"presentation","format":"pptx"},{"generator":"docx","format":"docx"},{"generator":"spreadsheet","format":"xlsx"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+
+
+
+$ docker logs rasid-replication-service --tail 80
+
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T12:49:47.589Z"}
+Debugger listening on ws://0.0.0.0:9229/3e08754f-0a98-4fc6-bc58-f219a44ed88a
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T12:49:47.590Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:49:51.039Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:49:51"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.025Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.033Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.036Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T12:49:52.038Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T12:49:52.038Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:50:04"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: Generation pipeline started {"id":"4195e094-6021-4971-8797-35ef0956ed5f","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:50:04.209Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:50:17.253Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:50:17.254Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"45dcbcb7-af66-43a4-af24-8e90c422cd2a","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.255Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"dashboard","id":"45dcbcb7-af66-43a4-af24-8e90c422cd2a","pages":1,"pixelPerfect":false,"processingTimeMs":2,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"7ba2485c-f8a9-489c-b181-53219a7dbafa","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"report","id":"7ba2485c-f8a9-489c-b181-53219a7dbafa","pages":1,"pixelPerfect":false,"processingTimeMs":2,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"6ad3b717-08ac-4fd4-ba55-820be609a796","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.259Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"spreadsheet","id":"6ad3b717-08ac-4fd4-ba55-820be609a796","pages":1,"pixelPerfect":false,"processingTimeMs":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.259Z"}
+Debugger listening on ws://0.0.0.0:9229/7cdbc652-9a61-40fa-ad44-cacd0fd74e06
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"4195e094-6021-4971-8797-35ef0956ed5f","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:50:17.260Z","totalMs":13051}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T12:50:52.950Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T12:50:52.956Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T12:50:52.957Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:50:55.635Z"}
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:50:55"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.439Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.447Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.450Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T12:50:56.451Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T12:50:56.451Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:08.638Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:51:08"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:51:08.639Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T12:51:08.640Z"}
+[32minfo[39m: Generation pipeline started {"id":"98bd9b42-5cd1-4230-8635-5f27a3ba14ae","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:51:08.640Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:51:28.055Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:51:28.057Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"62074c18-d154-4cdf-a575-202a0f049093","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.057Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"dashboard","id":"62074c18-d154-4cdf-a575-202a0f049093","pages":1,"pixelPerfect":true,"processingTimeMs":662,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.719Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"0e788cf4-4efc-4c9a-a0f9-50139fa25206","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.719Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"report","id":"0e788cf4-4efc-4c9a-a0f9-50139fa25206","pages":1,"pixelPerfect":true,"processingTimeMs":267,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.986Z"}
+Debugger listening on ws://0.0.0.0:9229/f7edd60c-f28a-4834-981b-c5f87bfda202
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"c5e2da93-6c4f-40cf-8bba-c5bd3949d8ed","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.987Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"spreadsheet","id":"c5e2da93-6c4f-40cf-8bba-c5bd3949d8ed","pages":1,"pixelPerfect":true,"processingTimeMs":216,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:29.203Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"98bd9b42-5cd1-4230-8635-5f27a3ba14ae","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:51:29.203Z","totalMs":20563}
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Generation pipeline started {"id":"7aa303bd-eee9-4ba5-9db8-82c7da7e8363","inputType":"image","localization":false,"outputs":["presentation:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:52:35.468Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:52:52.026Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:52:52.027Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"presentation","graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","id":"d0dc5810-125b-45b6-9e7d-2ebf80fcebd6","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.027Z"}
+[33mwarn[39m: Presentation service unavailable, falling back to dashboard adapter {"error":"fetch failed","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.029Z"}
+[33mwarn[39m: Presentation service unavailable, falling back to dashboard adapter {"error":"fetch failed","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.030Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"presentation","id":"d0dc5810-125b-45b6-9e7d-2ebf80fcebd6","pages":1,"pixelPerfect":true,"processingTimeMs":250,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.277Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":1,"id":"7aa303bd-eee9-4ba5-9db8-82c7da7e8363","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:52:52.278Z","totalMs":16809}
+[32minfo[39m: Structure extracted {"fileType":"xlsx","id":"14900034-71c2-4ee4-88de-00521eecd5b4","mode":"STRICT_REPLICATION","service":"replication-service","timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Structure extracted {"fileType":"pptx","id":"ca9569dd-a1da-46b3-883b-fc7d13ab87c4","mode":"STRICT_REPLICATION","service":"replication-service","timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Dual fidelity verification {"passed":true,"pixelDiff":0,"service":"replication-service","structuralSimilarity":1,"timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T13:13:58.424Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T13:13:58.433Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T13:13:58.434Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T13:14:01.366Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 13:14:01"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T13:14:01.602Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:14:01.610Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:14:01.616Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T13:14:01.617Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T13:14:01.618Z"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T13:14:16.096Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T13:14:16.104Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T13:14:16.105Z"}
+
+
+
+$ Invoke-RestMethod http://localhost:8005/api/v1/presentation/ready
+
+{
+  "ready": true
+}
+
+
+
+$ Invoke-RestMethod http://localhost:8007/health
+
+{
+  "status": "healthy",
+  "service": "replication-service",
+  "version": "1.0.0",
+  "timestamp": "2026-03-09T13:14:42.5Z",
+  "uptime": 25.089561103,
+  "memory": {
+    "rss": "117MB",
+    "heapUsed": "32MB",
+    "heapTotal": "34MB"
+  },
+  "connections": {
+    "database": "connected",
+    "redis": "connected"
+  }
+}
+
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"presentation","format":"pptx"},{"generator":"docx","format":"docx"},{"generator":"spreadsheet","format":"xlsx"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+
+{
+  "success": true,
+  "data": {
+    "id": "2701d63c-9373-4da8-8b89-6faea4155242",
+    "graphHash": "b92aeb83528da6b9714eb8e9d173eafa15615d156ad743ac8114e8f4e533042a",
+    "extractedData": {
+      "tables": [
+        {
+          "nodeId": "table-4",
+          "pageNumber": 1,
+          "title": "Sales Snapshot",
+          "headers": [
+            "Department",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Sales",
+              "500000"
+            ]
+          ],
+          "columnTypes": [
+            "text",
+            "number"
+          ],
+          "rowCount": 1,
+          "columnCount": 2
+        }
+      ],
+      "charts": [],
+      "kpis": [
+        {
+          "nodeId": "kpi-2",
+          "pageNumber": 1,
+          "label": "Revenue",
+          "value": "1250000",
+          "numericValue": 1250000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        },
+        {
+          "nodeId": "kpi-3",
+          "pageNumber": 1,
+          "label": "Profit",
+          "value": "350000",
+          "numericValue": 350000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        }
+      ],
+      "textBlocks": [
+        {
+          "nodeId": "text-1",
+          "pageNumber": 1,
+          "role": "subheading",
+          "text": "Sales Snapshot",
+          "fontSize": 22,
+          "fontWeight": 700,
+          "language": "en",
+          "direction": "ltr"
+        }
+      ],
+      "lists": [],
+      "extractedAt": "2026-03-09T13:15:15.625Z",
+      "sourceGraphId": "eb0137be-9699-41cd-b0bf-c0578aef4327",
+      "totalElements": 4
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "presentation",
+        "format": "pptx",
+        "mimeType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "sizeBytes": 52889,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": null,
+        "processingTimeMs": 76
+      },
+      {
+        "generator": "docx",
+        "format": "docx",
+        "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "sizeBytes": 1435,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": null,
+        "processingTimeMs": 25
+      },
+      {
+        "generator": "spreadsheet",
+        "format": "xlsx",
+        "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "sizeBytes": 613,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": null,
+        "processingTimeMs": 20
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 32867,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "1 tables, 0 charts, 2 KPIs, 1 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 125,
+        "detail": "3/3 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 32993
+  }
+}
+
+
+
+$ docker logs rasid-replication-service --tail 120
+
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:44:59.903Z"}
+[32minfo[39m: Pipeline execution complete {"elements":0,"format":"html","generator":"spreadsheet","id":"0fbdb371-f9e4-4e1e-a172-f4482927e8ec","pages":1,"pixelPerfect":false,"processingTimeMs":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:44:59.903Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"950d683b-7bf8-4b5d-b662-3753b2c414e7","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:44:59.903Z","totalMs":118}
+[32minfo[39m: Generation pipeline started {"id":"ffff9ceb-cc3c-4299-ad50-f628aa638bd0","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:49:37.038Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:49:37.047Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","kpis":0,"lists":0,"service":"data-extraction","tables":0,"textBlocks":0,"timestamp":"2026-03-09T12:49:37.048Z","totalElements":0}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","id":"b3634e1a-5f3e-4f33-b967-dabc6200e536","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"dashboard","id":"b3634e1a-5f3e-4f33-b967-dabc6200e536","pages":1,"pixelPerfect":false,"processingTimeMs":0,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","id":"f954d8d3-c319-46b7-9642-33658f7b1dc4","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.048Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"report","id":"f954d8d3-c319-46b7-9642-33658f7b1dc4","pages":1,"pixelPerfect":false,"processingTimeMs":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"8eba863d-563e-4e51-85bb-85f6a2e84e02","id":"f9847db5-3233-43fd-8a04-6bf093553c28","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Pipeline execution complete {"elements":0,"format":"html","generator":"spreadsheet","id":"f9847db5-3233-43fd-8a04-6bf093553c28","pages":1,"pixelPerfect":false,"processingTimeMs":0,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:49:37.049Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"ffff9ceb-cc3c-4299-ad50-f628aa638bd0","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:49:37.049Z","totalMs":11}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T12:49:47.575Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T12:49:47.589Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T12:49:47.590Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:49:51.039Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:49:51"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.025Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.033Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:49:52.036Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T12:49:52.038Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T12:49:52.038Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:50:04"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T12:50:04.208Z"}
+[32minfo[39m: Generation pipeline started {"id":"4195e094-6021-4971-8797-35ef0956ed5f","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:50:04.209Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:50:17.253Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:50:17.254Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"45dcbcb7-af66-43a4-af24-8e90c422cd2a","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.255Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"dashboard","id":"45dcbcb7-af66-43a4-af24-8e90c422cd2a","pages":1,"pixelPerfect":false,"processingTimeMs":2,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"7ba2485c-f8a9-489c-b181-53219a7dbafa","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.256Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"report","id":"7ba2485c-f8a9-489c-b181-53219a7dbafa","pages":1,"pixelPerfect":false,"processingTimeMs":2,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"24538fcd-af18-4365-969c-3d774b3ef6cd","id":"6ad3b717-08ac-4fd4-ba55-820be609a796","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.258Z"}
+[33mwarn[39m: Pixel validation skipped {"error":"Input buffer contains unsupported image format","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.259Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"spreadsheet","id":"6ad3b717-08ac-4fd4-ba55-820be609a796","pages":1,"pixelPerfect":false,"processingTimeMs":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:50:17.259Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"4195e094-6021-4971-8797-35ef0956ed5f","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:50:17.260Z","totalMs":13051}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T12:50:52.950Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T12:50:52.956Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T12:50:52.957Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:50:55.635Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:50:55"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.439Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.447Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T12:50:56.450Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T12:50:56.451Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T12:50:56.451Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:08.638Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 12:51:08"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T12:51:08.639Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T12:51:08.640Z"}
+[32minfo[39m: Generation pipeline started {"id":"98bd9b42-5cd1-4230-8635-5f27a3ba14ae","inputType":"image","localization":false,"outputs":["dashboard:html","report:html","spreadsheet:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:51:08.640Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:51:28.055Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:51:28.057Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"dashboard","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"62074c18-d154-4cdf-a575-202a0f049093","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.057Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"dashboard","id":"62074c18-d154-4cdf-a575-202a0f049093","pages":1,"pixelPerfect":true,"processingTimeMs":662,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.719Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"report","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"0e788cf4-4efc-4c9a-a0f9-50139fa25206","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.719Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"report","id":"0e788cf4-4efc-4c9a-a0f9-50139fa25206","pages":1,"pixelPerfect":true,"processingTimeMs":267,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.986Z"}
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"spreadsheet","graphId":"9a0d01c5-b2dc-46ea-aacf-4c7b99dcf6b6","id":"c5e2da93-6c4f-40cf-8bba-c5bd3949d8ed","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:28.987Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"html","generator":"spreadsheet","id":"c5e2da93-6c4f-40cf-8bba-c5bd3949d8ed","pages":1,"pixelPerfect":true,"processingTimeMs":216,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:51:29.203Z"}
+Debugger listening on ws://0.0.0.0:9229/3e08754f-0a98-4fc6-bc58-f219a44ed88a
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger listening on ws://0.0.0.0:9229/7cdbc652-9a61-40fa-ad44-cacd0fd74e06
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"98bd9b42-5cd1-4230-8635-5f27a3ba14ae","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:51:29.203Z","totalMs":20563}
+[32minfo[39m: Generation pipeline started {"id":"7aa303bd-eee9-4ba5-9db8-82c7da7e8363","inputType":"image","localization":false,"outputs":["presentation:html"],"service":"layout-generation-controller","timestamp":"2026-03-09T12:52:35.468Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T12:52:52.026Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T12:52:52.027Z","totalElements":4}
+Debugger listening on ws://0.0.0.0:9229/f7edd60c-f28a-4834-981b-c5f87bfda202
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Pipeline execution started {"format":"html","generator":"presentation","graphId":"8244fa64-eb5f-4efc-974d-f5bacb65d8ff","id":"d0dc5810-125b-45b6-9e7d-2ebf80fcebd6","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.027Z"}
+[33mwarn[39m: Presentation service unavailable, falling back to dashboard adapter {"error":"fetch failed","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.029Z"}
+[33mwarn[39m: Presentation service unavailable, falling back to dashboard adapter {"error":"fetch failed","service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.030Z"}
+Debugger listening on ws://0.0.0.0:9229/a331e239-70de-4618-bc93-550c4d97d869
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"html","generator":"presentation","id":"d0dc5810-125b-45b6-9e7d-2ebf80fcebd6","pages":1,"pixelPerfect":true,"processingTimeMs":250,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T12:52:52.277Z"}
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Generation pipeline complete {"artifacts":1,"id":"7aa303bd-eee9-4ba5-9db8-82c7da7e8363","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T12:52:52.278Z","totalMs":16809}
+[32minfo[39m: Structure extracted {"fileType":"xlsx","id":"14900034-71c2-4ee4-88de-00521eecd5b4","mode":"STRICT_REPLICATION","service":"replication-service","timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Structure extracted {"fileType":"pptx","id":"ca9569dd-a1da-46b3-883b-fc7d13ab87c4","mode":"STRICT_REPLICATION","service":"replication-service","timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Dual fidelity verification {"passed":true,"pixelDiff":0,"service":"replication-service","structuralSimilarity":1,"timestamp":"2026-03-09 12:54:04"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T13:13:58.424Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T13:13:58.433Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T13:13:58.434Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T13:14:01.366Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 13:14:01"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T13:14:01.602Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:14:01.610Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:14:01.616Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T13:14:01.617Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T13:14:01.618Z"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"replication-service","timestamp":"2026-03-09T13:14:16.096Z"}
+[32minfo[39m: Database disconnected {"service":"replication-service","timestamp":"2026-03-09T13:14:16.104Z"}
+[32minfo[39m: Redis disconnected {"service":"replication-service","timestamp":"2026-03-09T13:14:16.105Z"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T13:14:19.026Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 13:14:19"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T13:14:19.910Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:14:19.918Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:14:19.921Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T13:14:19.922Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T13:14:19.922Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:14:42.755Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 13:14:42"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T13:14:42.756Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T13:14:42.756Z"}
+[32minfo[39m: Generation pipeline started {"id":"2701d63c-9373-4da8-8b89-6faea4155242","inputType":"image","localization":false,"outputs":["presentation:pptx","docx:docx","spreadsheet:xlsx"],"service":"layout-generation-controller","timestamp":"2026-03-09T13:14:42.757Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"eb0137be-9699-41cd-b0bf-c0578aef4327","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T13:15:15.624Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"eb0137be-9699-41cd-b0bf-c0578aef4327","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T13:15:15.625Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"pptx","generator":"presentation","graphId":"eb0137be-9699-41cd-b0bf-c0578aef4327","id":"4a023e36-7ed0-4f50-b459-52a8342e387e","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:15:15.626Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"pptx","generator":"presentation","id":"4a023e36-7ed0-4f50-b459-52a8342e387e","pages":1,"pixelPerfect":"not validated","processingTimeMs":76,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:15:15.702Z"}
+[32minfo[39m: Pipeline execution started {"format":"docx","generator":"docx","graphId":"eb0137be-9699-41cd-b0bf-c0578aef4327","id":"10da3887-481f-4ef2-8f82-a1c7825d8b6d","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:15:15.703Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"docx","generator":"docx","id":"10da3887-481f-4ef2-8f82-a1c7825d8b6d","pages":1,"pixelPerfect":"not validated","processingTimeMs":25,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:15:15.728Z"}
+[32minfo[39m: Pipeline execution started {"format":"xlsx","generator":"spreadsheet","graphId":"eb0137be-9699-41cd-b0bf-c0578aef4327","id":"b73f71b9-0065-4370-84a4-06ac385744fa","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:15:15.729Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"xlsx","generator":"spreadsheet","id":"b73f71b9-0065-4370-84a4-06ac385744fa","pages":1,"pixelPerfect":"not validated","processingTimeMs":20,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:15:15.749Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"2701d63c-9373-4da8-8b89-6faea4155242","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T13:15:15.750Z","totalMs":32993}
+
+
+
+$ docker logs rasid-presentation-service --tail 120
+
+{"layout":"content","level":"info","message":"Slide added","presId":"90db647c-c861-453e-a9e1-ec175ccb859f","service":"slide-builder","slideIndex":7,"timestamp":"2026-03-09T10:45:26.251Z"}
+{"level":"info","message":"Presentation created from source","presId":"90db647c-c861-453e-a9e1-ec175ccb859f","service":"source-processor","slides":8,"sourceType":"csv","timestamp":"2026-03-09T10:45:26.266Z"}
+{"level":"info","message":"Theme applied","presId":"90db647c-c861-453e-a9e1-ec175ccb859f","service":"slide-builder","theme":{"accentColor":"#fbbc04","backgroundColor":"#ffffff","bodyFontSize":18,"fontFamily":"Cairo","headerFontSize":36,"primaryColor":"#8b5cf6","secondaryColor":"#f8fafc"},"timestamp":"2026-03-09T10:45:26.370Z","updatedSlides":8}
+{"level":"info","message":"Processing source for presentation","service":"source-processor","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T10:45:57.088Z","type":"csv","userId":"b0000000-0000-0000-0000-000000000001"}
+{"level":"info","message":"Presentation created","name":"تحليل البيانات","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T10:46:14.563Z","userId":"b0000000-0000-0000-0000-000000000001"}
+{"layout":"title","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T10:46:14.571Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T10:46:14.576Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T10:46:14.582Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T10:46:14.588Z"}
+{"layout":"two-column","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T10:46:14.595Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T10:46:14.601Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":6,"timestamp":"2026-03-09T10:46:14.608Z"}
+{"chartType":"bar","elementId":"c7af487c-2880-468d-8ad6-ed7e144ee706","level":"info","message":"Chart added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":6,"timestamp":"2026-03-09T10:46:14.613Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","slideIndex":7,"timestamp":"2026-03-09T10:46:14.619Z"}
+{"level":"info","message":"Presentation created from source","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"source-processor","slides":8,"sourceType":"csv","timestamp":"2026-03-09T10:46:14.622Z"}
+{"level":"info","message":"Theme applied","presId":"905d9dcc-8bf8-436a-a693-aa09ee4e25f7","service":"slide-builder","theme":{"accentColor":"#fbbc04","backgroundColor":"#ffffff","bodyFontSize":18,"fontFamily":"Cairo","headerFontSize":36,"primaryColor":"#8b5cf6","secondaryColor":"#f8fafc"},"timestamp":"2026-03-09T10:46:14.718Z","updatedSlides":8}
+[33mwarn[39m: Prisma known error {"meta":{"message":"Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `u` at 5","modelName":"Presentation"},"path":"/api/v1/presentation/presentations","prismaCode":"P2023","requestId":"557a765ff492a2a3994571c464bf2129","service":"presentation-service","timestamp":"2026-03-09T11:13:26.397Z"}
+Debugger listening on ws://0.0.0.0:9229/a9f638a0-f54d-4f62-ba3a-1385a6bda869
+[33mwarn[39m: Prisma known error {"meta":{"message":"Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `u` at 5","modelName":"Presentation"},"path":"/api/v1/presentation/presentations","prismaCode":"P2023","requestId":"1fce2e5d28b4bbc0ea03792d49a79d66","service":"presentation-service","timestamp":"2026-03-09T11:13:26.467Z"}
+For help, see: https://nodejs.org/en/docs/inspector
+[31merror[39m: Unhandled error Cannot read properties of undefined (reading 'findUnique') {"method":"POST","name":"TypeError","path":"/api/v1/presentation/ai/generate-from-data","requestId":"d4bc04dfe4511c75fe53195d2598752a","service":"presentation-service","stack":"TypeError: Cannot read properties of undefined (reading 'findUnique')\n    at Object.generateFromData (/app/src/services/ai-slide-generator.service.ts:169:40)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:406:38)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:19:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/node_modules/express/lib/router/route.js:149:13)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:39:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/node_modules/express/lib/router/route.js:149:13)\n    at authMiddleware (/app/src/middleware/auth.ts:53:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)","timestamp":"2026-03-09T11:21:19.684Z"}
+[31merror[39m: Unhandled error Cannot read properties of undefined (reading 'findUnique') {"method":"POST","name":"TypeError","path":"/api/v1/presentation/ai/generate-from-data","requestId":"e234b31c0605393195393ef3396a9640","service":"presentation-service","stack":"TypeError: Cannot read properties of undefined (reading 'findUnique')\n    at Object.generateFromData (/app/src/services/ai-slide-generator.service.ts:169:40)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:406:38)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:19:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/node_modules/express/lib/router/route.js:149:13)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:39:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/node_modules/express/lib/router/route.js:149:13)\n    at authMiddleware (/app/src/middleware/auth.ts:53:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)","timestamp":"2026-03-09T11:21:33.447Z"}
+[31merror[39m: Unhandled error Cannot read properties of undefined (reading 'findUnique') {"method":"POST","name":"TypeError","path":"/api/v1/presentation/ai/generate-from-data","requestId":"de271a4722b77c42605af5b2ca32e2c0","service":"presentation-service","stack":"TypeError: Cannot read properties of undefined (reading 'findUnique')\n    at Object.generateFromData (/app/src/services/ai-slide-generator.service.ts:169:40)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:406:38)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:19:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/node_modules/express/lib/router/route.js:149:13)\n    at <anonymous> (/app/src/routes/presentation.routes.ts:39:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n    at next (/app/node_modules/express/lib/router/route.js:149:13)\n    at authMiddleware (/app/src/middleware/auth.ts:53:5)\n    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)","timestamp":"2026-03-09T11:21:33.551Z"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"presentation-service","timestamp":"2026-03-09T11:23:01.921Z"}
+[32minfo[39m: Database disconnected {"service":"presentation-service","timestamp":"2026-03-09T11:23:01.943Z"}
+[32minfo[39m: Redis disconnected {"service":"presentation-service","timestamp":"2026-03-09T11:23:01.945Z"}
+[32minfo[39m: Database connected {"service":"presentation-service","timestamp":"2026-03-09T11:23:10.134Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T11:23:10.148Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T11:23:10.152Z"}
+[32minfo[39m: presentation-service running on port 8005 {"service":"presentation-service","timestamp":"2026-03-09T11:23:10.154Z"}
+[32minfo[39m: Health check: http://localhost:8005/health {"service":"presentation-service","timestamp":"2026-03-09T11:23:10.154Z"}
+{"level":"info","message":"Presentation created","name":"Executive Analysis: Revenue and Orders by Region","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T11:23:40.523Z","userId":"b0000000-0000-0000-0000-000000000001"}
+{"layout":"title","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T11:23:40.535Z"}
+{"chartType":"bar","elementId":"04cbfa3f-8bda-4ae1-99a4-83a93575424d","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T11:23:40.541Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T11:23:40.547Z"}
+{"chartType":"bar","elementId":"42348550-7d31-4f7d-9d33-9d81a74e9541","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T11:23:40.551Z"}
+{"layout":"two-column","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T11:23:40.559Z"}
+{"chartType":"bar","elementId":"cfad1f3c-a3d5-4491-9306-00c2f30ad724","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T11:23:40.564Z"}
+{"layout":"two-column","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T11:23:40.571Z"}
+{"chartType":"bar","elementId":"16702db6-7d63-4c0d-a15c-c5c58e2db504","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T11:23:40.574Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T11:23:40.580Z"}
+{"chartType":"pie","elementId":"493a3aed-f37d-4aeb-b7b8-0458a1c8d78e","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T11:23:40.583Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T11:23:40.589Z"}
+{"chartType":"bar","elementId":"690cde4f-2ddf-4202-9072-d89ddba7e129","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T11:23:40.595Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":6,"timestamp":"2026-03-09T11:23:40.602Z"}
+{"chartType":"bar","elementId":"6047bda9-7a4a-4f81-9704-c64e7bdcdbef","level":"info","message":"Chart added","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"slide-builder","slideIndex":6,"timestamp":"2026-03-09T11:23:40.605Z"}
+{"datasetId":"35c425ab-6937-4fa1-995f-a9c17fd9632d","level":"info","message":"Presentation generated from data","presId":"a61b551e-f75d-42ee-9631-35dcf4fb4f5c","service":"ai-slide-generator","slides":7,"timestamp":"2026-03-09T11:23:40.606Z"}
+{"level":"info","message":"Presentation created","name":"Quarterly Business Performance Analysis","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T11:24:13.220Z","userId":"b0000000-0000-0000-0000-000000000001"}
+{"layout":"title","level":"info","message":"Slide added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T11:24:13.226Z"}
+{"chartType":"bar","elementId":"e8cc19e5-e95f-4485-8056-9d66dd17ca18","level":"info","message":"Chart added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T11:24:13.230Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T11:24:13.234Z"}
+{"chartType":"bar","elementId":"fcb5b6a3-558b-4e0c-8c44-580f8642c2e0","level":"info","message":"Chart added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T11:24:13.238Z"}
+{"layout":"two-column","level":"info","message":"Slide added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T11:24:13.243Z"}
+{"chartType":"line","elementId":"112996d4-651a-4bcf-a26a-6485b2540baa","level":"info","message":"Chart added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T11:24:13.247Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T11:24:13.254Z"}
+{"chartType":"pie","elementId":"bee85a34-61c4-43e1-8de2-0ef76cd31360","level":"info","message":"Chart added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T11:24:13.258Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T11:24:13.263Z"}
+{"chartType":"bar","elementId":"ce9fb2bf-8f12-425d-8d87-dbfec612b9c0","level":"info","message":"Chart added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T11:24:13.266Z"}
+{"layout":"title","level":"info","message":"Slide added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T11:24:13.272Z"}
+{"chartType":"bar","elementId":"2a4a0d27-4cff-4667-9d63-7b3b9c4f07ea","level":"info","message":"Chart added","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T11:24:13.275Z"}
+{"datasetId":"35c425ab-6937-4fa1-995f-a9c17fd9632d","level":"info","message":"Presentation generated from data","presId":"f6e8a51b-e6bb-4cd1-b279-c8d34f08de5b","service":"ai-slide-generator","slides":6,"timestamp":"2026-03-09T11:24:13.275Z"}
+{"level":"info","message":"Presentation created","name":"Quarterly Business Performance Analysis","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T11:43:50.530Z","userId":"b0000000-0000-0000-0000-000000000001"}
+{"layout":"title","level":"info","message":"Slide added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T11:43:50.544Z"}
+{"chartType":"bar","elementId":"75bf7da0-edd3-49c7-a902-fff1b635d1b1","level":"info","message":"Chart added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T11:43:50.551Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T11:43:50.559Z"}
+{"chartType":"bar","elementId":"7590f8e5-09ea-41d7-af70-8598cd7656a1","level":"info","message":"Chart added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T11:43:50.563Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T11:43:50.570Z"}
+{"chartType":"line","elementId":"a5b5e18b-c04f-4337-b74c-160ef04e733d","level":"info","message":"Chart added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T11:43:50.574Z"}
+{"layout":"two-column","level":"info","message":"Slide added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T11:43:50.581Z"}
+{"chartType":"pie","elementId":"b015cbd1-e14d-4af8-8f91-ce3508ad61d5","level":"info","message":"Chart added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T11:43:50.586Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T11:43:50.594Z"}
+{"chartType":"bar","elementId":"daaedea3-4e8e-4e03-86ef-26aa487af6e4","level":"info","message":"Chart added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T11:43:50.598Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T11:43:50.605Z"}
+{"chartType":"bar","elementId":"c37eaed1-a07a-4033-9f2b-1ac92e036f57","level":"info","message":"Chart added","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"slide-builder","slideIndex":5,"timestamp":"2026-03-09T11:43:50.610Z"}
+{"datasetId":"35c425ab-6937-4fa1-995f-a9c17fd9632d","level":"info","message":"Presentation generated from data","presId":"24896902-4edc-4fc6-97c2-fabf4f06a8b5","service":"ai-slide-generator","slides":6,"timestamp":"2026-03-09T11:43:50.611Z"}
+{"level":"info","message":"Processing source for presentation","service":"source-processor","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T12:16:11.514Z","type":"text","userId":"b0000000-0000-0000-0000-000000000001"}
+{"level":"info","message":"Presentation created","name":"تزايد النشاط والتكامل بين البيانات والتقارير","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T12:16:23.874Z","userId":"b0000000-0000-0000-0000-000000000001"}
+{"layout":"title","level":"info","message":"Slide added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T12:16:23.886Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T12:16:23.893Z"}
+{"chartType":"bar","elementId":"ff9a2b0a-a30b-4102-aaa7-28b9d69bfffc","level":"info","message":"Chart added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":1,"timestamp":"2026-03-09T12:16:23.897Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T12:16:23.903Z"}
+{"chartType":"line","elementId":"5a0f0084-39f7-47cb-9a20-fb58dc06cf1a","level":"info","message":"Chart added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":2,"timestamp":"2026-03-09T12:16:23.906Z"}
+{"layout":"two-column","level":"info","message":"Slide added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T12:16:23.914Z"}
+{"chartType":"pie","elementId":"a0561cbd-399d-4fbf-b191-22462991a3ea","level":"info","message":"Chart added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":3,"timestamp":"2026-03-09T12:16:23.917Z"}
+{"layout":"content","level":"info","message":"Slide added","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":4,"timestamp":"2026-03-09T12:16:23.923Z"}
+{"level":"info","message":"Presentation created from source","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"source-processor","slides":5,"sourceType":"text","timestamp":"2026-03-09T12:16:23.963Z"}
+{"layout":"title","level":"info","message":"Slide updated","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T12:16:32.776Z"}
+{"level":"info","message":"PPTX exported","presId":"91cada17-ae39-49c0-9174-f2b20b97a4d2","service":"slide-builder","size":145753,"slides":5,"timestamp":"2026-03-09T12:16:38.123Z"}
+{"level":"info","message":"Processing source for presentation","service":"source-processor","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T12:53:28.713Z","type":"image","userId":"b0000000-0000-0000-0000-000000000001"}
+Debugger listening on ws://0.0.0.0:9229/d7689b63-1075-44cc-b1af-4e3ad42cd654
+For help, see: https://nodejs.org/en/docs/inspector
+{"level":"info","message":"Presentation created","name":"Sales Snapshot Analysis","presId":"13f22edf-582d-41f4-a572-ab1ca9a41152","service":"slide-builder","tenantId":"a0000000-0000-0000-0000-000000000001","timestamp":"2026-03-09T12:53:39.955Z","userId":"b0000000-0000-0000-0000-000000000001"}
+Debugger listening on ws://0.0.0.0:9229/9a5dd48d-a845-4451-af26-3b41c7e58dc6
+{"layout":"content","level":"info","message":"Slide added","presId":"13f22edf-582d-41f4-a572-ab1ca9a41152","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T12:53:39.966Z"}
+{"chartType":"bar","elementId":"4dc1490a-0a5b-446f-b5f2-620f780047b7","level":"info","message":"Chart added","presId":"13f22edf-582d-41f4-a572-ab1ca9a41152","service":"slide-builder","slideIndex":0,"timestamp":"2026-03-09T12:53:39.969Z"}
+{"level":"info","message":"Presentation created from source","presId":"13f22edf-582d-41f4-a572-ab1ca9a41152","service":"source-processor","slides":1,"sourceType":"image","timestamp":"2026-03-09T12:53:39.981Z"}
+For help, see: https://nodejs.org/en/docs/inspector
+{"level":"info","message":"PPTX exported","presId":"13f22edf-582d-41f4-a572-ab1ca9a41152","service":"slide-builder","size":70329,"slides":1,"timestamp":"2026-03-09T12:53:49.438Z"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"presentation-service","timestamp":"2026-03-09T13:13:57.839Z"}
+[32minfo[39m: Database disconnected {"service":"presentation-service","timestamp":"2026-03-09T13:13:57.847Z"}
+[32minfo[39m: Redis disconnected {"service":"presentation-service","timestamp":"2026-03-09T13:13:57.848Z"}
+[32minfo[39m: Database connected {"service":"presentation-service","timestamp":"2026-03-09T13:14:01.831Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:14:01.845Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:14:01.849Z"}
+[32minfo[39m: presentation-service running on port 8005 {"service":"presentation-service","timestamp":"2026-03-09T13:14:01.852Z"}
+[32minfo[39m: Health check: http://localhost:8005/health {"service":"presentation-service","timestamp":"2026-03-09T13:14:01.852Z"}
+[32minfo[39m: Received SIGTERM, shutting down gracefully... {"service":"presentation-service","timestamp":"2026-03-09T13:14:15.500Z"}
+[32minfo[39m: Database disconnected {"service":"presentation-service","timestamp":"2026-03-09T13:14:15.508Z"}
+[32minfo[39m: Redis disconnected {"service":"presentation-service","timestamp":"2026-03-09T13:14:15.509Z"}
+[32minfo[39m: Database connected {"service":"presentation-service","timestamp":"2026-03-09T13:14:19.983Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:14:19.994Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:14:19.996Z"}
+[32minfo[39m: presentation-service running on port 8005 {"service":"presentation-service","timestamp":"2026-03-09T13:14:19.998Z"}
+[32minfo[39m: Health check: http://localhost:8005/health {"service":"presentation-service","timestamp":"2026-03-09T13:14:19.998Z"}
+[32minfo[39m: Starting multi-format generation {"format":"pptx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:15:15.670Z"}
+[32minfo[39m: Generation complete {"elements":4,"fileSize":52889,"format":"pptx","processingTimeMs":17,"service":"multi-format-generator","timestamp":"2026-03-09T13:15:15.687Z"}
+[32minfo[39m: Starting multi-format generation {"format":"docx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:15:15.706Z"}
+[31merror[39m: Unhandled error Cannot find package 'docx' imported from /app/src/services/multi-format-generator.service.ts {"method":"POST","name":"Error","path":"/api/v1/presentation/internal/canonical-generate","requestId":"unknown","service":"presentation-service","stack":"Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'docx' imported from /app/src/services/multi-format-generator.service.ts\n    at packageResolve (node:internal/modules/esm/resolve:873:9)\n    at moduleResolve (node:internal/modules/esm/resolve:946:18)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at nextResolve (node:internal/modules/esm/hooks:864:28)\n    at resolveBase (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:3744)\n    at resolveDirectory (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:4243)\n    at resolveTsPaths (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:4984)\n    at resolve (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:5361)\n    at nextResolve (node:internal/modules/esm/hooks:864:28)\n    at Hooks.resolve (node:internal/modules/esm/hooks:306:30)","timestamp":"2026-03-09T13:15:15.726Z"}
+[32minfo[39m: Starting multi-format generation {"format":"xlsx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:15:15.734Z"}
+[31merror[39m: Unhandled error Cannot find package 'exceljs' imported from /app/src/services/multi-format-generator.service.ts {"method":"POST","name":"Error","path":"/api/v1/presentation/internal/canonical-generate","requestId":"unknown","service":"presentation-service","stack":"Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'exceljs' imported from /app/src/services/multi-format-generator.service.ts\n    at packageResolve (node:internal/modules/esm/resolve:873:9)\n    at moduleResolve (node:internal/modules/esm/resolve:946:18)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at nextResolve (node:internal/modules/esm/hooks:864:28)\n    at resolveBase (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:3744)\n    at resolveDirectory (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:4243)\n    at resolveTsPaths (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:4984)\n    at resolve (file:///root/.npm/_npx/fd45a72a545557e9/node_modules/tsx/dist/esm/index.mjs?1773062057786:2:5361)\n    at nextResolve (node:internal/modules/esm/hooks:864:28)\n    at Hooks.resolve (node:internal/modules/esm/hooks:306:30)","timestamp":"2026-03-09T13:15:15.747Z"}
+
+
+
+$ docker compose build presentation-service replication-service
+
+time="2026-03-09T16:16:36+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+time="2026-03-09T16:16:36+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.override.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image rasid-replication-service Building 
+ Image rasid-presentation-service Building 
+ Image rasid-rendering-environment Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.65kB done
+#1 DONE 0.0s
+
+#2 [replication-service internal] load build definition from Dockerfile
+#2 transferring dockerfile: 823B done
+#2 DONE 0.0s
+
+#3 [presentation-service internal] load build definition from Dockerfile
+#3 transferring dockerfile: 847B 0.0s done
+#3 DONE 0.0s
+
+#4 [presentation-service internal] load metadata for docker.io/library/node:20-alpine
+#4 ...
+
+#5 [auth] library/node:pull token for registry-1.docker.io
+#5 DONE 0.0s
+
+#4 [presentation-service internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.4s
+
+#6 [replication-service internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.0s
+
+#7 [presentation-service internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [replication-service dev 1/9] FROM docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa
+#8 resolve docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa 0.0s done
+#8 DONE 0.0s
+
+#9 [presentation-service internal] load build context
+#9 ...
+
+#10 [replication-service internal] load build context
+#10 transferring context: 1.70MB 1.1s done
+#10 DONE 1.1s
+
+#11 [replication-service dev 5/9] RUN npm ci
+#11 CACHED
+
+#12 [replication-service dev 6/9] COPY prisma ./prisma
+#12 CACHED
+
+#13 [replication-service dev 3/9] WORKDIR /app
+#13 CACHED
+
+#14 [replication-service dev 4/9] COPY package*.json ./
+#14 CACHED
+
+#15 [replication-service dev 2/9] RUN apk add --no-cache openssl python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev libjpeg-turbo-dev giflib-dev librsvg-dev
+#15 CACHED
+
+#16 [replication-service dev 7/9] RUN npx prisma generate
+#16 CACHED
+
+#17 [replication-service dev 8/9] COPY tsconfig.json ./
+#17 CACHED
+
+#18 [replication-service dev 9/9] COPY src ./src
+#18 DONE 0.1s
+
+#19 [replication-service] exporting to image
+#19 exporting layers 0.1s done
+#19 exporting manifest sha256:2c249d22e836ac3ed0ff2dfb828b1158d8903c769e5d27698cbe05de8a82c5df 0.0s done
+#19 exporting config sha256:f8b5462fb732c70a0f4bf6a8f11c15d8ed69ac5db49f4b760e27348cf8dd28d2 0.0s done
+#19 exporting attestation manifest sha256:0c9432d64eba61560513526928afb81ac82209c7f979b2302d4e3d3ccce67c6f 0.0s done
+#19 exporting manifest list sha256:9b5b89866f76422bf9c46851828c237e2209c941a201963a5075acda585a0ee3 0.0s done
+#19 naming to docker.io/library/rasid-replication-service:latest done
+#19 unpacking to docker.io/library/rasid-replication-service:latest 0.0s done
+#19 DONE 0.3s
+
+#20 [replication-service] resolving provenance for metadata file
+#20 DONE 0.0s
+
+#9 [presentation-service internal] load build context
+#9 transferring context: 1.71MB 1.6s done
+#9 DONE 1.6s
+
+#15 [presentation-service dev 2/9] RUN apk add --no-cache openssl python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev libjpeg-turbo-dev giflib-dev librsvg-dev
+#15 CACHED
+
+#13 [presentation-service dev 3/9] WORKDIR /app
+#13 CACHED
+
+#21 [presentation-service dev 4/9] COPY package*.json .npmrc* ./
+#21 DONE 0.0s
+
+#22 [presentation-service dev 5/9] RUN npm ci
+#22 10.06 npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+#22 10.13 npm warn deprecated fstream@1.0.12: This package is no longer supported.
+#22 11.60 npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#22 11.67 npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
+#22 11.68 npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#22 11.77 npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+#22 43.18 
+#22 43.18 added 837 packages, and audited 838 packages in 43s
+#22 43.18 
+#22 43.18 92 packages are looking for funding
+#22 43.18   run `npm fund` for details
+#22 43.18 
+#22 43.18 3 high severity vulnerabilities
+#22 43.18 
+#22 43.18 To address all issues (including breaking changes), run:
+#22 43.18   npm audit fix --force
+#22 43.18 
+#22 43.18 Run `npm audit` for details.
+#22 43.18 npm notice
+#22 43.18 npm notice New major version of npm available! 10.8.2 -> 11.11.0
+#22 43.18 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.11.0
+#22 43.18 npm notice To update run: npm install -g npm@11.11.0
+#22 43.18 npm notice
+#22 DONE 43.5s
+
+#23 [presentation-service dev 6/9] COPY prisma ./prisma
+#23 DONE 0.2s
+
+#24 [presentation-service dev 7/9] RUN npx prisma generate
+#24 1.009 Prisma schema loaded from prisma/schema.prisma
+#24 1.736 
+#24 1.736 ✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 268ms
+#24 1.736 
+#24 1.736 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#24 1.736 
+#24 1.736 Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+#24 1.736 
+#24 DONE 2.0s
+
+#25 [presentation-service dev 8/9] COPY tsconfig.json ./
+#25 DONE -0.4s
+
+#26 [presentation-service dev 9/9] COPY src ./src
+#26 DONE 0.0s
+
+#27 [presentation-service] exporting to image
+#27 exporting layers
+#27 exporting layers 11.8s done
+#27 exporting manifest sha256:ea06c10039ec08ab7d5c5b599ce1656d16cfaa0f224c85e77eb7f8b51193cc70 0.0s done
+#27 exporting config sha256:15ed52d64dc77d47a8bbd0bee5f0b9d4e23dbf2fcc28aed7bc33fb80b80bb483 0.0s done
+#27 exporting attestation manifest sha256:9329cc93fa4186b5e3a0135ce61e432cdd7810da79550011cd2ae49f1f7931a4 0.0s done
+#27 exporting manifest list sha256:bb5cc2cefae662abbbf12a9b232341e07b336c7adb895ce8db69b2b3d4e6acc5 0.0s done
+#27 naming to docker.io/library/rasid-presentation-service:latest 0.0s done
+#27 unpacking to docker.io/library/rasid-presentation-service:latest
+#27 unpacking to docker.io/library/rasid-presentation-service:latest 5.6s done
+#27 DONE 17.6s
+
+#28 [presentation-service] resolving provenance for metadata file
+#28 DONE 0.0s
+ Image rasid-presentation-service Built 
+ Image rasid-replication-service Built
+
+
+
+$ docker compose up -d presentation-service replication-service
+
+time="2026-03-09T16:17:43+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+time="2026-03-09T16:17:43+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.override.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Container rasid-redis Running 
+ Container rasid-postgres Running 
+ Container rasid-rendering-environment Running 
+ Container rasid-presentation-service Recreate 
+ Container rasid-replication-service Recreate 
+ Container rasid-presentation-service Recreated 
+ Container rasid-replication-service Recreated 
+ Container rasid-postgres Waiting 
+ Container rasid-redis Waiting 
+ Container rasid-redis Waiting 
+ Container rasid-rendering-environment Waiting 
+ Container rasid-postgres Waiting 
+ Container rasid-rendering-environment Healthy 
+ Container rasid-postgres Healthy 
+ Container rasid-redis Healthy 
+ Container rasid-redis Healthy 
+ Container rasid-replication-service Starting 
+ Container rasid-postgres Healthy 
+ Container rasid-presentation-service Starting 
+ Container rasid-replication-service Started 
+ Container rasid-presentation-service Started
+
+
+
+$ Invoke-RestMethod http://localhost:8005/api/v1/presentation/ready
+
+
+
+$ Invoke-RestMethod http://localhost:8007/health
+
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"presentation","format":"pptx"},{"generator":"docx","format":"docx"},{"generator":"spreadsheet","format":"xlsx"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+
+
+
+$ docker logs rasid-replication-service --tail 120
+
+
+
+
+
+$ docker logs rasid-presentation-service --tail 120
+
+
+
+
+
+$ Invoke-RestMethod http://localhost:8005/api/v1/presentation/ready
+
+{
+  "ready": true
+}
+
+
+
+$ Invoke-RestMethod http://localhost:8007/health
+
+{
+  "status": "healthy",
+  "service": "replication-service",
+  "version": "1.0.0",
+  "timestamp": "2026-03-09T13:18:31.182Z",
+  "uptime": 40.350781462,
+  "memory": {
+    "rss": "128MB",
+    "heapUsed": "32MB",
+    "heapTotal": "35MB"
+  },
+  "connections": {
+    "database": "connected",
+    "redis": "connected"
+  }
+}
+
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"presentation","format":"pptx"},{"generator":"docx","format":"docx"},{"generator":"spreadsheet","format":"xlsx"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+
+{
+  "success": true,
+  "data": {
+    "id": "a16e7b7e-f761-4187-88d3-cbb6cf570682",
+    "graphHash": "015e43cd036c90ba12578b619044fe248d9ea3076aa24f0fb0d881b5bc3483be",
+    "extractedData": {
+      "tables": [
+        {
+          "nodeId": "table-4",
+          "pageNumber": 1,
+          "title": "Sales Snapshot",
+          "headers": [
+            "Department",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Sales",
+              "500000"
+            ]
+          ],
+          "columnTypes": [
+            "text",
+            "number"
+          ],
+          "rowCount": 1,
+          "columnCount": 2
+        }
+      ],
+      "charts": [],
+      "kpis": [
+        {
+          "nodeId": "kpi-2",
+          "pageNumber": 1,
+          "label": "Revenue",
+          "value": "1250000",
+          "numericValue": 1250000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        },
+        {
+          "nodeId": "kpi-3",
+          "pageNumber": 1,
+          "label": "Profit",
+          "value": "350000",
+          "numericValue": 350000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        }
+      ],
+      "textBlocks": [
+        {
+          "nodeId": "text-1",
+          "pageNumber": 1,
+          "role": "subheading",
+          "text": "Sales Snapshot",
+          "fontSize": 22,
+          "fontWeight": 700,
+          "language": "en",
+          "direction": "ltr"
+        }
+      ],
+      "lists": [],
+      "extractedAt": "2026-03-09T13:18:52.165Z",
+      "sourceGraphId": "ab3ffc40-3575-484b-aebc-2d60d47a2e24",
+      "totalElements": 4
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "presentation",
+        "format": "pptx",
+        "sizeBytes": 52889,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": null,
+        "processingTimeMs": 76
+      },
+      {
+        "generator": "docx",
+        "format": "docx",
+        "sizeBytes": 8929,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 4,
+        "pixelValidation": null,
+        "processingTimeMs": 83
+      },
+      {
+        "generator": "spreadsheet",
+        "format": "xlsx",
+        "sizeBytes": 613,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 1,
+        "pixelValidation": null,
+        "processingTimeMs": 213
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 20698,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 4,
+        "detail": "1 tables, 0 charts, 2 KPIs, 1 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 373,
+        "detail": "3/3 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 21075
+  }
+}
+
+
+
+$ docker logs rasid-replication-service --tail 120
+
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T13:17:53.746Z"}
+npm warn exec The following package was not found and will be installed: tsx@4.21.0
+Debugger listening on ws://0.0.0.0:9229/12a4997c-2e2f-493b-9a21-cc888ab22b3e
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 13:17:53"}
+[32minfo[39m: Database connected {"service":"replication-service","timestamp":"2026-03-09T13:17:54.826Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:17:54.836Z"}
+[32minfo[39m: Redis connected {"service":"replication-service","timestamp":"2026-03-09T13:17:54.840Z"}
+[32minfo[39m: replication-service running on port 8007 {"service":"replication-service","timestamp":"2026-03-09T13:17:54.841Z"}
+[32minfo[39m: Health check: http://localhost:8007/health {"service":"replication-service","timestamp":"2026-03-09T13:17:54.842Z"}
+[32minfo[39m: Canonical pipeline orchestrator initialized {"generators":["dashboard","report","presentation","spreadsheet","docx"],"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:31.460Z"}
+[32minfo[39m: PDFIntelligenceService initialised {"service":"replication-service","timestamp":"2026-03-09 13:18:31"}
+{"level":"info","message":"LargeImageProcessor initialised","service":"large-image-processor","timestamp":"2026-03-09T13:18:31.461Z"}
+[32minfo[39m: Layout generation controller initialized {"service":"layout-generation-controller","timestamp":"2026-03-09T13:18:31.461Z"}
+[32minfo[39m: Generation pipeline started {"id":"a16e7b7e-f761-4187-88d3-cbb6cf570682","inputType":"image","localization":false,"outputs":["presentation:pptx","docx:docx","spreadsheet:xlsx"],"service":"layout-generation-controller","timestamp":"2026-03-09T13:18:31.464Z"}
+[32minfo[39m: Starting full data extraction {"graphId":"ab3ffc40-3575-484b-aebc-2d60d47a2e24","pageCount":1,"service":"data-extraction","timestamp":"2026-03-09T13:18:52.162Z"}
+[32minfo[39m: Data extraction complete {"charts":0,"graphId":"ab3ffc40-3575-484b-aebc-2d60d47a2e24","kpis":2,"lists":0,"service":"data-extraction","tables":1,"textBlocks":1,"timestamp":"2026-03-09T13:18:52.165Z","totalElements":4}
+[32minfo[39m: Pipeline execution started {"format":"pptx","generator":"presentation","graphId":"ab3ffc40-3575-484b-aebc-2d60d47a2e24","id":"9c9aadd2-c8ba-4ca2-9497-e09fc65ecd86","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:52.166Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"pptx","generator":"presentation","id":"9c9aadd2-c8ba-4ca2-9497-e09fc65ecd86","pages":1,"pixelPerfect":"not validated","processingTimeMs":76,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:52.242Z"}
+[32minfo[39m: Pipeline execution started {"format":"docx","generator":"docx","graphId":"ab3ffc40-3575-484b-aebc-2d60d47a2e24","id":"58889ce0-be83-4e58-be48-c4d7214f5886","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:52.242Z"}
+[32minfo[39m: Pipeline execution complete {"elements":4,"format":"docx","generator":"docx","id":"58889ce0-be83-4e58-be48-c4d7214f5886","pages":1,"pixelPerfect":"not validated","processingTimeMs":83,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:52.325Z"}
+[32minfo[39m: Pipeline execution started {"format":"xlsx","generator":"spreadsheet","graphId":"ab3ffc40-3575-484b-aebc-2d60d47a2e24","id":"4234d5ee-f947-4220-a899-7bdf4c4e2da2","pages":1,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:52.325Z"}
+[32minfo[39m: Pipeline execution complete {"elements":1,"format":"xlsx","generator":"spreadsheet","id":"4234d5ee-f947-4220-a899-7bdf4c4e2da2","pages":1,"pixelPerfect":"not validated","processingTimeMs":213,"service":"canonical-pipeline-orchestrator","timestamp":"2026-03-09T13:18:52.538Z"}
+[32minfo[39m: Generation pipeline complete {"artifacts":3,"id":"a16e7b7e-f761-4187-88d3-cbb6cf570682","service":"layout-generation-controller","stages":["Layout Analysis:completed","Localization:skipped","Arabic Typography:skipped","Data Extraction:completed","Data Binding:skipped","Generator Orchestration:completed"],"timestamp":"2026-03-09T13:18:52.539Z","totalMs":21075}
+
+
+
+$ docker logs rasid-presentation-service --tail 120
+
+npm warn exec The following package was not found and will be installed: tsx@4.21.0
+[32minfo[39m: Database connected {"service":"presentation-service","timestamp":"2026-03-09T13:17:55.158Z"}
+Debugger listening on ws://0.0.0.0:9229/dd23d9c4-1c38-493a-871a-02cbe6923042
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:17:55.179Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:17:55.181Z"}
+[32minfo[39m: presentation-service running on port 8005 {"service":"presentation-service","timestamp":"2026-03-09T13:17:55.183Z"}
+[32minfo[39m: Health check: http://localhost:8005/health {"service":"presentation-service","timestamp":"2026-03-09T13:17:55.183Z"}
+[32minfo[39m: Starting multi-format generation {"format":"pptx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:18:52.213Z"}
+[32minfo[39m: Generation complete {"elements":4,"fileSize":52889,"format":"pptx","processingTimeMs":16,"service":"multi-format-generator","timestamp":"2026-03-09T13:18:52.228Z"}
+[32minfo[39m: Starting multi-format generation {"format":"docx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:18:52.248Z"}
+[32minfo[39m: Generation complete {"elements":4,"fileSize":8929,"format":"docx","processingTimeMs":73,"service":"multi-format-generator","timestamp":"2026-03-09T13:18:52.321Z"}
+[32minfo[39m: Starting multi-format generation {"format":"xlsx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:18:52.328Z"}
+[31merror[39m: Unhandled error ExcelJS.Workbook is not a constructor {"method":"POST","name":"TypeError","path":"/api/v1/presentation/internal/canonical-generate","requestId":"unknown","service":"presentation-service","stack":"TypeError: ExcelJS.Workbook is not a constructor\n    at MultiFormatGeneratorService.generateXlsx (/app/src/services/multi-format-generator.service.ts:745:22)\n    at async MultiFormatGeneratorService.generate (/app/src/services/multi-format-generator.service.ts:98:18)\n    at async <anonymous> (/app/src/routes/presentation.routes.ts:800:22)","timestamp":"2026-03-09T13:18:52.535Z"}
+
+
+
+$ docker compose build presentation-service
+
+time="2026-03-09T16:19:41+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+time="2026-03-09T16:19:41+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.override.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image rasid-presentation-service Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 628B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 847B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 0.8s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [dev 1/9] FROM docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa
+#5 resolve docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 37.56kB 0.9s done
+#6 DONE 0.9s
+
+#7 [dev 4/9] COPY package*.json .npmrc* ./
+#7 CACHED
+
+#8 [dev 7/9] RUN npx prisma generate
+#8 CACHED
+
+#9 [dev 2/9] RUN apk add --no-cache openssl python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev libjpeg-turbo-dev giflib-dev librsvg-dev
+#9 CACHED
+
+#10 [dev 5/9] RUN npm ci
+#10 CACHED
+
+#11 [dev 3/9] WORKDIR /app
+#11 CACHED
+
+#12 [dev 6/9] COPY prisma ./prisma
+#12 CACHED
+
+#13 [dev 8/9] COPY tsconfig.json ./
+#13 CACHED
+
+#14 [dev 9/9] COPY src ./src
+#14 DONE 0.0s
+
+#15 exporting to image
+#15 exporting layers 0.1s done
+#15 exporting manifest sha256:21b6df5fcf2334684911fc2f72855501c4bf6739bfeffe78767a659621307d19 0.0s done
+#15 exporting config sha256:fd61cd2ac3372ad6449c3df0b66199562d15ecace971ee322eb1cf27f2e737b0 done
+#15 exporting attestation manifest sha256:e4f998d9bc3ef7e809469cba0a2d40a8bc104b6a5d35014cd7dc9d3379817ce3 0.0s done
+#15 exporting manifest list sha256:3ac1b34016d7ce9cb7cd5efdd115f469a7ebc56a81ba5324b2ec3130f6fe18ba 0.0s done
+#15 naming to docker.io/library/rasid-presentation-service:latest done
+#15 unpacking to docker.io/library/rasid-presentation-service:latest 0.0s done
+#15 DONE 0.2s
+
+#16 resolving provenance for metadata file
+#16 DONE 0.0s
+ Image rasid-presentation-service Built
+
+
+
+$ docker compose up -d presentation-service
+
+time="2026-03-09T16:19:44+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+time="2026-03-09T16:19:44+03:00" level=warning msg="C:\\DATA_AI\\rasid\\docker-compose.override.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Container rasid-postgres Running 
+ Container rasid-redis Running 
+ Container rasid-presentation-service Recreate 
+ Container rasid-presentation-service Recreated 
+ Container rasid-postgres Waiting 
+ Container rasid-redis Waiting 
+ Container rasid-postgres Healthy 
+ Container rasid-redis Healthy 
+ Container rasid-presentation-service Starting 
+ Container rasid-presentation-service Started
+
+
+
+$ Invoke-RestMethod http://localhost:8005/api/v1/presentation/ready
+
+{
+  "ready": true
+}
+
+
+
+$ $login = Invoke-RestMethod -Method Post -Uri 'http://localhost/api/v1/governance/auth/login' -ContentType 'application/json' -Body '{"email":"admin@rasid.demo","password":"Password123!"}'
+$token = if ($login.data.accessToken) { $login.data.accessToken } else { $login.data.token }
+$form = @{
+  file = Get-Item 'C:\DATA_AI\rasid\verification_run\phase3_test_input.png'
+  inputType = 'image'
+  outputs = '[{"generator":"spreadsheet","format":"xlsx"}]'
+  options = '{"pixelPerfectValidation":true,"extractData":true,"optimizeArabicTypography":false}'
+}
+Invoke-RestMethod -Method Post -Uri 'http://localhost:8007/api/v1/replication/generate-from-layout/upload' -Form $form | ConvertTo-Json -Depth 10
+
+{
+  "success": true,
+  "data": {
+    "id": "4a8dd2e8-0c0b-4b3c-b754-a02d823e85a3",
+    "graphHash": "a9251b968f861223f1e82bed0ea3adb2c4ff1fb6570f3138a68f0254f58ef370",
+    "extractedData": {
+      "tables": [
+        {
+          "nodeId": "table-4",
+          "pageNumber": 1,
+          "title": "Sales Snapshot",
+          "headers": [
+            "Department",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Sales",
+              "500000"
+            ]
+          ],
+          "columnTypes": [
+            "text",
+            "number"
+          ],
+          "rowCount": 1,
+          "columnCount": 2
+        }
+      ],
+      "charts": [],
+      "kpis": [
+        {
+          "nodeId": "kpi-2",
+          "pageNumber": 1,
+          "label": "Revenue",
+          "value": "1250000",
+          "numericValue": 1250000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        },
+        {
+          "nodeId": "kpi-3",
+          "pageNumber": 1,
+          "label": "Profit",
+          "value": "350000",
+          "numericValue": 350000,
+          "unit": "",
+          "trend": "neutral",
+          "trendValue": "",
+          "trendColor": "#5f6368"
+        }
+      ],
+      "textBlocks": [
+        {
+          "nodeId": "text-1",
+          "pageNumber": 1,
+          "role": "subheading",
+          "text": "Sales Snapshot",
+          "fontSize": 22,
+          "fontWeight": 700,
+          "language": "en",
+          "direction": "ltr"
+        }
+      ],
+      "lists": [],
+      "extractedAt": "2026-03-09T13:20:19.778Z",
+      "sourceGraphId": "ebd93951-5cee-40be-a42f-f9964c641809",
+      "totalElements": 4
+    },
+    "typographyReport": null,
+    "artifacts": [
+      {
+        "generator": "spreadsheet",
+        "format": "xlsx",
+        "sizeBytes": 7452,
+        "htmlLength": 0,
+        "pageCount": 1,
+        "elementsRendered": 3,
+        "pixelValidation": null,
+        "processingTimeMs": 279
+      }
+    ],
+    "pipelineStages": [
+      {
+        "name": "Layout Analysis",
+        "status": "completed",
+        "durationMs": 24012,
+        "detail": "image analyzed: 480x270"
+      },
+      {
+        "name": "Localization",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "Not requested"
+      },
+      {
+        "name": "Arabic Typography",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No Arabic content or not enabled"
+      },
+      {
+        "name": "Data Extraction",
+        "status": "completed",
+        "durationMs": 1,
+        "detail": "1 tables, 0 charts, 2 KPIs, 1 text blocks"
+      },
+      {
+        "name": "Data Binding",
+        "status": "skipped",
+        "durationMs": 0,
+        "detail": "No datasets provided"
+      },
+      {
+        "name": "Generator Orchestration",
+        "status": "completed",
+        "durationMs": 279,
+        "detail": "1/1 artifacts generated"
+      }
+    ],
+    "totalProcessingTimeMs": 24292
+  }
+}
+
+
+
+$ docker logs rasid-presentation-service --tail 80
+
+[32minfo[39m: Database connected {"service":"presentation-service","timestamp":"2026-03-09T13:19:52.272Z"}
+npm warn exec The following package was not found and will be installed: tsx@4.21.0
+Debugger listening on ws://0.0.0.0:9229/02af8761-f88f-47bb-9eaa-f05daa8b9c00
+For help, see: https://nodejs.org/en/docs/inspector
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:19:52.284Z"}
+[32minfo[39m: Redis connected {"service":"presentation-service","timestamp":"2026-03-09T13:19:52.287Z"}
+[32minfo[39m: presentation-service running on port 8005 {"service":"presentation-service","timestamp":"2026-03-09T13:19:52.288Z"}
+[32minfo[39m: Health check: http://localhost:8005/health {"service":"presentation-service","timestamp":"2026-03-09T13:19:52.288Z"}
+[32minfo[39m: Starting multi-format generation {"format":"xlsx","pages":1,"service":"multi-format-generator","timestamp":"2026-03-09T13:20:19.793Z"}
+[32minfo[39m: Generation complete {"elements":3,"fileSize":7452,"format":"xlsx","processingTimeMs":256,"service":"multi-format-generator","timestamp":"2026-03-09T13:20:20.048Z"}
+

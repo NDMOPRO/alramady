@@ -1,0 +1,683 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+  @@map("UserStatus")
+}
+
+enum ReportDefinitionStatus {
+  DRAFT
+  BUILDING
+  BUILT
+  COMPLETED
+  PUBLISHED
+  ARCHIVED
+  ERROR
+  @@map("report_definition_status")
+}
+
+enum ReportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  @@map("report_status")
+}
+
+enum ReportOutputFormat {
+  PDF
+  DOCX
+  HTML
+  XLSX
+  CSV
+  JSON
+  PPTX
+  @@map("report_output_format")
+}
+
+enum DataSourceType {
+  FILE
+  DATABASE
+  API
+  EXTRACTED_CHART
+  MANUAL
+  @@map("data_source_type")
+}
+
+enum DataSourceStatus {
+  ACTIVE
+  INACTIVE
+  ERROR
+  @@map("data_source_status")
+}
+
+enum DistributionStatus {
+  SENT
+  FAILED
+  PARTIAL
+  @@map("distribution_status")
+}
+
+enum KpiStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  @@map("kpi_status")
+}
+
+// ─── Core Models (read-only, managed by governance-service) ─────
+
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(500)
+  plan      String   @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime? @map("updated_at")
+
+  @@map("tenants")
+}
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  tenantId     String     @map("tenant_id") @db.Uuid
+  email        String     @unique @db.VarChar(500)
+  name         String     @db.VarChar(500)
+  role         String     @db.VarChar(50)
+  passwordHash String     @map("password_hash") @db.Text
+  status       UserStatus @default(ACTIVE)
+  lastLogin    DateTime?  @map("last_login") @db.Timestamp(6)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime?  @map("updated_at")
+  deletedAt    DateTime?  @map("deleted_at")
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("users")
+}
+
+// ─── Reporting Models ────────────────────────────────────────────
+
+model ReportDefinition {
+  id          String                 @id @default(uuid()) @db.Uuid
+  name        String                 @db.VarChar(500)
+  description String?                @db.Text
+  templateId  String?                @map("template_id") @db.Uuid
+  config      Json
+  status      ReportDefinitionStatus @default(DRAFT)
+  tenantId    String                 @map("tenant_id") @db.Uuid
+  createdBy   String                 @map("created_by") @db.Uuid
+  updatedBy   String?                @map("updated_by") @db.Uuid
+  reportType  String?                @map("report_type") @db.VarChar(200)
+  outputFormat String?               @map("output_format") @db.VarChar(50)
+  mode        String?                @db.VarChar(50)
+  dataSources Json?                  @map("data_sources")
+  settings    Json?
+  metadata    Json?
+  deletedAt   DateTime?              @map("deleted_at")
+  createdAt   DateTime               @default(now()) @map("created_at")
+  updatedAt   DateTime               @updatedAt @map("updated_at")
+
+  buildOutputs ReportBuildOutput[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("report_definitions")
+}
+
+model ReportBuildOutput {
+  id               String       @id @default(uuid()) @db.Uuid
+  reportId         String       @map("report_id") @db.Uuid
+  renderedSections Json?        @map("rendered_sections")
+  fetchedData      Json?        @map("fetched_data")
+  buildDuration    Int?         @map("build_duration")
+  status           ReportStatus @default(PENDING)
+  format           ReportOutputFormat?
+  fileSize         Int?         @map("file_size")
+  filePath         String?      @map("file_path") @db.VarChar(1000)
+  metadata         Json?
+  createdAt        DateTime     @default(now()) @map("created_at")
+
+  reportDefinition ReportDefinition @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([status])
+  @@map("report_build_outputs")
+}
+
+model Report {
+  id            String            @id @default(uuid()) @db.Uuid
+  tenantId      String            @map("tenant_id") @db.Uuid
+  name          String            @db.VarChar(500)
+  description   String?           @db.Text
+  type          String            @db.VarChar(200)
+  format        ReportOutputFormat?
+  status        ReportStatus      @default(PENDING)
+  dataSources   Json?             @map("data_sources")
+  parameters    Json?
+  content       Json?
+  metadata      Json?
+  generatedAt   DateTime?         @map("generated_at")
+  headerConfig  Json?             @map("header_config")
+  footerConfig  Json?             @map("footer_config")
+  createdBy     String?           @map("created_by") @db.Uuid
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+
+  sections      ReportSection[]
+  comments      ReportComment[]
+  annotations   ReportAnnotation[]
+  charts        ReportChart[]
+  schedules     ReportSchedule[]
+  distributionConfigs DistributionConfig[]
+
+  @@index([tenantId])
+  @@index([type])
+  @@index([status])
+  @@map("reports")
+}
+
+model ReportSection {
+  id          String    @id @default(uuid()) @db.Uuid
+  reportId    String    @map("report_id") @db.Uuid
+  title       String?   @db.VarChar(500)
+  content     String?   @db.Text
+  type        String?   @db.VarChar(100)
+  order       Int       @default(0)
+  isLocked    Boolean   @default(false) @map("is_locked")
+  lockedBy    String?   @map("locked_by") @db.Uuid
+  lockedAt    DateTime? @map("locked_at")
+  lockReason  String?   @map("lock_reason") @db.VarChar(500)
+  metadata    Json?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  report      Report    @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("report_sections")
+}
+
+model ReportAuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  reportId    String   @map("report_id") @db.Uuid
+  sectionId   String?  @map("section_id") @db.Uuid
+  action      String   @db.VarChar(200)
+  performedBy String   @map("performed_by") @db.Uuid
+  details     String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([reportId])
+  @@map("report_audit_logs")
+}
+
+model ReportTemplate {
+  id                    String   @id @default(uuid()) @db.Uuid
+  name                  String   @db.VarChar(500)
+  description           String?  @db.Text
+  html                  String   @db.Text
+  variables             Json?
+  category              String?  @db.VarChar(200)
+  tenantId              String?  @map("tenant_id") @db.Uuid
+  isPublic              Boolean  @default(false) @map("is_public")
+  isPremium             Boolean  @default(false) @map("is_premium")
+  isSystem              Boolean  @default(false) @map("is_system")
+  createdBy             String?  @map("created_by") @db.Uuid
+  updatedBy             String?  @map("updated_by") @db.Uuid
+  status                String?  @db.VarChar(100)
+  version               Int      @default(1)
+  tags                  Json?
+  settings              Json?
+  templateConfig        Json?    @map("template_config")
+  layoutData            Json?    @map("layout_data")
+  defaultDataBindings   Json?    @map("default_data_bindings")
+  supportedOutputFormats Json?   @map("supported_output_formats")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@index([category])
+  @@map("report_templates")
+}
+
+model ReportDataSource {
+  id               String          @id @default(uuid()) @db.Uuid
+  reportId         String          @map("report_id") @db.Uuid
+  tenantId         String?         @map("tenant_id") @db.Uuid
+  name             String?         @db.VarChar(500)
+  type             DataSourceType
+  config           Json?
+  connectionConfig Json?           @map("connection_config")
+  data             Json?
+  status           DataSourceStatus @default(ACTIVE)
+  lastTestedAt     DateTime?       @map("last_tested_at")
+  metadata         Json?
+  createdAt        DateTime        @default(now()) @map("created_at")
+  updatedAt        DateTime        @updatedAt @map("updated_at")
+
+  @@index([reportId])
+  @@map("report_data_sources")
+}
+
+model ReportChart {
+  id        String   @id @default(uuid()) @db.Uuid
+  reportId  String   @map("report_id") @db.Uuid
+  type      String   @db.VarChar(100)
+  title     String?  @db.VarChar(500)
+  config    Json?
+  data      Json?
+  theme     String?  @db.VarChar(100)
+  width     Int?
+  height    Int?
+  imageData Bytes?   @map("image_data")
+  hash      String?  @db.VarChar(128)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  report    Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("report_charts")
+}
+
+model ReportComment {
+  id              String   @id @default(uuid()) @db.Uuid
+  reportId        String   @map("report_id") @db.Uuid
+  sectionId       String?  @map("section_id") @db.Uuid
+  parentCommentId String?  @map("parent_comment_id") @db.Uuid
+  content         String   @db.Text
+  userId          String   @map("user_id") @db.Uuid
+  userName        String   @map("user_name") @db.VarChar(500)
+  mentions        Json?
+  resolved        Boolean  @default(false)
+  resolvedBy      String?  @map("resolved_by") @db.Uuid
+  resolvedAt      DateTime? @map("resolved_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  report          Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("report_comments")
+}
+
+model ReportAnnotation {
+  id        String   @id @default(uuid()) @db.Uuid
+  reportId  String   @map("report_id") @db.Uuid
+  sectionId String?  @map("section_id") @db.Uuid
+  type      String   @db.VarChar(100)
+  position  Json?
+  content   String?  @db.Text
+  color     String?  @db.VarChar(50)
+  createdBy String   @map("created_by") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  report    Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("report_annotations")
+}
+
+model ReportPostEdit {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  editType          String   @map("edit_type") @db.VarChar(200)
+  editData          Json?    @map("edit_data")
+  changes           Json?
+  status            String   @db.VarChar(100)
+  isPublished       Boolean  @default(false) @map("is_published")
+  version           Int      @default(1)
+  targetSectionId   String?  @map("target_section_id") @db.Uuid
+  watermarkConfig   Json?    @map("watermark_config")
+  headerFooterConfig Json?   @map("header_footer_config")
+  formatOverrides   Json?    @map("format_overrides")
+  annotation        String?  @db.Text
+  createdBy         String   @map("created_by") @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@index([reportId])
+  @@index([tenantId])
+  @@map("report_post_edits")
+}
+
+model ReportOutput {
+  id          String             @id @default(uuid()) @db.Uuid
+  reportId    String             @map("report_id") @db.Uuid
+  format      ReportOutputFormat?
+  filePath    String?            @map("file_path") @db.VarChar(1000)
+  fileSize    Int?               @map("file_size")
+  status      ReportStatus       @default(PENDING)
+  metadata    Json?
+  createdAt   DateTime           @default(now()) @map("created_at")
+
+  @@index([reportId])
+  @@map("report_outputs")
+}
+
+// ─── Scheduling & Distribution ───────────────────────────────────
+
+model ReportSchedule {
+  id             String   @id @default(uuid()) @db.Uuid
+  reportId       String   @map("report_id") @db.Uuid
+  cronExpression String   @map("cron_expression") @db.VarChar(200)
+  recipients     Json
+  format         ReportOutputFormat?
+  status         String   @db.VarChar(100)
+  tenantId       String   @map("tenant_id") @db.Uuid
+  createdBy      String   @map("created_by") @db.Uuid
+  nextRunAt      DateTime? @map("next_run_at")
+  lastRunAt      DateTime? @map("last_run_at")
+  runCount       Int       @default(0) @map("run_count")
+  failureCount   Int       @default(0) @map("failure_count")
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  report         Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  histories      ScheduleHistory[]
+
+  @@index([reportId])
+  @@map("report_schedules")
+}
+
+model ScheduleHistory {
+  id             String   @id @default(uuid()) @db.Uuid
+  scheduleId     String   @map("schedule_id") @db.Uuid
+  status         String   @db.VarChar(100)
+  error          String?  @db.Text
+  duration       Int?
+  recipientCount Int?     @map("recipient_count")
+  fileSize       Int?     @map("file_size")
+  metadata       Json?
+  executedAt     DateTime @default(now()) @map("executed_at")
+
+  schedule       ReportSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleId])
+  @@map("schedule_histories")
+}
+
+model DistributionConfig {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  name              String   @db.VarChar(500)
+  recipients        Json
+  schedule          Json?
+  format            ReportOutputFormat?
+  includeWatermark  Boolean  @default(false) @map("include_watermark")
+  watermarkText     String?  @map("watermark_text") @db.VarChar(500)
+  emailSubject      String   @map("email_subject") @db.VarChar(1000)
+  emailBody         String   @map("email_body") @db.Text
+  trackReadReceipts Boolean  @default(false) @map("track_read_receipts")
+  accessPassword    String?  @map("access_password") @db.VarChar(256)
+  accessExpiry      DateTime? @map("access_expiry")
+  maxViews          Int?     @map("max_views")
+  allowDownload     Boolean  @default(true) @map("allow_download")
+  allowPrint        Boolean  @default(true) @map("allow_print")
+  enabled           Boolean  @default(true)
+  createdBy         String   @map("created_by") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  report            Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  records           DistributionRecord[]
+
+  @@index([reportId])
+  @@map("distribution_configs")
+}
+
+model DistributionRecord {
+  id                   String             @id @default(uuid()) @db.Uuid
+  distributionConfigId String             @map("distribution_config_id") @db.Uuid
+  reportId             String             @map("report_id") @db.Uuid
+  sentAt               DateTime?          @map("sent_at")
+  recipientCount       Int                @map("recipient_count")
+  status               DistributionStatus
+  errorMessage         String?            @map("error_message") @db.Text
+  fileSize             BigInt?            @map("file_size")
+  readReceipts         Json?              @map("read_receipts")
+  trackingIds          Json?              @map("tracking_ids")
+  createdAt            DateTime           @default(now()) @map("created_at")
+
+  distributionConfig   DistributionConfig @relation(fields: [distributionConfigId], references: [id], onDelete: Cascade)
+  readReceiptLogs      ReadReceiptLog[]
+
+  @@index([distributionConfigId])
+  @@index([reportId])
+  @@map("distribution_records")
+}
+
+model ReadReceiptLog {
+  id                   String   @id @default(uuid()) @db.Uuid
+  distributionRecordId String   @map("distribution_record_id") @db.Uuid
+  recipientEmail       String   @map("recipient_email") @db.VarChar(500)
+  ipAddress            String?  @map("ip_address") @db.VarChar(50)
+  userAgent            String?  @map("user_agent") @db.VarChar(1000)
+  readAt               DateTime @default(now()) @map("read_at")
+
+  distributionRecord   DistributionRecord @relation(fields: [distributionRecordId], references: [id], onDelete: Cascade)
+
+  @@index([distributionRecordId])
+  @@map("read_receipt_logs")
+}
+
+// ─── Interactive Reports ─────────────────────────────────────────
+
+model InteractiveReport {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String   @db.VarChar(500)
+  description   String?  @db.Text
+  reportId      String?  @map("report_id") @db.Uuid
+  config        Json?
+  parameters    Json?
+  elements      Json?
+  bookmarks     Json?
+  linkedReports Json?    @map("linked_reports")
+  version       Int      @default(1)
+  tenantId      String?  @map("tenant_id") @db.Uuid
+  createdBy     String   @map("created_by") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  versions      InteractiveReportVersion[]
+
+  @@index([tenantId])
+  @@map("interactive_reports")
+}
+
+model InteractiveReportVersion {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  version           Int
+  config            Json?
+  parameters        Json?
+  elements          Json?
+  linkedReports     Json?    @map("linked_reports")
+  changedBy         String?  @map("changed_by") @db.Uuid
+  changeDescription String?  @map("change_description") @db.Text
+  createdBy         String?  @map("created_by") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  report            InteractiveReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("interactive_report_versions")
+}
+
+// ─── SMS & Notifications ─────────────────────────────────────────
+
+model SMSLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  reportId        String   @map("report_id") @db.Uuid
+  recipientPhone  String   @map("recipient_phone") @db.VarChar(20)
+  messageSid      String   @map("message_sid") @db.VarChar(100)
+  status          String   @db.VarChar(50)
+  messageBody     String   @map("message_body") @db.Text
+  sentAt          DateTime @map("sent_at")
+  segmentCount    Int      @default(1) @map("segment_count")
+  errorMessage    String?  @map("error_message") @db.Text
+
+  @@index([reportId])
+  @@index([messageSid])
+  @@map("sms_logs")
+}
+
+// ─── Visual Regression ───────────────────────────────────────────
+
+model VisualBaseline {
+  id          String   @id @default(uuid()) @db.Uuid
+  componentId String   @unique @map("component_id") @db.VarChar(500)
+  imageData   Bytes    @map("image_data")
+  hash        String   @db.VarChar(128)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime? @map("updated_at")
+
+  @@map("visual_baselines")
+}
+
+// ─── External Simulation ─────────────────────────────────────────
+
+model ReportExternalSimulation {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  name              String   @db.VarChar(500)
+  description       String?  @db.Text
+  simulationType    String   @map("simulation_type") @db.VarChar(200)
+  status            String   @db.VarChar(100)
+  inputParameters   Json?    @map("input_parameters")
+  externalSourceUrl String?  @map("external_source_url") @db.VarChar(1000)
+  scenarioConfig    Json?    @map("scenario_config")
+  resultData        Json?    @map("result_data")
+  comparisonResult  Json?    @map("comparison_result")
+  createdBy         String   @map("created_by") @db.Uuid
+  metadata          Json?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@index([reportId])
+  @@map("report_external_simulations")
+}
+
+// ─── Compare & Schedule ──────────────────────────────────────────
+
+model ReportCompareSchedule {
+  id             String    @id @default(uuid()) @db.Uuid
+  reportId       String    @map("report_id") @db.Uuid
+  reportIdB      String?   @map("report_id_b") @db.Uuid
+  compareWith    String    @map("compare_with") @db.Uuid
+  name           String?   @db.VarChar(500)
+  comparisonType String?   @map("comparison_type") @db.VarChar(200)
+  schedule       Json?
+  thresholds     Json?
+  status         String    @db.VarChar(100)
+  isActive       Boolean   @default(true) @map("is_active")
+  resultData     Json?     @map("result_data")
+  lastExecutedAt DateTime? @map("last_executed_at")
+  tenantId       String    @map("tenant_id") @db.Uuid
+  createdBy      String    @map("created_by") @db.Uuid
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([reportId])
+  @@index([tenantId])
+  @@map("report_compare_schedules")
+}
+
+// ─── KPI Models ──────────────────────────────────────────────────
+
+model Kpi {
+  id               String    @id @default(uuid()) @db.Uuid
+  tenantId         String    @map("tenant_id") @db.Uuid
+  name             String    @db.VarChar(500)
+  description      String?   @db.Text
+  datasetId        String?   @map("dataset_id") @db.Uuid
+  query            String?   @db.Text
+  status           KpiStatus @default(ACTIVE)
+  settings         Json?
+  target           Float?
+  unit             String?   @db.VarChar(100)
+  category         String?   @db.VarChar(200)
+  format           String?   @db.VarChar(100)
+  threshold        Json?
+  trendDirection   String?   @map("trend_direction") @db.VarChar(50)
+  calculationType  String?   @map("calculation_type") @db.VarChar(100)
+  aggregation      String?   @db.VarChar(100)
+  groupBy          String?   @map("group_by") @db.VarChar(500)
+  filters          Json?
+  displayConfig    Json?     @map("display_config")
+  alertConfig      Json?     @map("alert_config")
+  metadata         Json?
+  lastCalculatedAt DateTime? @map("last_calculated_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  values           KpiValue[]
+
+  @@index([tenantId])
+  @@index([category])
+  @@map("kpis")
+}
+
+model KpiValue {
+  id         String   @id @default(uuid()) @db.Uuid
+  kpiId      String   @map("kpi_id") @db.Uuid
+  value      Float
+  recordedAt DateTime @map("recorded_at")
+  metadata   Json?
+
+  kpi        Kpi      @relation(fields: [kpiId], references: [id], onDelete: Cascade)
+
+  @@index([kpiId])
+  @@index([recordedAt])
+  @@map("kpi_values")
+}
+
+// ─── Compliance & Governance ─────────────────────────────────────
+
+model CompliancePolicy {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(500)
+  description String   @db.Text
+  framework   String   @db.VarChar(200)
+  status      String   @db.VarChar(100)
+  evidence    String?  @db.Text
+  assignee    String?  @db.VarChar(500)
+  dueDate     DateTime? @map("due_date")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  checks      ComplianceCheck[]
+
+  @@index([tenantId])
+  @@index([framework])
+  @@map("compliance_policies")
+}
+
+model ComplianceCheck {
+  id         String   @id @default(uuid()) @db.Uuid
+  policyId   String   @map("policy_id") @db.Uuid
+  status     String   @db.VarChar(100)
+  details    String?  @db.Text
+  checkedAt  DateTime @map("checked_at")
+
+  policy     CompliancePolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@map("compliance_checks")
+}

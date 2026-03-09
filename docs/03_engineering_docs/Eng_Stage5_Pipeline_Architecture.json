@@ -1,0 +1,390 @@
+[
+  {
+    "type": "Ingestion Pipelines",
+    "type_ar": "خطوط الاستيعاب",
+    "pipelines": [
+      {
+        "id": "PL-001",
+        "name": "File Upload Pipeline",
+        "desc": "استيعاب الملفات المرفوعة من المستخدم",
+        "stages": [
+          "Receive File",
+          "Validate Format",
+          "Extract Metadata",
+          "Parse Content",
+          "Store Dataset",
+          "Index Content"
+        ],
+        "trigger": "User Upload",
+        "async": true,
+        "engines": [
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-002",
+        "name": "API Ingestion Pipeline",
+        "desc": "استيعاب البيانات من مصادر خارجية عبر API",
+        "stages": [
+          "Authenticate",
+          "Fetch Data",
+          "Transform Schema",
+          "Validate Data",
+          "Store Dataset"
+        ],
+        "trigger": "API Call / Schedule",
+        "async": true,
+        "engines": [
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-003",
+        "name": "OCR Ingestion Pipeline",
+        "desc": "استخراج النصوص من الصور والمستندات الممسوحة",
+        "stages": [
+          "Receive Image",
+          "Preprocess",
+          "OCR Extract",
+          "Post-Process",
+          "Structure Data",
+          "Store"
+        ],
+        "trigger": "File Upload (Image/PDF)",
+        "async": true,
+        "engines": [
+          "Data Engine",
+          "AI Engine"
+        ]
+      },
+      {
+        "id": "PL-004",
+        "name": "Bulk Import Pipeline",
+        "desc": "استيراد دفعي لمجموعات بيانات كبيرة",
+        "stages": [
+          "Validate Archive",
+          "Extract Files",
+          "Parallel Parse",
+          "Merge Datasets",
+          "Quality Check",
+          "Store"
+        ],
+        "trigger": "Bulk Upload",
+        "async": true,
+        "engines": [
+          "Data Engine"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "AI Processing Pipelines",
+    "type_ar": "خطوط معالجة الذكاء الاصطناعي",
+    "pipelines": [
+      {
+        "id": "PL-005",
+        "name": "Natural Language Query Pipeline",
+        "desc": "معالجة الاستعلامات اللغوية الطبيعية",
+        "stages": [
+          "Parse Query",
+          "Intent Detection",
+          "Context Assembly",
+          "LLM Inference",
+          "Response Format",
+          "Cache"
+        ],
+        "trigger": "User Query",
+        "async": false,
+        "engines": [
+          "AI Engine"
+        ]
+      },
+      {
+        "id": "PL-006",
+        "name": "AI Analysis Pipeline",
+        "desc": "تحليل البيانات بالذكاء الاصطناعي",
+        "stages": [
+          "Load Dataset",
+          "Feature Extraction",
+          "Model Selection",
+          "Analysis",
+          "Insight Generation",
+          "Report"
+        ],
+        "trigger": "Analysis Request",
+        "async": true,
+        "engines": [
+          "AI Engine",
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-007",
+        "name": "AI Content Generation Pipeline",
+        "desc": "توليد المحتوى بالذكاء الاصطناعي",
+        "stages": [
+          "Receive Prompt",
+          "Context Assembly",
+          "Generate Content",
+          "Quality Check",
+          "Format Output"
+        ],
+        "trigger": "Generation Request",
+        "async": true,
+        "engines": [
+          "AI Engine",
+          "Presentation Engine",
+          "Reporting Engine"
+        ]
+      },
+      {
+        "id": "PL-008",
+        "name": "Embedding Pipeline",
+        "desc": "توليد التمثيلات المتجهية للبيانات",
+        "stages": [
+          "Load Content",
+          "Chunk Text",
+          "Generate Embeddings",
+          "Store Vectors",
+          "Update Index"
+        ],
+        "trigger": "New Content / Update",
+        "async": true,
+        "engines": [
+          "AI Engine",
+          "Data Engine"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Transformation Pipelines",
+    "type_ar": "خطوط التحويل",
+    "pipelines": [
+      {
+        "id": "PL-009",
+        "name": "Data Cleaning Pipeline",
+        "desc": "تنظيف وتنقية البيانات",
+        "stages": [
+          "Load Dataset",
+          "Detect Issues",
+          "Apply Rules",
+          "Validate Results",
+          "Store Clean Data"
+        ],
+        "trigger": "Manual / Auto",
+        "async": true,
+        "engines": [
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-010",
+        "name": "Format Conversion Pipeline",
+        "desc": "تحويل بين صيغ الملفات",
+        "stages": [
+          "Load Source",
+          "Parse Format",
+          "Transform",
+          "Validate Output",
+          "Store Result"
+        ],
+        "trigger": "Conversion Request",
+        "async": true,
+        "engines": [
+          "Conversion Engine"
+        ]
+      },
+      {
+        "id": "PL-011",
+        "name": "Localization Pipeline",
+        "desc": "تعريب المحتوى والواجهات",
+        "stages": [
+          "Load Content",
+          "Detect Language",
+          "Apply RTL",
+          "Translate Strings",
+          "Validate Arabic",
+          "Store"
+        ],
+        "trigger": "Localization Request",
+        "async": true,
+        "engines": [
+          "Localization Engine"
+        ]
+      },
+      {
+        "id": "PL-012",
+        "name": "Excel Processing Pipeline",
+        "desc": "معالجة ملفات Excel المتقدمة",
+        "stages": [
+          "Load Workbook",
+          "Parse Sheets",
+          "Execute Formulas",
+          "Generate Pivots",
+          "Format Output",
+          "Store"
+        ],
+        "trigger": "Excel Operation",
+        "async": true,
+        "engines": [
+          "Excel Engine"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Analytics Pipelines",
+    "type_ar": "خطوط التحليل",
+    "pipelines": [
+      {
+        "id": "PL-013",
+        "name": "Dashboard Rendering Pipeline",
+        "desc": "عرض لوحات المؤشرات التفاعلية",
+        "stages": [
+          "Load Config",
+          "Fetch Data",
+          "Compute Metrics",
+          "Render Widgets",
+          "Apply Filters",
+          "Serve"
+        ],
+        "trigger": "Dashboard View",
+        "async": false,
+        "engines": [
+          "Dashboard Engine",
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-014",
+        "name": "KPI Calculation Pipeline",
+        "desc": "حساب مؤشرات الأداء",
+        "stages": [
+          "Load Definitions",
+          "Fetch Source Data",
+          "Calculate KPIs",
+          "Compare Targets",
+          "Store Results"
+        ],
+        "trigger": "Schedule / Request",
+        "async": true,
+        "engines": [
+          "Dashboard Engine",
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-015",
+        "name": "Replication Matching Pipeline",
+        "desc": "المطابقة الحرفية الهندسية",
+        "stages": [
+          "Load Source",
+          "Load Target",
+          "Pixel Compare",
+          "Structure Compare",
+          "Score Match",
+          "Report"
+        ],
+        "trigger": "Match Request",
+        "async": true,
+        "engines": [
+          "Replication Engine"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Export Pipelines",
+    "type_ar": "خطوط التصدير",
+    "pipelines": [
+      {
+        "id": "PL-016",
+        "name": "Report Generation Pipeline",
+        "desc": "توليد التقارير الاحترافية",
+        "stages": [
+          "Load Template",
+          "Fetch Data",
+          "Render Sections",
+          "Apply Formatting",
+          "Generate PDF",
+          "Store/Deliver"
+        ],
+        "trigger": "Schedule / Manual",
+        "async": true,
+        "engines": [
+          "Reporting Engine"
+        ]
+      },
+      {
+        "id": "PL-017",
+        "name": "Presentation Export Pipeline",
+        "desc": "تصدير العروض التقديمية",
+        "stages": [
+          "Load Presentation",
+          "Render Slides",
+          "Apply Animations",
+          "Export Format",
+          "Store"
+        ],
+        "trigger": "Export Request",
+        "async": true,
+        "engines": [
+          "Presentation Engine"
+        ]
+      },
+      {
+        "id": "PL-018",
+        "name": "Infographic Export Pipeline",
+        "desc": "تصدير الإنفوجرافيك",
+        "stages": [
+          "Load Design",
+          "Render Elements",
+          "Apply Styling",
+          "Export Format",
+          "Store"
+        ],
+        "trigger": "Export Request",
+        "async": true,
+        "engines": [
+          "Infographic Engine"
+        ]
+      },
+      {
+        "id": "PL-019",
+        "name": "Bulk Export Pipeline",
+        "desc": "تصدير دفعي متعدد الصيغ",
+        "stages": [
+          "Collect Items",
+          "Queue Jobs",
+          "Parallel Export",
+          "Package Results",
+          "Deliver"
+        ],
+        "trigger": "Bulk Export Request",
+        "async": true,
+        "engines": [
+          "Conversion Engine",
+          "Data Engine"
+        ]
+      },
+      {
+        "id": "PL-020",
+        "name": "Library Asset Pipeline",
+        "desc": "إدارة أصول المكتبة",
+        "stages": [
+          "Receive Asset",
+          "Validate",
+          "Generate Thumbnail",
+          "Index",
+          "Store"
+        ],
+        "trigger": "Asset Upload",
+        "async": true,
+        "engines": [
+          "Library Engine"
+        ]
+      }
+    ]
+  }
+]

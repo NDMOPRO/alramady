@@ -1,0 +1,877 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────────────────
+
+enum PresentationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  DELETED
+}
+
+enum DatasetStatus {
+  active
+  archived
+  deleted
+}
+
+enum DatasetSourceType {
+  file
+  api
+  manual
+  ai
+  database
+  stream
+  archive
+  image_ocr
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+// ─── Tenant ─────────────────────────────────────────────────────────────────
+
+model Tenant {
+  id            String    @id @default(uuid()) @db.Uuid
+  name          String    @db.VarChar(500)
+  plan          String    @db.VarChar(64)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime? @map("updated_at")
+
+  presentations Presentation[]
+  themes        Theme[]
+
+  @@map("tenants")
+}
+
+// ─── User (read-only, managed by governance) ────────────────────────────────
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  tenantId     String     @map("tenant_id") @db.Uuid
+  email        String     @unique @db.VarChar(500)
+  name         String     @db.VarChar(500)
+  role         String     @default("USER") @db.VarChar(50)
+  passwordHash String     @map("password_hash") @db.Text
+  status       UserStatus @default(ACTIVE)
+  lastLogin    DateTime?  @map("last_login")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime?  @map("updated_at")
+  deletedAt    DateTime?  @map("deleted_at")
+
+  @@index([tenantId])
+  @@map("users")
+}
+
+// ─── Presentation ────────────────────────────────────────────────────────────
+
+model Presentation {
+  id          String             @id @default(uuid()) @db.Uuid
+  name        String             @db.VarChar(500)
+  description String?            @db.Text
+  status      PresentationStatus @default(DRAFT)
+  theme       Json?
+  slides      Json?
+  slideCount  Int                @default(0) @map("slide_count")
+  width       Float?
+  height      Float?
+  tenantId    String             @map("tenant_id") @db.Uuid
+  userId      String             @map("user_id") @db.Uuid
+  title       String?            @db.VarChar(500)
+  isPublic    Boolean            @default(false) @map("is_public")
+  thumbnail   String?            @db.Text
+  tags        Json?
+  settings    Json?
+  version     Int                @default(1)
+  folderId    String?            @map("folder_id") @db.Uuid
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+
+  tenant              Tenant                    @relation(fields: [tenantId], references: [id])
+  slideRecords        Slide[]
+  embedTokens         EmbedToken[]
+  liveSessions        LiveSession[]
+  presentationStates  PresentationState[]
+  collaborationSessions CollaborationSession[]
+  protections         PresentationProtection[]
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([status])
+  @@map("presentations")
+}
+
+// ─── Slide ───────────────────────────────────────────────────────────────────
+
+model Slide {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  slideIndex      Int      @map("slide_index")
+  order           Int      @default(0)
+  layout          String   @db.VarChar(100)
+  content         Json?
+  notes           String?  @db.Text
+  thumbnail       String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  presentation    Presentation     @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  slideElements   SlideElement[]
+  slideTransitions SlideTransition[]
+
+  @@index([presentationId])
+  @@index([slideIndex])
+  @@index([order])
+  @@map("slides")
+}
+
+// ─── SlideElement ────────────────────────────────────────────────────────────
+
+model SlideElement {
+  id         String   @id @default(uuid()) @db.Uuid
+  slideId    String   @map("slide_id") @db.Uuid
+  type       String   @db.VarChar(50)
+  content    Json?
+  positionX  Float?   @map("position_x")
+  positionY  Float?   @map("position_y")
+  width      Float?
+  height     Float?
+  rotation   Float?   @default(0)
+  layer      Int      @default(0)
+  style      Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  slide            Slide              @relation(fields: [slideId], references: [id], onDelete: Cascade)
+  elementAnimations ElementAnimation[]
+
+  @@index([slideId])
+  @@map("slide_elements")
+}
+
+// ─── SlideTransition ────────────────────────────────────────────────────────
+
+model SlideTransition {
+  id             String   @id @default(uuid()) @db.Uuid
+  slideId        String   @unique @map("slide_id") @db.Uuid
+  type           String   @db.VarChar(50)
+  duration       Int      @default(500)
+  delay          Int      @default(0)
+  direction      String?  @db.VarChar(20)
+  easing         String   @default("easeInOut") @db.VarChar(50)
+  advanceOnClick Boolean  @default(true) @map("advance_on_click")
+  advanceAfter   Int?     @map("advance_after")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  slide Slide @relation(fields: [slideId], references: [id], onDelete: Cascade)
+
+  @@map("slide_transitions")
+}
+
+// ─── ElementAnimation ────────────────────────────────────────────────────────
+
+model ElementAnimation {
+  id         String   @id @default(uuid()) @db.Uuid
+  elementId  String   @map("element_id") @db.Uuid
+  slideId    String   @map("slide_id") @db.Uuid
+  trigger    String   @db.VarChar(50)
+  effect     Json?
+  timing     Json?
+  properties Json?
+  order      Int      @default(0)
+  groupId    String?  @map("group_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  element SlideElement @relation(fields: [elementId], references: [id], onDelete: Cascade)
+
+  @@index([slideId])
+  @@index([elementId])
+  @@map("element_animations")
+}
+
+// ─── Theme ───────────────────────────────────────────────────────────────────
+
+model Theme {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  name           String   @db.VarChar(200)
+  colors         Json?
+  fonts          Json?
+  backgrounds    Json?
+  thumbnail      String?  @db.Text
+  isDefault      Boolean  @default(false) @map("is_default")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@map("themes")
+}
+
+// ─── LiveSession ─────────────────────────────────────────────────────────────
+
+model LiveSession {
+  id                String   @id @default(uuid()) @db.Uuid
+  presentationId    String   @map("presentation_id") @db.Uuid
+  hostUserId        String   @map("host_user_id") @db.Uuid
+  sessionCode       String   @map("session_code") @db.VarChar(10)
+  currentSlideIndex Int      @default(0) @map("current_slide_index")
+  isActive          Boolean  @default(true) @map("is_active")
+  startedAt         DateTime @default(now()) @map("started_at")
+  endedAt           DateTime? @map("ended_at")
+
+  presentation  Presentation   @relation(fields: [presentationId], references: [id])
+  sessionViewers SessionViewer[]
+
+  @@index([presentationId])
+  @@index([sessionCode])
+  @@map("live_sessions")
+}
+
+// ─── SessionViewer ───────────────────────────────────────────────────────────
+
+model SessionViewer {
+  id           String    @id @default(uuid()) @db.Uuid
+  sessionId    String    @map("session_id") @db.Uuid
+  viewerName   String    @map("viewer_name") @db.VarChar(200)
+  viewerUserId String?   @map("viewer_user_id") @db.Uuid
+  joinedAt     DateTime  @default(now()) @map("joined_at")
+  lastActiveAt DateTime  @default(now()) @map("last_active_at")
+
+  session LiveSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("session_viewers")
+}
+
+// ─── SlideView ───────────────────────────────────────────────────────────────
+
+model SlideView {
+  id              String   @id @default(uuid()) @db.Uuid
+  sessionId       String   @map("session_id") @db.Uuid
+  viewerId        String   @map("viewer_id") @db.Uuid
+  slideIndex      Int      @map("slide_index")
+  presentationId  String   @map("presentation_id") @db.Uuid
+  viewedAt        DateTime @default(now()) @map("viewed_at")
+  durationMs      Int?     @map("duration_ms")
+
+  @@index([sessionId])
+  @@index([viewerId])
+  @@index([presentationId])
+  @@map("slide_views")
+}
+
+// ─── PresentationState (CRDT) ────────────────────────────────────────────────
+
+model PresentationState {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @unique @map("presentation_id") @db.Uuid
+  crdtState       String?  @map("crdt_state") @db.Text
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  presentation Presentation @relation(fields: [presentationId], references: [id])
+
+  @@map("presentation_states")
+}
+
+// ─── CollaborationSession ────────────────────────────────────────────────────
+
+model CollaborationSession {
+  id              String    @id @default(uuid()) @db.Uuid
+  sessionId       String?   @map("session_id") @db.VarChar(64)
+  presentationId  String    @map("presentation_id") @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  joinedAt        DateTime  @default(now()) @map("joined_at")
+  leftAt          DateTime? @map("left_at")
+  isActive        Boolean   @default(true) @map("is_active")
+  active          Boolean   @default(true)
+
+  presentation Presentation @relation(fields: [presentationId], references: [id])
+
+  @@index([presentationId])
+  @@index([userId])
+  @@map("collaboration_sessions")
+}
+
+// ─── CollaborationEvent ──────────────────────────────────────────────────────
+
+model CollaborationEvent {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  eventType       String   @map("event_type") @db.VarChar(50)
+  updateSize      Int?     @map("update_size")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([presentationId])
+  @@map("collaboration_events")
+}
+
+// ─── EmbedToken ──────────────────────────────────────────────────────────────
+
+model EmbedToken {
+  id              String    @id @default(uuid()) @db.Uuid
+  token           String    @unique @db.VarChar(256)
+  presentationId  String    @map("presentation_id") @db.Uuid
+  createdBy       String    @map("created_by") @db.Uuid
+  expiresAt       DateTime? @map("expires_at")
+  allowedDomains  String[]  @map("allowed_domains")
+  maxViews        Int?      @map("max_views")
+  currentViews    Int       @default(0) @map("current_views")
+  showControls    Boolean   @default(true) @map("show_controls")
+  autoPlay        Boolean   @default(false) @map("auto_play")
+  startSlide      Int       @default(0) @map("start_slide")
+  theme           String    @default("auto") @db.VarChar(20)
+  isRevoked       Boolean   @default(false) @map("is_revoked")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  presentation Presentation @relation(fields: [presentationId], references: [id])
+
+  @@index([presentationId])
+  @@map("embed_tokens")
+}
+
+// ─── MediaAsset ──────────────────────────────────────────────────────────────
+
+model MediaAsset {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  source          String   @db.VarChar(50)
+  sourceId        String   @map("source_id") @db.VarChar(200)
+  sourceUrl       String   @map("source_url") @db.Text
+  localPath       String   @map("local_path") @db.Text
+  mimeType        String   @map("mime_type") @db.VarChar(100)
+  fileSize        Int      @map("file_size")
+  width           Int?
+  height          Int?
+  photographer    String?  @db.VarChar(200)
+  photographerUrl String?  @map("photographer_url") @db.Text
+  altText         String?  @map("alt_text") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([presentationId])
+  @@index([source, sourceId])
+  @@map("media_assets")
+}
+
+// ─── PresentationProtection ──────────────────────────────────────────────────
+
+model PresentationProtection {
+  id               String    @id @default(uuid()) @db.Uuid
+  presentationId   String    @unique @map("presentation_id") @db.Uuid
+  passwordHash     String    @map("password_hash") @db.Text
+  salt             String    @db.VarChar(128)
+  requirePassword  Boolean   @default(true) @map("require_password")
+  allowPrinting    Boolean   @default(true) @map("allow_printing")
+  allowCopying     Boolean   @default(true) @map("allow_copying")
+  allowEditing     Boolean   @default(true) @map("allow_editing")
+  expiresAt        DateTime? @map("expires_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  presentation Presentation @relation(fields: [presentationId], references: [id])
+
+  @@index([presentationId])
+  @@map("presentation_protections")
+}
+
+// ─── TimerSession ────────────────────────────────────────────────────────────
+
+model TimerSession {
+  id                   String    @id @default(uuid()) @db.Uuid
+  presentationId       String    @map("presentation_id") @db.Uuid
+  totalSlides          Int       @map("total_slides")
+  totalDurationSeconds Int       @map("total_duration_seconds")
+  slideAllocations     Json?     @map("slide_allocations")
+  warningThreshold     Float     @default(80) @map("warning_threshold")
+  autoAdvance          Boolean   @default(false) @map("auto_advance")
+  currentSlide         Int       @default(0) @map("current_slide")
+  status               String    @default("not_started") @db.VarChar(20)
+  startedAt            DateTime? @map("started_at")
+  pausedAt             DateTime? @map("paused_at")
+  finishedAt           DateTime? @map("finished_at")
+  elapsedSeconds       Int       @default(0) @map("elapsed_seconds")
+  slideElapsedSeconds  Int       @default(0) @map("slide_elapsed_seconds")
+  slideStartedAt       DateTime? @map("slide_started_at")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  slideTimingLogs SlideTimingLog[]
+
+  @@index([presentationId])
+  @@map("timer_sessions")
+}
+
+// ─── SlideTimingLog ──────────────────────────────────────────────────────────
+
+model SlideTimingLog {
+  id               String    @id @default(uuid()) @db.Uuid
+  timerSessionId   String    @map("timer_session_id") @db.Uuid
+  slideIndex       Int       @map("slide_index")
+  allocatedSeconds Int       @map("allocated_seconds")
+  actualSeconds    Int       @map("actual_seconds")
+  startedAt        DateTime  @map("started_at")
+  finishedAt       DateTime? @map("finished_at")
+
+  timerSession TimerSession @relation(fields: [timerSessionId], references: [id], onDelete: Cascade)
+
+  @@index([timerSessionId])
+  @@map("slide_timing_logs")
+}
+
+// ─── SlideTemplate ───────────────────────────────────────────────────────────
+
+model SlideTemplate {
+  id               String   @id @default(uuid()) @db.Uuid
+  name             String   @db.VarChar(200)
+  description      String?  @db.Text
+  category         String   @db.VarChar(100)
+  layout           String   @db.VarChar(100)
+  masterSlideId    String?  @map("master_slide_id") @db.Uuid
+  elements         Json?
+  backgroundColor  String?  @map("background_color") @db.VarChar(50)
+  backgroundImage  String?  @map("background_image") @db.Text
+  transitions      Json?
+  metadata         Json?
+  version          Int      @default(1)
+  createdBy        String   @map("created_by") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@map("slide_templates")
+}
+
+// ─── MasterSlide ─────────────────────────────────────────────────────────────
+
+model MasterSlide {
+  id               String   @id @default(uuid()) @db.Uuid
+  name             String   @db.VarChar(200)
+  description      String?  @db.Text
+  layout           Json?
+  elements         Json?
+  backgroundColor  String?  @map("background_color") @db.VarChar(50)
+  backgroundImage  String?  @map("background_image") @db.Text
+  headerStyle      Json?    @map("header_style")
+  footerStyle      Json?    @map("footer_style")
+  isDefault        Boolean  @default(false) @map("is_default")
+  createdBy        String   @map("created_by") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("master_slides")
+}
+
+// ─── AI Session ──────────────────────────────────────────────────────────────
+
+model AiSession {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String?  @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  sessionType     String   @map("session_type") @db.VarChar(50)
+  status          String   @default("active") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@map("ai_sessions")
+}
+
+model PresentationAdvancedEdit {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  operation       String   @db.VarChar(100)
+  targetType      String   @map("target_type") @db.VarChar(50)
+  targetId        String?  @map("target_id") @db.Uuid
+  beforeState     Json?    @map("before_state")
+  afterState      Json?    @map("after_state")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@index([userId])
+  @@map("presentation_advanced_edits")
+}
+
+model PresentationAiContent {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  contentType     String   @map("content_type") @db.VarChar(50)
+  prompt          String?  @db.Text
+  generatedContent Json?   @map("generated_content")
+  status          String   @default("pending") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@map("presentation_ai_contents")
+}
+
+model PresentationAnimationConfig {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  slideId         String?  @map("slide_id") @db.Uuid
+  elementId       String?  @map("element_id") @db.Uuid
+  animationType   String   @map("animation_type") @db.VarChar(50)
+  direction       String?  @db.VarChar(30)
+  duration        Int      @default(500)
+  delay           Int      @default(0) @map("delay_ms")
+  easing          String   @default("ease") @db.VarChar(30)
+  config          Json?
+  orderIndex      Int      @default(0) @map("order_index")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@index([slideId])
+  @@map("presentation_animation_configs")
+}
+
+model PresentationCollaboration {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  role            String   @default("viewer") @db.VarChar(20)
+  permissions     Json?
+  isActive        Boolean  @default(true) @map("is_active")
+  lastAccess      DateTime? @map("last_access")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([presentationId, userId])
+  @@index([presentationId])
+  @@map("presentation_collaborations")
+}
+
+model PresentationExportJob {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  format          String   @db.VarChar(20)
+  status          String   @default("pending") @db.VarChar(20)
+  outputUrl       String?  @map("output_url") @db.Text
+  config          Json?
+  error           String?  @db.Text
+  startedAt       DateTime? @map("started_at")
+  completedAt     DateTime? @map("completed_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([presentationId])
+  @@index([userId])
+  @@map("presentation_export_jobs")
+}
+
+model PresentationIntegration {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String?  @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  integrationType String   @map("integration_type") @db.VarChar(50)
+  provider        String   @db.VarChar(50)
+  config          Json?
+  status          String   @default("active") @db.VarChar(20)
+  lastSync        DateTime? @map("last_sync")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("presentation_integrations")
+}
+
+model PresentationMultiSource {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  sourceType      String   @map("source_type") @db.VarChar(50)
+  sourceId        String?  @map("source_id") @db.VarChar(500)
+  sourceUrl       String?  @map("source_url") @db.Text
+  extractedData   Json?    @map("extracted_data")
+  status          String   @default("pending") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@map("presentation_multi_sources")
+}
+
+model PresentationSmartDesign {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  designType      String   @map("design_type") @db.VarChar(50)
+  inputData       Json?    @map("input_data")
+  generatedDesign Json?    @map("generated_design")
+  status          String   @default("pending") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@map("presentation_smart_designs")
+}
+
+// ─── Infographic ────────────────────────────────────────────────────────────
+
+model Infographic {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  title           String   @db.VarChar(500)
+  description     String?  @db.Text
+  type            String   @db.VarChar(50)
+  data            Json?
+  layout          Json?
+  style           Json?
+  elements        Json?
+  thumbnail       String?  @db.Text
+  isRtl           Boolean  @default(true) @map("is_rtl")
+  version         Int      @default(1)
+  status          String   @default("draft") @db.VarChar(20)
+  tags            Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  versions InfographicVersion[]
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([type])
+  @@map("infographics")
+}
+
+model InfographicVersion {
+  id              String   @id @default(uuid()) @db.Uuid
+  infographicId   String   @map("infographic_id") @db.Uuid
+  version         Int
+  data            Json?
+  layout          Json?
+  style           Json?
+  elements        Json?
+  changelog       String?  @db.Text
+  createdBy       String   @map("created_by") @db.Uuid
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  infographic Infographic @relation(fields: [infographicId], references: [id], onDelete: Cascade)
+
+  @@index([infographicId])
+  @@map("infographic_versions")
+}
+
+// ─── Quiz & Poll ────────────────────────────────────────────────────────────
+
+model PresentationQuiz {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  slideId         String?  @map("slide_id") @db.Uuid
+  title           String   @db.VarChar(500)
+  questions       Json
+  settings        Json?
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  responses QuizResponse[]
+
+  @@index([presentationId])
+  @@map("presentation_quizzes")
+}
+
+model QuizResponse {
+  id         String   @id @default(uuid()) @db.Uuid
+  quizId     String   @map("quiz_id") @db.Uuid
+  viewerId   String?  @map("viewer_id") @db.Uuid
+  viewerName String?  @map("viewer_name") @db.VarChar(200)
+  answers    Json
+  score      Float?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  quiz PresentationQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+  @@map("quiz_responses")
+}
+
+model PresentationPoll {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  slideId         String?  @map("slide_id") @db.Uuid
+  question        String   @db.Text
+  options         Json
+  settings        Json?
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  votes PollVote[]
+
+  @@index([presentationId])
+  @@map("presentation_polls")
+}
+
+model PollVote {
+  id       String   @id @default(uuid()) @db.Uuid
+  pollId   String   @map("poll_id") @db.Uuid
+  optionIndex Int   @map("option_index")
+  viewerId String?  @map("viewer_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  poll PresentationPoll @relation(fields: [pollId], references: [id], onDelete: Cascade)
+
+  @@index([pollId])
+  @@map("poll_votes")
+}
+
+// ─── Comments ───────────────────────────────────────────────────────────────
+
+model PresentationComment {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  slideId         String?  @map("slide_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  text            String   @db.Text
+  positionX       Float?   @map("position_x")
+  positionY       Float?   @map("position_y")
+  parentId        String?  @map("parent_id") @db.Uuid
+  resolved        Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@index([slideId])
+  @@map("presentation_comments")
+}
+
+// ─── Recording ──────────────────────────────────────────────────────────────
+
+model PresentationRecording {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  type            String   @db.VarChar(30)
+  duration        Int?
+  fileUrl         String?  @map("file_url") @db.Text
+  fileSize        Int?     @map("file_size")
+  status          String   @default("recording") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([presentationId])
+  @@map("presentation_recordings")
+}
+
+// ─── Brand Kit ──────────────────────────────────────────────────────────────
+
+model BrandKit {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @unique @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(200)
+  logoUrl         String?  @map("logo_url") @db.Text
+  logoBuffer      String?  @map("logo_buffer") @db.Text
+  primaryColor    String   @map("primary_color") @db.VarChar(20)
+  secondaryColor  String   @map("secondary_color") @db.VarChar(20)
+  accentColor     String?  @map("accent_color") @db.VarChar(20)
+  fontPrimary     String   @map("font_primary") @db.VarChar(100)
+  fontSecondary   String?  @map("font_secondary") @db.VarChar(100)
+  fontArabic      String   @default("Tajawal") @map("font_arabic") @db.VarChar(100)
+  colorPalette    Json?    @map("color_palette")
+  guidelines      Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("brand_kits")
+}
+
+// ─── Workspace ──────────────────────────────────────────────────────────────
+
+model PresentationWorkspace {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(200)
+  description     String?  @db.Text
+  ownerId         String   @map("owner_id") @db.Uuid
+  members         Json?
+  settings        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@map("presentation_workspaces")
+}
+
+// ─── Automation Skill ───────────────────────────────────────────────────────
+
+model AutomationSkill {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  name            String   @db.VarChar(200)
+  description     String?  @db.Text
+  workflow        Json
+  triggerType     String   @map("trigger_type") @db.VarChar(50)
+  isActive        Boolean  @default(true) @map("is_active")
+  lastRunAt       DateTime? @map("last_run_at")
+  runCount        Int      @default(0) @map("run_count")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@map("automation_skills")
+}
+
+// ─── Scheduled Task ─────────────────────────────────────────────────────────
+
+model ScheduledPresentationTask {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  name            String   @db.VarChar(200)
+  taskType        String   @map("task_type") @db.VarChar(50)
+  schedule        String   @db.VarChar(100)
+  config          Json
+  isActive        Boolean  @default(true) @map("is_active")
+  lastRunAt       DateTime? @map("last_run_at")
+  nextRunAt       DateTime? @map("next_run_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@map("scheduled_presentation_tasks")
+}
+
+// ─── Interactive Element ────────────────────────────────────────────────────
+
+model InteractiveElement {
+  id              String   @id @default(uuid()) @db.Uuid
+  presentationId  String   @map("presentation_id") @db.Uuid
+  slideId         String   @map("slide_id") @db.Uuid
+  type            String   @db.VarChar(50)
+  config          Json
+  position        Json?
+  style           Json?
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([presentationId])
+  @@index([slideId])
+  @@map("interactive_elements")
+}

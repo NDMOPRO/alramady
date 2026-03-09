@@ -1,0 +1,126 @@
+[
+  {
+    "phase": "Phase 1 — Foundation",
+    "phase_ar": "المرحلة 1 — الأساس",
+    "duration": "Months 1-3",
+    "goal": "بناء البنية التحتية الأساسية ومحرك البيانات ونظام الحوكمة",
+    "engines": [
+      "Data Engine",
+      "Governance Engine"
+    ],
+    "milestones": [
+      "M1.1: Infrastructure setup (Kubernetes, CI/CD, Monitoring)",
+      "M1.2: Data Engine — File ingestion and parsing",
+      "M1.3: Data Engine — Dataset registry and versioning",
+      "M1.4: Governance Engine — User auth and tenant management",
+      "M1.5: Governance Engine — Role-based access control",
+      "M1.6: API Gateway and service mesh setup"
+    ]
+  },
+  {
+    "phase": "Phase 2 — Core Processing",
+    "phase_ar": "المرحلة 2 — المعالجة الأساسية",
+    "duration": "Months 4-6",
+    "goal": "بناء محرك Excel ومحرك التحويل ومحرك المكتبة والقوالب",
+    "engines": [
+      "Excel Engine",
+      "Conversion Engine",
+      "Library Engine",
+      "Template Engine"
+    ],
+    "milestones": [
+      "M2.1: Excel Engine — Workbook processing and formulas",
+      "M2.2: Excel Engine — Pivot tables and advanced formatting",
+      "M2.3: Conversion Engine — Multi-format conversion",
+      "M2.4: Library Engine — Asset management",
+      "M2.5: Template Engine — Template registry and management",
+      "M2.6: Integration testing Phase 1 + Phase 2"
+    ]
+  },
+  {
+    "phase": "Phase 3 — Analytics & Visualization",
+    "phase_ar": "المرحلة 3 — التحليل والتصور",
+    "duration": "Months 7-9",
+    "goal": "بناء محرك لوحات المؤشرات ومحرك التقارير",
+    "engines": [
+      "Dashboard Engine",
+      "Reporting Engine"
+    ],
+    "milestones": [
+      "M3.1: Dashboard Engine — Interactive dashboard builder",
+      "M3.2: Dashboard Engine — Widget library and real-time updates",
+      "M3.3: Reporting Engine — Report template system",
+      "M3.4: Reporting Engine — Scheduled report generation",
+      "M3.5: Reporting Engine — Multi-format export",
+      "M3.6: Integration testing Phase 1-3"
+    ]
+  },
+  {
+    "phase": "Phase 4 — AI Integration",
+    "phase_ar": "المرحلة 4 — تكامل الذكاء الاصطناعي",
+    "duration": "Months 10-12",
+    "goal": "بناء محرك الذكاء الاصطناعي والاستجواب الحر",
+    "engines": [
+      "AI Engine"
+    ],
+    "milestones": [
+      "M4.1: AI Engine — LLM integration and query processing",
+      "M4.2: AI Engine — Data analysis and insight generation",
+      "M4.3: AI Engine — Content generation assistance",
+      "M4.4: AI Engine — Embedding and semantic search",
+      "M4.5: AI Engine — Cross-engine AI orchestration",
+      "M4.6: Integration testing Phase 1-4"
+    ]
+  },
+  {
+    "phase": "Phase 5 — Output Engines",
+    "phase_ar": "المرحلة 5 — محركات الإخراج",
+    "duration": "Months 13-16",
+    "goal": "بناء محرك العروض التقديمية ومحرك الإنفوجرافيك",
+    "engines": [
+      "Presentation Engine",
+      "Infographic Engine"
+    ],
+    "milestones": [
+      "M5.1: Presentation Engine — Slide builder and templates",
+      "M5.2: Presentation Engine — Animations and transitions",
+      "M5.3: Presentation Engine — Multi-format export",
+      "M5.4: Infographic Engine — Design builder",
+      "M5.5: Infographic Engine — Template library",
+      "M5.6: Integration testing Phase 1-5"
+    ]
+  },
+  {
+    "phase": "Phase 6 — Quality & Localization",
+    "phase_ar": "المرحلة 6 — الجودة والتعريب",
+    "duration": "Months 17-19",
+    "goal": "بناء محرك المطابقة الحرفية ومحرك التعريب",
+    "engines": [
+      "Replication Engine",
+      "Localization Engine"
+    ],
+    "milestones": [
+      "M6.1: Replication Engine — Pixel-perfect matching",
+      "M6.2: Replication Engine — Structure comparison",
+      "M6.3: Localization Engine — RTL and Arabic support",
+      "M6.4: Localization Engine — Cultural formatting",
+      "M6.5: Localization Engine — Full platform arabization",
+      "M6.6: Integration testing Phase 1-6"
+    ]
+  },
+  {
+    "phase": "Phase 7 — Hardening & Launch",
+    "phase_ar": "المرحلة 7 — التقوية والإطلاق",
+    "duration": "Months 20-22",
+    "goal": "اختبار شامل وتحسين الأداء والأمان والإطلاق",
+    "milestones": [
+      "M7.1: Performance optimization and load testing",
+      "M7.2: Security audit and penetration testing",
+      "M7.3: Accessibility and compliance review",
+      "M7.4: User acceptance testing (UAT)",
+      "M7.5: Production deployment and monitoring",
+      "M7.6: Official platform launch"
+    ],
+    "engines": []
+  }
+]

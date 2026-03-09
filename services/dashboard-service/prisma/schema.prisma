@@ -1,0 +1,617 @@
+// ============================================================================
+// RASID Dashboard Service - Prisma Schema
+// Database: PostgreSQL
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VIEWER
+  DATA_STEWARD
+  ANALYST
+  API_CONSUMER
+}
+
+enum DatasetStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  UNDER_REVIEW
+  REJECTED
+}
+
+enum DashboardVisibility {
+  PRIVATE
+  TEAM
+  ORGANIZATION
+  PUBLIC
+}
+
+enum WidgetType {
+  BAR_CHART
+  LINE_CHART
+  PIE_CHART
+  DONUT_CHART
+  AREA_CHART
+  SCATTER_PLOT
+  HEATMAP
+  TABLE
+  KPI_CARD
+  MAP
+  GAUGE
+  FUNNEL
+  TREEMAP
+  TEXT
+  IMAGE
+}
+
+enum Language {
+  EN
+  AR
+}
+
+// ============================================================================
+// CORE MODELS
+// ============================================================================
+
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(256)
+  slug      String   @unique @db.VarChar(256)
+  domain    String?  @db.VarChar(512)
+  logo      String?  @db.Text
+  settings  Json?    @default("{}")
+  isActive  Boolean  @default(true) @map("is_active")
+  plan      String   @default("free") @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  users      User[]
+  datasets   Dataset[]
+  dashboards Dashboard[]
+
+  @@map("tenants")
+}
+
+model User {
+  id              String     @id @default(uuid()) @db.Uuid
+  tenantId        String     @map("tenant_id") @db.Uuid
+  email           String     @db.VarChar(320)
+  passwordHash    String?    @map("password_hash") @db.Text
+  firstName       String     @map("first_name") @db.VarChar(128)
+  lastName        String     @map("last_name") @db.VarChar(128)
+  displayName     String?    @map("display_name") @db.VarChar(255)
+  avatarUrl       String?    @map("avatar_url") @db.Text
+  phone           String?    @db.VarChar(32)
+  locale          Language   @default(EN)
+  timezone        String     @default("UTC") @db.VarChar(64)
+  status          UserStatus @default(PENDING_VERIFICATION)
+  emailVerifiedAt DateTime?  @map("email_verified_at") @db.Timestamptz
+  lastLoginAt     DateTime?  @map("last_login_at") @db.Timestamptz
+  preferences     Json?      @default("{}")
+  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime?  @map("deleted_at") @db.Timestamptz
+
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dashboards Dashboard[] @relation("DashboardCreator")
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([email])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// ============================================================================
+// DATA MODELS
+// ============================================================================
+
+model Dataset {
+  id           String        @id @default(uuid()) @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  createdById  String        @map("created_by_id") @db.Uuid
+  updatedById  String?       @map("updated_by_id") @db.Uuid
+  folderId     String?       @map("folder_id") @db.Uuid
+  name         String        @db.VarChar(512)
+  slug         String        @db.VarChar(512)
+  description  String?       @db.Text
+  source       String?       @db.VarChar(512)
+  sourceUrl    String?       @map("source_url") @db.Text
+  format       String?       @db.VarChar(64)
+  fileSize     BigInt?       @map("file_size")
+  rowCount     Int?          @map("row_count")
+  columnCount  Int?          @map("column_count")
+  schema       Json?
+  sampleData   Json?         @map("sample_data")
+  status       DatasetStatus @default(DRAFT)
+  isPublic     Boolean       @default(false) @map("is_public")
+  license      String?       @db.VarChar(256)
+  frequency    String?       @db.VarChar(64)
+  lastSyncedAt DateTime?     @map("last_synced_at") @db.Timestamptz
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz
+  settings     Json?         @default("{}")
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz
+
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dashboardWidgets DashboardWidget[]
+  dataRows         DataRow[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("datasets")
+}
+
+model DataRow {
+  id        String   @id @default(uuid()) @db.Uuid
+  datasetId String   @map("dataset_id") @db.Uuid
+  rowIndex  Int      @map("row_index")
+  data      Json
+  checksum  String?  @db.VarChar(128)
+  isValid   Boolean  @default(true) @map("is_valid")
+  errors    Json?
+  version   Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, rowIndex, version])
+  @@index([datasetId])
+  @@index([rowIndex])
+  @@map("data_rows")
+}
+
+// ============================================================================
+// DASHBOARD MODELS
+// ============================================================================
+
+model Dashboard {
+  id          String              @id @default(uuid()) @db.Uuid
+  tenantId    String              @map("tenant_id") @db.Uuid
+  createdById String              @map("created_by_id") @db.Uuid
+  folderId    String?             @map("folder_id") @db.Uuid
+  name        String              @db.VarChar(512)
+  slug        String              @db.VarChar(512)
+  description String?             @db.Text
+  visibility  DashboardVisibility @default(PRIVATE)
+  layout      Json?
+  theme       Json?
+  filters     Json?
+  refreshRate Int?                @map("refresh_rate")
+  thumbnail   String?             @db.Text
+  isFavorite  Boolean             @default(false) @map("is_favorite")
+  viewCount   Int                 @default(0) @map("view_count")
+  settings    Json?               @default("{}")
+  publishedAt DateTime?           @map("published_at") @db.Timestamptz
+  createdAt   DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?           @map("deleted_at") @db.Timestamptz
+
+  tenant    Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy User              @relation("DashboardCreator", fields: [createdById], references: [id])
+  widgets   DashboardWidget[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([folderId])
+  @@index([visibility])
+  @@index([deletedAt])
+  @@map("dashboards")
+}
+
+model DashboardWidget {
+  id           String     @id @default(uuid()) @db.Uuid
+  dashboardId  String     @map("dashboard_id") @db.Uuid
+  datasetId    String?    @map("dataset_id") @db.Uuid
+  type         WidgetType
+  title        String     @db.VarChar(512)
+  description  String?    @db.Text
+  config       Json
+  query        String?    @db.Text
+  position     Json
+  size         Json
+  style        Json?
+  refreshRate  Int?       @map("refresh_rate")
+  cacheSeconds Int?       @map("cache_seconds")
+  sortOrder    Int        @default(0) @map("sort_order")
+  isVisible    Boolean    @default(true) @map("is_visible")
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+
+  dashboard Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dataset   Dataset?  @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+
+  @@index([dashboardId])
+  @@index([datasetId])
+  @@index([type])
+  @@map("dashboard_widgets")
+}
+
+model DashboardFilter {
+  id          String   @id @default(uuid()) @db.Uuid
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  filterType  String   @map("filter_type") @db.VarChar(64)
+  targetField String   @map("target_field") @db.VarChar(256)
+  label       String   @db.VarChar(256)
+  config      Json?
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@map("dashboard_filters")
+}
+
+// ============================================================================
+// WIDGET ENGINE MODELS
+// ============================================================================
+
+model Widget {
+  id              String   @id @default(uuid()) @db.Uuid
+  dashboardId     String   @map("dashboard_id") @db.Uuid
+  type            String   @db.VarChar(64)
+  title           String   @db.VarChar(512)
+  config          String   @db.Text
+  dataSource      String   @map("data_source") @db.Text
+  layout          String   @db.Text
+  refreshInterval Int?     @map("refresh_interval")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@map("widgets")
+}
+
+model WidgetTemplate {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(256)
+  description  String   @db.Text
+  type         String   @db.VarChar(64)
+  config       String   @db.Text
+  previewImage String?  @map("preview_image") @db.Text
+  category     String   @db.VarChar(128)
+  tags         String   @db.Text
+  usageCount   Int      @default(0) @map("usage_count")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([type])
+  @@index([category])
+  @@map("widget_templates")
+}
+
+model WidgetInteraction {
+  id              String   @id @default(uuid()) @db.Uuid
+  sourceWidgetId  String   @map("source_widget_id") @db.Uuid
+  targetWidgetId  String   @map("target_widget_id") @db.Uuid
+  interactionType String   @map("interaction_type") @db.VarChar(64)
+  sourceField     String   @map("source_field") @db.VarChar(256)
+  targetField     String   @map("target_field") @db.VarChar(256)
+  config          String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([sourceWidgetId])
+  @@index([targetWidgetId])
+  @@map("widget_interactions")
+}
+
+model WidgetDataFetch {
+  id              String   @id @default(uuid()) @db.Uuid
+  widgetId        String   @map("widget_id") @db.Uuid
+  rowsFetched     Int      @map("rows_fetched")
+  queryDurationMs Int      @map("query_duration_ms")
+  filters         String?  @db.Text
+  fetchedAt       DateTime @map("fetched_at") @db.Timestamptz
+
+  @@index([widgetId])
+  @@map("widget_data_fetches")
+}
+
+// ============================================================================
+// CROSS-FILTER & LINKING MODELS
+// ============================================================================
+
+model CrossFilterConfig {
+  id              String   @id @default(uuid()) @db.Uuid
+  dashboardId     String   @map("dashboard_id") @db.Uuid
+  sourceWidgetId  String   @map("source_widget_id") @db.Uuid
+  targetWidgetIds String   @map("target_widget_ids") @db.Text
+  filterField     String   @map("filter_field") @db.VarChar(256)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime? @map("updated_at") @db.Timestamptz
+
+  @@unique([dashboardId, sourceWidgetId], name: "dashboardId_sourceWidgetId")
+  @@index([dashboardId])
+  @@map("cross_filter_configs")
+}
+
+model DashboardLink {
+  id                  String   @id @default(uuid()) @db.Uuid
+  sourceDashboardId   String   @map("source_dashboard_id") @db.Uuid
+  targetDashboardId   String   @map("target_dashboard_id") @db.Uuid
+  triggerWidgetId     String   @map("trigger_widget_id") @db.Uuid
+  filterMapping       String   @map("filter_mapping") @db.Text
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([sourceDashboardId])
+  @@index([triggerWidgetId])
+  @@map("dashboard_links")
+}
+
+// ============================================================================
+// SECTION CRUD MODELS
+// ============================================================================
+
+model DashboardEasyMode {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(256)
+  description    String?  @db.Text
+  dashboardType  String?  @map("dashboard_type") @db.VarChar(64)
+  config         Json?
+  isPublic       Boolean  @default(false) @map("is_public")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("dashboard_easy_modes")
+}
+
+model DashboardDragElement {
+  id          String   @id @default(uuid()) @db.Uuid
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  elementType String   @map("element_type") @db.VarChar(64)
+  label       String   @db.VarChar(256)
+  positionX   Float    @default(0) @map("position_x")
+  positionY   Float    @default(0) @map("position_y")
+  width       Float    @default(100)
+  height      Float    @default(100)
+  zIndex      Int      @default(0) @map("z_index")
+  config      Json?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@map("dashboard_drag_elements")
+}
+
+model DashboardFullEditor {
+  id          String   @id @default(uuid()) @db.Uuid
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  editorMode  String   @map("editor_mode") @db.VarChar(64)
+  undoHistory Json?    @map("undo_history")
+  config      Json?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@map("dashboard_full_editors")
+}
+
+model DashboardPostEdit {
+  id          String   @id @default(uuid()) @db.Uuid
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  editType    String   @map("edit_type") @db.VarChar(64)
+  annotation  String?  @db.Text
+  isPublished Boolean  @default(false) @map("is_published")
+  version     Int      @default(1)
+  config      Json?
+  name        String?  @db.VarChar(256)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@map("dashboard_post_edits")
+}
+
+model DashboardTemplate {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(256)
+  description    String?  @db.Text
+  category       String   @db.VarChar(128)
+  templateConfig Json?    @map("template_config")
+  isPremium      Boolean  @default(false) @map("is_premium")
+  isPublic       Boolean  @default(true) @map("is_public")
+  thumbnail      String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([category])
+  @@map("dashboard_templates")
+}
+
+model DashboardExternalSimulation {
+  id             String   @id @default(uuid()) @db.Uuid
+  dashboardId    String   @map("dashboard_id") @db.Uuid
+  name           String   @db.VarChar(256)
+  description    String?  @db.Text
+  simulationType String   @map("simulation_type") @db.VarChar(64)
+  status         String   @default("pending") @db.VarChar(32)
+  config         Json?
+  resultData     Json?    @map("result_data")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@index([status])
+  @@map("dashboard_external_simulations")
+}
+
+model DashboardPerformance {
+  id           String   @id @default(uuid()) @db.Uuid
+  dashboardId  String   @map("dashboard_id") @db.Uuid
+  metricName   String   @map("metric_name") @db.VarChar(256)
+  metricType   String   @map("metric_type") @db.VarChar(64)
+  currentValue Float    @default(0) @map("current_value")
+  targetValue  Float    @default(0) @map("target_value")
+  status       String?  @db.VarChar(32)
+  config       Json?
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@index([metricType])
+  @@map("dashboard_performances")
+}
+
+// ============================================================================
+// THEME MODELS
+// ============================================================================
+
+model DashboardTheme {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(256)
+  description  String   @db.Text
+  mode         String   @db.VarChar(16)
+  colors       String   @db.Text
+  typography   String   @db.Text
+  spacing      String   @db.Text
+  borderRadius String   @map("border_radius") @db.Text
+  shadows      String   @db.Text
+  rtl          Boolean  @default(false)
+  brandKit     String?  @map("brand_kit") @db.Text
+  createdBy    String   @map("created_by") @db.VarChar(256)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("dashboard_themes")
+}
+
+model ThemeVariant {
+  id             String   @id @default(uuid()) @db.Uuid
+  baseThemeId    String   @map("base_theme_id") @db.Uuid
+  variantThemeId String   @map("variant_theme_id") @db.Uuid
+  variantType    String   @map("variant_type") @db.VarChar(32)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("theme_variants")
+}
+
+// ============================================================================
+// EXPORT MODELS
+// ============================================================================
+
+model ExportHistory {
+  id          String   @id @default(uuid()) @db.Uuid
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  format      String   @db.VarChar(16)
+  filename    String   @db.VarChar(512)
+  fileSize    Int      @map("file_size")
+  exportedAt  DateTime @map("exported_at") @db.Timestamptz
+  metadata    Json?
+
+  @@index([dashboardId])
+  @@index([exportedAt])
+  @@map("export_histories")
+}
+
+// ============================================================================
+// REALTIME MODELS
+// ============================================================================
+
+model DataStream {
+  id              String   @id @default(uuid()) @db.Uuid
+  dashboardId     String   @map("dashboard_id") @db.Uuid
+  widgetId        String   @map("widget_id") @db.Uuid
+  dataSourceId    String   @map("data_source_id") @db.Uuid
+  refreshInterval Int      @map("refresh_interval")
+  query           String   @db.Text
+  aggregation     Json?
+  filters         Json?
+  maxDataPoints   Int?     @default(1000) @map("max_data_points")
+  enabled         Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@index([widgetId])
+  @@map("data_streams")
+}
+
+model ConnectionLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  event       String   @db.VarChar(32)
+  socketId    String   @map("socket_id") @db.VarChar(128)
+  userId      String   @map("user_id") @db.VarChar(256)
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  metadata    Json?
+  timestamp   DateTime @db.Timestamptz
+
+  @@index([dashboardId])
+  @@index([timestamp])
+  @@map("connection_logs")
+}
+
+// ============================================================================
+// TV MODE MODELS
+// ============================================================================
+
+model TvSession {
+  id          String    @id @default(uuid()) @db.Uuid
+  dashboardId String    @map("dashboard_id") @db.Uuid
+  shareToken  String    @unique @map("share_token") @db.VarChar(128)
+  config      String    @db.Text
+  status      String    @default("active") @db.VarChar(32)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime? @map("updated_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@index([shareToken])
+  @@map("tv_sessions")
+}
+
+// ============================================================================
+// LAYOUT HISTORY
+// ============================================================================
+
+model DashboardLayoutHistory {
+  id          String   @id @default(uuid()) @db.Uuid
+  dashboardId String   @map("dashboard_id") @db.Uuid
+  layouts     String   @db.Text
+  savedAt     DateTime @map("saved_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@map("dashboard_layout_histories")
+}
+
+// ============================================================================
+// ADVANCED MODE
+// ============================================================================
+
+model DashboardAdvancedMode {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(256)
+  description String?  @db.Text
+  config      Json?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("dashboard_advanced_modes")
+}

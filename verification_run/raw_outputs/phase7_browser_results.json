@@ -1,0 +1,54 @@
+{
+  "baseline": {
+    "datasets": 60,
+    "reports": 22,
+    "presentations": 24,
+    "libraryAssets": 16,
+    "latestLibraryAsset": "phase7-audit-export.csv",
+    "latestActionAssets": [
+      {
+        "id": "44d4c514-2405-4222-a264-e7f8e7c33f9a",
+        "name": "phase4-home-sample-1773067341546.json",
+        "tags": ["library-action", "reusable", "dataset-report"]
+      },
+      {
+        "id": "571b8b62-3b34-4574-bd08-ae34f90e405b",
+        "name": "phase4-home-sample-1773067288269.json",
+        "tags": ["library-action", "reusable", "dataset-report"]
+      },
+      {
+        "id": "f268a188-ba47-455f-ab41-dd90ad395249",
+        "name": "اعتماد-تدفق-عربي-للتحقق-1773058832674.json",
+        "tags": ["library-workflow", "library-action", "reusable"]
+      }
+    ]
+  },
+  "importFromLibrary": {
+    "assetId": "7eb04dcf-106e-4020-8915-d43c344f0f13",
+    "message": "تم استيراد phase7-audit-export.csv إلى البيانات وإنشاء Dataset فعلي."
+  },
+  "themeAndPresentation": {
+    "themeName": "ثيم إعادة استخدام المرحلة 7 1773067637764",
+    "themeAssetId": "d067e647-67d2-4ddc-be05-2a45e44f0b7f",
+    "activateThemeMessage": null,
+    "presentationMessage": "تم إنشاء عرض من phase7-audit-export.csv ثم تطبيق الثيم ثيم إعادة استخدام المرحلة 7 1773067637764."
+  },
+  "reportAndWorkflowReuse": {
+    "reportRecipeId": "44d4c514-2405-4222-a264-e7f8e7c33f9a",
+    "reportReuseMessage": "تم تشغيل الوصفة المحفوظة وبناء تقرير جديد من phase4-home-sample.",
+    "workflowName": "سير اعتماد المرحلة 7 1773067687348",
+    "workflowRecipeId": "fa5727f4-d0fc-4073-9c7f-c69d1aeeacef",
+    "workflowMessage": "تم إنشاء سير العمل سير اعتماد المرحلة 7 1773067687348 ثم حفظ وصفته داخل المكتبة.",
+    "workflowReuseMessage": "تم تشغيل وصفة سير العمل سير اعتماد المرحلة 7 1773067687348 بنجاح."
+  },
+  "after": {
+    "datasets": 61,
+    "reports": 23,
+    "presentations": 25,
+    "libraryAssets": 18,
+    "latestPresentation": "تحليل بيانات الإجراءات",
+    "latestReport": "phase4-home-sample - تقرير محفوظ",
+    "latestLibraryAsset": "سير-اعتماد-المرحلة-7-1773067687348-1773067689053.json",
+    "activeTheme": "الثيم النشط الآن هو ثيم إعادة استخدام المرحلة 7 1773067637764."
+  }
+}

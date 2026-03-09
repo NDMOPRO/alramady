@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Template {
+  id               String    @id @default(uuid())
+  name             String
+  type             String    @default("report")
+  engine           String    @default("handlebars")
+  content          String    @default("")
+  variables        Json?
+  category         String?
+  tenantId         String
+  userId           String?
+  createdBy        String?
+  version          Int       @default(1)
+  isPublished      Boolean   @default(false)
+  isSystem         Boolean   @default(false)
+  usageCount       Int       @default(0)
+  averageRating    Float     @default(0)
+  ratingCount      Int       @default(0)
+  templateJson     Json?
+  thumbnailUrl     String?
+  sourceDocumentId String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  ratings          TemplateRating[]
+
+  @@map("templates")
+}
+
+model TemplateRating {
+  id         String   @id @default(uuid())
+  templateId String
+  userId     String
+  rating     Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  template   Template @relation(fields: [templateId], references: [id])
+
+  @@map("template_ratings")
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  title     String?
+  content   Json?
+  tenantId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("documents")
+}
+
+model TemplateVersion {
+  id              String   @id @default(uuid())
+  templateId      String
+  version         Int
+  content         Json
+  contentHash     String
+  changes         Json?
+  createdBy       String
+  createdAt       DateTime @default(now())
+  message         String
+  parentVersionId String?
+  branchName      String   @default("main")
+  tags            String[]
+  size            Int      @default(0)
+
+  @@map("template_versions")
+}
+
+model MarketplaceTemplate {
+  id              String    @id @default(uuid())
+  name            String
+  description     String
+  longDescription String
+  category        String
+  subcategory     String?
+  tags            String?
+  previewImages   String?
+  authorId        String
+  authorName      String
+  pricingType     String    @default("free")
+  price           Float?
+  currency        String    @default("USD")
+  discount        String?
+  version         String    @default("1.0.0")
+  compatibility   String?
+  fileUrl         String
+  status          String    @default("draft")
+  downloads       Int       @default(0)
+  views           Int       @default(0)
+  rating          Float     @default(0)
+  ratingCount     Int       @default(0)
+  favorites       Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("marketplace_templates")
+}
+
+model PublishingWorkflow {
+  id             String    @id @default(uuid())
+  templateId     String
+  status         String    @default("submitted")
+  reviewer       String?
+  submittedAt    DateTime  @default(now())
+  reviewedAt     DateTime?
+  feedback       String?
+  checklistItems Json?
+
+  @@map("publishing_workflows")
+}
+
+model TemplateReview {
+  id         String   @id @default(uuid())
+  templateId String
+  userId     String
+  userName   String
+  rating     Float
+  title      String
+  content    String
+  helpful    Int      @default(0)
+  verified   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("template_reviews")
+}
+
+model TemplateDownload {
+  id           String   @id @default(uuid())
+  templateId   String
+  userId       String
+  downloadedAt DateTime @default(now())
+
+  @@map("template_downloads")
+}
+
+model TemplateCategory {
+  id          String  @id @default(uuid())
+  name        String
+  slug        String  @unique
+  description String
+  parentId    String?
+  icon        String?
+  sortOrder   Int     @default(0)
+
+  @@map("template_categories")
+}
+
+model RevenueTransaction {
+  id              String   @id @default(uuid())
+  templateId      String
+  authorId        String
+  buyerId         String
+  amount          Float
+  platformFee     Float
+  authorEarnings  Float
+  currency        String   @default("USD")
+  transactionAt   DateTime @default(now())
+
+  @@map("revenue_transactions")
+}

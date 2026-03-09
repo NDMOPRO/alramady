@@ -1,0 +1,2758 @@
+// ============================================================================
+// RASID Platform - Complete Prisma Schema
+// Database: PostgreSQL
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VIEWER
+  DATA_STEWARD
+  ANALYST
+  API_CONSUMER
+}
+
+enum DatasetStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  UNDER_REVIEW
+  REJECTED
+}
+
+enum ColumnDataType {
+  STRING
+  INTEGER
+  FLOAT
+  DECIMAL
+  BOOLEAN
+  DATE
+  DATETIME
+  TIMESTAMP
+  JSON
+  ARRAY
+  BINARY
+  UUID
+  TEXT
+  ENUM
+}
+
+enum IngestionJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  PAUSED
+  RETRYING
+}
+
+enum IngestionSourceType {
+  CSV
+  EXCEL
+  JSON
+  XML
+  API
+  DATABASE
+  S3
+  FTP
+  SFTP
+  STREAMING
+}
+
+enum DataQualityCheckStatus {
+  PENDING
+  PASSED
+  FAILED
+  WARNING
+  SKIPPED
+}
+
+enum DataQualityCheckType {
+  COMPLETENESS
+  UNIQUENESS
+  VALIDITY
+  CONSISTENCY
+  ACCURACY
+  TIMELINESS
+  SCHEMA_CONFORMANCE
+  CUSTOM_RULE
+}
+
+enum DashboardVisibility {
+  PRIVATE
+  TEAM
+  ORGANIZATION
+  PUBLIC
+}
+
+enum WidgetType {
+  BAR_CHART
+  LINE_CHART
+  PIE_CHART
+  DONUT_CHART
+  AREA_CHART
+  SCATTER_PLOT
+  HEATMAP
+  TABLE
+  KPI_CARD
+  MAP
+  GAUGE
+  FUNNEL
+  TREEMAP
+  TEXT
+  IMAGE
+  CUSTOM
+}
+
+enum ReportStatus {
+  DRAFT
+  GENERATING
+  COMPLETED
+  FAILED
+  SCHEDULED
+}
+
+enum ReportOutputFormat {
+  PDF
+  EXCEL
+  CSV
+  HTML
+  WORD
+  POWERPOINT
+  JSON
+}
+
+enum ReportDefinitionMode {
+  EASY
+  ADVANCED
+}
+
+enum ReportDefinitionStatus {
+  DRAFT
+  BUILDING
+  COMPLETED
+  FAILED
+  ARCHIVED
+}
+
+enum DataSourceType {
+  POSTGRESQL
+  MYSQL
+  MSSQL
+  ORACLE
+  MONGODB
+  REST_API
+  GRAPHQL
+  CSV_FILE
+  EXCEL_FILE
+  INTERNAL_DATASET
+}
+
+enum DataSourceStatus {
+  ACTIVE
+  INACTIVE
+  ERROR
+  TESTING
+}
+
+enum DistributionStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
+  PARTIAL
+}
+
+enum PresentationStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum InfographicStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum WorkbookStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum ReplicationJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  PAUSED
+}
+
+enum ReplicationMode {
+  FULL
+  INCREMENTAL
+  CDC
+}
+
+enum LocalizationJobStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+  REVIEW_PENDING
+}
+
+enum AiSessionStatus {
+  ACTIVE
+  CLOSED
+  EXPIRED
+}
+
+enum AiQueryStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  EXPORT
+  IMPORT
+  SHARE
+  PUBLISH
+  ARCHIVE
+  APPROVE
+  REJECT
+  EXECUTE
+}
+
+enum PermissionAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  EXPORT
+  IMPORT
+  SHARE
+  PUBLISH
+  MANAGE
+  EXECUTE
+}
+
+enum ResourceType {
+  DATASET
+  DASHBOARD
+  REPORT
+  PRESENTATION
+  INFOGRAPHIC
+  WORKBOOK
+  TEMPLATE
+  FOLDER
+  KNOWLEDGE_BASE
+  KPI
+  LIBRARY_ASSET
+}
+
+enum LibraryAssetType {
+  CHART_TEMPLATE
+  COLOR_PALETTE
+  ICON_SET
+  FONT
+  LAYOUT_TEMPLATE
+  DATA_CONNECTOR
+  WIDGET_TEMPLATE
+  STYLE_THEME
+  IMAGE
+  DOCUMENT
+}
+
+enum ConversionJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ConversionSourceFormat {
+  CSV
+  EXCEL
+  JSON
+  XML
+  PARQUET
+  AVRO
+  ORC
+  PDF
+  HTML
+  YAML
+}
+
+enum ConversionTargetFormat {
+  CSV
+  EXCEL
+  JSON
+  XML
+  PARQUET
+  AVRO
+  ORC
+  PDF
+  HTML
+  YAML
+  SQL
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ERROR
+  SUCCESS
+  TASK_ASSIGNED
+  TASK_COMPLETED
+  APPROVAL_REQUIRED
+  SYSTEM_ALERT
+  DATA_QUALITY_ALERT
+  JOB_COMPLETED
+  JOB_FAILED
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  SMS
+  WEBHOOK
+  PUSH
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+  DISMISSED
+  ACTIONED
+}
+
+enum WorkflowStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+  ON_HOLD
+}
+
+enum WorkflowStepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  SKIPPED
+  WAITING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+enum WorkflowStepType {
+  MANUAL
+  AUTOMATIC
+  APPROVAL
+  NOTIFICATION
+  CONDITION
+  PARALLEL
+  TRANSFORM
+  VALIDATE
+}
+
+enum KnowledgeBaseStatus {
+  ACTIVE
+  INACTIVE
+  PROCESSING
+  ARCHIVED
+}
+
+enum KnowledgeChunkStatus {
+  PENDING
+  INDEXED
+  FAILED
+  ARCHIVED
+}
+
+enum PromptCategory {
+  DATA_ANALYSIS
+  DATA_CLEANING
+  VISUALIZATION
+  REPORT_GENERATION
+  SUMMARIZATION
+  TRANSLATION
+  CLASSIFICATION
+  EXTRACTION
+  TRANSFORMATION
+  CUSTOM
+}
+
+enum PromptStatus {
+  DRAFT
+  ACTIVE
+  DEPRECATED
+  ARCHIVED
+}
+
+enum ScheduleFrequency {
+  ONCE
+  HOURLY
+  DAILY
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CRON
+}
+
+enum KpiStatus {
+  ACTIVE
+  INACTIVE
+  DEPRECATED
+}
+
+enum KpiTrend {
+  UP
+  DOWN
+  STABLE
+  UNKNOWN
+}
+
+enum ConversionPipelineStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+enum VersionStatus {
+  DRAFT
+  PUBLISHED
+  DEPRECATED
+  ARCHIVED
+}
+
+enum FeatureStatus {
+  ENABLED
+  DISABLED
+  BETA
+  DEPRECATED
+}
+
+enum Language {
+  AR
+  EN
+  FR
+  ES
+  DE
+  ZH
+  JA
+  KO
+  RU
+  PT
+  IT
+  NL
+  TR
+  HI
+  UR
+}
+
+// ============================================================================
+// REGISTRY TABLES
+// ============================================================================
+
+model Tenant {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  slug        String   @unique @db.VarChar(128)
+  domain      String?  @db.VarChar(255)
+  logoUrl     String?  @map("logo_url") @db.Text
+  settings    Json?    @default("{}")
+  plan        String   @default("free") @db.VarChar(64)
+  isActive    Boolean  @default(true) @map("is_active")
+  maxUsers    Int      @default(10) @map("max_users")
+  maxStorage  BigInt   @default(1073741824) @map("max_storage")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+
+  users              User[]
+  datasets           Dataset[]
+  dashboards         Dashboard[]
+  reports            Report[]
+  templates          Template[]
+  folders            Folder[]
+  knowledgeBases     KnowledgeBase[]
+  prompts            Prompt[]
+  glossaries         Glossary[]
+  kpis               Kpi[]
+  workflowInstances  WorkflowInstance[]
+  scheduledReports   ScheduledReport[]
+  libraryAssets      LibraryAsset[]
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+  reportDefinitions  ReportDefinition[]
+  reportTemplates    ReportTemplate[]    @relation("ReportTemplateTenant")
+  reportSchedules    ReportSchedule[]    @relation("ReportScheduleTenant")
+  reportDataSources  ReportDataSource[]  @relation("ReportDataSourceTenant")
+  compareSchedules   ReportCompareSchedule[] @relation("CompareScheduleTenant")
+  themes             Theme[]
+  connectorConnections ConnectorConnection[]
+  policies           Policy[]
+  compliancePolicies CompliancePolicy[]
+  workflowDefinitions WorkflowDefinition[]
+  layoutAnalyses      LayoutAnalysis[]
+  documentExtractions DocumentExtraction[]
+  pixelValidations    PixelValidation[]
+  fontRecognitions    FontRecognition[]
+  layoutTranslations  LayoutTranslation[]
+  qualityValidations  QualityValidation[]
+  bridgePayloads      BridgePayload[]
+  dataLineage         DataLineage[]
+  trainingDatasets    TrainingDataset[]
+  trainingJobs        TrainingJob[]
+  modelRegistry       ModelRegistry[]
+  contextMemoryLong   ContextMemoryLong[]
+  episodeMemory       EpisodeMemory[]
+  semanticFacts       SemanticFact[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@map("tenants")
+}
+
+model User {
+  id                String     @id @default(uuid()) @db.Uuid
+  tenantId          String     @map("tenant_id") @db.Uuid
+  email             String     @db.VarChar(320)
+  passwordHash      String?    @map("password_hash") @db.Text
+  firstName         String     @map("first_name") @db.VarChar(128)
+  lastName          String     @map("last_name") @db.VarChar(128)
+  displayName       String?    @map("display_name") @db.VarChar(255)
+  avatarUrl         String?    @map("avatar_url") @db.Text
+  phone             String?    @db.VarChar(32)
+  locale            Language   @default(EN)
+  timezone          String     @default("UTC") @db.VarChar(64)
+  status            UserStatus @default(PENDING_VERIFICATION)
+  emailVerifiedAt   DateTime?  @map("email_verified_at") @db.Timestamptz
+  lastLoginAt       DateTime?  @map("last_login_at") @db.Timestamptz
+  preferences       Json?      @default("{}")
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt         DateTime?  @map("deleted_at") @db.Timestamptz
+
+  tenant               Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userRoles            UserRole[]
+  datasets             Dataset[]             @relation("DatasetCreator")
+  datasetsUpdated      Dataset[]             @relation("DatasetUpdater")
+  ingestionJobs        IngestionJob[]
+  dashboards           Dashboard[]           @relation("DashboardCreator")
+  reports              Report[]              @relation("ReportCreator")
+  presentations        Presentation[]        @relation("PresentationCreator")
+  infographics         Infographic[]         @relation("InfographicCreator")
+  workbooks            Workbook[]            @relation("WorkbookCreator")
+  aiSessions           AiSession[]
+  auditLogs            AuditLog[]
+  notifications        Notification[]
+  workflowStepsAssigned WorkflowStep[]       @relation("StepAssignee")
+  workflowStepsCompleted WorkflowStep[]      @relation("StepCompletedBy")
+  scheduledReports     ScheduledReport[]
+  conversionJobs       ConversionJob[]
+  localizationJobs     LocalizationJob[]
+  promptVersions       PromptVersion[]
+  kpis                 Kpi[]
+  reportDefinitions    ReportDefinition[]          @relation("ReportDefinitionCreator")
+  reportTemplatesCreated ReportTemplate[]          @relation("ReportTemplateCreator")
+  reportSchedulesCreated ReportSchedule[]          @relation("ReportScheduleCreator")
+  reportPostEdits      ReportPostEdit[]            @relation("ReportPostEditCreator")
+  externalSimulations  ReportExternalSimulation[]  @relation("ExternalSimulationCreator")
+  compareSchedules     ReportCompareSchedule[]     @relation("CompareScheduleCreator")
+  interactiveReports   InteractiveReport[]         @relation("InteractiveReportCreator")
+  interactiveVersions  InteractiveReportVersion[]  @relation("InteractiveVersionChanger")
+  reportComments       ReportComment[]             @relation("ReportCommentUser")
+  reportAnnotations    ReportAnnotation[]          @relation("ReportAnnotationCreator")
+  distributionConfigs  DistributionConfig[]        @relation("DistributionConfigCreator")
+  collaborationSessions CollaborationSession[]
+  shareLinks           ShareLink[]
+  connectorConnections ConnectorConnection[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([email])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        RoleName @unique
+  displayName String   @map("display_name") @db.VarChar(128)
+  description String?  @db.Text
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  userRoles   UserRole[]
+  permissions Permission[]
+
+  @@index([name])
+  @@map("roles")
+}
+
+model UserRole {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  roleId    String   @map("role_id") @db.Uuid
+  grantedAt DateTime @default(now()) @map("granted_at") @db.Timestamptz
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@map("user_roles")
+}
+
+model Dataset {
+  id              String        @id @default(uuid()) @db.Uuid
+  tenantId        String        @map("tenant_id") @db.Uuid
+  createdById     String        @map("created_by_id") @db.Uuid
+  updatedById     String?       @map("updated_by_id") @db.Uuid
+  folderId        String?       @map("folder_id") @db.Uuid
+  name            String        @db.VarChar(512)
+  slug            String        @db.VarChar(512)
+  description     String?       @db.Text
+  source          String?       @db.VarChar(512)
+  sourceUrl       String?       @map("source_url") @db.Text
+  format          String?       @db.VarChar(64)
+  fileSize        BigInt?       @map("file_size")
+  rowCount        Int?          @map("row_count")
+  columnCount     Int?          @map("column_count")
+  schema          Json?
+  sampleData      Json?         @map("sample_data")
+  status          DatasetStatus @default(DRAFT)
+  isPublic        Boolean       @default(false) @map("is_public")
+  license         String?       @db.VarChar(256)
+  frequency       String?       @db.VarChar(64)
+  lastSyncedAt    DateTime?     @map("last_synced_at") @db.Timestamptz
+  publishedAt     DateTime?     @map("published_at") @db.Timestamptz
+  settings        Json?         @default("{}")
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz
+
+  tenant            Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy         User                @relation("DatasetCreator", fields: [createdById], references: [id])
+  updatedBy         User?               @relation("DatasetUpdater", fields: [updatedById], references: [id])
+  folder            Folder?             @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  columns           DatasetColumn[]
+  versions          DatasetVersion[]
+  metadata          Metadata[]
+  tags              Tag[]
+  ingestionJobs     IngestionJob[]
+  dataQualityChecks DataQualityCheck[]
+  dashboardWidgets  DashboardWidget[]
+  dataRows          DataRow[]
+  kpis              Kpi[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([folderId])
+  @@index([status])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@index([name])
+  @@map("datasets")
+}
+
+model DatasetColumn {
+  id            String         @id @default(uuid()) @db.Uuid
+  datasetId     String         @map("dataset_id") @db.Uuid
+  name          String         @db.VarChar(256)
+  displayName   String?        @map("display_name") @db.VarChar(256)
+  description   String?        @db.Text
+  dataType      ColumnDataType @map("data_type")
+  ordinalPosition Int          @map("ordinal_position")
+  isNullable    Boolean        @default(true) @map("is_nullable")
+  isPrimaryKey  Boolean        @default(false) @map("is_primary_key")
+  isUnique      Boolean        @default(false) @map("is_unique")
+  defaultValue  String?        @map("default_value") @db.Text
+  maxLength     Int?           @map("max_length")
+  precision     Int?
+  scale         Int?
+  format        String?        @db.VarChar(128)
+  constraints   Json?
+  statistics    Json?
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, name])
+  @@index([datasetId])
+  @@index([dataType])
+  @@map("dataset_columns")
+}
+
+model DatasetVersion {
+  id            String   @id @default(uuid()) @db.Uuid
+  datasetId     String   @map("dataset_id") @db.Uuid
+  versionNumber Int      @map("version_number")
+  changeSummary String?  @map("change_summary") @db.Text
+  schema        Json?
+  rowCount      Int?     @map("row_count")
+  fileSize      BigInt?  @map("file_size")
+  filePath      String?  @map("file_path") @db.Text
+  checksum      String?  @db.VarChar(128)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, versionNumber])
+  @@index([datasetId])
+  @@map("dataset_versions")
+}
+
+model Metadata {
+  id         String   @id @default(uuid()) @db.Uuid
+  datasetId  String   @map("dataset_id") @db.Uuid
+  key        String   @db.VarChar(256)
+  value      String   @db.Text
+  valueType  String   @default("string") @map("value_type") @db.VarChar(32)
+  language   Language @default(EN)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, key, language])
+  @@index([datasetId])
+  @@index([key])
+  @@map("metadata")
+}
+
+model Tag {
+  id        String   @id @default(uuid()) @db.Uuid
+  datasetId String   @map("dataset_id") @db.Uuid
+  name      String   @db.VarChar(128)
+  slug      String   @db.VarChar(128)
+  color     String?  @db.VarChar(7)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, slug])
+  @@index([datasetId])
+  @@index([slug])
+  @@index([name])
+  @@map("tags")
+}
+
+model Template {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(256)
+  slug        String   @db.VarChar(256)
+  description String?  @db.Text
+  category    String?  @db.VarChar(128)
+  type        String   @db.VarChar(64)
+  content     Json
+  thumbnail   String?  @db.Text
+  isSystem    Boolean  @default(false) @map("is_system")
+  isActive    Boolean  @default(true) @map("is_active")
+  version     Int      @default(1)
+  settings    Json?    @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([type])
+  @@index([category])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@map("templates")
+}
+
+model Version {
+  id            String        @id @default(uuid()) @db.Uuid
+  resourceType  ResourceType  @map("resource_type")
+  resourceId    String        @map("resource_id") @db.Uuid
+  versionNumber Int           @map("version_number")
+  label         String?       @db.VarChar(128)
+  description   String?       @db.Text
+  snapshot      Json
+  status        VersionStatus @default(DRAFT)
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([resourceType, resourceId, versionNumber])
+  @@index([resourceType, resourceId])
+  @@index([status])
+  @@map("versions")
+}
+
+model Feature {
+  id          String        @id @default(uuid()) @db.Uuid
+  key         String        @unique @db.VarChar(256)
+  name        String        @db.VarChar(256)
+  description String?       @db.Text
+  status      FeatureStatus @default(DISABLED)
+  config      Json?         @default("{}")
+  rolloutPct  Int           @default(0) @map("rollout_pct")
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([key])
+  @@index([status])
+  @@map("features")
+}
+
+// ============================================================================
+// ENGINE TABLES
+// ============================================================================
+
+model IngestionJob {
+  id              String              @id @default(uuid()) @db.Uuid
+  datasetId       String              @map("dataset_id") @db.Uuid
+  createdById     String              @map("created_by_id") @db.Uuid
+  sourceType      IngestionSourceType @map("source_type")
+  sourceConfig    Json                @map("source_config")
+  status          IngestionJobStatus  @default(PENDING)
+  progress        Float               @default(0)
+  totalRows       Int?                @map("total_rows")
+  processedRows   Int?                @map("processed_rows")
+  failedRows      Int?                @map("failed_rows")
+  errorMessage    String?             @map("error_message") @db.Text
+  errorDetails    Json?               @map("error_details")
+  startedAt       DateTime?           @map("started_at") @db.Timestamptz
+  completedAt     DateTime?           @map("completed_at") @db.Timestamptz
+  durationMs      Int?                @map("duration_ms")
+  retryCount      Int                 @default(0) @map("retry_count")
+  maxRetries      Int                 @default(3) @map("max_retries")
+  settings        Json?               @default("{}")
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset   Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  createdBy User    @relation(fields: [createdById], references: [id])
+
+  @@index([datasetId])
+  @@index([createdById])
+  @@index([status])
+  @@index([sourceType])
+  @@index([createdAt])
+  @@map("ingestion_jobs")
+}
+
+model DataQualityCheck {
+  id            String                 @id @default(uuid()) @db.Uuid
+  datasetId     String                 @map("dataset_id") @db.Uuid
+  checkType     DataQualityCheckType   @map("check_type")
+  columnName    String?                @map("column_name") @db.VarChar(256)
+  ruleName      String                 @map("rule_name") @db.VarChar(256)
+  ruleConfig    Json                   @map("rule_config")
+  status        DataQualityCheckStatus @default(PENDING)
+  score         Float?
+  totalRecords  Int?                   @map("total_records")
+  passedRecords Int?                   @map("passed_records")
+  failedRecords Int?                   @map("failed_records")
+  errorMessage  String?                @map("error_message") @db.Text
+  details       Json?
+  executedAt    DateTime?              @map("executed_at") @db.Timestamptz
+  durationMs    Int?                   @map("duration_ms")
+  createdAt     DateTime               @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime               @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([checkType])
+  @@index([status])
+  @@index([executedAt])
+  @@map("data_quality_checks")
+}
+
+model Dashboard {
+  id           String              @id @default(uuid()) @db.Uuid
+  tenantId     String              @map("tenant_id") @db.Uuid
+  createdById  String              @map("created_by_id") @db.Uuid
+  folderId     String?             @map("folder_id") @db.Uuid
+  name         String              @db.VarChar(512)
+  slug         String              @db.VarChar(512)
+  description  String?             @db.Text
+  visibility   DashboardVisibility @default(PRIVATE)
+  layout       Json?
+  theme        Json?
+  filters      Json?
+  refreshRate  Int?                @map("refresh_rate")
+  thumbnail    String?             @db.Text
+  isFavorite   Boolean             @default(false) @map("is_favorite")
+  viewCount    Int                 @default(0) @map("view_count")
+  settings     Json?               @default("{}")
+  publishedAt  DateTime?           @map("published_at") @db.Timestamptz
+  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt    DateTime?           @map("deleted_at") @db.Timestamptz
+
+  tenant    Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy User              @relation("DashboardCreator", fields: [createdById], references: [id])
+  folder    Folder?           @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  widgets   DashboardWidget[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([folderId])
+  @@index([visibility])
+  @@index([deletedAt])
+  @@map("dashboards")
+}
+
+model DashboardWidget {
+  id           String     @id @default(uuid()) @db.Uuid
+  dashboardId  String     @map("dashboard_id") @db.Uuid
+  datasetId    String?    @map("dataset_id") @db.Uuid
+  type         WidgetType
+  title        String     @db.VarChar(512)
+  description  String?    @db.Text
+  config       Json
+  query        String?    @db.Text
+  position     Json
+  size         Json
+  style        Json?
+  refreshRate  Int?       @map("refresh_rate")
+  cacheSeconds Int?       @map("cache_seconds")
+  sortOrder    Int        @default(0) @map("sort_order")
+  isVisible    Boolean    @default(true) @map("is_visible")
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+
+  dashboard Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dataset   Dataset?  @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+
+  @@index([dashboardId])
+  @@index([datasetId])
+  @@index([type])
+  @@map("dashboard_widgets")
+}
+
+model Report {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  createdById   String       @map("created_by_id") @db.Uuid
+  folderId      String?      @map("folder_id") @db.Uuid
+  name          String       @db.VarChar(512)
+  slug          String       @db.VarChar(512)
+  description   String?      @db.Text
+  status        ReportStatus @default(DRAFT)
+  type          String       @db.VarChar(64)
+  content       Json?
+  parameters    Json?
+  dataSources   Json?        @map("data_sources")
+  layout        Json?
+  theme         Json?
+  language      Language     @default(EN)
+  pageSize      String       @default("A4") @map("page_size") @db.VarChar(16)
+  orientation   String       @default("portrait") @db.VarChar(16)
+  headerConfig  Json?        @map("header_config")
+  footerConfig  Json?        @map("footer_config")
+  settings      Json?        @default("{}")
+  publishedAt   DateTime?    @map("published_at") @db.Timestamptz
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime?    @map("deleted_at") @db.Timestamptz
+
+  tenant           Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy        User             @relation("ReportCreator", fields: [createdById], references: [id])
+  folder           Folder?          @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  outputs          ReportOutput[]
+  scheduledReports ScheduledReport[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([folderId])
+  @@index([status])
+  @@index([type])
+  @@index([deletedAt])
+  @@map("reports")
+}
+
+model ReportOutput {
+  id          String             @id @default(uuid()) @db.Uuid
+  reportId    String             @map("report_id") @db.Uuid
+  format      ReportOutputFormat
+  filePath    String             @map("file_path") @db.Text
+  fileSize    BigInt?            @map("file_size")
+  checksum    String?            @db.VarChar(128)
+  pageCount   Int?               @map("page_count")
+  generatedAt DateTime           @map("generated_at") @db.Timestamptz
+  expiresAt   DateTime?          @map("expires_at") @db.Timestamptz
+  durationMs  Int?               @map("duration_ms")
+  metadata    Json?
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([format])
+  @@index([generatedAt])
+  @@map("report_outputs")
+}
+
+model Presentation {
+  id          String             @id @default(uuid()) @db.Uuid
+  createdById String             @map("created_by_id") @db.Uuid
+  folderId    String?            @map("folder_id") @db.Uuid
+  name        String             @db.VarChar(512)
+  description String?            @db.Text
+  status      PresentationStatus @default(DRAFT)
+  theme       Json?
+  slides      Json?
+  slideCount  Int                @default(0) @map("slide_count")
+  language    Language           @default(EN)
+  aspectRatio String             @default("16:9") @map("aspect_ratio") @db.VarChar(16)
+  thumbnail   String?            @db.Text
+  settings    Json?              @default("{}")
+  publishedAt DateTime?          @map("published_at") @db.Timestamptz
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?          @map("deleted_at") @db.Timestamptz
+
+  createdBy              User                  @relation("PresentationCreator", fields: [createdById], references: [id])
+  folder                 Folder?               @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  slideRecords           Slide[]
+  collaborationSessions  CollaborationSession[]
+
+  @@index([createdById])
+  @@index([folderId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("presentations")
+}
+
+model Infographic {
+  id          String           @id @default(uuid()) @db.Uuid
+  createdById String           @map("created_by_id") @db.Uuid
+  folderId    String?          @map("folder_id") @db.Uuid
+  name        String           @db.VarChar(512)
+  description String?          @db.Text
+  status      InfographicStatus @default(DRAFT)
+  canvas      Json?
+  elements    Json?
+  width       Int              @default(1080)
+  height      Int              @default(1920)
+  theme       Json?
+  language    Language         @default(EN)
+  thumbnail   String?          @db.Text
+  exportUrl   String?          @map("export_url") @db.Text
+  settings    Json?            @default("{}")
+  publishedAt DateTime?        @map("published_at") @db.Timestamptz
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?        @map("deleted_at") @db.Timestamptz
+
+  createdBy User    @relation("InfographicCreator", fields: [createdById], references: [id])
+  folder    Folder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  sections  InfographicSection[]
+
+  @@index([createdById])
+  @@index([folderId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("infographics")
+}
+
+model Workbook {
+  id          String         @id @default(uuid()) @db.Uuid
+  createdById String         @map("created_by_id") @db.Uuid
+  folderId    String?        @map("folder_id") @db.Uuid
+  name        String         @db.VarChar(512)
+  description String?        @db.Text
+  status      WorkbookStatus @default(DRAFT)
+  sheets      Json?
+  sheetCount  Int            @default(1) @map("sheet_count")
+  activeSheet Int            @default(0) @map("active_sheet")
+  settings    Json?          @default("{}")
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?      @map("deleted_at") @db.Timestamptz
+
+  createdBy User    @relation("WorkbookCreator", fields: [createdById], references: [id])
+  folder    Folder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  @@index([createdById])
+  @@index([folderId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("workbooks")
+}
+
+model ReplicationJob {
+  id              String               @id @default(uuid()) @db.Uuid
+  name            String               @db.VarChar(256)
+  description     String?              @db.Text
+  sourceConfig    Json                 @map("source_config")
+  targetConfig    Json                 @map("target_config")
+  mode            ReplicationMode      @default(FULL)
+  status          ReplicationJobStatus @default(PENDING)
+  schedule        String?              @db.VarChar(128)
+  lastRunAt       DateTime?            @map("last_run_at") @db.Timestamptz
+  nextRunAt       DateTime?            @map("next_run_at") @db.Timestamptz
+  totalRecords    Int?                 @map("total_records")
+  replicatedRecords Int?               @map("replicated_records")
+  failedRecords   Int?                 @map("failed_records")
+  errorMessage    String?              @map("error_message") @db.Text
+  durationMs      Int?                 @map("duration_ms")
+  settings        Json?                @default("{}")
+  createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime             @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([status])
+  @@index([mode])
+  @@index([nextRunAt])
+  @@map("replication_jobs")
+}
+
+model LocalizationJob {
+  id             String               @id @default(uuid()) @db.Uuid
+  createdById    String               @map("created_by_id") @db.Uuid
+  resourceType   ResourceType         @map("resource_type")
+  resourceId     String               @map("resource_id") @db.Uuid
+  sourceLanguage Language             @map("source_language")
+  targetLanguage Language             @map("target_language")
+  status         LocalizationJobStatus @default(PENDING)
+  progress       Float                @default(0)
+  totalSegments  Int?                 @map("total_segments")
+  translatedSegments Int?             @map("translated_segments")
+  reviewedSegments Int?               @map("reviewed_segments")
+  engine         String?              @db.VarChar(64)
+  errorMessage   String?              @map("error_message") @db.Text
+  result         Json?
+  startedAt      DateTime?            @map("started_at") @db.Timestamptz
+  completedAt    DateTime?            @map("completed_at") @db.Timestamptz
+  durationMs     Int?                 @map("duration_ms")
+  createdAt      DateTime             @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime             @updatedAt @map("updated_at") @db.Timestamptz
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@index([createdById])
+  @@index([resourceType, resourceId])
+  @@index([status])
+  @@index([sourceLanguage])
+  @@index([targetLanguage])
+  @@map("localization_jobs")
+}
+
+model AiSession {
+  id          String          @id @default(uuid()) @db.Uuid
+  userId      String          @map("user_id") @db.Uuid
+  title       String?         @db.VarChar(512)
+  status      AiSessionStatus @default(ACTIVE)
+  model       String          @default("gpt-4") @db.VarChar(64)
+  systemPrompt String?        @map("system_prompt") @db.Text
+  context     Json?
+  tokenCount  Int             @default(0) @map("token_count")
+  messageCount Int            @default(0) @map("message_count")
+  settings    Json?           @default("{}")
+  expiresAt   DateTime?       @map("expires_at") @db.Timestamptz
+  closedAt    DateTime?       @map("closed_at") @db.Timestamptz
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime        @updatedAt @map("updated_at") @db.Timestamptz
+
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  queries AiQuery[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("ai_sessions")
+}
+
+model AiQuery {
+  id              String        @id @default(uuid()) @db.Uuid
+  sessionId       String        @map("session_id") @db.Uuid
+  query           String        @db.Text
+  response        String?       @db.Text
+  status          AiQueryStatus @default(PENDING)
+  model           String?       @db.VarChar(64)
+  promptTokens    Int?          @map("prompt_tokens")
+  completionTokens Int?         @map("completion_tokens")
+  totalTokens     Int?          @map("total_tokens")
+  latencyMs       Int?          @map("latency_ms")
+  context         Json?
+  metadata        Json?
+  rating          Int?
+  feedback        String?       @db.Text
+  errorMessage    String?       @map("error_message") @db.Text
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+
+  session AiSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("ai_queries")
+}
+
+model AuditLog {
+  id           String      @id @default(uuid()) @db.Uuid
+  tenantId     String      @map("tenant_id") @db.Uuid
+  userId       String?     @map("user_id") @db.Uuid
+  action       AuditAction
+  resourceType ResourceType @map("resource_type")
+  resourceId   String       @map("resource_id") @db.Uuid
+  resourceName String?      @map("resource_name") @db.VarChar(512)
+  oldValue     Json?        @map("old_value")
+  newValue     Json?        @map("new_value")
+  ipAddress    String?      @map("ip_address") @db.VarChar(45)
+  userAgent    String?      @map("user_agent") @db.Text
+  sessionId    String?      @map("session_id") @db.VarChar(128)
+  metadata     Json?
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([action])
+  @@index([resourceType, resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model Permission {
+  id           String           @id @default(uuid()) @db.Uuid
+  roleId       String           @map("role_id") @db.Uuid
+  resourceType ResourceType     @map("resource_type")
+  action       PermissionAction
+  conditions   Json?
+  isGranted    Boolean          @default(true) @map("is_granted")
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, resourceType, action])
+  @@index([roleId])
+  @@index([resourceType])
+  @@index([action])
+  @@map("permissions")
+}
+
+model LibraryAsset {
+  id          String           @id @default(uuid()) @db.Uuid
+  tenantId    String           @map("tenant_id") @db.Uuid
+  name        String           @db.VarChar(512)
+  description String?          @db.Text
+  type        LibraryAssetType
+  filePath    String           @map("file_path") @db.Text
+  fileSize    BigInt?          @map("file_size")
+  mimeType    String?          @map("mime_type") @db.VarChar(128)
+  thumbnail   String?          @db.Text
+  tags        Json?
+  metadata    Json?
+  isPublic    Boolean          @default(false) @map("is_public")
+  downloadCount Int            @default(0) @map("download_count")
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?        @map("deleted_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([type])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("library_assets")
+}
+
+model ConversionJob {
+  id             String                @id @default(uuid()) @db.Uuid
+  createdById    String                @map("created_by_id") @db.Uuid
+  pipelineId     String?               @map("pipeline_id") @db.Uuid
+  sourceFormat   ConversionSourceFormat @map("source_format")
+  targetFormat   ConversionTargetFormat @map("target_format")
+  status         ConversionJobStatus    @default(PENDING)
+  sourceFilePath String                @map("source_file_path") @db.Text
+  outputFilePath String?               @map("output_file_path") @db.Text
+  sourceFileSize BigInt?               @map("source_file_size")
+  outputFileSize BigInt?               @map("output_file_size")
+  options        Json?
+  progress       Float                 @default(0)
+  errorMessage   String?               @map("error_message") @db.Text
+  startedAt      DateTime?             @map("started_at") @db.Timestamptz
+  completedAt    DateTime?             @map("completed_at") @db.Timestamptz
+  durationMs     Int?                  @map("duration_ms")
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime              @updatedAt @map("updated_at") @db.Timestamptz
+
+  createdBy User                @relation(fields: [createdById], references: [id])
+  pipeline  ConversionPipeline? @relation(fields: [pipelineId], references: [id], onDelete: SetNull)
+
+  @@index([createdById])
+  @@index([pipelineId])
+  @@index([status])
+  @@index([sourceFormat])
+  @@index([targetFormat])
+  @@index([createdAt])
+  @@map("conversion_jobs")
+}
+
+// ============================================================================
+// ADDITIONAL TABLES
+// ============================================================================
+
+model Notification {
+  id          String             @id @default(uuid()) @db.Uuid
+  tenantId    String             @map("tenant_id") @db.Uuid
+  userId      String             @map("user_id") @db.Uuid
+  type        NotificationType
+  channel     NotificationChannel @default(IN_APP)
+  status      NotificationStatus @default(UNREAD)
+  title       String             @db.VarChar(512)
+  message     String             @db.Text
+  link        String?            @db.Text
+  resourceType ResourceType?    @map("resource_type")
+  resourceId  String?            @map("resource_id") @db.Uuid
+  metadata    Json?
+  readAt      DateTime?          @map("read_at") @db.Timestamptz
+  sentAt      DateTime?          @map("sent_at") @db.Timestamptz
+  expiresAt   DateTime?          @map("expires_at") @db.Timestamptz
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model WorkflowInstance {
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String         @map("tenant_id") @db.Uuid
+  name           String         @db.VarChar(256)
+  description    String?        @db.Text
+  resourceType   ResourceType   @map("resource_type")
+  resourceId     String         @map("resource_id") @db.Uuid
+  status         WorkflowStatus @default(PENDING)
+  currentStepIdx Int            @default(0) @map("current_step_idx")
+  config         Json?
+  context        Json?
+  errorMessage   String?        @map("error_message") @db.Text
+  startedAt      DateTime?      @map("started_at") @db.Timestamptz
+  completedAt    DateTime?      @map("completed_at") @db.Timestamptz
+  durationMs     Int?           @map("duration_ms")
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  steps  WorkflowStep[]
+
+  @@index([tenantId])
+  @@index([resourceType, resourceId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("workflow_instances")
+}
+
+model WorkflowStep {
+  id             String             @id @default(uuid()) @db.Uuid
+  workflowId     String             @map("workflow_id") @db.Uuid
+  name           String             @db.VarChar(256)
+  description    String?            @db.Text
+  type           WorkflowStepType   @default(MANUAL)
+  status         WorkflowStepStatus @default(PENDING)
+  stepOrder      Int                @map("step_order")
+  assigneeId     String?            @map("assignee_id") @db.Uuid
+  completedById  String?            @map("completed_by_id") @db.Uuid
+  config         Json?
+  input          Json?
+  output         Json?
+  errorMessage   String?            @map("error_message") @db.Text
+  comment        String?            @db.Text
+  startedAt      DateTime?          @map("started_at") @db.Timestamptz
+  completedAt    DateTime?          @map("completed_at") @db.Timestamptz
+  durationMs     Int?               @map("duration_ms")
+  dueAt          DateTime?          @map("due_at") @db.Timestamptz
+  createdAt      DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+
+  workflow    WorkflowInstance @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  assignee    User?            @relation("StepAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  completedBy User?            @relation("StepCompletedBy", fields: [completedById], references: [id], onDelete: SetNull)
+
+  @@index([workflowId])
+  @@index([assigneeId])
+  @@index([status])
+  @@index([stepOrder])
+  @@map("workflow_steps")
+}
+
+model KnowledgeBase {
+  id          String              @id @default(uuid()) @db.Uuid
+  tenantId    String              @map("tenant_id") @db.Uuid
+  name        String              @db.VarChar(256)
+  description String?             @db.Text
+  status      KnowledgeBaseStatus @default(ACTIVE)
+  language    Language            @default(EN)
+  embeddingModel String?          @map("embedding_model") @db.VarChar(128)
+  chunkSize   Int                 @default(1000) @map("chunk_size")
+  chunkOverlap Int                @default(200) @map("chunk_overlap")
+  totalChunks Int                 @default(0) @map("total_chunks")
+  totalDocuments Int              @default(0) @map("total_documents")
+  settings    Json?               @default("{}")
+  lastIndexedAt DateTime?         @map("last_indexed_at") @db.Timestamptz
+  createdAt   DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?           @map("deleted_at") @db.Timestamptz
+
+  tenant Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  chunks KnowledgeChunk[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([language])
+  @@index([deletedAt])
+  @@map("knowledge_bases")
+}
+
+model KnowledgeChunk {
+  id              String               @id @default(uuid()) @db.Uuid
+  knowledgeBaseId String               @map("knowledge_base_id") @db.Uuid
+  documentName    String               @map("document_name") @db.VarChar(512)
+  documentPath    String?              @map("document_path") @db.Text
+  content         String               @db.Text
+  contentHash     String               @map("content_hash") @db.VarChar(128)
+  chunkIndex      Int                  @map("chunk_index")
+  tokenCount      Int?                 @map("token_count")
+  embedding       Json?
+  status          KnowledgeChunkStatus @default(PENDING)
+  metadata        Json?
+  createdAt       DateTime             @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime             @updatedAt @map("updated_at") @db.Timestamptz
+
+  knowledgeBase KnowledgeBase @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+
+  @@index([knowledgeBaseId])
+  @@index([status])
+  @@index([contentHash])
+  @@index([documentName])
+  @@map("knowledge_chunks")
+}
+
+model Prompt {
+  id          String         @id @default(uuid()) @db.Uuid
+  tenantId    String         @map("tenant_id") @db.Uuid
+  name        String         @db.VarChar(256)
+  slug        String         @db.VarChar(256)
+  description String?        @db.Text
+  category    PromptCategory @default(CUSTOM)
+  status      PromptStatus   @default(DRAFT)
+  isSystem    Boolean        @default(false) @map("is_system")
+  settings    Json?          @default("{}")
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime?      @map("deleted_at") @db.Timestamptz
+
+  tenant   Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  versions PromptVersion[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([category])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("prompts")
+}
+
+model PromptVersion {
+  id            String       @id @default(uuid()) @db.Uuid
+  promptId      String       @map("prompt_id") @db.Uuid
+  createdById   String       @map("created_by_id") @db.Uuid
+  versionNumber Int          @map("version_number")
+  content       String       @db.Text
+  systemMessage String?      @map("system_message") @db.Text
+  variables     Json?
+  model         String?      @db.VarChar(64)
+  temperature   Float?
+  maxTokens     Int?         @map("max_tokens")
+  status        PromptStatus @default(DRAFT)
+  testResults   Json?        @map("test_results")
+  changelog     String?      @db.Text
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz
+
+  prompt    Prompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  createdBy User   @relation(fields: [createdById], references: [id])
+
+  @@unique([promptId, versionNumber])
+  @@index([promptId])
+  @@index([createdById])
+  @@index([status])
+  @@map("prompt_versions")
+}
+
+model TranslationMemory {
+  id             String   @id @default(uuid()) @db.Uuid
+  sourceLanguage Language @map("source_language")
+  targetLanguage Language @map("target_language")
+  sourceText     String   @map("source_text") @db.Text
+  targetText     String   @map("target_text") @db.Text
+  sourceHash     String   @map("source_hash") @db.VarChar(128)
+  context        String?  @db.Text
+  domain         String?  @db.VarChar(128)
+  quality        Float?
+  usageCount     Int      @default(0) @map("usage_count")
+  isVerified     Boolean  @default(false) @map("is_verified")
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([sourceLanguage, targetLanguage])
+  @@index([sourceHash])
+  @@index([domain])
+  @@index([isVerified])
+  @@map("translation_memory")
+}
+
+model Glossary {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(256)
+  description String?  @db.Text
+  language    Language @default(EN)
+  domain      String?  @db.VarChar(128)
+  isActive    Boolean  @default(true) @map("is_active")
+  termCount   Int      @default(0) @map("term_count")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+
+  tenant Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  terms  GlossaryTerm[]
+
+  @@index([tenantId])
+  @@index([language])
+  @@index([domain])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@map("glossaries")
+}
+
+model GlossaryTerm {
+  id             String   @id @default(uuid()) @db.Uuid
+  glossaryId     String   @map("glossary_id") @db.Uuid
+  term           String   @db.VarChar(512)
+  definition     String?  @db.Text
+  translations   Json?
+  context        String?  @db.Text
+  partOfSpeech   String?  @map("part_of_speech") @db.VarChar(64)
+  notes          String?  @db.Text
+  isApproved     Boolean  @default(false) @map("is_approved")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  glossary Glossary @relation(fields: [glossaryId], references: [id], onDelete: Cascade)
+
+  @@index([glossaryId])
+  @@index([term])
+  @@index([isApproved])
+  @@map("glossary_terms")
+}
+
+model Folder {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  parentId    String?  @map("parent_id") @db.Uuid
+  name        String   @db.VarChar(256)
+  slug        String   @db.VarChar(256)
+  description String?  @db.Text
+  color       String?  @db.VarChar(7)
+  icon        String?  @db.VarChar(64)
+  sortOrder   Int      @default(0) @map("sort_order")
+  path        String   @db.Text
+  depth       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent        Folder?        @relation("FolderTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children      Folder[]       @relation("FolderTree")
+  datasets      Dataset[]
+  dashboards    Dashboard[]
+  reports       Report[]
+  presentations Presentation[]
+  infographics  Infographic[]
+  workbooks     Workbook[]
+
+  @@unique([tenantId, parentId, slug])
+  @@index([tenantId])
+  @@index([parentId])
+  @@index([path])
+  @@index([deletedAt])
+  @@map("folders")
+}
+
+model ScheduledReport {
+  id            String            @id @default(uuid()) @db.Uuid
+  tenantId      String            @map("tenant_id") @db.Uuid
+  reportId      String            @map("report_id") @db.Uuid
+  createdById   String            @map("created_by_id") @db.Uuid
+  name          String            @db.VarChar(256)
+  frequency     ScheduleFrequency @default(DAILY)
+  cronExpression String?          @map("cron_expression") @db.VarChar(128)
+  timezone      String            @default("UTC") @db.VarChar(64)
+  outputFormat  ReportOutputFormat @default(PDF) @map("output_format")
+  recipients    Json?
+  isActive      Boolean           @default(true) @map("is_active")
+  lastRunAt     DateTime?         @map("last_run_at") @db.Timestamptz
+  nextRunAt     DateTime?         @map("next_run_at") @db.Timestamptz
+  runCount      Int               @default(0) @map("run_count")
+  failCount     Int               @default(0) @map("fail_count")
+  settings      Json?             @default("{}")
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  report    Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  createdBy User   @relation(fields: [createdById], references: [id])
+
+  @@index([tenantId])
+  @@index([reportId])
+  @@index([createdById])
+  @@index([isActive])
+  @@index([nextRunAt])
+  @@map("scheduled_reports")
+}
+
+model Kpi {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  createdById   String    @map("created_by_id") @db.Uuid
+  datasetId     String?   @map("dataset_id") @db.Uuid
+  name          String    @db.VarChar(256)
+  slug          String    @db.VarChar(256)
+  description   String?   @db.Text
+  status        KpiStatus @default(ACTIVE)
+  unit          String?   @db.VarChar(64)
+  formula       String?   @db.Text
+  query         String?   @db.Text
+  currentValue  Float?    @map("current_value")
+  previousValue Float?    @map("previous_value")
+  targetValue   Float?    @map("target_value")
+  minValue      Float?    @map("min_value")
+  maxValue      Float?    @map("max_value")
+  trend         KpiTrend  @default(UNKNOWN)
+  changePercent Float?    @map("change_percent")
+  frequency     ScheduleFrequency @default(DAILY)
+  lastCalculatedAt DateTime? @map("last_calculated_at") @db.Timestamptz
+  settings      Json?     @default("{}")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz
+
+  tenant    Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdBy User         @relation(fields: [createdById], references: [id])
+  dataset   Dataset?     @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+  history   KpiHistory[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([datasetId])
+  @@index([status])
+  @@index([trend])
+  @@index([deletedAt])
+  @@map("kpis")
+}
+
+model KpiHistory {
+  id         String   @id @default(uuid()) @db.Uuid
+  kpiId      String   @map("kpi_id") @db.Uuid
+  value      Float
+  target     Float?
+  trend      KpiTrend @default(UNKNOWN)
+  change     Float?
+  changePct  Float?   @map("change_pct")
+  metadata   Json?
+  recordedAt DateTime @map("recorded_at") @db.Timestamptz
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  kpi Kpi @relation(fields: [kpiId], references: [id], onDelete: Cascade)
+
+  @@index([kpiId])
+  @@index([recordedAt])
+  @@map("kpi_history")
+}
+
+model DataRow {
+  id        String   @id @default(uuid()) @db.Uuid
+  datasetId String   @map("dataset_id") @db.Uuid
+  rowIndex  Int      @map("row_index")
+  data      Json
+  checksum  String?  @db.VarChar(128)
+  isValid   Boolean  @default(true) @map("is_valid")
+  errors    Json?
+  version   Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, rowIndex, version])
+  @@index([datasetId])
+  @@index([rowIndex])
+  @@index([isValid])
+  @@map("data_rows")
+}
+
+model ConversionPipeline {
+  id          String                   @id @default(uuid()) @db.Uuid
+  name        String                   @db.VarChar(256)
+  description String?                  @db.Text
+  status      ConversionPipelineStatus @default(DRAFT)
+  steps       Json
+  schedule    String?                  @db.VarChar(128)
+  isActive    Boolean                  @default(true) @map("is_active")
+  lastRunAt   DateTime?                @map("last_run_at") @db.Timestamptz
+  nextRunAt   DateTime?                @map("next_run_at") @db.Timestamptz
+  runCount    Int                      @default(0) @map("run_count")
+  failCount   Int                      @default(0) @map("fail_count")
+  settings    Json?                    @default("{}")
+  createdAt   DateTime                 @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime                 @updatedAt @map("updated_at") @db.Timestamptz
+
+  jobs ConversionJob[]
+
+  @@index([status])
+  @@index([isActive])
+  @@index([nextRunAt])
+  @@map("conversion_pipelines")
+}
+
+// ============================================================================
+// REPORTING ENGINE - Extended Models
+// ============================================================================
+
+model ReportDefinition {
+  id            String                 @id @default(uuid()) @db.Uuid
+  tenantId      String                 @map("tenant_id") @db.Uuid
+  createdBy     String                 @map("created_by") @db.Uuid
+  updatedBy     String?                @map("updated_by") @db.Uuid
+  name          String                 @db.VarChar(512)
+  description   String?                @db.Text
+  mode          ReportDefinitionMode   @default(EASY)
+  status        ReportDefinitionStatus @default(DRAFT)
+  reportType    String                 @default("general") @map("report_type") @db.VarChar(64)
+  templateId    String?                @map("template_id") @db.Uuid
+  config        Json                   @default("{}")
+  sections      Json?
+  dataSources   Json?                  @map("data_sources")
+  outputFormat  ReportOutputFormat     @default(PDF) @map("output_format")
+  settings      Json?                  @default("{}")
+  metadata      Json?                  @default("{}")
+  publishedAt   DateTime?              @map("published_at") @db.Timestamptz
+  createdAt     DateTime               @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime               @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime?              @map("deleted_at") @db.Timestamptz
+
+  tenant          Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdByUser   User                 @relation("ReportDefinitionCreator", fields: [createdBy], references: [id])
+  template        ReportTemplate?      @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  buildOutputs    ReportBuildOutput[]
+  schedules       ReportSchedule[]
+  postEdits       ReportPostEdit[]
+  charts          ReportChart[]
+  interactiveReports InteractiveReport[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@index([createdBy])
+  @@index([mode])
+  @@index([status])
+  @@index([reportType])
+  @@index([deletedAt])
+  @@map("report_definitions")
+}
+
+model ReportBuildOutput {
+  id               String             @id @default(uuid()) @db.Uuid
+  reportId         String             @map("report_id") @db.Uuid
+  format           ReportOutputFormat  @default(PDF)
+  status           ReportStatus       @default(DRAFT)
+  renderedSections Json?              @map("rendered_sections")
+  fetchedData      Json?              @map("fetched_data")
+  filePath         String?            @map("file_path") @db.Text
+  fileSize         BigInt?            @map("file_size")
+  buildDuration    Int?               @map("build_duration")
+  metadata         Json?              @default("{}")
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+
+  reportDefinition ReportDefinition @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([format])
+  @@index([status])
+  @@map("report_build_outputs")
+}
+
+model ReportTemplate {
+  id                    String            @id @default(uuid()) @db.Uuid
+  tenantId              String            @map("tenant_id") @db.Uuid
+  createdBy             String            @map("created_by") @db.Uuid
+  updatedBy             String?           @map("updated_by") @db.Uuid
+  name                  String            @db.VarChar(256)
+  description           String?           @db.Text
+  category              String?           @db.VarChar(128)
+  subcategory           String?           @db.VarChar(128)
+  html                  String            @db.Text
+  variables             Json?             @default("[]")
+  templateConfig        Json?             @default("{}") @map("template_config")
+  layoutData            Json?             @map("layout_data")
+  defaultDataBindings   Json?             @map("default_data_bindings")
+  supportedOutputFormats Json?            @map("supported_output_formats")
+  thumbnailUrl          String?           @map("thumbnail_url") @db.Text
+  isPremium             Boolean           @default(false) @map("is_premium")
+  isPublic              Boolean           @default(false) @map("is_public")
+  isSystem              Boolean           @default(false) @map("is_system")
+  status                String            @default("active") @db.VarChar(32)
+  version               Int               @default(1)
+  tags                  Json?             @default("[]")
+  settings              Json?             @default("{}")
+  createdAt             DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt             DateTime?         @map("deleted_at") @db.Timestamptz
+
+  tenant              Tenant              @relation("ReportTemplateTenant", fields: [tenantId], references: [id], onDelete: Cascade)
+  createdByUser       User                @relation("ReportTemplateCreator", fields: [createdBy], references: [id])
+  reportDefinitions   ReportDefinition[]
+
+  @@index([tenantId])
+  @@index([createdBy])
+  @@index([category])
+  @@index([isPremium])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("report_templates")
+}
+
+model ReportSchedule {
+  id              String            @id @default(uuid()) @db.Uuid
+  reportId        String            @map("report_id") @db.Uuid
+  tenantId        String            @map("tenant_id") @db.Uuid
+  createdBy       String            @map("created_by") @db.Uuid
+  cronExpression  String            @map("cron_expression") @db.VarChar(128)
+  recipients      Json              @default("[]")
+  format          ReportOutputFormat @default(PDF)
+  status          String            @default("active") @db.VarChar(32)
+  nextRunAt       DateTime?         @map("next_run_at") @db.Timestamptz
+  lastRunAt       DateTime?         @map("last_run_at") @db.Timestamptz
+  runCount        Int               @default(0) @map("run_count")
+  failureCount    Int               @default(0) @map("failure_count")
+  metadata        Json?             @default("{}")
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime          @updatedAt @map("updated_at") @db.Timestamptz
+
+  reportDefinition ReportDefinition @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  tenant           Tenant           @relation("ReportScheduleTenant", fields: [tenantId], references: [id], onDelete: Cascade)
+  createdByUser    User             @relation("ReportScheduleCreator", fields: [createdBy], references: [id])
+  history          ScheduleHistory[]
+
+  @@index([reportId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([nextRunAt])
+  @@map("report_schedules")
+}
+
+model ScheduleHistory {
+  id             String   @id @default(uuid()) @db.Uuid
+  scheduleId     String   @map("schedule_id") @db.Uuid
+  status         String   @db.VarChar(32)
+  duration       Int?
+  recipientCount Int?     @map("recipient_count")
+  fileSize       BigInt?  @map("file_size")
+  error          String?  @db.Text
+  metadata       Json?    @default("{}")
+  executedAt     DateTime @default(now()) @map("executed_at") @db.Timestamptz
+
+  schedule ReportSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@index([scheduleId])
+  @@index([executedAt])
+  @@index([status])
+  @@map("schedule_histories")
+}
+
+model ReportDataSource {
+  id               String           @id @default(uuid()) @db.Uuid
+  tenantId         String           @map("tenant_id") @db.Uuid
+  name             String           @db.VarChar(256)
+  type             DataSourceType   @default(INTERNAL_DATASET)
+  connectionConfig Json             @map("connection_config") @default("{}")
+  status           DataSourceStatus @default(ACTIVE)
+  lastTestedAt     DateTime?        @map("last_tested_at") @db.Timestamptz
+  metadata         Json?            @default("{}")
+  createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation("ReportDataSourceTenant", fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([type])
+  @@index([status])
+  @@map("report_data_sources")
+}
+
+model ReportChart {
+  id        String   @id @default(uuid()) @db.Uuid
+  reportId  String   @map("report_id") @db.Uuid
+  type      String   @db.VarChar(64)
+  title     String?  @db.VarChar(256)
+  config    Json     @default("{}")
+  theme     String?  @db.VarChar(64)
+  width     Int      @default(800)
+  height    Int      @default(400)
+  imageData String?  @map("image_data") @db.Text
+  metadata  Json?    @default("{}")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  reportDefinition ReportDefinition @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([type])
+  @@map("report_charts")
+}
+
+model ReportPostEdit {
+  id              String   @id @default(uuid()) @db.Uuid
+  reportId        String   @map("report_id") @db.Uuid
+  editType        String   @map("edit_type") @db.VarChar(64)
+  targetSectionId String?  @map("target_section_id") @db.VarChar(128)
+  changes         Json     @default("{}")
+  annotation      String?  @db.Text
+  version         Int      @default(1)
+  isPublished     Boolean  @default(false) @map("is_published")
+  formatOverrides Json?    @map("format_overrides")
+  headerFooterConfig Json? @map("header_footer_config")
+  watermarkConfig Json?    @map("watermark_config")
+  createdBy       String   @map("created_by") @db.Uuid
+  metadata        Json?    @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  reportDefinition ReportDefinition @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  createdByUser    User             @relation("ReportPostEditCreator", fields: [createdBy], references: [id])
+
+  @@index([reportId])
+  @@index([editType])
+  @@index([isPublished])
+  @@index([version])
+  @@map("report_post_edits")
+}
+
+model ReportExternalSimulation {
+  id               String   @id @default(uuid()) @db.Uuid
+  reportId         String?  @map("report_id") @db.Uuid
+  name             String   @db.VarChar(256)
+  description      String?  @db.Text
+  simulationType   String   @map("simulation_type") @db.VarChar(64)
+  status           String   @default("pending") @db.VarChar(32)
+  inputParameters  Json?    @map("input_parameters") @default("{}")
+  externalSourceUrl String? @map("external_source_url") @db.Text
+  scenarioConfig   Json?    @map("scenario_config")
+  resultData       Json?    @map("result_data")
+  comparisonResult Json?    @map("comparison_result")
+  createdBy        String   @map("created_by") @db.Uuid
+  metadata         Json?    @default("{}")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  createdByUser User @relation("ExternalSimulationCreator", fields: [createdBy], references: [id])
+
+  @@index([reportId])
+  @@index([simulationType])
+  @@index([status])
+  @@map("report_external_simulations")
+}
+
+model ReportCompareSchedule {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(256)
+  description     String?  @db.Text
+  reportIdA       String   @map("report_id_a") @db.Uuid
+  reportIdB       String   @map("report_id_b") @db.Uuid
+  comparisonType  String   @map("comparison_type") @db.VarChar(64)
+  comparisonConfig Json?   @map("comparison_config")
+  scheduleConfig  Json?    @map("schedule_config")
+  notificationConfig Json? @map("notification_config")
+  thresholds      Json?
+  isActive        Boolean  @default(true) @map("is_active")
+  status          String   @default("pending") @db.VarChar(32)
+  resultData      Json?    @map("result_data")
+  lastExecutedAt  DateTime? @map("last_executed_at") @db.Timestamptz
+  createdBy       String   @map("created_by") @db.Uuid
+  metadata        Json?    @default("{}")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant        Tenant @relation("CompareScheduleTenant", fields: [tenantId], references: [id], onDelete: Cascade)
+  createdByUser User   @relation("CompareScheduleCreator", fields: [createdBy], references: [id])
+
+  @@index([tenantId])
+  @@index([comparisonType])
+  @@index([isActive])
+  @@index([status])
+  @@map("report_compare_schedules")
+}
+
+model InteractiveReport {
+  id             String   @id @default(uuid()) @db.Uuid
+  reportId       String   @map("report_id") @db.Uuid
+  name           String   @db.VarChar(256)
+  description    String?  @db.Text
+  elements       Json     @default("[]")
+  parameters     Json?    @default("[]")
+  linkedReports  Json?    @map("linked_reports") @default("[]")
+  bookmarks      Json?    @default("[]")
+  version        Int      @default(1)
+  createdBy      String   @map("created_by") @db.Uuid
+  metadata       Json?    @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  reportDefinition ReportDefinition      @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  createdByUser    User                  @relation("InteractiveReportCreator", fields: [createdBy], references: [id])
+  versions         InteractiveReportVersion[]
+  comments         ReportComment[]
+  annotations      ReportAnnotation[]
+
+  @@index([reportId])
+  @@index([createdBy])
+  @@map("interactive_reports")
+}
+
+model InteractiveReportVersion {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  version           Int
+  elements          Json     @default("[]")
+  parameters        Json?    @default("[]")
+  linkedReports     Json?    @map("linked_reports") @default("[]")
+  changedBy         String   @map("changed_by") @db.Uuid
+  changeDescription String?  @map("change_description") @db.Text
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  interactiveReport InteractiveReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  changedByUser     User              @relation("InteractiveVersionChanger", fields: [changedBy], references: [id])
+
+  @@unique([reportId, version])
+  @@index([reportId])
+  @@map("interactive_report_versions")
+}
+
+model ReportComment {
+  id              String    @id @default(uuid()) @db.Uuid
+  reportId        String    @map("report_id") @db.Uuid
+  sectionId       String?   @map("section_id") @db.VarChar(128)
+  userId          String    @map("user_id") @db.Uuid
+  userName        String    @map("user_name") @db.VarChar(256)
+  content         String    @db.Text
+  parentCommentId String?   @map("parent_comment_id") @db.Uuid
+  resolved        Boolean   @default(false)
+  resolvedBy      String?   @map("resolved_by") @db.Uuid
+  resolvedAt      DateTime? @map("resolved_at") @db.Timestamptz
+  mentions        Json?     @default("[]")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  interactiveReport InteractiveReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user              User              @relation("ReportCommentUser", fields: [userId], references: [id])
+  parent            ReportComment?    @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies           ReportComment[]   @relation("CommentReplies")
+
+  @@index([reportId])
+  @@index([userId])
+  @@index([parentCommentId])
+  @@index([resolved])
+  @@map("report_comments")
+}
+
+model ReportAnnotation {
+  id        String   @id @default(uuid()) @db.Uuid
+  reportId  String   @map("report_id") @db.Uuid
+  sectionId String?  @map("section_id") @db.VarChar(128)
+  type      String   @db.VarChar(64)
+  position  Json     @default("{}")
+  content   String?  @db.Text
+  color     String?  @db.VarChar(32)
+  createdBy String   @map("created_by") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  interactiveReport InteractiveReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  createdByUser     User              @relation("ReportAnnotationCreator", fields: [createdBy], references: [id])
+
+  @@index([reportId])
+  @@index([sectionId])
+  @@map("report_annotations")
+}
+
+model DistributionConfig {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  name              String   @db.VarChar(256)
+  recipients        Json     @default("[]")
+  schedule          Json?
+  format            ReportOutputFormat @default(PDF)
+  includeWatermark  Boolean  @default(false) @map("include_watermark")
+  watermarkText     String?  @map("watermark_text") @db.VarChar(256)
+  emailSubject      String?  @map("email_subject") @db.VarChar(512)
+  emailBody         String?  @map("email_body") @db.Text
+  trackReadReceipts Boolean  @default(false) @map("track_read_receipts")
+  accessPassword    String?  @map("access_password") @db.VarChar(256)
+  accessExpiry      DateTime? @map("access_expiry") @db.Timestamptz
+  maxViews          Int?     @map("max_views")
+  allowDownload     Boolean  @default(true) @map("allow_download")
+  allowPrint        Boolean  @default(true) @map("allow_print")
+  enabled           Boolean  @default(true)
+  createdBy         String   @map("created_by") @db.Uuid
+  metadata          Json?    @default("{}")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  createdByUser      User                @relation("DistributionConfigCreator", fields: [createdBy], references: [id])
+  distributionRecords DistributionRecord[]
+
+  @@index([reportId])
+  @@index([enabled])
+  @@map("distribution_configs")
+}
+
+model DistributionRecord {
+  id                   String   @id @default(uuid()) @db.Uuid
+  distributionConfigId String   @map("distribution_config_id") @db.Uuid
+  reportId             String   @map("report_id") @db.Uuid
+  status               DistributionStatus @default(PENDING)
+  recipientCount       Int      @default(0) @map("recipient_count")
+  errorMessage         String?  @map("error_message") @db.Text
+  fileSize             BigInt?  @map("file_size")
+  readReceipts         Json?    @map("read_receipts") @default("{}")
+  trackingIds          Json?    @map("tracking_ids") @default("[]")
+  sentAt               DateTime? @map("sent_at") @db.Timestamptz
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  distributionConfig DistributionConfig @relation(fields: [distributionConfigId], references: [id], onDelete: Cascade)
+  readReceiptLogs    ReadReceiptLog[]
+
+  @@index([distributionConfigId])
+  @@index([reportId])
+  @@index([status])
+  @@index([sentAt])
+  @@map("distribution_records")
+}
+
+model ReadReceiptLog {
+  id                   String   @id @default(uuid()) @db.Uuid
+  distributionRecordId String   @map("distribution_record_id") @db.Uuid
+  recipientEmail       String   @map("recipient_email") @db.VarChar(320)
+  ipAddress            String?  @map("ip_address") @db.VarChar(45)
+  userAgent            String?  @map("user_agent") @db.Text
+  readAt               DateTime @default(now()) @map("read_at") @db.Timestamptz
+
+  distributionRecord DistributionRecord @relation(fields: [distributionRecordId], references: [id], onDelete: Cascade)
+
+  @@index([distributionRecordId])
+  @@index([recipientEmail])
+  @@map("read_receipt_logs")
+}
+
+// ============================================================================
+// PRESENTATION ENGINE MODELS
+// ============================================================================
+
+model Slide {
+  id               String   @id @default(uuid()) @db.Uuid
+  presentationId   String   @map("presentation_id") @db.Uuid
+  slideIndex       Int      @map("slide_index")
+  layout           String   @db.VarChar(50)
+  content          String   @db.Text
+  notes            String?  @db.Text
+  thumbnail        String?  @db.Text
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  presentation Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+
+  @@index([presentationId])
+  @@index([slideIndex])
+  @@map("slides")
+}
+
+model Theme {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(255)
+  tenantId  String   @map("tenant_id") @db.Uuid
+  config    String   @db.Text
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@map("themes")
+}
+
+model InfographicSection {
+  id             String   @id @default(uuid()) @db.Uuid
+  infographicId  String   @map("infographic_id") @db.Uuid
+  sectionType    String   @map("section_type") @db.VarChar(50)
+  sectionIndex   Int      @map("section_index")
+  content        String   @db.Text
+  style          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  infographic Infographic @relation(fields: [infographicId], references: [id], onDelete: Cascade)
+
+  @@index([infographicId])
+  @@map("infographic_sections")
+}
+
+model CollaborationSession {
+  id               String   @id @default(uuid()) @db.Uuid
+  presentationId   String   @map("presentation_id") @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  role             String   @db.VarChar(20)
+  isActive         Boolean  @default(true) @map("is_active")
+  joinedAt         DateTime @default(now()) @map("joined_at") @db.Timestamptz
+  lastActiveAt     DateTime @default(now()) @map("last_active_at") @db.Timestamptz
+
+  presentation Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@unique([presentationId, userId])
+  @@index([presentationId])
+  @@map("collaboration_sessions")
+}
+
+model ShareLink {
+  id               String    @id @default(uuid()) @db.Uuid
+  resourceType     String    @map("resource_type") @db.VarChar(50)
+  resourceId       String    @map("resource_id") @db.Uuid
+  token            String    @unique @db.VarChar(255)
+  permissions      String    @db.VarChar(20)
+  password         String?   @db.VarChar(255)
+  expiresAt        DateTime? @map("expires_at") @db.Timestamptz
+  maxViews         Int?      @map("max_views")
+  viewCount        Int       @default(0) @map("view_count")
+  createdBy        String    @map("created_by") @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  creator User @relation(fields: [createdBy], references: [id])
+
+  @@index([resourceType, resourceId])
+  @@index([token])
+  @@map("share_links")
+}
+
+// ============================================================================
+// CONNECTOR CONNECTIONS (External Service Integrations)
+// ============================================================================
+
+model ConnectorConnection {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  connectorType   String    @map("connector_type") @db.VarChar(50)
+  accessToken     String    @map("access_token") @db.Text
+  refreshToken    String?   @map("refresh_token") @db.Text
+  expiresAt       DateTime  @map("expires_at") @db.Timestamptz
+  tokenType       String    @default("Bearer") @map("token_type") @db.VarChar(20)
+  status          String    @default("active") @db.VarChar(20)
+  lastUsedAt      DateTime? @map("last_used_at") @db.Timestamptz
+  lastRefreshedAt DateTime? @map("last_refreshed_at") @db.Timestamptz
+  revokedAt       DateTime? @map("revoked_at") @db.Timestamptz
+  metadata        Json?     @db.JsonB
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, connectorType])
+  @@index([userId])
+  @@index([status])
+  @@map("connector_connections")
+}
+
+// ============================================================================
+// POLICY ENGINE (Governance)
+// ============================================================================
+
+model Policy {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  resource    String   @db.VarChar(100)
+  action      String   @db.VarChar(100)
+  conditions  Json     @db.JsonB
+  effect      String   @db.VarChar(30)
+  priority    Int      @default(0)
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, resource, action])
+  @@index([enabled])
+  @@map("policies")
+}
+
+model CompliancePolicy {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  name        String    @db.VarChar(255)
+  description String    @db.Text
+  framework   String    @db.VarChar(100)
+  status      String    @default("pending") @db.VarChar(30)
+  evidence    String?   @db.Text
+  assignee    String?   @db.VarChar(255)
+  dueDate     DateTime? @map("due_date") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  checks ComplianceCheck[]
+
+  @@index([tenantId, framework])
+  @@index([status])
+  @@map("compliance_policies")
+}
+
+model ComplianceCheck {
+  id               String   @id @default(uuid()) @db.Uuid
+  compliancePolicyId String @map("compliance_policy_id") @db.Uuid
+  status           String   @db.VarChar(30)
+  findings         Json?    @db.JsonB
+  checkedBy        String?  @map("checked_by") @db.Uuid
+  checkedAt        DateTime @default(now()) @map("checked_at") @db.Timestamptz
+
+  compliancePolicy CompliancePolicy @relation(fields: [compliancePolicyId], references: [id], onDelete: Cascade)
+
+  @@index([compliancePolicyId])
+  @@index([checkedAt])
+  @@map("compliance_checks")
+}
+
+model WorkflowDefinition {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(255)
+  description     String?  @db.Text
+  triggerResource String   @map("trigger_resource") @db.VarChar(100)
+  triggerAction   String   @map("trigger_action") @db.VarChar(100)
+  steps           Json     @db.JsonB
+  status          String   @default("active") @db.VarChar(30)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, triggerResource])
+  @@index([status])
+  @@map("workflow_definitions")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DOCUMENT INTELLIGENCE UPGRADE MODELS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+model LayoutAnalysis {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  sourceId          String   @map("source_id") @db.VarChar(255)
+  sourceType        String   @map("source_type") @db.VarChar(50)
+  layoutGraph       Json     @map("layout_graph") @db.JsonB
+  designTokens      Json     @map("design_tokens") @db.JsonB
+  metadata          Json?    @db.JsonB
+  pageCount         Int      @map("page_count")
+  elementCount      Int      @map("element_count")
+  confidence        Float
+  processingTimeMs  Int      @map("processing_time_ms")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sourceType])
+  @@index([sourceId])
+  @@index([createdAt])
+  @@map("layout_analyses")
+}
+
+model DocumentExtraction {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  fileId            String   @map("file_id") @db.VarChar(255)
+  fileType          String   @map("file_type") @db.VarChar(50)
+  pages             Json     @db.JsonB
+  tables            Json?    @db.JsonB
+  charts            Json?    @db.JsonB
+  fullText          String?  @map("full_text") @db.Text
+  languages         String[] @db.VarChar(10)
+  confidence        Float
+  ocrEngine         String   @map("ocr_engine") @db.VarChar(30)
+  processingTimeMs  Int      @map("processing_time_ms")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, fileType])
+  @@index([fileId])
+  @@index([createdAt])
+  @@map("document_extractions")
+}
+
+model PixelValidation {
+  id                 String   @id @default(uuid()) @db.Uuid
+  tenantId           String   @map("tenant_id") @db.Uuid
+  sourceHash         String   @map("source_hash") @db.VarChar(64)
+  pixelDiff          Int      @map("pixel_diff")
+  totalPixels        Int      @map("total_pixels")
+  diffPercentage     Float    @map("diff_percentage")
+  ssim               Float
+  lpips              Float
+  isPerfect          Boolean  @map("is_perfect")
+  iterationCount     Int      @map("iteration_count")
+  convergenceHistory Float[]  @map("convergence_history")
+  hotspots           Json?    @db.JsonB
+  diffImagePath      String?  @map("diff_image_path") @db.VarChar(500)
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([sourceHash])
+  @@index([isPerfect])
+  @@index([createdAt])
+  @@map("pixel_validations")
+}
+
+model FontRecognition {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  sourceId          String   @map("source_id") @db.VarChar(255)
+  detectedFonts     Json     @map("detected_fonts") @db.JsonB
+  typographyHierarchy Json   @map("typography_hierarchy") @db.JsonB
+  confidence        Float
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([sourceId])
+  @@map("font_recognitions")
+}
+
+model LayoutTranslation {
+  id                 String   @id @default(uuid()) @db.Uuid
+  tenantId           String   @map("tenant_id") @db.Uuid
+  sourceLanguage     String   @map("source_language") @db.VarChar(10)
+  targetLanguage     String   @map("target_language") @db.VarChar(10)
+  segmentCount       Int      @map("segment_count")
+  adjustmentCount    Int      @map("adjustment_count")
+  fromMemoryCount    Int      @map("from_memory_count")
+  qualityScore       Float    @map("quality_score")
+  layoutGraph        Json     @map("layout_graph") @db.JsonB
+  translationPairs   Json     @map("translation_pairs") @db.JsonB
+  layoutAdjustments  Json     @map("layout_adjustments") @db.JsonB
+  processingTimeMs   Int      @map("processing_time_ms")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sourceLanguage, targetLanguage])
+  @@index([createdAt])
+  @@map("layout_translations")
+}
+
+model QualityValidation {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  sourceId        String   @map("source_id") @db.VarChar(255)
+  metrics         Json     @db.JsonB
+  issues          Json     @db.JsonB
+  overallScore    Float    @map("overall_score")
+  issueCount      Int      @map("issue_count")
+  criticalCount   Int      @map("critical_count")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([sourceId])
+  @@index([overallScore])
+  @@map("quality_validations")
+}
+
+// ============================================================================
+// CROSS-ENGINE DATA BRIDGE
+// ============================================================================
+
+model BridgePayload {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  sourceEngine    String   @map("source_engine") @db.VarChar(50)
+  targetEngine    String   @map("target_engine") @db.VarChar(50)
+  dataType        String   @map("data_type") @db.VarChar(100)
+  data            Json     @db.JsonB
+  correlationId   String   @map("correlation_id") @db.Uuid
+  ttlMs           Int?     @map("ttl_ms")
+  status          String   @default("delivered") @db.VarChar(30)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  lineage  DataLineage[]
+
+  @@index([tenantId, sourceEngine])
+  @@index([tenantId, targetEngine])
+  @@index([correlationId])
+  @@index([createdAt])
+  @@map("bridge_payloads")
+}
+
+model DataLineage {
+  id              String   @id @default(uuid()) @db.Uuid
+  payloadId       String   @map("payload_id") @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  sourceEngine    String   @map("source_engine") @db.VarChar(50)
+  targetEngine    String   @map("target_engine") @db.VarChar(50)
+  dataType        String   @map("data_type") @db.VarChar(100)
+  transformations Json     @default("[]") @db.JsonB
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  payload  BridgePayload @relation(fields: [payloadId], references: [id], onDelete: Cascade)
+  tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([payloadId])
+  @@index([tenantId, createdAt])
+  @@index([sourceEngine, targetEngine])
+  @@map("data_lineage")
+}
+
+// ============================================================================
+// AI TRAINING CENTER
+// ============================================================================
+
+model TrainingDataset {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(255)
+  description     String?  @db.Text
+  taskType        String   @map("task_type") @db.VarChar(50)
+  format          String   @db.VarChar(20)
+  sampleCount     Int      @map("sample_count") @default(0)
+  trainCount      Int      @map("train_count") @default(0)
+  validationCount Int      @map("validation_count") @default(0)
+  testCount       Int      @map("test_count") @default(0)
+  labelDistribution Json?  @map("label_distribution") @db.JsonB
+  qualityScore    Float?   @map("quality_score")
+  version         Int      @default(1)
+  storagePath     String   @map("storage_path") @db.VarChar(500)
+  status          String   @default("draft") @db.VarChar(30)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant   Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  jobs     TrainingJob[]
+
+  @@index([tenantId, taskType])
+  @@index([status])
+  @@map("training_datasets")
+}
+
+model TrainingJob {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  datasetId       String   @map("dataset_id") @db.Uuid
+  modelConfigId   String?  @map("model_config_id") @db.Uuid
+  baseModel       String   @map("base_model") @db.VarChar(100)
+  taskType        String   @map("task_type") @db.VarChar(50)
+  hyperparameters Json     @db.JsonB
+  status          String   @default("pending") @db.VarChar(30)
+  metrics         Json?    @db.JsonB
+  epochs          Int      @default(0)
+  currentEpoch    Int      @default(0) @map("current_epoch")
+  trainingLoss    Float?   @map("training_loss")
+  validationLoss  Float?   @map("validation_loss")
+  externalJobId   String?  @map("external_job_id") @db.VarChar(255)
+  startedAt       DateTime? @map("started_at") @db.Timestamptz
+  completedAt     DateTime? @map("completed_at") @db.Timestamptz
+  errorMessage    String?  @map("error_message") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  dataset  TrainingDataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  tenant   Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  model    ModelRegistry?
+
+  @@index([tenantId, status])
+  @@index([datasetId])
+  @@map("training_jobs")
+}
+
+model ModelRegistry {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  jobId           String   @unique @map("job_id") @db.Uuid
+  name            String   @db.VarChar(255)
+  version         String   @db.VarChar(50)
+  taskType        String   @map("task_type") @db.VarChar(50)
+  baseModel       String   @map("base_model") @db.VarChar(100)
+  metrics         Json     @db.JsonB
+  status          String   @default("registered") @db.VarChar(30)
+  deploymentId    String?  @map("deployment_id") @db.VarChar(255)
+  artifactPath    String   @map("artifact_path") @db.VarChar(500)
+  metadata        Json?    @db.JsonB
+  promotedAt      DateTime? @map("promoted_at") @db.Timestamptz
+  archivedAt      DateTime? @map("archived_at") @db.Timestamptz
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  job      TrainingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, taskType])
+  @@index([status])
+  @@map("model_registry")
+}
+
+// ============================================================================
+// CONTEXT MEMORY LAYER
+// ============================================================================
+
+model ContextMemoryLong {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  category        String   @db.VarChar(100)
+  key             String   @db.VarChar(255)
+  value           Json     @db.JsonB
+  accessCount     Int      @default(0) @map("access_count")
+  lastAccessedAt  DateTime @default(now()) @map("last_accessed_at") @db.Timestamptz
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId, category, key])
+  @@index([tenantId, userId])
+  @@index([category])
+  @@map("context_memory_long")
+}
+
+model EpisodeMemory {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  requestText     String   @map("request_text") @db.Text
+  intent          String   @db.VarChar(100)
+  actions         Json     @db.JsonB
+  outcome         String   @db.VarChar(50)
+  satisfaction    Float?
+  duration        Int?
+  context         Json?    @db.JsonB
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, userId, createdAt])
+  @@index([intent])
+  @@map("episode_memory")
+}
+
+model SemanticFact {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  subject         String   @db.VarChar(255)
+  predicate       String   @db.VarChar(255)
+  object          String   @db.Text
+  confidence      Float    @default(1.0)
+  source          String   @db.VarChar(100)
+  validatedAt     DateTime? @map("validated_at") @db.Timestamptz
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, subject])
+  @@index([predicate])
+  @@map("semantic_facts")
+}

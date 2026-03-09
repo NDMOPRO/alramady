@@ -1,0 +1,97 @@
+%% Rasid Platform - Service Interaction Map
+graph LR
+    subgraph GW["Gateway :80"]
+        NGINX["Nginx"]
+    end
+
+    subgraph E01["Data Service :8001"]
+        DS_Routes["18 Route Files"]
+        DS_Services["27 Service Classes"]
+        DS_Connectors["Connector Registry"]
+    end
+
+    subgraph E02["Excel Service :8002"]
+        EX_Routes["10 Route Files"]
+        EX_Services["25 Service Classes"]
+        EX_Workers["Formula Workers"]
+        EX_Formulas["106+ Formulas"]
+    end
+
+    subgraph E03["Dashboard Service :8003"]
+        DB_Routes["10 Route Files"]
+        DB_Services["21 Service Classes"]
+    end
+
+    subgraph E04["Reporting Service :8004"]
+        RP_Routes["9 Route Files"]
+        RP_Services["21 Service Classes"]
+    end
+
+    subgraph E05["Presentation Service :8005"]
+        PR_Routes["9 Route Files"]
+        PR_Services["29 Service Classes"]
+    end
+
+    subgraph E07["Localization Service :8008"]
+        LO_Routes["6 Route Files"]
+        LO_Services["12 Service Classes"]
+    end
+
+    subgraph E08["Conversion Service :8013"]
+        CO_Routes["7 Route Files"]
+        CO_Services["23 Service Classes"]
+    end
+
+    subgraph E09["AI Service :8009"]
+        AI_Routes["2 Route Files"]
+        AI_Services["26 Service Classes"]
+        AI_Agents["AI Agents"]
+    end
+
+    subgraph E10["Governance Service :8010"]
+        GV_Routes["10 Route Files"]
+        GV_Services["40 Service Classes"]
+    end
+
+    subgraph SUP["Support Services"]
+        INF["Infographic :8006<br/>7 Services"]
+        REP["Replication :8007<br/>22 Services"]
+        LIB["Library :8011<br/>7 Services"]
+        TPL["Template :8012<br/>5 Services"]
+        REN["Rendering :8014<br/>Chromium Engine"]
+    end
+
+    NGINX --> E01
+    NGINX --> E02
+    NGINX --> E03
+    NGINX --> E04
+    NGINX --> E05
+    NGINX --> E07
+    NGINX --> E08
+    NGINX --> E09
+    NGINX --> E10
+    NGINX --> INF
+    NGINX --> REP
+    NGINX --> LIB
+    NGINX --> TPL
+
+    %% Cross-service interactions
+    E03 -.->|data queries| E01
+    E04 -.->|data queries| E01
+    E04 -.->|chart rendering| E03
+    E05 -.->|AI content| E09
+    E05 -.->|infographics| INF
+    E07 -.->|AI translation| E09
+    E08 -.->|file reading| E01
+    REP -.->|pixel rendering| REN
+    REP -.->|layout analysis| E09
+    INF -.->|templates| TPL
+    LIB -.->|file storage| E01
+
+    classDef core fill:#3498DB,stroke:#2980B9,color:#fff
+    classDef support fill:#9B59B6,stroke:#8E44AD,color:#fff
+    classDef gateway fill:#E74C3C,stroke:#C0392B,color:#fff
+
+    class E01,E02,E03,E04,E05,E07,E08,E09,E10 core
+    class INF,REP,LIB,TPL,REN support
+    class NGINX gateway

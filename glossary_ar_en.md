@@ -1,0 +1,48 @@
+# معجم المصطلحات
+
+- راصد — Rasid
+- الصفحة الرئيسية — Home
+- البيانات — Data
+- التحليل — Analysis
+- التقارير — Reports
+- العروض التقديمية — Presentations
+- المكتبة — Library
+- الإعدادات — Settings
+- مساعد راصد — Rasid Assistant
+- مجموعة بيانات — Dataset
+- لوحة مؤشرات — Dashboard
+- تقرير — Report
+- عرض تقديمي — Presentation
+- أصل — Asset
+- مجلد — Folder
+- قاعدة معرفة — Knowledge Base
+- قالب — Prompt Template
+- سير عمل — Workflow
+- علم وظيفي — Feature Flag
+- سجل التدقيق — Audit Log
+- موصل سحابي — Cloud Connector
+- ثيم — Theme
+- المظهر — Appearance
+- تعريب — Localization
+- تحويل — Conversion
+- مطابقة بصرية — Visual Replication
+- مطابقة بصرية صارمة — Strict Visual Replication
+- مخرج فعلي — Real Output
+- محرك — Engine
+- إعادة استخدام — Reuse
+- هوية بصرية — Visual Identity
+- وضع ليلي — Dark Mode
+- وضع نهاري — Light Mode
+- اتجاه من اليمين إلى اليسار — Right-to-Left
+- إدارة المستخدمين — User Administration
+- إدارة الفرق — Team Administration
+- جدولة — Scheduling
+- استيراد — Import
+- تصدير — Export
+- استعلام معرفة — Knowledge Query
+- فهرسة — Indexing
+- بروفايل البيانات — Data Profile
+- مؤشرات KPI — KPI Recommendations
+- توصيات الرسوم — Chart Recommendations
+- استهلاك الرموز — Token Usage
+- سجلات الاستخدام — Usage Visibility

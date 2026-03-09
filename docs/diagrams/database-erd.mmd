@@ -1,0 +1,609 @@
+%% Rasid Platform - Database Entity Relationship Diagram
+%% Organized by service domain
+
+erDiagram
+
+    %% ══════════════════════════════════════
+    %% CORE ENTITIES (Root / Governance)
+    %% ══════════════════════════════════════
+
+    Tenant {
+        string id PK
+        string name
+        string slug
+        string plan
+        string status
+        datetime createdAt
+    }
+
+    User {
+        string id PK
+        string tenantId FK
+        string email
+        string name
+        string passwordHash
+        string status
+        string role
+        datetime createdAt
+    }
+
+    Role {
+        string id PK
+        string tenantId FK
+        string name
+        string description
+    }
+
+    UserRole {
+        string id PK
+        string userId FK
+        string roleId FK
+    }
+
+    Permission {
+        string id PK
+        string roleId FK
+        string action
+        string resource
+        string resourceType
+    }
+
+    AuditLog {
+        string id PK
+        string tenantId FK
+        string userId FK
+        string action
+        string resource
+        json details
+        datetime createdAt
+    }
+
+    Tenant ||--o{ User : "has"
+    Tenant ||--o{ Role : "defines"
+    User ||--o{ UserRole : "assigned"
+    Role ||--o{ UserRole : "assigned"
+    Role ||--o{ Permission : "grants"
+    Tenant ||--o{ AuditLog : "logs"
+    User ||--o{ AuditLog : "performs"
+
+    %% ══════════════════════════════════════
+    %% E01: DATA SERVICE
+    %% ══════════════════════════════════════
+
+    Dataset {
+        string id PK
+        string tenantId FK
+        string name
+        string sourceType
+        string status
+        int rowCount
+        json metadata
+        datetime createdAt
+    }
+
+    DatasetColumn {
+        string id PK
+        string datasetId FK
+        string name
+        string dataType
+        int position
+        boolean nullable
+    }
+
+    DataRow {
+        string id PK
+        string datasetId FK
+        json data
+        int rowIndex
+    }
+
+    DatasetVersion {
+        string id PK
+        string datasetId FK
+        int versionNumber
+        string changeType
+        datetime createdAt
+    }
+
+    IngestionJob {
+        string id PK
+        string tenantId FK
+        string sourceType
+        string status
+        string filePath
+        json result
+    }
+
+    DataQualityCheck {
+        string id PK
+        string datasetId FK
+        string checkType
+        string result
+        float score
+    }
+
+    KnowledgeGraphNode {
+        string id PK
+        string tenantId FK
+        string label
+        string nodeType
+        json properties
+    }
+
+    KnowledgeGraphEdge {
+        string id PK
+        string sourceNodeId FK
+        string targetNodeId FK
+        string relationship
+    }
+
+    Pipeline {
+        string id PK
+        string tenantId FK
+        string name
+        json steps
+        string status
+    }
+
+    SyncSchedule {
+        string id PK
+        string sourceId UK
+        string cronExpression
+        boolean enabled
+    }
+
+    ConnectorConnection {
+        string id PK
+        string tenantId FK
+        string connectorType
+        json config
+        datetime lastUsedAt
+    }
+
+    Dataset ||--o{ DatasetColumn : "has"
+    Dataset ||--o{ DataRow : "contains"
+    Dataset ||--o{ DatasetVersion : "versioned"
+    Dataset ||--o{ DataQualityCheck : "validated"
+    Tenant ||--o{ Dataset : "owns"
+    Tenant ||--o{ IngestionJob : "runs"
+    Tenant ||--o{ ConnectorConnection : "configures"
+    KnowledgeGraphNode ||--o{ KnowledgeGraphEdge : "source"
+    KnowledgeGraphNode ||--o{ KnowledgeGraphEdge : "target"
+    Tenant ||--o{ Pipeline : "defines"
+
+    %% ══════════════════════════════════════
+    %% E02: EXCEL SERVICE
+    %% ══════════════════════════════════════
+
+    Workbook {
+        string id PK
+        string tenantId FK
+        string name
+        string status
+        json sheetsJson
+        json formulasJson
+    }
+
+    ExcelWorkbook {
+        string id PK
+        string tenantId FK
+        string title
+        string fileUrl
+    }
+
+    Sheet {
+        string id PK
+        string workbookId FK
+        string name
+        int index
+    }
+
+    Cell {
+        string id PK
+        string sheetId FK
+        string address
+        string value
+        string formula
+        json formatting
+    }
+
+    Chart {
+        string id PK
+        string sheetId FK
+        string chartType
+        json config
+    }
+
+    Macro {
+        string id PK
+        string workbookId FK
+        string name
+        string code
+    }
+
+    Workbook ||--o{ Sheet : "contains"
+    Sheet ||--o{ Cell : "has"
+    Sheet ||--o{ Chart : "displays"
+    Workbook ||--o{ Macro : "runs"
+
+    %% ══════════════════════════════════════
+    %% E03: DASHBOARD SERVICE
+    %% ══════════════════════════════════════
+
+    Dashboard {
+        string id PK
+        string tenantId FK
+        string title
+        string visibility
+        json layout
+        string themeId
+    }
+
+    DashboardWidget {
+        string id PK
+        string dashboardId FK
+        string widgetType
+        json config
+        json position
+    }
+
+    DashboardFilter {
+        string id PK
+        string dashboardId FK
+        string filterType
+        json config
+    }
+
+    DashboardTheme {
+        string id PK
+        string name
+        json colors
+        json typography
+    }
+
+    Dashboard ||--o{ DashboardWidget : "contains"
+    Dashboard ||--o{ DashboardFilter : "applies"
+    Tenant ||--o{ Dashboard : "owns"
+
+    %% ══════════════════════════════════════
+    %% E04: REPORTING SERVICE
+    %% ══════════════════════════════════════
+
+    ReportDefinition {
+        string id PK
+        string tenantId FK
+        string title
+        string mode
+        string status
+        json sections
+    }
+
+    Report {
+        string id PK
+        string definitionId FK
+        string status
+        json data
+        datetime generatedAt
+    }
+
+    ReportSchedule {
+        string id PK
+        string reportDefId FK
+        string cronExpression
+        string format
+    }
+
+    DistributionConfig {
+        string id PK
+        string reportDefId FK
+        json channels
+        json recipients
+    }
+
+    ReportDefinition ||--o{ Report : "generates"
+    ReportDefinition ||--o{ ReportSchedule : "scheduled"
+    ReportDefinition ||--o{ DistributionConfig : "distributes"
+
+    %% ══════════════════════════════════════
+    %% E05: PRESENTATION SERVICE
+    %% ══════════════════════════════════════
+
+    Presentation {
+        string id PK
+        string tenantId FK
+        string title
+        string status
+        string themeId
+    }
+
+    Slide {
+        string id PK
+        string presentationId FK
+        int order
+        json elements
+    }
+
+    SlideElement {
+        string id PK
+        string slideId FK
+        string elementType
+        json properties
+        json position
+    }
+
+    Theme {
+        string id PK
+        string name
+        json colors
+        json fonts
+        json layouts
+    }
+
+    LiveSession {
+        string id PK
+        string presentationId FK
+        string sessionCode
+        boolean active
+    }
+
+    Presentation ||--o{ Slide : "contains"
+    Slide ||--o{ SlideElement : "has"
+    Presentation ||--o{ LiveSession : "presents"
+    Tenant ||--o{ Presentation : "owns"
+
+    %% ══════════════════════════════════════
+    %% E07: LOCALIZATION SERVICE
+    %% ══════════════════════════════════════
+
+    LocalizationJob {
+        string id PK
+        string tenantId FK
+        string sourceLang
+        string targetLang
+        string status
+        json content
+    }
+
+    TranslationMemory {
+        string id PK
+        string tenantId FK
+        string sourceText
+        string translatedText
+        string sourceLang
+        string targetLang
+    }
+
+    Glossary {
+        string id PK
+        string tenantId FK
+        string name
+        string domain
+    }
+
+    GlossaryTerm {
+        string id PK
+        string glossaryId FK
+        string sourceTerm
+        string translatedTerm
+    }
+
+    Glossary ||--o{ GlossaryTerm : "contains"
+    Tenant ||--o{ LocalizationJob : "requests"
+    Tenant ||--o{ TranslationMemory : "builds"
+    Tenant ||--o{ Glossary : "manages"
+
+    %% ══════════════════════════════════════
+    %% E08: CONVERSION SERVICE
+    %% ══════════════════════════════════════
+
+    ConversionJob {
+        string id PK
+        string tenantId FK
+        string sourceFormat
+        string targetFormat
+        string status
+        string inputPath
+        string outputPath
+    }
+
+    ConversionPipeline {
+        string id PK
+        string name
+        json steps
+        string status
+    }
+
+    OcrResult {
+        string id PK
+        string jobId FK
+        string text
+        float confidence
+        json boundingBoxes
+    }
+
+    ConversionJob ||--o{ OcrResult : "produces"
+
+    %% ══════════════════════════════════════
+    %% E09: AI SERVICE
+    %% ══════════════════════════════════════
+
+    AiSession {
+        string id PK
+        string tenantId FK
+        string userId FK
+        string sessionType
+        string status
+    }
+
+    AiQuery {
+        string id PK
+        string sessionId FK
+        string query
+        json response
+        string status
+    }
+
+    KnowledgeBase {
+        string id PK
+        string tenantId FK
+        string name
+        string status
+    }
+
+    KnowledgeChunk {
+        string id PK
+        string knowledgeBaseId FK
+        string content
+        json embedding
+    }
+
+    VectorDocument {
+        string id PK
+        string tenantId FK
+        string content
+        json embedding
+        json metadata
+    }
+
+    FineTuneJob {
+        string id PK
+        string tenantId FK
+        string modelId
+        string status
+        json config
+    }
+
+    AiSession ||--o{ AiQuery : "contains"
+    KnowledgeBase ||--o{ KnowledgeChunk : "indexed"
+    Tenant ||--o{ AiSession : "runs"
+    Tenant ||--o{ KnowledgeBase : "builds"
+
+    %% ══════════════════════════════════════
+    %% E10: GOVERNANCE SERVICE (extras)
+    %% ══════════════════════════════════════
+
+    Policy {
+        string id PK
+        string tenantId FK
+        string name
+        json rules
+        boolean active
+    }
+
+    WorkflowDefinition {
+        string id PK
+        string tenantId FK
+        string name
+        json steps
+    }
+
+    FeatureFlag {
+        string id PK
+        string tenantId FK
+        string key
+        boolean enabled
+        json rules
+    }
+
+    RlsPolicy {
+        string id PK
+        string tenantId FK
+        string tableName
+        json filter
+    }
+
+    Webhook {
+        string id PK
+        string tenantId FK
+        string url
+        json events
+        boolean active
+    }
+
+    Tenant ||--o{ Policy : "enforces"
+    Tenant ||--o{ WorkflowDefinition : "defines"
+    Tenant ||--o{ FeatureFlag : "toggles"
+    Tenant ||--o{ Webhook : "registers"
+
+    %% ══════════════════════════════════════
+    %% SUPPORT: REPLICATION SERVICE
+    %% ══════════════════════════════════════
+
+    ReplicationJob {
+        string id PK
+        string tenantId FK
+        string sourceDocId
+        string status
+        float fidelityScore
+    }
+
+    ComparisonResult {
+        string id PK
+        string jobId FK
+        float pixelDiff
+        json diffMap
+    }
+
+    PrintLock {
+        string id PK
+        string documentId FK
+        json fontConfig
+        json layoutConfig
+        boolean locked
+    }
+
+    ReplicationJob ||--o{ ComparisonResult : "validates"
+
+    %% ══════════════════════════════════════
+    %% SUPPORT: LIBRARY SERVICE
+    %% ══════════════════════════════════════
+
+    LibraryAsset {
+        string id PK
+        string tenantId FK
+        string name
+        string assetType
+        string filePath
+        json metadata
+    }
+
+    Folder {
+        string id PK
+        string tenantId FK
+        string name
+        string parentId FK
+    }
+
+    Folder ||--o{ Folder : "parent"
+    Folder ||--o{ LibraryAsset : "contains"
+    Tenant ||--o{ LibraryAsset : "owns"
+
+    %% ══════════════════════════════════════
+    %% SUPPORT: TEMPLATE SERVICE
+    %% ══════════════════════════════════════
+
+    Template {
+        string id PK
+        string tenantId FK
+        string name
+        string category
+        json content
+    }
+
+    TemplateVersion {
+        string id PK
+        string templateId FK
+        int version
+        json content
+    }
+
+    MarketplaceTemplate {
+        string id PK
+        string templateId FK
+        float price
+        int downloads
+        float rating
+    }
+
+    Template ||--o{ TemplateVersion : "versioned"
+    Template ||--o{ MarketplaceTemplate : "published"

@@ -1,0 +1,147 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model ChartRender {
+  id             String   @id @default(uuid())
+  chartType      String   @map("chart_type")
+  width          Int
+  height         Int
+  dataPointCount Int      @map("data_point_count")
+  renderSize     Int      @map("render_size")
+  renderedAt     DateTime @map("rendered_at")
+
+  @@map("chart_renders")
+}
+
+model InfographicLayout {
+  id             String   @id @default(uuid())
+  infographicId  String?  @unique @map("infographic_id")
+  name           String?
+  algorithm      String?
+  elements       Json?
+  config         Json?
+  sections       String?
+  width          Int?
+  height         Int?
+  gridColumns    Int?     @map("grid_columns")
+  gridRows       Int?     @map("grid_rows")
+  dataPointCount Int?     @map("data_point_count")
+  utilization    Float?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("infographic_layouts")
+}
+
+model Infographic {
+  id          String    @id @default(uuid())
+  tenantId    String    @map("tenant_id")
+  userId      String    @map("user_id")
+  title       String    @db.VarChar(500)
+  description String?
+  type        String    @db.VarChar(50)
+  data        Json?
+  layout      Json?
+  style       Json?
+  elements    Json?
+  thumbnail   String?
+  isRtl       Boolean?  @default(true) @map("is_rtl")
+  version     Int?      @default(1)
+  status      String?   @default("draft") @db.VarChar(20)
+  tags        Json?
+  createdAt   DateTime? @default(now()) @map("created_at")
+  updatedAt   DateTime? @default(now()) @map("updated_at")
+
+  versions    InfographicVersion[]
+
+  @@index([tenantId], map: "idx_infographics_tenant_id")
+  @@index([userId], map: "idx_infographics_user_id")
+  @@index([type], map: "idx_infographics_type")
+  @@map("infographics")
+}
+
+model InfographicVersion {
+  id             String    @id @default(uuid())
+  infographicId  String    @map("infographic_id")
+  version        Int
+  data           Json?
+  layout         Json?
+  style          Json?
+  elements       Json?
+  changelog      String?
+  createdBy      String    @map("created_by")
+  createdAt      DateTime? @default(now()) @map("created_at")
+
+  infographic    Infographic @relation(fields: [infographicId], references: [id], onDelete: Cascade)
+
+  @@index([infographicId], map: "idx_infographic_versions_infographic_id")
+  @@map("infographic_versions")
+}
+
+model InfographicProfessional {
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  tenantId         String?   @map("tenant_id")
+  title            String    @db.VarChar(500)
+  description      String?
+  infographicType  String?   @default("general") @map("infographic_type") @db.VarChar(50)
+  data             Json?
+  layout           Json?
+  style            Json?
+  elements         Json?
+  thumbnail        String?
+  isPublic         Boolean?  @default(false) @map("is_public")
+  isRtl            Boolean?  @default(true) @map("is_rtl")
+  version          Int?      @default(1)
+  status           String?   @default("draft") @db.VarChar(20)
+  tags             Json?
+  createdAt        DateTime? @default(now()) @map("created_at")
+  updatedAt        DateTime? @default(now()) @map("updated_at")
+
+  @@index([userId], map: "idx_infographic_professionals_user_id")
+  @@map("infographic_professionals")
+}
+
+model InfographicTemplate {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(500)
+  description String?
+  category    String?   @db.VarChar(100)
+  thumbnail   String?
+  layout      Json?
+  style       Json?
+  elements    Json?
+  isDefault   Boolean?  @default(false) @map("is_default")
+  usageCount  Int?      @default(0) @map("usage_count")
+  createdAt   DateTime? @default(now()) @map("created_at")
+  updatedAt   DateTime? @default(now()) @map("updated_at")
+
+  @@map("infographic_templates")
+}
+
+model Icon {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String
+  category    String
+  tags        String[]
+  svgContent  String   @map("svg_content")
+  width       Int
+  height      Int
+  viewBox     String?  @map("view_box")
+  variants    Json?
+  style       String
+  uploadedBy  String?  @map("uploaded_by")
+  isCustom    Boolean  @default(false) @map("is_custom")
+  usageCount  Int      @default(0) @map("usage_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("icons")
+}

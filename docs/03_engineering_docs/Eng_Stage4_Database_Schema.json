@@ -1,0 +1,1520 @@
+{
+  "registries": [
+    {
+      "name": "dataset_registry",
+      "title": "Dataset Registry",
+      "description": "سجل جميع مجموعات البيانات المستوردة والمولدة",
+      "tables": [
+        {
+          "table": "datasets",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "tenant_id",
+              "UUID",
+              "FK → tenants.id, INDEX",
+              "معرف المستأجر"
+            ],
+            [
+              "name",
+              "VARCHAR(500)",
+              "NOT NULL",
+              "اسم مجموعة البيانات"
+            ],
+            [
+              "description",
+              "TEXT",
+              "",
+              "وصف مجموعة البيانات"
+            ],
+            [
+              "source_type",
+              "ENUM",
+              "INDEX",
+              "نوع المصدر (file, api, manual, ai)"
+            ],
+            [
+              "file_path",
+              "VARCHAR(1000)",
+              "",
+              "مسار الملف الأصلي"
+            ],
+            [
+              "format",
+              "VARCHAR(50)",
+              "INDEX",
+              "صيغة البيانات"
+            ],
+            [
+              "size_bytes",
+              "BIGINT",
+              "",
+              "حجم البيانات"
+            ],
+            [
+              "row_count",
+              "BIGINT",
+              "",
+              "عدد الصفوف"
+            ],
+            [
+              "column_count",
+              "INT",
+              "",
+              "عدد الأعمدة"
+            ],
+            [
+              "schema_json",
+              "JSON",
+              "",
+              "هيكل البيانات"
+            ],
+            [
+              "status",
+              "ENUM",
+              "INDEX",
+              "حالة (active, archived, deleted)"
+            ],
+            [
+              "engine",
+              "VARCHAR(100)",
+              "INDEX",
+              "المحرك المسؤول"
+            ],
+            [
+              "created_by",
+              "UUID",
+              "FK → users.id",
+              "المنشئ"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "INDEX",
+              "تاريخ الإنشاء"
+            ],
+            [
+              "updated_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ التحديث"
+            ]
+          ]
+        },
+        {
+          "table": "dataset_columns",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "dataset_id",
+              "UUID",
+              "FK → datasets.id, INDEX",
+              "معرف مجموعة البيانات"
+            ],
+            [
+              "name",
+              "VARCHAR(500)",
+              "NOT NULL",
+              "اسم العمود"
+            ],
+            [
+              "data_type",
+              "VARCHAR(100)",
+              "",
+              "نوع البيانات"
+            ],
+            [
+              "position",
+              "INT",
+              "",
+              "ترتيب العمود"
+            ],
+            [
+              "nullable",
+              "BOOLEAN",
+              "",
+              "قابل للقيم الفارغة"
+            ],
+            [
+              "stats_json",
+              "JSON",
+              "",
+              "إحصائيات العمود"
+            ]
+          ]
+        },
+        {
+          "table": "dataset_versions",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "dataset_id",
+              "UUID",
+              "FK → datasets.id, INDEX",
+              "معرف مجموعة البيانات"
+            ],
+            [
+              "version",
+              "INT",
+              "NOT NULL",
+              "رقم الإصدار"
+            ],
+            [
+              "change_type",
+              "ENUM",
+              "",
+              "نوع التغيير"
+            ],
+            [
+              "change_summary",
+              "TEXT",
+              "",
+              "ملخص التغيير"
+            ],
+            [
+              "snapshot_path",
+              "VARCHAR(1000)",
+              "",
+              "مسار اللقطة"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ الإنشاء"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "metadata_registry",
+      "title": "Metadata Registry",
+      "description": "سجل البيانات الوصفية لجميع الكائنات",
+      "tables": [
+        {
+          "table": "metadata",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "entity_type",
+              "ENUM",
+              "INDEX",
+              "نوع الكيان (dataset, report, dashboard, presentation)"
+            ],
+            [
+              "entity_id",
+              "UUID",
+              "INDEX",
+              "معرف الكيان"
+            ],
+            [
+              "tenant_id",
+              "UUID",
+              "FK → tenants.id, INDEX",
+              "معرف المستأجر"
+            ],
+            [
+              "key",
+              "VARCHAR(500)",
+              "INDEX",
+              "مفتاح البيانات الوصفية"
+            ],
+            [
+              "value",
+              "TEXT",
+              "",
+              "قيمة البيانات الوصفية"
+            ],
+            [
+              "data_type",
+              "VARCHAR(50)",
+              "",
+              "نوع القيمة"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ الإنشاء"
+            ]
+          ]
+        },
+        {
+          "table": "tags",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "entity_type",
+              "ENUM",
+              "INDEX",
+              "نوع الكيان"
+            ],
+            [
+              "entity_id",
+              "UUID",
+              "INDEX",
+              "معرف الكيان"
+            ],
+            [
+              "tag",
+              "VARCHAR(200)",
+              "INDEX",
+              "الوسم"
+            ],
+            [
+              "created_by",
+              "UUID",
+              "FK → users.id",
+              "المنشئ"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "template_registry",
+      "title": "Template Registry",
+      "description": "سجل القوالب الجاهزة والمخصصة",
+      "tables": [
+        {
+          "table": "templates",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "tenant_id",
+              "UUID",
+              "FK → tenants.id, INDEX",
+              "معرف المستأجر"
+            ],
+            [
+              "name",
+              "VARCHAR(500)",
+              "NOT NULL",
+              "اسم القالب"
+            ],
+            [
+              "category",
+              "ENUM",
+              "INDEX",
+              "الفئة (report, dashboard, presentation, infographic, excel)"
+            ],
+            [
+              "engine",
+              "VARCHAR(100)",
+              "INDEX",
+              "المحرك"
+            ],
+            [
+              "template_json",
+              "JSON",
+              "",
+              "بيانات القالب"
+            ],
+            [
+              "thumbnail_path",
+              "VARCHAR(1000)",
+              "",
+              "مسار الصورة المصغرة"
+            ],
+            [
+              "is_system",
+              "BOOLEAN",
+              "INDEX",
+              "قالب نظام أم مخصص"
+            ],
+            [
+              "usage_count",
+              "INT",
+              "DEFAULT 0",
+              "عدد الاستخدامات"
+            ],
+            [
+              "created_by",
+              "UUID",
+              "FK → users.id",
+              "المنشئ"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ الإنشاء"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "user_registry",
+      "title": "User Registry",
+      "description": "سجل المستخدمين والمستأجرين والأدوار",
+      "tables": [
+        {
+          "table": "tenants",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "name",
+              "VARCHAR(500)",
+              "NOT NULL",
+              "اسم المؤسسة"
+            ],
+            [
+              "plan",
+              "ENUM",
+              "INDEX",
+              "الخطة (free, pro, enterprise)"
+            ],
+            [
+              "settings_json",
+              "JSON",
+              "",
+              "إعدادات المستأجر"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ الإنشاء"
+            ]
+          ]
+        },
+        {
+          "table": "users",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "tenant_id",
+              "UUID",
+              "FK → tenants.id, INDEX",
+              "معرف المستأجر"
+            ],
+            [
+              "email",
+              "VARCHAR(500)",
+              "UNIQUE",
+              "البريد الإلكتروني"
+            ],
+            [
+              "name",
+              "VARCHAR(500)",
+              "NOT NULL",
+              "الاسم"
+            ],
+            [
+              "role",
+              "ENUM",
+              "INDEX",
+              "الدور (admin, editor, viewer)"
+            ],
+            [
+              "password_hash",
+              "VARCHAR(500)",
+              "",
+              "كلمة المرور المشفرة"
+            ],
+            [
+              "status",
+              "ENUM",
+              "INDEX",
+              "الحالة (active, suspended, deleted)"
+            ],
+            [
+              "last_login",
+              "TIMESTAMP",
+              "",
+              "آخر دخول"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ الإنشاء"
+            ]
+          ]
+        },
+        {
+          "table": "roles",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "tenant_id",
+              "UUID",
+              "FK → tenants.id, INDEX",
+              "معرف المستأجر"
+            ],
+            [
+              "name",
+              "VARCHAR(200)",
+              "NOT NULL",
+              "اسم الدور"
+            ],
+            [
+              "permissions_json",
+              "JSON",
+              "",
+              "الصلاحيات"
+            ]
+          ]
+        },
+        {
+          "table": "user_roles",
+          "fields": [
+            [
+              "user_id",
+              "UUID",
+              "FK → users.id, INDEX",
+              "معرف المستخدم"
+            ],
+            [
+              "role_id",
+              "UUID",
+              "FK → roles.id, INDEX",
+              "معرف الدور"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "version_registry",
+      "title": "Version Registry",
+      "description": "سجل الإصدارات لجميع الكائنات",
+      "tables": [
+        {
+          "table": "versions",
+          "fields": [
+            [
+              "id",
+              "UUID",
+              "PK",
+              "معرف فريد"
+            ],
+            [
+              "entity_type",
+              "ENUM",
+              "INDEX",
+              "نوع الكيان"
+            ],
+            [
+              "entity_id",
+              "UUID",
+              "INDEX",
+              "معرف الكيان"
+            ],
+            [
+              "tenant_id",
+              "UUID",
+              "FK → tenants.id, INDEX",
+              "معرف المستأجر"
+            ],
+            [
+              "version_number",
+              "INT",
+              "NOT NULL",
+              "رقم الإصدار"
+            ],
+            [
+              "snapshot_json",
+              "JSON",
+              "",
+              "لقطة الكيان"
+            ],
+            [
+              "change_log",
+              "TEXT",
+              "",
+              "سجل التغييرات"
+            ],
+            [
+              "created_by",
+              "UUID",
+              "FK → users.id",
+              "المنشئ"
+            ],
+            [
+              "created_at",
+              "TIMESTAMP",
+              "",
+              "تاريخ الإنشاء"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "feature_registry",
+      "title": "Feature Registry",
+      "description": "سجل الميزات المعتمدة للمنصة",
+      "tables": [
+        {
+          "table": "features",
+          "fields": [
+            [
+              "id",
+              "VARCHAR(10)",
+              "PK",
+              "معرف الميزة F-XXXXXX"
+            ],
+            [
+              "hash",
+              "VARCHAR(64)",
+              "UNIQUE",
+              "بصمة SHA-256"
+            ],
+            [
+              "text",
+              "TEXT",
+              "NOT NULL",
+              "نص الميزة الأصلي"
+            ],
+            [
+              "engine",
+              "VARCHAR(100)",
+              "INDEX",
+              "المحرك"
+            ],
+            [
+              "module_id",
+              "VARCHAR(10)",
+              "INDEX",
+              "معرف الموديول"
+            ],
+            [
+              "service",
+              "VARCHAR(100)",
+              "INDEX",
+              "الخدمة"
+            ],
+            [
+              "source_section",
+              "VARCHAR(500)",
+              "",
+              "القسم المصدري"
+            ],
+            [
+              "status",
+              "ENUM",
+              "DEFAULT 'locked'",
+              "الحالة (locked, implemented, tested)"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "engine_tables": {
+    "Data Engine": [
+      {
+        "table": "ingestion_jobs",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "dataset_id",
+            "UUID",
+            "FK → datasets.id",
+            "مجموعة البيانات"
+          ],
+          [
+            "source_url",
+            "VARCHAR(2000)",
+            "",
+            "مصدر البيانات"
+          ],
+          [
+            "status",
+            "ENUM",
+            "INDEX",
+            "الحالة"
+          ],
+          [
+            "progress",
+            "INT",
+            "",
+            "نسبة التقدم"
+          ],
+          [
+            "error_log",
+            "TEXT",
+            "",
+            "سجل الأخطاء"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "تاريخ الإنشاء"
+          ]
+        ]
+      },
+      {
+        "table": "data_quality_checks",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "dataset_id",
+            "UUID",
+            "FK, INDEX",
+            "مجموعة البيانات"
+          ],
+          [
+            "check_type",
+            "ENUM",
+            "",
+            "نوع الفحص"
+          ],
+          [
+            "result",
+            "ENUM",
+            "",
+            "النتيجة"
+          ],
+          [
+            "details_json",
+            "JSON",
+            "",
+            "التفاصيل"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Dashboard Engine": [
+      {
+        "table": "dashboards",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "name",
+            "VARCHAR(500)",
+            "NOT NULL",
+            "الاسم"
+          ],
+          [
+            "layout_json",
+            "JSON",
+            "",
+            "التخطيط"
+          ],
+          [
+            "filters_json",
+            "JSON",
+            "",
+            "الفلاتر"
+          ],
+          [
+            "is_published",
+            "BOOLEAN",
+            "INDEX",
+            "منشور"
+          ],
+          [
+            "created_by",
+            "UUID",
+            "FK → users.id",
+            "المنشئ"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      },
+      {
+        "table": "dashboard_widgets",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "dashboard_id",
+            "UUID",
+            "FK, INDEX",
+            "اللوحة"
+          ],
+          [
+            "widget_type",
+            "ENUM",
+            "",
+            "نوع العنصر"
+          ],
+          [
+            "config_json",
+            "JSON",
+            "",
+            "الإعدادات"
+          ],
+          [
+            "dataset_id",
+            "UUID",
+            "FK",
+            "مجموعة البيانات"
+          ],
+          [
+            "position_json",
+            "JSON",
+            "",
+            "الموقع"
+          ]
+        ]
+      }
+    ],
+    "Reporting Engine": [
+      {
+        "table": "reports",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "name",
+            "VARCHAR(500)",
+            "NOT NULL",
+            "الاسم"
+          ],
+          [
+            "template_id",
+            "UUID",
+            "FK",
+            "القالب"
+          ],
+          [
+            "config_json",
+            "JSON",
+            "",
+            "الإعدادات"
+          ],
+          [
+            "schedule_json",
+            "JSON",
+            "",
+            "الجدولة"
+          ],
+          [
+            "last_generated",
+            "TIMESTAMP",
+            "",
+            "آخر توليد"
+          ],
+          [
+            "created_by",
+            "UUID",
+            "FK",
+            "المنشئ"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      },
+      {
+        "table": "report_outputs",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "report_id",
+            "UUID",
+            "FK, INDEX",
+            "التقرير"
+          ],
+          [
+            "format",
+            "ENUM",
+            "",
+            "الصيغة"
+          ],
+          [
+            "file_path",
+            "VARCHAR(1000)",
+            "",
+            "المسار"
+          ],
+          [
+            "size_bytes",
+            "BIGINT",
+            "",
+            "الحجم"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Presentation Engine": [
+      {
+        "table": "presentations",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "name",
+            "VARCHAR(500)",
+            "NOT NULL",
+            "الاسم"
+          ],
+          [
+            "template_id",
+            "UUID",
+            "FK",
+            "القالب"
+          ],
+          [
+            "slides_json",
+            "JSON",
+            "",
+            "الشرائح"
+          ],
+          [
+            "theme_json",
+            "JSON",
+            "",
+            "السمة"
+          ],
+          [
+            "created_by",
+            "UUID",
+            "FK",
+            "المنشئ"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Infographic Engine": [
+      {
+        "table": "infographics",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "name",
+            "VARCHAR(500)",
+            "NOT NULL",
+            "الاسم"
+          ],
+          [
+            "template_id",
+            "UUID",
+            "FK",
+            "القالب"
+          ],
+          [
+            "elements_json",
+            "JSON",
+            "",
+            "العناصر"
+          ],
+          [
+            "created_by",
+            "UUID",
+            "FK",
+            "المنشئ"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Excel Engine": [
+      {
+        "table": "workbooks",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "dataset_id",
+            "UUID",
+            "FK",
+            "مجموعة البيانات"
+          ],
+          [
+            "name",
+            "VARCHAR(500)",
+            "NOT NULL",
+            "الاسم"
+          ],
+          [
+            "sheets_json",
+            "JSON",
+            "",
+            "الأوراق"
+          ],
+          [
+            "formulas_json",
+            "JSON",
+            "",
+            "المعادلات"
+          ],
+          [
+            "created_by",
+            "UUID",
+            "FK",
+            "المنشئ"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Replication Engine": [
+      {
+        "table": "replication_jobs",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "source_id",
+            "UUID",
+            "",
+            "المصدر"
+          ],
+          [
+            "target_id",
+            "UUID",
+            "",
+            "الهدف"
+          ],
+          [
+            "match_score",
+            "DECIMAL(5,4)",
+            "",
+            "نسبة المطابقة"
+          ],
+          [
+            "status",
+            "ENUM",
+            "INDEX",
+            "الحالة"
+          ],
+          [
+            "details_json",
+            "JSON",
+            "",
+            "التفاصيل"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Localization Engine": [
+      {
+        "table": "localization_jobs",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "entity_type",
+            "ENUM",
+            "",
+            "نوع الكيان"
+          ],
+          [
+            "entity_id",
+            "UUID",
+            "",
+            "معرف الكيان"
+          ],
+          [
+            "source_lang",
+            "VARCHAR(10)",
+            "",
+            "اللغة المصدر"
+          ],
+          [
+            "target_lang",
+            "VARCHAR(10)",
+            "",
+            "اللغة الهدف"
+          ],
+          [
+            "status",
+            "ENUM",
+            "INDEX",
+            "الحالة"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "AI Engine": [
+      {
+        "table": "ai_sessions",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "user_id",
+            "UUID",
+            "FK",
+            "المستخدم"
+          ],
+          [
+            "context_json",
+            "JSON",
+            "",
+            "السياق"
+          ],
+          [
+            "model",
+            "VARCHAR(100)",
+            "",
+            "النموذج"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      },
+      {
+        "table": "ai_queries",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "session_id",
+            "UUID",
+            "FK, INDEX",
+            "الجلسة"
+          ],
+          [
+            "query_text",
+            "TEXT",
+            "NOT NULL",
+            "نص الاستعلام"
+          ],
+          [
+            "response_text",
+            "TEXT",
+            "",
+            "الاستجابة"
+          ],
+          [
+            "tokens_used",
+            "INT",
+            "",
+            "التوكنات"
+          ],
+          [
+            "latency_ms",
+            "INT",
+            "",
+            "زمن الاستجابة"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Governance Engine": [
+      {
+        "table": "audit_logs",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "user_id",
+            "UUID",
+            "FK, INDEX",
+            "المستخدم"
+          ],
+          [
+            "action",
+            "VARCHAR(200)",
+            "INDEX",
+            "الإجراء"
+          ],
+          [
+            "entity_type",
+            "ENUM",
+            "INDEX",
+            "نوع الكيان"
+          ],
+          [
+            "entity_id",
+            "UUID",
+            "INDEX",
+            "معرف الكيان"
+          ],
+          [
+            "details_json",
+            "JSON",
+            "",
+            "التفاصيل"
+          ],
+          [
+            "ip_address",
+            "VARCHAR(50)",
+            "",
+            "عنوان IP"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "INDEX",
+            "التاريخ"
+          ]
+        ]
+      },
+      {
+        "table": "permissions",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "role_id",
+            "UUID",
+            "FK, INDEX",
+            "الدور"
+          ],
+          [
+            "resource_type",
+            "ENUM",
+            "INDEX",
+            "نوع المورد"
+          ],
+          [
+            "resource_id",
+            "UUID",
+            "",
+            "معرف المورد"
+          ],
+          [
+            "action",
+            "ENUM",
+            "",
+            "الإجراء (read, write, delete, admin)"
+          ]
+        ]
+      }
+    ],
+    "Library Engine": [
+      {
+        "table": "library_assets",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "name",
+            "VARCHAR(500)",
+            "NOT NULL",
+            "الاسم"
+          ],
+          [
+            "asset_type",
+            "ENUM",
+            "INDEX",
+            "النوع"
+          ],
+          [
+            "file_path",
+            "VARCHAR(1000)",
+            "",
+            "المسار"
+          ],
+          [
+            "size_bytes",
+            "BIGINT",
+            "",
+            "الحجم"
+          ],
+          [
+            "mime_type",
+            "VARCHAR(100)",
+            "",
+            "نوع MIME"
+          ],
+          [
+            "created_by",
+            "UUID",
+            "FK",
+            "المنشئ"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ],
+    "Template Engine": [],
+    "Conversion Engine": [
+      {
+        "table": "conversion_jobs",
+        "fields": [
+          [
+            "id",
+            "UUID",
+            "PK",
+            "معرف فريد"
+          ],
+          [
+            "tenant_id",
+            "UUID",
+            "FK, INDEX",
+            "المستأجر"
+          ],
+          [
+            "source_format",
+            "VARCHAR(50)",
+            "",
+            "الصيغة المصدر"
+          ],
+          [
+            "target_format",
+            "VARCHAR(50)",
+            "",
+            "الصيغة الهدف"
+          ],
+          [
+            "source_path",
+            "VARCHAR(1000)",
+            "",
+            "المسار المصدر"
+          ],
+          [
+            "output_path",
+            "VARCHAR(1000)",
+            "",
+            "المسار الناتج"
+          ],
+          [
+            "status",
+            "ENUM",
+            "INDEX",
+            "الحالة"
+          ],
+          [
+            "created_at",
+            "TIMESTAMP",
+            "",
+            "التاريخ"
+          ]
+        ]
+      }
+    ]
+  }
+}

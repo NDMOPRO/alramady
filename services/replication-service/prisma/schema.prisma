@@ -1,0 +1,353 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ReplicationJob {
+  id                 String   @id @default(uuid())
+  tenantId           String   @map("tenant_id")
+  userId             String?  @map("user_id")
+  status             String   @default("pending")
+  targetFormat       String?  @map("target_format")
+  documentStructure  Json?    @map("document_structure")
+  elementCount       Int?     @map("element_count")
+  sourceDimensions   Json?    @map("source_dimensions")
+  sourceType         String?  @map("source_type")
+  sourceConfig       String?  @map("source_config")
+  mode               String?
+  fidelityScore      Float?   @map("fidelity_score")
+  metadata           String?
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("replication_job")
+}
+
+model Document {
+  id        String         @id @default(uuid())
+  title     String?
+  format    String?
+  tenantId  String?
+  metadata  Json?
+  pages     DocumentPage[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("document")
+}
+
+model DocumentPage {
+  id         String           @id @default(uuid())
+  documentId String
+  pageNumber Int
+  width      Int?
+  height     Int?
+  imageData  String?
+  content    Json?
+  document   Document         @relation(fields: [documentId], references: [id])
+  elements   DocumentElement[]
+  createdAt  DateTime         @default(now())
+
+  @@map("document_page")
+}
+
+model DocumentElement {
+  id         String       @id @default(uuid())
+  pageId     String
+  type       String?
+  content    String?
+  style      Json?
+  bbox       Json?
+  page       DocumentPage @relation(fields: [pageId], references: [id])
+  createdAt  DateTime     @default(now())
+
+  @@map("document_element")
+}
+
+model ComparisonResult {
+  id              String   @id @default(uuid())
+  requestId       String?
+  overallScore    Float?
+  visualScore     Float?
+  structuralScore Float?
+  contentScore    Float?
+  status          String?
+  differences     Json?
+  statistics      Json?
+  createdAt       DateTime @default(now())
+
+  @@map("comparison_result")
+}
+
+model FidelityReport {
+  id              String   @id @default(uuid())
+  comparisonId    String?
+  overallFidelity Float?
+  categories      Json?
+  recommendations String[]
+  generatedAt     DateTime @default(now())
+
+  @@map("fidelity_report")
+}
+
+model PrincipleValidation {
+  id                     String   @id @default(uuid())
+  tenantId               String
+  matchMode              String
+  valid                  Boolean
+  overallScore           Float
+  pixelDeviation         Float
+  structuralFingerprint  Float
+  numericDeviation       Float
+  violations             Json?
+  enforcedRules          String[]
+  createdAt              DateTime @default(now())
+
+  @@map("principle_validation")
+}
+
+model CorePrinciple {
+  id                             String   @id @default(uuid())
+  tenantId                       String
+  matchMode                      String
+  name                           String?
+  principleType                  String?
+  isActive                       Boolean  @default(true)
+  minAcceptableScore             Float?
+  disableAutoEnhancement         Boolean? @default(true)
+  disableAutoBeautification      Boolean? @default(true)
+  disableRedistribution          Boolean? @default(true)
+  disableRounding                Boolean? @default(true)
+  enforceSequentialPhases        Boolean? @default(true)
+  preventPhaseMergeWithoutPass   Boolean? @default(true)
+  preventBatchMerge              Boolean? @default(true)
+  numericDeviationThreshold      Float?
+  pixelDeviationThreshold        Float?
+  structuralFingerprintThreshold Float?
+  maxResourcesPerTenant          Int?
+  createdAt                      DateTime @default(now())
+  updatedAt                      DateTime @updatedAt
+
+  @@unique([tenantId, matchMode], name: "tenantId_matchMode")
+  @@map("core_principle")
+}
+
+model DualVerify {
+  id                    String   @id @default(uuid())
+  originalDocumentId    String
+  replicaDocumentId     String
+  tenantId              String
+  userId                String
+  overallPassed         Boolean
+  overallScore          Float
+  pixelCheckPassed      Boolean
+  pixelDeviation        Float
+  structuralCheckPassed Boolean
+  structuralScore       Float
+  bothChecksPassed      Boolean
+  verdict               String
+  rejectionReasons      String[]
+  matchMode             String
+  processingTime        Int?
+  verifiedAt            DateTime @default(now())
+
+  @@map("dual_verification")
+}
+
+model DashboardMatch {
+  id                         String   @id @default(uuid())
+  tenantId                   String
+  userId                     String
+  widgetCount                Int
+  gridColumns                Int
+  gridRows                   Int
+  totalWidth                 Int
+  totalHeight                Int
+  matchMode                  String
+  autoBeautificationDisabled Boolean?
+  widgets                    Json?
+  theme                      Json?
+  dataBindings               Json?
+  matchedAt                  DateTime @default(now())
+
+  @@map("dashboard_match")
+}
+
+model StructuralAnalysis {
+  id              String   @id @default(uuid())
+  documentId      String
+  tenantId        String
+  phases          Json?
+  overallPassed   Boolean
+  overallScore    Float
+  elementCount    Int
+  constraintHash  String?
+  fingerprintHash String?
+  totalDuration   Int?
+  analyzedAt      DateTime @default(now())
+
+  @@map("structural_analysis")
+}
+
+model MatchScope {
+  id            String   @id @default(uuid())
+  tenantId      String
+  name          String?
+  scopeType     String?
+  isActive      Boolean  @default(true)
+  config        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("match_scope")
+}
+
+model ScopeAnalysis {
+  id                    String   @id @default(uuid())
+  documentId            String
+  tenantId              String
+  sourceFormat          String
+  targetFormat          String
+  detectedFormat        String?
+  fileSize              Int?
+  pageCount             Int?
+  elementCount          Int?
+  containsCharts        Boolean?
+  containsTables        Boolean?
+  containsImages        Boolean?
+  containsFormulas      Boolean?
+  fontList              String[]
+  colorPalette          String[]
+  complexityScore            Float?
+  estimatedMatchDifficulty   String?
+  recommendedMatchMode       String?
+  capabilities          Json?
+  warnings              Json?
+  analyzedAt            DateTime @default(now())
+
+  @@map("scope_analysis")
+}
+
+model MatchPhases {
+  id            String   @id @default(uuid())
+  tenantId      String
+  name          String?
+  phaseType     String?
+  isActive      Boolean  @default(true)
+  config        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("match_phases")
+}
+
+model ImageMatching {
+  id            String   @id @default(uuid())
+  tenantId      String
+  name          String?
+  matchType     String?
+  isActive      Boolean  @default(true)
+  config        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("image_matching")
+}
+
+model PrintLock {
+  id            String   @id @default(uuid())
+  tenantId      String
+  name          String?
+  lockType      String?
+  isActive      Boolean  @default(true)
+  config        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("print_lock")
+}
+
+model DocumentLock {
+  id            String    @id @default(uuid())
+  documentId    String
+  tenantId      String
+  userId        String
+  lockType      String
+  scope         String?
+  targetIds     String[]
+  lockedData    Json?
+  isActive      Boolean   @default(true)
+  releasedBy    String?
+  releaseReason String?
+  releasedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  expiresAt     DateTime?
+
+  @@map("document_lock")
+}
+
+model LockValidation {
+  id             String   @id @default(uuid())
+  documentId     String
+  lockId         String
+  valid          Boolean
+  violationCount Int
+  violations     Json?
+  checkedAt      DateTime @default(now())
+
+  @@map("lock_validation")
+}
+
+model FontLockConfig {
+  id                    String   @id @default(uuid())
+  documentId            String
+  tenantId              String
+  fontEmbedding         String
+  preserveKerningTables Boolean?
+  preserveBaseline      Boolean?
+  preserveLineHeight    Boolean?
+  preserveLetterSpacing Boolean?
+  fontList              String[]
+  createdAt             DateTime @default(now())
+
+  @@map("font_lock_config")
+}
+
+model SideBySideComparison {
+  id                   String   @id @default(uuid())
+  originalDocumentId   String
+  replicaDocumentId    String
+  tenantId             String
+  userId               String
+  matchPercentage      Float?
+  totalPixels          Int?
+  differingPixels      Int?
+  maxDeviation         Float?
+  averageDeviation     Float?
+  criticalRegionCount  Int?
+  majorRegionCount     Int?
+  minorRegionCount     Int?
+  diffRegions          Json?
+  compositeWidth       Int?
+  compositeHeight      Int?
+  generatedAt          DateTime @default(now())
+
+  @@map("side_by_side_comparison")
+}
+
+model BrandStyleGuide {
+  id                String   @id @default(uuid())
+  sourceDocumentId  String
+  name              String
+  colorPalette      String?
+  typography        String?
+  spacing           String?
+  layout            String?
+  generatedAt       DateTime @default(now())
+
+  @@map("brand_style_guide")
+}

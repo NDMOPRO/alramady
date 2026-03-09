@@ -1,0 +1,1353 @@
+// ============================================================================
+// Governance Service - Prisma Schema
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum RoleName {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VIEWER
+  DATA_STEWARD
+  ANALYST
+  API_CONSUMER
+}
+
+enum PermissionAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  EXPORT
+  IMPORT
+  SHARE
+  PUBLISH
+  MANAGE
+  EXECUTE
+}
+
+enum ResourceType {
+  DATASET
+  DASHBOARD
+  REPORT
+  PRESENTATION
+  INFOGRAPHIC
+  WORKBOOK
+  TEMPLATE
+  FOLDER
+  KNOWLEDGE_BASE
+  KPI
+  LIBRARY_ASSET
+}
+
+enum DatasetStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  UNDER_REVIEW
+  REJECTED
+}
+
+enum KpiStatus {
+  ACTIVE
+  INACTIVE
+  DEPRECATED
+}
+
+enum KpiTrend {
+  UP
+  DOWN
+  STABLE
+  UNKNOWN
+}
+
+enum ScheduleFrequency {
+  ONCE
+  HOURLY
+  DAILY
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CRON
+}
+
+enum DashboardVisibility {
+  PRIVATE
+  TEAM
+  ORGANIZATION
+  PUBLIC
+}
+
+enum ReportStatus {
+  DRAFT
+  GENERATING
+  COMPLETED
+  FAILED
+  SCHEDULED
+}
+
+enum Language {
+  AR
+  EN
+  FR
+  ES
+  DE
+  ZH
+  JA
+  KO
+  RU
+  PT
+  IT
+  NL
+  TR
+  HI
+  UR
+}
+
+enum VersionStatus {
+  DRAFT
+  PUBLISHED
+  DEPRECATED
+  ARCHIVED
+}
+
+// ============================================================================
+// CORE MODELS
+// ============================================================================
+
+model Tenant {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @db.VarChar(255)
+  slug        String    @unique @default(uuid()) @db.VarChar(128)
+  domain      String?   @db.VarChar(255)
+  logoUrl     String?   @map("logo_url") @db.Text
+  settings    Json?     @default("{}")
+  plan        String    @default("free") @db.VarChar(64)
+  isActive    Boolean   @default(true) @map("is_active")
+  maxUsers    Int       @default(10) @map("max_users")
+  maxStorage  BigInt    @default(1073741824) @map("max_storage")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+
+  users              User[]
+  datasets           Dataset[]
+  dashboards         Dashboard[]
+  reports            Report[]
+  auditLogs          AuditLog[]
+  kpis               Kpi[]
+  policies           Policy[]
+  workflowDefinitions WorkflowDefinition[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@map("tenants")
+}
+
+model User {
+  id                String     @id @default(uuid()) @db.Uuid
+  tenantId          String     @map("tenant_id") @db.Uuid
+  email             String     @unique @db.VarChar(320)
+  name              String?    @db.VarChar(255)
+  passwordHash      String?    @map("password_hash") @db.Text
+  firstName         String     @default("") @map("first_name") @db.VarChar(128)
+  lastName          String     @default("") @map("last_name") @db.VarChar(128)
+  displayName       String?    @map("display_name") @db.VarChar(255)
+  avatarUrl         String?    @map("avatar_url") @db.Text
+  phone             String?    @db.VarChar(32)
+  role              String?    @db.VarChar(64)
+  locale            Language   @default(EN)
+  timezone          String     @default("UTC") @db.VarChar(64)
+  status            UserStatus @default(PENDING_VERIFICATION)
+  emailVerifiedAt   DateTime?  @map("email_verified_at") @db.Timestamptz
+  lastLoginAt       DateTime?  @map("last_login_at") @db.Timestamptz
+  lastLogin         DateTime?  @map("last_login") @db.Timestamptz
+  mfaSecret         String?    @map("mfa_secret") @db.Text
+  mfaEnabled        Boolean    @default(false) @map("mfa_enabled")
+  preferences       Json?      @default("{}")
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt         DateTime?  @map("deleted_at") @db.Timestamptz
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userRoles   UserRole[]
+  auditLogs   AuditLog[]
+  teamMembers TeamMember[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([email])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  name        String   @unique @db.VarChar(128)
+  displayName String   @default("") @map("display_name") @db.VarChar(128)
+  description String?  @db.Text
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  userRoles   UserRole[]
+  permissions Permission[]
+
+  @@index([name])
+  @@map("roles")
+}
+
+model UserRole {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  roleId    String    @map("role_id") @db.Uuid
+  tenantId  String?   @map("tenant_id") @db.Uuid
+  grantedAt DateTime  @default(now()) @map("granted_at") @db.Timestamptz
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([tenantId])
+  @@map("user_roles")
+}
+
+model Permission {
+  id           String   @id @default(uuid()) @db.Uuid
+  roleId       String   @map("role_id") @db.Uuid
+  userId       String?  @map("user_id") @db.Uuid
+  tenantId     String?  @map("tenant_id") @db.Uuid
+  name         String?  @db.VarChar(255)
+  resource     String?  @db.VarChar(128)
+  resourceType String   @default("") @map("resource_type") @db.VarChar(128)
+  action       String   @default("") @db.VarChar(128)
+  conditions   Json?
+  isGranted    Boolean  @default(true) @map("is_granted")
+  grantedBy    String?  @map("granted_by") @db.VarChar(128)
+  source       String?  @db.VarChar(128)
+  suggestionId String?  @map("suggestion_id") @db.Uuid
+  revokedBy    String?  @map("revoked_by") @db.VarChar(128)
+  revokeReason String?  @map("revoke_reason") @db.Text
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([roleId])
+  @@index([userId])
+  @@index([tenantId])
+  @@index([resourceType])
+  @@index([action])
+  @@map("permissions")
+}
+
+model AuditLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  userId       String?  @map("user_id") @db.Uuid
+  action       String   @db.VarChar(128)
+  resourceType String   @default("") @map("resource_type") @db.VarChar(64)
+  resourceId   String   @default("") @map("resource_id") @db.VarChar(128)
+  resourceName String?  @map("resource_name") @db.VarChar(512)
+  entityType   String?  @map("entity_type") @db.VarChar(128)
+  entityId     String?  @map("entity_id") @db.VarChar(128)
+  oldValue     Json?    @map("old_value")
+  newValue     Json?    @map("new_value")
+  detailsJson  Json?    @map("details_json")
+  details      Json?
+  changes      Json?
+  ipAddress    String?  @map("ip_address") @db.VarChar(45)
+  userAgent    String?  @map("user_agent") @db.Text
+  sessionId    String?  @map("session_id") @db.VarChar(128)
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([action])
+  @@index([resourceType, resourceId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ============================================================================
+// DATA MODELS
+// ============================================================================
+
+model Dataset {
+  id              String        @id @default(uuid()) @db.Uuid
+  tenantId        String        @map("tenant_id") @db.Uuid
+  createdById     String        @map("created_by_id") @db.Uuid
+  name            String        @db.VarChar(512)
+  slug            String        @db.VarChar(512)
+  description     String?       @db.Text
+  status          DatasetStatus @default(DRAFT)
+  classification  String?       @db.VarChar(64)
+  rowCount        Int?          @map("row_count")
+  columnCount     Int?          @map("column_count")
+  schema          Json?
+  isPublic        Boolean       @default(false) @map("is_public")
+  settings        Json?         @default("{}")
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  versions DatasetVersion[]
+  columns  DatasetColumn[]
+  kpis     Kpi[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("datasets")
+}
+
+model DatasetVersion {
+  id            String   @id @default(uuid()) @db.Uuid
+  datasetId     String   @map("dataset_id") @db.Uuid
+  versionNumber Int      @default(0) @map("version_number")
+  version       Int      @default(0)
+  changeSummary String?  @map("change_summary") @db.Text
+  schema        Json?
+  rowCount      Int?     @map("row_count")
+  fileSize      BigInt?  @map("file_size")
+  filePath      String?  @map("file_path") @db.Text
+  checksum      String?  @db.VarChar(128)
+  maskedColumns Json?    @map("masked_columns")
+  maskingRules  Json?    @map("masking_rules")
+  anonymizedColumns Json? @map("anonymized_columns")
+  anonymizationRules Json? @map("anonymization_rules")
+  dataJson      Json?    @map("data_json")
+  changeDescription String? @map("change_description") @db.Text
+  changedBy     String?  @map("changed_by") @db.VarChar(128)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, versionNumber])
+  @@index([datasetId])
+  @@index([version])
+  @@map("dataset_versions")
+}
+
+model DatasetColumn {
+  id            String   @id @default(uuid()) @db.Uuid
+  datasetId     String   @map("dataset_id") @db.Uuid
+  name          String   @db.VarChar(256)
+  displayName   String?  @map("display_name") @db.VarChar(256)
+  description   String?  @db.Text
+  dataType      String   @map("data_type") @db.VarChar(32)
+  ordinalPosition Int    @map("ordinal_position")
+  isNullable    Boolean  @default(true) @map("is_nullable")
+  isPrimaryKey  Boolean  @default(false) @map("is_primary_key")
+  encrypted     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, name])
+  @@index([datasetId])
+  @@map("dataset_columns")
+}
+
+model Dashboard {
+  id           String              @id @default(uuid()) @db.Uuid
+  tenantId     String              @map("tenant_id") @db.Uuid
+  createdById  String              @map("created_by_id") @db.Uuid
+  name         String              @db.VarChar(512)
+  slug         String              @db.VarChar(512)
+  description  String?             @db.Text
+  visibility   DashboardVisibility @default(PRIVATE)
+  kpiIds       String[]            @map("kpi_ids")
+  settings     Json?               @default("{}")
+  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt    DateTime?           @map("deleted_at") @db.Timestamptz
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([deletedAt])
+  @@map("dashboards")
+}
+
+model Report {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  createdById   String       @map("created_by_id") @db.Uuid
+  name          String       @db.VarChar(512)
+  slug          String       @db.VarChar(512)
+  description   String?      @db.Text
+  status        ReportStatus @default(DRAFT)
+  kpiIds        String[]     @map("kpi_ids")
+  language      Language     @default(EN)
+  settings      Json?        @default("{}")
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime?    @map("deleted_at") @db.Timestamptz
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([deletedAt])
+  @@map("reports")
+}
+
+model Kpi {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  createdById   String    @map("created_by_id") @db.Uuid
+  datasetId     String?   @map("dataset_id") @db.Uuid
+  name          String    @db.VarChar(256)
+  slug          String    @db.VarChar(256)
+  description   String?   @db.Text
+  status        KpiStatus @default(ACTIVE)
+  unit          String?   @db.VarChar(64)
+  formula       String?   @db.Text
+  query         String?   @db.Text
+  currentValue  Float?    @map("current_value")
+  previousValue Float?    @map("previous_value")
+  targetValue   Float?    @map("target_value")
+  minValue      Float?    @map("min_value")
+  maxValue      Float?    @map("max_value")
+  trend         KpiTrend  @default(UNKNOWN)
+  changePercent    Float?    @map("change_percent")
+  sensitivityLevel String?   @map("sensitivity_level") @db.VarChar(32)
+  frequency        ScheduleFrequency @default(DAILY)
+  lastCalculatedAt DateTime? @map("last_calculated_at") @db.Timestamptz
+  settings      Json?     @default("{}")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  deletedAt     DateTime? @map("deleted_at") @db.Timestamptz
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dataset Dataset? @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@index([createdById])
+  @@index([datasetId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("kpis")
+}
+
+model Version {
+  id            String       @id @default(uuid()) @db.Uuid
+  resourceType  String       @map("resource_type") @db.VarChar(64)
+  resourceId    String       @map("resource_id") @db.Uuid
+  versionNumber Int          @map("version_number")
+  label         String?      @db.VarChar(128)
+  description   String?      @db.Text
+  snapshot      Json
+  status        VersionStatus @default(DRAFT)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime     @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([resourceType, resourceId, versionNumber])
+  @@index([resourceType, resourceId])
+  @@index([status])
+  @@map("versions")
+}
+
+model Policy {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  resource    String   @db.VarChar(100)
+  action      String   @db.VarChar(100)
+  conditions  Json     @db.JsonB
+  effect      String   @db.VarChar(30)
+  priority    Int      @default(0)
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, resource, action])
+  @@index([enabled])
+  @@map("policies")
+}
+
+model WorkflowDefinition {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(255)
+  description     String?  @db.Text
+  triggerResource String   @map("trigger_resource") @db.VarChar(100)
+  triggerAction   String   @map("trigger_action") @db.VarChar(100)
+  steps           Json     @db.JsonB
+  status          String   @default("active") @db.VarChar(30)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, triggerResource])
+  @@index([status])
+  @@map("workflow_definitions")
+}
+
+// ============================================================================
+// GOVERNANCE MODELS
+// ============================================================================
+
+model AccessPolicy {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(255)
+  description  String?  @db.Text
+  resourceType String   @map("resource_type") @db.VarChar(64)
+  resourceId   String?  @map("resource_id") @db.VarChar(128)
+  rules        String?  @db.Text
+  priority     Int      @default(0)
+  enabled      Boolean  @default(true)
+  createdBy    String?  @map("created_by") @db.VarChar(128)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([resourceType, resourceId])
+  @@index([enabled])
+  @@map("access_policies")
+}
+
+model AccessRequest {
+  id               String    @id @default(uuid()) @db.Uuid
+  requesterId      String    @map("requester_id") @db.VarChar(128)
+  requesterName    String?   @map("requester_name") @db.VarChar(255)
+  resourceType     String    @map("resource_type") @db.VarChar(64)
+  resourceId       String?   @map("resource_id") @db.VarChar(128)
+  requestedActions String?   @map("requested_actions") @db.Text
+  requestedFields  String?   @map("requested_fields") @db.Text
+  justification    String?   @db.Text
+  status           String    @default("pending") @db.VarChar(32)
+  reviewedBy       String?   @map("reviewed_by") @db.VarChar(128)
+  reviewedAt       DateTime? @map("reviewed_at") @db.Timestamptz
+  reviewNote       String?   @map("review_note") @db.Text
+  expiresAt        DateTime? @map("expires_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([requesterId])
+  @@index([status])
+  @@map("access_requests")
+}
+
+model PermissionDelegation {
+  id              String    @id @default(uuid()) @db.Uuid
+  delegatorId     String    @map("delegator_id") @db.VarChar(128)
+  delegateeId     String    @map("delegatee_id") @db.VarChar(128)
+  resourceType    String    @map("resource_type") @db.VarChar(64)
+  resourceId      String?   @map("resource_id") @db.VarChar(128)
+  delegatedActions String?  @map("delegated_actions") @db.Text
+  delegatedFields String?   @map("delegated_fields") @db.Text
+  expiresAt       DateTime? @map("expires_at") @db.Timestamptz
+  revocable       Boolean   @default(true)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([delegatorId])
+  @@index([delegateeId])
+  @@index([resourceType, resourceId])
+  @@map("permission_delegations")
+}
+
+model AccessLog {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  resourceType     String   @map("resource_type") @db.VarChar(64)
+  resourceId       String?  @map("resource_id") @db.VarChar(128)
+  action           String   @db.VarChar(64)
+  allowed          Boolean
+  matchedRules     String?  @map("matched_rules") @db.Text
+  deniedReasons    String?  @map("denied_reasons") @db.Text
+  evaluationTimeMs Float?   @map("evaluation_time_ms")
+  evaluatedAt      DateTime @default(now()) @map("evaluated_at") @db.Timestamptz
+
+  @@index([userId])
+  @@index([resourceId])
+  @@index([evaluatedAt])
+  @@map("access_logs")
+}
+
+model PermissionSuggestion {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.VarChar(128)
+  userId     String   @map("user_id") @db.Uuid
+  action     String   @db.VarChar(128)
+  permission String   @db.VarChar(128)
+  resource   String   @db.VarChar(128)
+  reason     String?  @db.Text
+  confidence Float    @default(0)
+  status     String   @default("pending_review") @db.VarChar(32)
+  modelUsed  String?  @map("model_used") @db.VarChar(64)
+  promptHash String?  @map("prompt_hash") @db.VarChar(128)
+  appliedBy  String?   @map("applied_by") @db.VarChar(128)
+  appliedAt  DateTime? @map("applied_at") @db.Timestamptz
+  reviewedBy String?   @map("reviewed_by") @db.VarChar(128)
+  reviewedAt DateTime? @map("reviewed_at") @db.Timestamptz
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([tenantId, userId])
+  @@index([status])
+  @@map("permission_suggestions")
+}
+
+model RlsAudit {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  tenantId   String   @map("tenant_id") @db.VarChar(128)
+  resource   String   @db.VarChar(128)
+  resourceId String?  @map("resource_id") @db.VarChar(128)
+  action     String   @db.VarChar(64)
+  allowed    Boolean
+  reason     String?  @db.Text
+  checksum   String?  @db.VarChar(128)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([userId, tenantId])
+  @@index([resource])
+  @@index([createdAt])
+  @@map("rls_audits")
+}
+
+model RlsPolicy {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.VarChar(128)
+  resourceType String    @map("resource_type") @db.VarChar(64)
+  name         String    @db.VarChar(255)
+  description  String?   @db.Text
+  config       Json?
+  priority     Int       @default(0)
+  active       Boolean   @default(true)
+  expiresAt    DateTime? @map("expires_at") @db.Timestamptz
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([tenantId, resourceType])
+  @@index([active])
+  @@map("rls_policies")
+}
+
+model TenantMembership {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tenantId  String    @map("tenant_id") @db.VarChar(128)
+  role      String?   @db.VarChar(64)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([userId, tenantId])
+  @@map("tenant_memberships")
+}
+
+model Comparison {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  config      Json?
+  status      String?  @db.VarChar(32)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("comparisons")
+}
+
+model EngineIntegration {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  config      Json?
+  status      String?  @db.VarChar(32)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("engine_integrations")
+}
+
+model OneClickOp {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  config      Json?
+  status      String?  @db.VarChar(32)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("one_click_ops")
+}
+
+model ProductLevel {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  config      Json?
+  status      String?  @db.VarChar(32)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("product_levels")
+}
+
+model Team {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(255)
+  description    String?  @db.Text
+  organizationId String?  @map("organization_id") @db.VarChar(128)
+  config      Json?
+  status      String?  @db.VarChar(32)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  members TeamMember[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String   @id @default(uuid()) @db.Uuid
+  teamId    String   @map("team_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      String?  @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([teamId])
+  @@index([userId])
+  @@map("team_members")
+}
+
+// ============================================================================
+// ARCHIVE MODELS
+// ============================================================================
+
+model ArchiveConfig {
+  id              String   @id @default(uuid()) @db.Uuid
+  entityType      String   @map("entity_type") @db.VarChar(64)
+  retentionDays   Int      @map("retention_days")
+  archiveStrategy String   @map("archive_strategy") @db.VarChar(32)
+  isEnabled       Boolean  @default(true) @map("is_enabled")
+  filters         String?  @db.Text
+  configuredBy    String?  @map("configured_by") @db.VarChar(128)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([entityType])
+  @@map("archive_configs")
+}
+
+model ArchiveCycleLog {
+  id               String   @id @default(uuid()) @db.Uuid
+  processedConfigs Int      @map("processed_configs")
+  totalArchived    Int      @map("total_archived")
+  errors           String?  @db.Text
+  executedAt       DateTime @default(now()) @map("executed_at") @db.Timestamptz
+
+  @@index([executedAt])
+  @@map("archive_cycle_logs")
+}
+
+model ArchivableEntity {
+  id           String    @id @default(uuid()) @db.Uuid
+  entityType   String    @map("entity_type") @db.VarChar(64)
+  isArchived   Boolean   @default(false) @map("is_archived")
+  isCompressed Boolean   @default(false) @map("is_compressed")
+  archivedAt   DateTime? @map("archived_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([entityType, isArchived])
+  @@map("archivable_entities")
+}
+
+model ArchiveEntry {
+  id           String   @id @default(uuid()) @db.Uuid
+  entityType   String   @map("entity_type") @db.VarChar(64)
+  entityId        String    @map("entity_id") @db.VarChar(128)
+  originalData    String?   @map("original_data") @db.Text
+  archiveStrategy String?   @map("archive_strategy") @db.VarChar(32)
+  archivedAt      DateTime  @default(now()) @map("archived_at") @db.Timestamptz
+  restoredAt      DateTime? @map("restored_at") @db.Timestamptz
+  restoredBy      String?   @map("restored_by") @db.VarChar(128)
+  configId        String?   @map("config_id") @db.VarChar(128)
+
+  @@index([entityType])
+  @@index([entityId])
+  @@index([archivedAt])
+  @@map("archive_entries")
+}
+
+model ArchiveRestoreLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  archiveEntryId String   @map("archive_entry_id") @db.VarChar(128)
+  entityType     String   @map("entity_type") @db.VarChar(64)
+  entityId       String   @map("entity_id") @db.VarChar(128)
+  restoredBy     String   @map("restored_by") @db.VarChar(128)
+  restoredAt     DateTime @default(now()) @map("restored_at") @db.Timestamptz
+
+  @@index([archiveEntryId])
+  @@map("archive_restore_logs")
+}
+
+// ============================================================================
+// BACKUP MODELS
+// ============================================================================
+
+model BackupConfig {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String   @db.VarChar(255)
+  type          String   @db.VarChar(32)
+  schedule      String?  @db.VarChar(64)
+  databases     Json?
+  storageTarget Json?    @map("storage_target")
+  retention     Json?
+  encryption    Json?
+  compression   Json?
+  notifications Json?
+  enabled       Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("backup_configs")
+}
+
+model BackupRecord {
+  id             String    @id @default(uuid()) @db.Uuid
+  configId       String    @map("config_id") @db.VarChar(128)
+  type           String    @db.VarChar(32)
+  status         String    @db.VarChar(32)
+  filePath       String?   @map("file_path") @db.Text
+  fileSize       BigInt?   @map("file_size")
+  compressedSize BigInt?   @map("compressed_size")
+  checksum       String?   @db.VarChar(128)
+  database       String?   @db.VarChar(128)
+  startedAt      DateTime? @map("started_at") @db.Timestamptz
+  completedAt    DateTime? @map("completed_at") @db.Timestamptz
+  duration       Int?
+  error          String?   @db.Text
+  metadata       Json?
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([configId])
+  @@index([status])
+  @@map("backup_records")
+}
+
+// ============================================================================
+// ENCRYPTION MODELS
+// ============================================================================
+
+model SensitiveField {
+  id               String   @id @default(uuid()) @db.Uuid
+  documentId       String   @map("document_id") @db.VarChar(128)
+  fieldPath        String   @map("field_path") @db.VarChar(512)
+  sensitivityLevel String   @map("sensitivity_level") @db.VarChar(32)
+  markedBy         String?  @map("marked_by") @db.VarChar(128)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([documentId])
+  @@map("sensitive_fields")
+}
+
+model EncryptionLog {
+  id                  String   @id @default(uuid()) @db.Uuid
+  documentId          String   @map("document_id") @db.VarChar(128)
+  encryptedFieldCount Int      @map("encrypted_field_count")
+  encryptedFields     String?  @map("encrypted_fields") @db.Text
+  performedAt         DateTime @default(now()) @map("performed_at") @db.Timestamptz
+
+  @@index([documentId])
+  @@map("encryption_logs")
+}
+
+// ============================================================================
+// COLLABORATION MODELS
+// ============================================================================
+
+model CollaborationSession {
+  id           String    @id @default(uuid()) @db.Uuid
+  sessionId    String    @unique @map("session_id") @db.VarChar(128)
+  documentId   String    @map("document_id") @db.VarChar(128)
+  documentType String    @map("document_type") @db.VarChar(64)
+  startedAt    DateTime  @default(now()) @map("started_at") @db.Timestamptz
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  participants CollaborationParticipant[]
+
+  @@index([documentId])
+  @@index([isActive])
+  @@map("collaboration_sessions")
+}
+
+model CollaborationParticipant {
+  id           String    @id @default(uuid()) @db.Uuid
+  sessionId    String    @map("session_id") @db.VarChar(128)
+  userId       String    @map("user_id") @db.Uuid
+  userName     String?   @map("user_name") @db.VarChar(255)
+  joinedAt     DateTime  @default(now()) @map("joined_at") @db.Timestamptz
+  lastActiveAt DateTime? @map("last_active_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  session CollaborationSession @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
+
+  @@unique([sessionId, userId])
+  @@index([sessionId])
+  @@index([userId])
+  @@map("collaboration_participants")
+}
+
+// ============================================================================
+// COMPLIANCE MODELS
+// ============================================================================
+
+model ComplianceCheck {
+  id           String   @id @default(uuid()) @db.Uuid
+  status       String   @db.VarChar(32)
+  overallScore Float?   @map("overall_score")
+  regulations  Json?
+  issueCount   Int?     @map("issue_count")
+  checkedAt    DateTime @default(now()) @map("checked_at") @db.Timestamptz
+  duration     Int?
+  resourceType String?  @map("resource_type") @db.VarChar(64)
+  datasetId    String?  @map("dataset_id") @db.VarChar(128)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([status])
+  @@index([checkedAt])
+  @@map("compliance_checks")
+}
+
+model ConsentRecord {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  resourceId String?   @map("resource_id") @db.VarChar(128)
+  purpose    String    @db.VarChar(128)
+  granted   Boolean   @default(false)
+  grantedAt DateTime? @map("granted_at") @db.Timestamptz
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz
+  ipAddress String?   @map("ip_address") @db.VarChar(45)
+  source    String?   @db.VarChar(64)
+  version   String?   @db.VarChar(32)
+  metadata  Json?
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([userId, purpose])
+  @@index([granted])
+  @@map("consent_records")
+}
+
+model RetentionPolicy {
+  id                  String   @id @default(uuid()) @db.Uuid
+  name                String   @db.VarChar(255)
+  description         String?  @db.Text
+  resourceType        String   @map("resource_type") @db.VarChar(64)
+  retentionPeriodDays Int      @map("retention_period_days")
+  action              String   @db.VarChar(32)
+  conditions          Json?
+  enabled             Boolean  @default(true)
+  lastExecutedAt      DateTime? @map("last_executed_at") @db.Timestamptz
+  nextExecutionAt     DateTime? @map("next_execution_at") @db.Timestamptz
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([resourceType])
+  @@index([enabled])
+  @@map("retention_policies")
+}
+
+// ============================================================================
+// FEATURE FLAGS
+// ============================================================================
+
+model FeatureFlag {
+  id           String    @id @default(uuid()) @db.Uuid
+  key          String    @db.VarChar(128)
+  tenantId     String    @map("tenant_id") @db.VarChar(128)
+  defaultValue Boolean   @default(false) @map("default_value")
+  description  String?   @db.Text
+  enabled      Boolean   @default(true)
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  rules FeatureFlagRule[]
+
+  @@index([key, tenantId])
+  @@map("feature_flags")
+}
+
+model FeatureFlagRule {
+  id          String    @id @default(uuid()) @db.Uuid
+  flagId      String    @map("flag_id") @db.Uuid
+  conditions  Json
+  resultValue Boolean   @map("result_value")
+  priority    Int       @default(0)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  flag FeatureFlag @relation(fields: [flagId], references: [id], onDelete: Cascade)
+
+  @@index([flagId])
+  @@map("feature_flag_rules")
+}
+
+// ============================================================================
+// KPI APPROVAL
+// ============================================================================
+
+model KpiApprovalRequest {
+  id                String    @id @default(uuid()) @db.Uuid
+  kpiId             String    @map("kpi_id") @db.VarChar(128)
+  tenantId          String    @map("tenant_id") @db.VarChar(128)
+  changes           String?   @db.Text
+  submittedBy       String    @map("submitted_by") @db.VarChar(128)
+  status            String    @default("pending") @db.VarChar(32)
+  requiredApprovers String?   @map("required_approvers") @db.Text
+  impactAnalysis    String?   @map("impact_analysis") @db.Text
+  requestHash       String?   @map("request_hash") @db.VarChar(128)
+  rejectedBy        String?   @map("rejected_by") @db.VarChar(128)
+  rejectionReason   String?   @map("rejection_reason") @db.Text
+  resolvedAt        DateTime? @map("resolved_at") @db.Timestamptz
+  expiresAt         DateTime? @map("expires_at") @db.Timestamptz
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  votes KpiApprovalVote[]
+
+  @@index([kpiId, tenantId])
+  @@index([status])
+  @@map("kpi_approval_requests")
+}
+
+model KpiApprovalVote {
+  id         String   @id @default(uuid()) @db.Uuid
+  requestId  String   @map("request_id") @db.Uuid
+  approverId String   @map("approver_id") @db.VarChar(128)
+  decision   String   @db.VarChar(16)
+  reason     String?  @db.Text
+  votedAt    DateTime @default(now()) @map("voted_at") @db.Timestamptz
+
+  request KpiApprovalRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@index([approverId])
+  @@map("kpi_approval_votes")
+}
+
+model KpiValue {
+  id         String   @id @default(uuid()) @db.Uuid
+  kpiId      String   @map("kpi_id") @db.VarChar(128)
+  value      Float
+  periodDate DateTime @map("period_date") @db.Timestamptz
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([kpiId])
+  @@index([periodDate])
+  @@map("kpi_values")
+}
+
+model ReportAccess {
+  id        String    @id @default(uuid()) @db.Uuid
+  reportId  String    @map("report_id") @db.VarChar(128)
+  userId    String    @map("user_id") @db.Uuid
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([reportId])
+  @@index([userId])
+  @@map("report_access")
+}
+
+model DashboardAccess {
+  id          String    @id @default(uuid()) @db.Uuid
+  dashboardId String    @map("dashboard_id") @db.VarChar(128)
+  userId      String    @map("user_id") @db.Uuid
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([dashboardId])
+  @@index([userId])
+  @@map("dashboard_access")
+}
+
+// ============================================================================
+// SECURITY MODELS
+// ============================================================================
+
+model LoginAttempt {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  ipAddress String   @map("ip_address") @db.VarChar(45)
+  endpoint  String   @db.VarChar(255)
+  success   Boolean
+  userAgent String?  @map("user_agent") @db.Text
+  timestamp DateTime @default(now()) @db.Timestamptz
+
+  @@index([userId])
+  @@index([ipAddress])
+  @@index([timestamp])
+  @@map("login_attempts")
+}
+
+model SecurityEvent {
+  id          String   @id @default(uuid()) @db.Uuid
+  type        String   @db.VarChar(64)
+  severity    String   @db.VarChar(16)
+  source      String   @db.VarChar(128)
+  userId      String?  @map("user_id") @db.Uuid
+  ipAddress   String?  @map("ip_address") @db.VarChar(45)
+  description String?  @db.Text
+  metadata    String?  @db.Text
+  timestamp   DateTime @default(now()) @db.Timestamptz
+
+  @@index([type])
+  @@index([severity])
+  @@index([timestamp])
+  @@map("security_events")
+}
+
+// ============================================================================
+// WEBHOOK MODELS
+// ============================================================================
+
+model Webhook {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(255)
+  targetUrl  String   @map("target_url") @db.Text
+  events     String?  @db.Text
+  secretHash String?  @map("secret_hash") @db.Text
+  secret     String?  @db.Text
+  headers    String?  @db.Text
+  isEnabled  Boolean  @default(true) @map("is_enabled")
+  createdBy  String?  @map("created_by") @db.VarChar(128)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  deliveries WebhookDelivery[]
+
+  @@index([isEnabled])
+  @@map("webhooks")
+}
+
+model WebhookDelivery {
+  id           String    @id @default(uuid()) @db.Uuid
+  webhookId    String    @map("webhook_id") @db.Uuid
+  event        String    @db.VarChar(128)
+  payload      String?   @db.Text
+  status       String    @default("PENDING") @db.VarChar(32)
+  attemptCount Int       @default(0) @map("attempt_count")
+  statusCode   Int?      @map("status_code")
+  responseBody String?   @map("response_body") @db.Text
+  error        String?   @db.Text
+  sentAt       DateTime? @map("sent_at") @db.Timestamptz
+  deliveredAt  DateTime? @map("delivered_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  webhook Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId])
+  @@index([status])
+  @@map("webhook_deliveries")
+}
+
+model InboundWebhookConfig {
+  id        String   @id @default(uuid()) @db.Uuid
+  source    String   @db.VarChar(128)
+  secret    String?  @db.Text
+  isEnabled Boolean  @default(true) @map("is_enabled")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([source, isEnabled])
+  @@map("inbound_webhook_configs")
+}
+
+model InboundWebhook {
+  id         String   @id @default(uuid()) @db.Uuid
+  source     String   @db.VarChar(128)
+  headers    String?  @db.Text
+  body       String?  @db.Text
+  bodySize   Int      @map("body_size")
+  receivedBy String?  @map("received_by") @db.VarChar(128)
+  receivedAt DateTime @default(now()) @map("received_at") @db.Timestamptz
+  status     String   @default("RECEIVED") @db.VarChar(32)
+
+  @@index([source])
+  @@index([receivedAt])
+  @@map("inbound_webhooks")
+}
+
+// ============================================================================
+// SYNC MODELS
+// ============================================================================
+
+model SyncQueue {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.VarChar(128)
+  userId       String    @map("user_id") @db.Uuid
+  operationType String   @map("operation_type") @db.VarChar(32)
+  resource     String    @db.VarChar(64)
+  resourceId   String    @map("resource_id") @db.VarChar(128)
+  payload      String?   @db.Text
+  payloadHash  String?   @map("payload_hash") @db.VarChar(128)
+  status       String    @default("pending") @db.VarChar(32)
+  retryCount   Int       @default(0) @map("retry_count")
+  error        String?   @db.Text
+  lastError           String?   @map("last_error") @db.Text
+  syncedAt            DateTime? @map("synced_at") @db.Timestamptz
+  processedAt         DateTime? @map("processed_at") @db.Timestamptz
+  conflictResolution  String?   @map("conflict_resolution") @db.VarChar(32)
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([tenantId, userId])
+  @@index([status])
+  @@map("sync_queue")
+}
+
+model SyncVersion {
+  id         String   @id @default(uuid()) @db.Uuid
+  resource   String   @db.VarChar(64)
+  resourceId String   @map("resource_id") @db.VarChar(128)
+  lastHash   String?  @map("last_hash") @db.VarChar(128)
+  version    Int      @default(1)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([resource, resourceId], name: "resource_resourceId")
+  @@index([resource, resourceId])
+  @@map("sync_versions")
+}
+
+model SyncedFile {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.VarChar(128)
+  externalId   String   @map("external_id") @db.VarChar(255)
+  provider     String   @db.VarChar(64)
+  filename     String   @db.VarChar(512)
+  mimeType     String?  @map("mime_type") @db.VarChar(128)
+  fileSize     Int?     @map("file_size")
+  lastSyncedAt DateTime? @map("last_synced_at") @db.Timestamptz
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([tenantId, externalId], name: "tenantId_externalId")
+  @@index([tenantId])
+  @@map("synced_files")
+}
+
+// ============================================================================
+// EXTERNAL INTEGRATION
+// ============================================================================
+
+model ExternalIntegration {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  provider     String    @db.VarChar(64)
+  accessToken  String?   @map("access_token") @db.Text
+  refreshToken String?   @map("refresh_token") @db.Text
+  expiresAt    DateTime? @map("expires_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([userId, provider], name: "userId_provider")
+  @@index([userId])
+  @@map("external_integrations")
+}
+
+// ============================================================================
+// UNDO/REDO
+// ============================================================================
+
+model ActionLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  actionId      String   @map("action_id") @db.VarChar(128)
+  userId        String   @map("user_id") @db.Uuid
+  actionType    String   @map("action_type") @db.VarChar(64)
+  entityType    String   @map("entity_type") @db.VarChar(64)
+  entityId      String   @map("entity_id") @db.VarChar(128)
+  previousState String?  @map("previous_state") @db.Text
+  newState      String?  @map("new_state") @db.Text
+  metadata      String?  @db.Text
+  performedAt   DateTime @default(now()) @map("performed_at") @db.Timestamptz
+
+  @@index([userId])
+  @@index([actionId])
+  @@index([performedAt])
+  @@map("action_logs")
+}
+
+// ============================================================================
+// PII REDACTION
+// ============================================================================
+
+model PiiScanLog {
+  id                  String   @id @default(uuid()) @db.Uuid
+  datasetId           String   @map("dataset_id") @db.VarChar(128)
+  mode                String   @db.VarChar(32)
+  totalRecordsScanned Int      @map("total_records_scanned")
+  totalDetections     Int      @map("total_detections")
+  detectionsByType    String?  @map("detections_by_type") @db.Text
+  scannedBy           String?  @map("scanned_by") @db.VarChar(128)
+  performedAt         DateTime @default(now()) @map("performed_at") @db.Timestamptz
+
+  @@index([datasetId])
+  @@map("pii_scan_logs")
+}

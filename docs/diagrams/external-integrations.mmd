@@ -1,0 +1,93 @@
+%% Rasid Platform - External Integration Map
+graph LR
+    subgraph RasidPlatform["Rasid Platform"]
+        AI["AI Service<br/>:8009"]
+        LOC["Localization<br/>:8008"]
+        PRES["Presentation<br/>:8005"]
+        INF["Infographic<br/>:8006"]
+        REP["Replication<br/>:8007"]
+        GOV["Governance<br/>:8010"]
+        RPT["Reporting<br/>:8004"]
+        DAT["Data Service<br/>:8001"]
+        REN["Rendering<br/>:8014"]
+    end
+
+    subgraph OpenAIPlatform["OpenAI Platform"]
+        GPT4o["GPT-4o<br/>Chat & Analysis"]
+        Vision["GPT-4o Vision<br/>Image Understanding"]
+        Whisper["Whisper<br/>Audio Transcription"]
+        Embeddings["Embeddings API<br/>text-embedding-3"]
+        FineTune["Fine-Tuning API"]
+    end
+
+    subgraph EmailSystems["Email Systems"]
+        SMTP["SMTP Server"]
+        SMS["SMS Gateway"]
+    end
+
+    subgraph IdentityProviders["Identity Providers"]
+        LDAP["LDAP / Active Directory"]
+        SAML["SAML IdP"]
+        OIDC["OpenID Connect"]
+        MS365["Microsoft 365"]
+    end
+
+    subgraph DataConnectors["External Data Sources"]
+        GA["Google Analytics"]
+        Notion["Notion API"]
+        DBs["External Databases<br/>PostgreSQL / MySQL"]
+        APIs["REST APIs"]
+    end
+
+    subgraph BrowserEngine["Browser Engine"]
+        Chromium["Headless Chromium<br/>Puppeteer"]
+    end
+
+    %% AI Integrations
+    AI -->|"chat, analysis"| GPT4o
+    AI -->|"document vision"| Vision
+    AI -->|"vector embeddings"| Embeddings
+    AI -->|"model training"| FineTune
+
+    LOC -->|"translation"| GPT4o
+    PRES -->|"slide content"| GPT4o
+    INF -->|"infographic design"| GPT4o
+    REP -->|"layout analysis"| Vision
+
+    %% Audio
+    DAT -->|"audio transcription"| Whisper
+
+    %% Email
+    RPT -->|"report delivery"| SMTP
+    GOV -->|"notifications"| SMTP
+    GOV -->|"SMS alerts"| SMS
+
+    %% Identity
+    GOV -->|"SSO auth"| SAML
+    GOV -->|"SSO auth"| OIDC
+    GOV -->|"directory sync"| LDAP
+    GOV -->|"M365 integration"| MS365
+
+    %% Data Connectors
+    DAT -->|"analytics import"| GA
+    DAT -->|"workspace sync"| Notion
+    DAT -->|"database connect"| DBs
+    DAT -->|"API ingestion"| APIs
+
+    %% Rendering
+    REN -->|"HTML rendering"| Chromium
+    REP -->|"pixel rendering"| REN
+
+    classDef rasid fill:#3498DB,stroke:#2980B9,color:#fff
+    classDef openai fill:#10A37F,stroke:#0D8C6D,color:#fff
+    classDef email fill:#E74C3C,stroke:#C0392B,color:#fff
+    classDef identity fill:#9B59B6,stroke:#8E44AD,color:#fff
+    classDef data fill:#E67E22,stroke:#D35400,color:#fff
+    classDef browser fill:#34495E,stroke:#2C3E50,color:#fff
+
+    class AI,LOC,PRES,INF,REP,GOV,RPT,DAT,REN rasid
+    class GPT4o,Vision,Whisper,Embeddings,FineTune openai
+    class SMTP,SMS email
+    class LDAP,SAML,OIDC,MS365 identity
+    class GA,Notion,DBs,APIs data
+    class Chromium browser

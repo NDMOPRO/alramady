@@ -1,0 +1,1633 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Core Registry: Dataset Registry (3 tables) ─────────────────
+
+model Dataset {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(500)
+  description String?  @db.Text
+  sourceType  DatasetSourceType @map("source_type")
+  filePath    String?  @map("file_path") @db.VarChar(1000)
+  format      String?  @db.VarChar(50)
+  sizeBytes   BigInt?  @map("size_bytes")
+  rowCount    BigInt?  @map("row_count")
+  columnCount Int?     @map("column_count")
+  schemaJson  Json?    @map("schema_json")
+  status      DatasetStatus @default(active)
+  engine      String?  @db.VarChar(100)
+  createdBy   String   @map("created_by") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  creator     User     @relation("DatasetCreator", fields: [createdBy], references: [id])
+  columns     DatasetColumn[]
+  versions    DatasetVersion[]
+  workbooks   Workbook[]
+  dashboardWidgets DashboardWidget[]
+  tableName   String?  @map("table_name") @db.VarChar(500)
+  metadata    Json?
+  sourceConnection String? @map("source_connection") @db.Text
+  qualityScore Float?  @map("quality_score")
+  qualityDetails Json? @map("quality_details")
+  tags        Json?
+  category    String?  @db.VarChar(200)
+  owner       String?  @db.VarChar(500)
+
+  ingestionJobs IngestionJob[]
+  dataQualityChecks DataQualityCheck[]
+  dataRows    DataRow[]
+  readingSessions ReadingSession[]
+  tableViews  TableView[]
+  visualProcessings VisualProcessing[]
+  mixedFileEntries MixedFileEntry[]
+  dataProfiles DataProfile[]
+  qualityScores QualityScore[]
+  anomalyDetections AnomalyDetection[]
+  lineageNodes LineageNode[]
+  lineageEdges LineageEdge[]
+  dataDictionaryEntries DataDictionaryEntry[]
+  columnLineages ColumnLineage[]
+  datasetAccessLogs DatasetAccessLog[]
+  datasetUsageStats DatasetUsageStats?
+  pipelines   Pipeline[]
+
+  @@index([tenantId])
+  @@index([sourceType])
+  @@index([format])
+  @@index([status])
+  @@index([engine])
+  @@index([createdAt])
+  @@map("datasets")
+}
+
+model DatasetColumn {
+  id              String   @id @default(uuid()) @db.Uuid
+  datasetId       String   @map("dataset_id") @db.Uuid
+  name            String   @db.VarChar(500)
+  originalName    String?  @map("original_name") @db.VarChar(500)
+  dataType        String?  @map("data_type") @db.VarChar(100)
+  inferredType    String?  @map("inferred_type") @db.VarChar(100)
+  position        Int?
+  displayOrder    Int?     @default(0) @map("display_order")
+  nullable        Boolean?
+  isVisible       Boolean  @default(true) @map("is_visible")
+  isRequired      Boolean  @default(false) @map("is_required")
+  isPrimaryKey    Boolean  @default(false) @map("is_primary_key")
+  defaultValue    String?  @map("default_value") @db.VarChar(1000)
+  format          String?  @db.VarChar(200)
+  minValue        String?  @map("min_value") @db.VarChar(500)
+  maxValue        String?  @map("max_value") @db.VarChar(500)
+  transformations Json?
+  statsJson       Json?    @map("stats_json")
+  metadata        Json?
+
+  dataset         Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([displayOrder])
+  @@map("dataset_columns")
+}
+
+model DatasetVersion {
+  id            String   @id @default(uuid()) @db.Uuid
+  datasetId     String   @map("dataset_id") @db.Uuid
+  version       Int
+  changeType    ChangeType? @map("change_type")
+  changeSummary String?  @map("change_summary") @db.Text
+  snapshotPath  String?  @map("snapshot_path") @db.VarChar(1000)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  dataset       Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@map("dataset_versions")
+}
+
+// ─── Core Registry: Metadata Registry (2 tables) ────────────────
+
+model Metadata {
+  id         String   @id @default(uuid()) @db.Uuid
+  entityType EntityType @map("entity_type")
+  entityId   String   @map("entity_id") @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  key        String   @db.VarChar(500)
+  value      String?  @db.Text
+  dataType   String?  @map("data_type") @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([entityType])
+  @@index([entityId])
+  @@index([tenantId])
+  @@index([key])
+  @@map("metadata")
+}
+
+model Tag {
+  id         String     @id @default(uuid()) @db.Uuid
+  entityType EntityType @map("entity_type")
+  entityId   String     @map("entity_id") @db.Uuid
+  tag        String     @db.VarChar(200)
+  createdBy  String     @map("created_by") @db.Uuid
+
+  creator    User       @relation(fields: [createdBy], references: [id])
+
+  @@index([entityType])
+  @@index([entityId])
+  @@index([tag])
+  @@map("tags")
+}
+
+// ─── Core Registry: Template Registry (1 table) ─────────────────
+
+model Template {
+  id            String           @id @default(uuid()) @db.Uuid
+  tenantId      String           @map("tenant_id") @db.Uuid
+  name          String           @db.VarChar(500)
+  category      TemplateCategory
+  engine        String?          @db.VarChar(100)
+  templateJson  Json?            @map("template_json")
+  thumbnailPath String?          @map("thumbnail_path") @db.VarChar(1000)
+  isSystem      Boolean          @default(false) @map("is_system")
+  usageCount    Int              @default(0) @map("usage_count")
+  createdBy     String           @map("created_by") @db.Uuid
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  tenant        Tenant           @relation(fields: [tenantId], references: [id])
+  creator       User             @relation("TemplateCreator", fields: [createdBy], references: [id])
+  reports       Report[]
+  presentations Presentation[]
+  infographics  Infographic[]
+
+  @@index([tenantId])
+  @@index([category])
+  @@index([engine])
+  @@index([isSystem])
+  @@map("templates")
+}
+
+// ─── Core Registry: User Registry (4 tables) ────────────────────
+
+model Tenant {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(500)
+  plan         TenantPlan @default(free)
+  settingsJson Json?    @map("settings_json")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  users        User[]
+  datasets     Dataset[]
+  metadata     Metadata[]
+  templates    Template[]
+  dashboards   Dashboard[]
+  reports      Report[]
+  presentations Presentation[]
+  infographics  Infographic[]
+  replicationJobs ReplicationJob[]
+  localizationJobs LocalizationJob[]
+  aiSessions    AiSession[]
+  auditLogs     AuditLog[]
+  versions      Version[]
+  roles         Role[]
+  libraryAssets LibraryAsset[]
+  conversionJobs ConversionJob[]
+  workbooks     Workbook[]
+  ingestionJobs IngestionJob[]
+  translationMemories TranslationMemory[]
+  glossaries          Glossary[]
+  knowledgeBases      KnowledgeBase[]
+  promptTemplates     PromptTemplate[]
+  notifications       Notification[]
+  workflows           Workflow[]
+  assetFolders        AssetFolder[]
+
+  connectorConnections ConnectorConnection[]
+  dataSources          DataSource[]
+  uploadSessions       UploadSession[]
+  knowledgeGraphNodes  KnowledgeGraphNode[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  tenantId     String     @map("tenant_id") @db.Uuid
+  email        String     @unique @db.VarChar(500)
+  name         String     @db.VarChar(500)
+  role         UserRole   @default(viewer)
+  passwordHash String     @map("password_hash") @db.VarChar(500)
+  status       UserStatus @default(active)
+  lastLogin    DateTime?  @map("last_login")
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  tenant       Tenant     @relation(fields: [tenantId], references: [id])
+  userRoles    UserRole2[]
+  datasets     Dataset[]  @relation("DatasetCreator")
+  templates    Template[] @relation("TemplateCreator")
+  tags         Tag[]
+  dashboards   Dashboard[] @relation("DashboardCreator")
+  reports      Report[]   @relation("ReportCreator")
+  presentations Presentation[] @relation("PresentationCreator")
+  infographics  Infographic[] @relation("InfographicCreator")
+  aiSessions    AiSession[]
+  auditLogs     AuditLog[]
+  versions      Version[]  @relation("VersionCreator")
+  libraryAssets LibraryAsset[] @relation("LibraryAssetCreator")
+  workbooks     Workbook[] @relation("WorkbookCreator")
+
+  @@index([tenantId])
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+
+model Role {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  name            String   @db.VarChar(200)
+  permissionsJson Json?    @map("permissions_json")
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  userRoles       UserRole2[]
+  permissions     Permission[]
+
+  @@index([tenantId])
+  @@map("roles")
+}
+
+model UserRole2 {
+  userId String @map("user_id") @db.Uuid
+  roleId String @map("role_id") @db.Uuid
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@map("user_roles")
+}
+
+// ─── Core Registry: Version Registry (1 table) ──────────────────
+
+model Version {
+  id            String     @id @default(uuid()) @db.Uuid
+  entityType    EntityType @map("entity_type")
+  entityId      String     @map("entity_id") @db.Uuid
+  tenantId      String     @map("tenant_id") @db.Uuid
+  versionNumber Int        @map("version_number")
+  snapshotJson  Json?      @map("snapshot_json")
+  changeLog     String?    @map("change_log") @db.Text
+  createdBy     String     @map("created_by") @db.Uuid
+  createdAt     DateTime   @default(now()) @map("created_at")
+
+  tenant        Tenant     @relation(fields: [tenantId], references: [id])
+  creator       User       @relation("VersionCreator", fields: [createdBy], references: [id])
+
+  @@index([entityType])
+  @@index([entityId])
+  @@index([tenantId])
+  @@map("versions")
+}
+
+// ─── Core Registry: Feature Registry (1 table) ──────────────────
+
+model Feature {
+  id            String        @id @db.VarChar(10)
+  hash          String        @unique @db.VarChar(64)
+  text          String        @db.Text
+  engine        String?       @db.VarChar(100)
+  moduleId      String?       @map("module_id") @db.VarChar(10)
+  service       String?       @db.VarChar(100)
+  sourceSection String?       @map("source_section") @db.VarChar(500)
+  status        FeatureStatus @default(locked)
+
+  @@index([engine])
+  @@index([moduleId])
+  @@index([service])
+  @@map("features")
+}
+
+// ─── Data Engine: Organization & Storage ────────────────────────
+
+model Organization {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(500)
+  slug      String   @unique @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  storageQuotas StorageQuota[]
+
+  @@map("organizations")
+}
+
+model StorageQuota {
+  id                 String   @id @default(uuid()) @db.Uuid
+  organizationId     String   @map("organization_id") @db.Uuid
+  totalBytes         BigInt   @map("total_bytes")
+  usedBytes          BigInt   @default(0) @map("used_bytes")
+  maxDatasets        Int      @map("max_datasets")
+  maxRowsPerDataset  Int?     @map("max_rows_per_dataset")
+  tier               String   @default("standard") @db.VarChar(50)
+  isUnlimited        Boolean  @default(false) @map("is_unlimited")
+  metadata           Json?
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  organization       Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([tier])
+  @@map("storage_quotas")
+}
+
+// ─── Data Engine: File Classification ───────────────────────────
+
+model FileClassification {
+  id                String   @id @default(uuid()) @db.Uuid
+  fileName          String   @map("file_name") @db.VarChar(1000)
+  fileType          String   @map("file_type") @db.VarChar(100)
+  fileSize          BigInt   @map("file_size")
+  mimeType          String?  @map("mime_type") @db.VarChar(200)
+  classifiedType    String   @map("classified_type") @db.VarChar(200)
+  confidence        Float
+  aiModel           String?  @map("ai_model") @db.VarChar(200)
+  suggestedSchema   Json?    @map("suggested_schema")
+  detectedEncoding  String?  @map("detected_encoding") @db.VarChar(50)
+  detectedDelimiter String?  @map("detected_delimiter") @db.VarChar(10)
+  previewData       Json?    @map("preview_data")
+  metadata          Json?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@index([fileType])
+  @@index([classifiedType])
+  @@map("file_classifications")
+}
+
+// ─── Data Engine: Reading Sessions ──────────────────────────────
+
+model ReadingSession {
+  id              String   @id @default(uuid()) @db.Uuid
+  datasetId       String   @map("dataset_id") @db.Uuid
+  sessionType     String   @map("session_type") @db.VarChar(100)
+  pageSize        Int      @default(50) @map("page_size")
+  currentPage     Int      @default(1) @map("current_page")
+  cursorPosition  Json?    @map("cursor_position")
+  filters         Json?
+  sortConfig      Json?    @map("sort_config")
+  highlightRules  Json?    @map("highlight_rules")
+  bookmarks       Json?
+  isActive        Boolean  @default(true) @map("is_active")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  dataset         Dataset  @relation(fields: [datasetId], references: [id])
+
+  @@index([datasetId])
+  @@index([isActive])
+  @@map("reading_sessions")
+}
+
+// ─── Data Engine: Table Views ───────────────────────────────────
+
+model TableView {
+  id              String   @id @default(uuid()) @db.Uuid
+  datasetId       String   @map("dataset_id") @db.Uuid
+  name            String   @db.VarChar(500)
+  description     String?  @db.Text
+  viewType        String   @default("table") @map("view_type") @db.VarChar(50)
+  columnConfig    Json?    @map("column_config")
+  filterConfig    Json?    @map("filter_config")
+  sortConfig      Json?    @map("sort_config")
+  groupConfig     Json?    @map("group_config")
+  aggregateConfig Json?    @map("aggregate_config")
+  pivotConfig     Json?    @map("pivot_config")
+  isDefault       Boolean  @default(false) @map("is_default")
+  isShared        Boolean  @default(false) @map("is_shared")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  dataset         Dataset  @relation(fields: [datasetId], references: [id])
+
+  @@index([datasetId])
+  @@index([viewType])
+  @@map("table_views")
+}
+
+// ─── Data Engine: Visual Processing ─────────────────────────────
+
+model VisualProcessing {
+  id              String    @id @default(uuid()) @db.Uuid
+  datasetId       String    @map("dataset_id") @db.Uuid
+  processingType  String    @map("processing_type") @db.VarChar(100)
+  status          String    @default("pending") @db.VarChar(50)
+  inputConfig     Json?     @map("input_config")
+  outputConfig    Json?     @map("output_config")
+  chartType       String?   @map("chart_type") @db.VarChar(100)
+  visualConfig    Json?     @map("visual_config")
+  resultData      Json?     @map("result_data")
+  thumbnailUrl    String?   @map("thumbnail_url") @db.VarChar(2000)
+  errorMessage    String?   @map("error_message") @db.Text
+  metadata        Json?
+  startedAt       DateTime? @map("started_at")
+  completedAt     DateTime? @map("completed_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  dataset         Dataset   @relation(fields: [datasetId], references: [id])
+
+  @@index([datasetId])
+  @@index([status])
+  @@index([processingType])
+  @@map("visual_processings")
+}
+
+// ─── Data Engine: Mixed File Entries ────────────────────────────
+
+model MixedFileEntry {
+  id            String   @id @default(uuid()) @db.Uuid
+  datasetId     String   @map("dataset_id") @db.Uuid
+  fileName      String   @map("file_name") @db.VarChar(1000)
+  fileType      String   @map("file_type") @db.VarChar(100)
+  fileSize      BigInt   @map("file_size")
+  filePath      String   @map("file_path") @db.VarChar(2000)
+  sheetName     String?  @map("sheet_name") @db.VarChar(500)
+  sheetIndex    Int?     @map("sheet_index")
+  extractedData Json?    @map("extracted_data")
+  status        String   @default("pending") @db.VarChar(50)
+  metadata      Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  dataset       Dataset  @relation(fields: [datasetId], references: [id])
+
+  @@index([datasetId])
+  @@index([fileType])
+  @@index([status])
+  @@map("mixed_file_entries")
+}
+
+// ─── Engine: Data Engine (2 tables) ─────────────────────────────
+
+model IngestionJob {
+  id        String          @id @default(uuid()) @db.Uuid
+  tenantId  String          @map("tenant_id") @db.Uuid
+  datasetId String          @map("dataset_id") @db.Uuid
+  sourceUrl String?         @map("source_url") @db.VarChar(2000)
+  status    JobStatus       @default(pending)
+  progress  Int?            @default(0)
+  errorLog  String?         @map("error_log") @db.Text
+  createdAt DateTime        @default(now()) @map("created_at")
+
+  tenant    Tenant          @relation(fields: [tenantId], references: [id])
+  dataset   Dataset         @relation(fields: [datasetId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("ingestion_jobs")
+}
+
+model DataQualityCheck {
+  id          String      @id @default(uuid()) @db.Uuid
+  datasetId   String      @map("dataset_id") @db.Uuid
+  checkType   CheckType   @map("check_type")
+  result      CheckResult
+  detailsJson Json?       @map("details_json")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  dataset     Dataset     @relation(fields: [datasetId], references: [id])
+
+  @@index([datasetId])
+  @@map("data_quality_checks")
+}
+
+// ─── Engine: Excel Engine (1 table) ─────────────────────────────
+
+model Workbook {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  datasetId    String?  @map("dataset_id") @db.Uuid
+  name         String   @db.VarChar(500)
+  sheetsJson   Json?    @map("sheets_json")
+  formulasJson Json?    @map("formulas_json")
+  createdBy    String   @map("created_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  dataset      Dataset? @relation(fields: [datasetId], references: [id])
+  creator      User     @relation("WorkbookCreator", fields: [createdBy], references: [id])
+
+  @@index([tenantId])
+  @@map("workbooks")
+}
+
+// ─── Engine: Dashboard Engine (2 tables) ────────────────────────
+
+model Dashboard {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(500)
+  layoutJson  Json?    @map("layout_json")
+  filtersJson Json?    @map("filters_json")
+  isPublished Boolean  @default(false) @map("is_published")
+  createdBy   String   @map("created_by") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  creator     User     @relation("DashboardCreator", fields: [createdBy], references: [id])
+  widgets     DashboardWidget[]
+  filters     DashboardFilter[]
+
+  @@index([tenantId])
+  @@index([isPublished])
+  @@map("dashboards")
+}
+
+model DashboardWidget {
+  id           String  @id @default(uuid()) @db.Uuid
+  dashboardId  String  @map("dashboard_id") @db.Uuid
+  widgetType   WidgetType @map("widget_type")
+  configJson   Json?   @map("config_json")
+  datasetId    String? @map("dataset_id") @db.Uuid
+  positionJson Json?   @map("position_json")
+
+  dashboard    Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dataset      Dataset?  @relation(fields: [datasetId], references: [id])
+
+  @@index([dashboardId])
+  @@map("dashboard_widgets")
+}
+
+// ─── Engine: Reporting Engine (2 tables) ────────────────────────
+
+model Report {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  name          String   @db.VarChar(500)
+  templateId    String?  @map("template_id") @db.Uuid
+  configJson    Json?    @map("config_json")
+  scheduleJson  Json?    @map("schedule_json")
+  dataSourceId  String?  @map("data_source_id") @db.Uuid
+  lastGenerated DateTime? @map("last_generated")
+  createdBy     String   @map("created_by") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  template      Template? @relation(fields: [templateId], references: [id])
+  creator       User     @relation("ReportCreator", fields: [createdBy], references: [id])
+  outputs       ReportOutput[]
+  scheduledReports ScheduledReport[]
+
+  @@index([tenantId])
+  @@map("reports")
+}
+
+model ReportOutput {
+  id        String       @id @default(uuid()) @db.Uuid
+  reportId  String       @map("report_id") @db.Uuid
+  format    OutputFormat
+  filePath  String?      @map("file_path") @db.VarChar(1000)
+  sizeBytes BigInt?      @map("size_bytes")
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  report    Report       @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("report_outputs")
+}
+
+// ─── Engine: Presentation Engine (1 table) ──────────────────────
+
+model Presentation {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  name       String   @db.VarChar(500)
+  templateId String?  @map("template_id") @db.Uuid
+  slidesJson Json?    @map("slides_json")
+  themeJson  Json?    @map("theme_json")
+  createdBy  String   @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  template   Template? @relation(fields: [templateId], references: [id])
+  creator    User     @relation("PresentationCreator", fields: [createdBy], references: [id])
+
+  @@index([tenantId])
+  @@map("presentations")
+}
+
+// ─── Engine: Infographic Engine (1 table) ───────────────────────
+
+model Infographic {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  name         String   @db.VarChar(500)
+  templateId   String?  @map("template_id") @db.Uuid
+  elementsJson Json?    @map("elements_json")
+  createdBy    String   @map("created_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  template     Template? @relation(fields: [templateId], references: [id])
+  creator      User     @relation("InfographicCreator", fields: [createdBy], references: [id])
+
+  @@index([tenantId])
+  @@map("infographics")
+}
+
+// ─── Engine: Replication Engine (1 table) ───────────────────────
+
+model ReplicationJob {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  sourceId    String?   @map("source_id") @db.Uuid
+  targetId    String?   @map("target_id") @db.Uuid
+  matchScore  Decimal?  @map("match_score") @db.Decimal(5, 4)
+  status      JobStatus @default(pending)
+  detailsJson Json?     @map("details_json")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("replication_jobs")
+}
+
+// ─── Engine: Localization Engine (1 table) ──────────────────────
+
+model LocalizationJob {
+  id         String     @id @default(uuid()) @db.Uuid
+  tenantId   String     @map("tenant_id") @db.Uuid
+  entityType EntityType @map("entity_type")
+  entityId   String?    @map("entity_id") @db.Uuid
+  sourceLang String?    @map("source_lang") @db.VarChar(10)
+  targetLang String?    @map("target_lang") @db.VarChar(10)
+  status     JobStatus  @default(pending)
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("localization_jobs")
+}
+
+// ─── Engine: AI Engine (2 tables) ───────────────────────────────
+
+model AiSession {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  contextJson Json?    @map("context_json")
+  model       String?  @db.VarChar(100)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+  queries     AiQuery[]
+
+  @@index([tenantId])
+  @@map("ai_sessions")
+}
+
+model AiQuery {
+  id           String   @id @default(uuid()) @db.Uuid
+  sessionId    String   @map("session_id") @db.Uuid
+  queryText    String   @map("query_text") @db.Text
+  responseText String?  @map("response_text") @db.Text
+  tokensUsed   Int?     @map("tokens_used")
+  latencyMs    Int?     @map("latency_ms")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  session      AiSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("ai_queries")
+}
+
+// ─── Engine: Governance Engine (2 tables) ───────────────────────
+
+model AuditLog {
+  id          String     @id @default(uuid()) @db.Uuid
+  tenantId    String     @map("tenant_id") @db.Uuid
+  userId      String     @map("user_id") @db.Uuid
+  action      String     @db.VarChar(200)
+  entityType  EntityType @map("entity_type")
+  entityId    String?    @map("entity_id") @db.Uuid
+  detailsJson Json?      @map("details_json")
+  ipAddress   String?    @map("ip_address") @db.VarChar(50)
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  tenant      Tenant     @relation(fields: [tenantId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([action])
+  @@index([entityType])
+  @@index([entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model Permission {
+  id           String         @id @default(uuid()) @db.Uuid
+  roleId       String         @map("role_id") @db.Uuid
+  resourceType ResourceType   @map("resource_type")
+  resourceId   String?        @map("resource_id") @db.Uuid
+  action       PermissionAction
+
+  role         Role           @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([roleId])
+  @@index([resourceType])
+  @@map("permissions")
+}
+
+// ─── Engine: Library Engine (1 table) ───────────────────────────
+
+model LibraryAsset {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  name      String    @db.VarChar(500)
+  assetType AssetType @map("asset_type")
+  filePath  String?   @map("file_path") @db.VarChar(1000)
+  sizeBytes BigInt?   @map("size_bytes")
+  mimeType  String?   @map("mime_type") @db.VarChar(100)
+  createdBy String    @map("created_by") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  creator   User      @relation("LibraryAssetCreator", fields: [createdBy], references: [id])
+
+  @@index([tenantId])
+  @@index([assetType])
+  @@map("library_assets")
+}
+
+// ─── Engine: Conversion Engine (1 table) ────────────────────────
+
+model ConversionJob {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  sourceFormat String?   @map("source_format") @db.VarChar(50)
+  targetFormat String?   @map("target_format") @db.VarChar(50)
+  sourcePath   String?   @map("source_path") @db.VarChar(1000)
+  outputPath   String?   @map("output_path") @db.VarChar(1000)
+  status       JobStatus @default(pending)
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  tenant       Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("conversion_jobs")
+}
+
+// ─── Extended Models: Data ──────────────────────────────────────
+
+model DataRow {
+  id        String   @id @default(uuid()) @db.Uuid
+  datasetId String   @map("dataset_id") @db.Uuid
+  rowIndex  Int      @map("row_index")
+  data      Json
+  createdAt DateTime @default(now()) @map("created_at")
+
+  dataset   Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([rowIndex])
+  @@map("data_rows")
+}
+
+// ─── Extended Models: Localization ──────────────────────────────
+
+model TranslationMemory {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  sourceText String   @map("source_text") @db.Text
+  targetText String   @map("target_text") @db.Text
+  sourceLang String   @map("source_lang") @db.VarChar(10)
+  targetLang String   @map("target_lang") @db.VarChar(10)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([sourceLang, targetLang])
+  @@map("translation_memories")
+}
+
+model Glossary {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  name       String   @db.VarChar(500)
+  sourceLang String   @map("source_lang") @db.VarChar(10)
+  targetLang String   @map("target_lang") @db.VarChar(10)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  terms      GlossaryTerm[]
+
+  @@index([tenantId])
+  @@map("glossaries")
+}
+
+model GlossaryTerm {
+  id         String   @id @default(uuid()) @db.Uuid
+  glossaryId String   @map("glossary_id") @db.Uuid
+  sourceTerm String   @map("source_term") @db.VarChar(500)
+  targetTerm String   @map("target_term") @db.VarChar(500)
+  context    String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  glossary   Glossary @relation(fields: [glossaryId], references: [id], onDelete: Cascade)
+
+  @@index([glossaryId])
+  @@map("glossary_terms")
+}
+
+// ─── Extended Models: AI / RAG ───────────────────────────────────
+
+model KnowledgeBase {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(500)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  chunks      KnowledgeChunk[]
+
+  @@index([tenantId])
+  @@map("knowledge_bases")
+}
+
+model KnowledgeChunk {
+  id              String        @id @default(uuid()) @db.Uuid
+  knowledgeBaseId String        @map("knowledge_base_id") @db.Uuid
+  content         String        @db.Text
+  embedding       Json?
+  metadata        Json?
+  chunkIndex      Int           @map("chunk_index")
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  knowledgeBase   KnowledgeBase @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+
+  @@index([knowledgeBaseId])
+  @@map("knowledge_chunks")
+}
+
+model PromptTemplate {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  name       String   @db.VarChar(500)
+  category   String?  @db.VarChar(100)
+  template   String   @db.Text
+  variables  Json?
+  version    Int      @default(1)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([category])
+  @@map("prompt_templates")
+}
+
+// ─── Extended Models: Governance ────────────────────────────────
+
+model Notification {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  type      String   @db.VarChar(100)
+  title     String   @db.VarChar(500)
+  body      String?  @db.Text
+  data      Json?
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([isRead])
+  @@map("notifications")
+}
+
+model Workflow {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String   @db.VarChar(500)
+  stepsJson Json     @map("steps_json")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  instances WorkflowInstance[]
+
+  @@index([tenantId])
+  @@map("workflows")
+}
+
+model WorkflowInstance {
+  id           String     @id @default(uuid()) @db.Uuid
+  workflowId   String     @map("workflow_id") @db.Uuid
+  entityType   EntityType @map("entity_type")
+  entityId     String     @map("entity_id") @db.Uuid
+  currentStep  Int        @default(0) @map("current_step")
+  status       JobStatus  @default(pending)
+  historyJson  Json?      @map("history_json")
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  workflow     Workflow   @relation(fields: [workflowId], references: [id])
+
+  @@index([workflowId])
+  @@index([status])
+  @@map("workflow_instances")
+}
+
+// ─── Extended Models: Reporting ──────────────────────────────────
+
+model ScheduledReport {
+  id          String       @id @default(uuid()) @db.Uuid
+  reportId    String       @map("report_id") @db.Uuid
+  cronExpr    String       @map("cron_expr") @db.VarChar(100)
+  recipients  Json
+  format      OutputFormat
+  isActive    Boolean      @default(true) @map("is_active")
+  lastRunAt   DateTime?    @map("last_run_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  report      Report       @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([isActive])
+  @@map("scheduled_reports")
+}
+
+// ─── Extended Models: Dashboard ──────────────────────────────────
+
+model DashboardFilter {
+  id          String    @id @default(uuid()) @db.Uuid
+  dashboardId String    @map("dashboard_id") @db.Uuid
+  name        String    @db.VarChar(200)
+  filterType  String    @map("filter_type") @db.VarChar(50)
+  configJson  Json?     @map("config_json")
+
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+
+  @@index([dashboardId])
+  @@map("dashboard_filters")
+}
+
+// ─── Extended Models: Library ────────────────────────────────────
+
+model AssetFolder {
+  id        String       @id @default(uuid()) @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  name      String       @db.VarChar(500)
+  parentId  String?      @map("parent_id") @db.Uuid
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  tenant    Tenant       @relation(fields: [tenantId], references: [id])
+  parent    AssetFolder? @relation("FolderHierarchy", fields: [parentId], references: [id])
+  children  AssetFolder[] @relation("FolderHierarchy")
+
+  @@index([tenantId])
+  @@index([parentId])
+  @@map("asset_folders")
+}
+
+// ─── Data Engine: Pipelines ──────────────────────────────────────
+
+model Pipeline {
+  id          String   @id @default(uuid()) @db.Uuid
+  datasetId   String?  @map("dataset_id") @db.Uuid
+  name        String   @db.VarChar(500)
+  description String?  @db.Text
+  steps       Json?
+  schedule    String?  @db.VarChar(200)
+  enabled     Boolean  @default(true)
+  createdBy   String?  @map("created_by") @db.VarChar(500)
+  tags        Json?
+  stepOrder   Json?    @map("step_order")
+  version     Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  dataset     Dataset? @relation(fields: [datasetId], references: [id])
+  executions  PipelineExecution[]
+  schedules   PipelineSchedule[]
+  metrics     PipelineMetric[]
+  logs        PipelineLog[]
+
+  @@index([datasetId])
+  @@index([enabled])
+  @@map("pipelines")
+}
+
+model PipelineExecution {
+  id          String    @id @default(uuid()) @db.Uuid
+  pipelineId  String    @map("pipeline_id") @db.Uuid
+  status      String    @default("pending") @db.VarChar(50)
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  params      Json?
+  stepResults Json?     @map("step_results")
+  metrics     Json?
+
+  pipeline    Pipeline  @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+
+  @@index([pipelineId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("pipeline_executions")
+}
+
+model PipelineSchedule {
+  id             String    @id @default(uuid()) @db.Uuid
+  pipelineId     String    @unique @map("pipeline_id") @db.Uuid
+  cronExpression String    @map("cron_expression") @db.VarChar(100)
+  timezone       String?   @db.VarChar(100)
+  nextRunAt      DateTime? @map("next_run_at")
+  lastRunAt      DateTime? @map("last_run_at")
+  enabled        Boolean   @default(true)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  pipeline       Pipeline  @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+
+  @@map("pipeline_schedules")
+}
+
+model PipelineMetric {
+  id                 String   @id @default(uuid()) @db.Uuid
+  pipelineId         String   @map("pipeline_id") @db.Uuid
+  totalRowsProcessed Int      @default(0) @map("total_rows_processed")
+  totalDurationMs    Int      @default(0) @map("total_duration_ms")
+  memoryUsageMb      Float?   @map("memory_usage_mb")
+  errorCount         Int      @default(0) @map("error_count")
+  retryCount         Int      @default(0) @map("retry_count")
+  stepDurations      Json?    @map("step_durations")
+  recordedAt         DateTime @default(now()) @map("recorded_at")
+
+  pipeline           Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+
+  @@index([pipelineId])
+  @@index([recordedAt])
+  @@map("pipeline_metrics")
+}
+
+model PipelineLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  pipelineId  String?  @map("pipeline_id") @db.Uuid
+  executionId String   @map("execution_id") @db.Uuid
+  stepId      String?  @map("step_id") @db.VarChar(200)
+  level       String   @db.VarChar(20)
+  message     String   @db.Text
+  timestamp   DateTime @default(now())
+
+  pipeline    Pipeline? @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+
+  @@index([executionId])
+  @@index([pipelineId])
+  @@index([level])
+  @@index([timestamp])
+  @@map("pipeline_logs")
+}
+
+model PipelineTemplate {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String   @db.VarChar(500)
+  description   String?  @db.Text
+  category      String?  @db.VarChar(200)
+  steps         Json?
+  defaultConfig Json?    @map("default_config")
+  usageCount    Int      @default(0) @map("usage_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@index([usageCount])
+  @@map("pipeline_templates")
+}
+
+// ─── Data Engine: Scheduled Jobs ────────────────────────────────
+
+model ScheduledJob {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(500)
+  cronExpression String   @map("cron_expression") @db.VarChar(100)
+  dataSourceId   String?  @map("data_source_id") @db.Uuid
+  importConfig   Json?    @map("import_config")
+  retryPolicy    Json?    @map("retry_policy")
+  enabled        Boolean  @default(true)
+  createdBy      String?  @map("created_by") @db.VarChar(500)
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  histories      JobHistory[]
+
+  @@index([enabled])
+  @@map("scheduled_jobs")
+}
+
+model JobHistory {
+  id             String    @id @default(uuid()) @db.Uuid
+  jobId          String    @map("job_id") @db.Uuid
+  runId          String    @unique @map("run_id") @db.Uuid
+  status         String    @default("pending") @db.VarChar(50)
+  startedAt      DateTime? @map("started_at")
+  completedAt    DateTime? @map("completed_at")
+  duration       Int?
+  rowsProcessed  Int       @default(0) @map("rows_processed")
+  rowsInserted   Int       @default(0) @map("rows_inserted")
+  rowsUpdated    Int       @default(0) @map("rows_updated")
+  rowsSkipped    Int       @default(0) @map("rows_skipped")
+  rowsFailed     Int       @default(0) @map("rows_failed")
+  errorMessages  Json?     @map("error_messages")
+  retryCount     Int       @default(0) @map("retry_count")
+
+  job            ScheduledJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([status])
+  @@index([startedAt])
+  @@index([completedAt])
+  @@map("job_histories")
+}
+
+// ─── Data Engine: Quality & Profiling ───────────────────────────
+
+model DataProfile {
+  id         String   @id @default(uuid()) @db.Uuid
+  datasetId  String   @unique @map("dataset_id") @db.Uuid
+  profiles   Json?
+  profiledAt DateTime @default(now()) @map("profiled_at")
+
+  dataset    Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@map("data_profiles")
+}
+
+model QualityScore {
+  id           String   @id @default(uuid()) @db.Uuid
+  datasetId    String   @map("dataset_id") @db.Uuid
+  overall      Float    @default(0)
+  completeness Float    @default(0)
+  accuracy     Float    @default(0)
+  consistency  Float    @default(0)
+  timeliness   Float    @default(0)
+  uniqueness   Float    @default(0)
+  validity     Float    @default(0)
+  dimensions   Json?
+  scoredAt     DateTime @default(now()) @map("scored_at")
+
+  dataset      Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([scoredAt])
+  @@map("quality_scores")
+}
+
+model AnomalyDetection {
+  id             String   @id @default(uuid()) @db.Uuid
+  datasetId      String   @map("dataset_id") @db.Uuid
+  column         String   @db.VarChar(500)
+  method         String   @db.VarChar(50)
+  threshold      Float    @default(0)
+  totalAnomalies Int      @default(0) @map("total_anomalies")
+  anomalyRate    Float    @default(0) @map("anomaly_rate")
+  results        Json?
+  detectedAt     DateTime @default(now()) @map("detected_at")
+
+  dataset        Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([column])
+  @@map("anomaly_detections")
+}
+
+// ─── Data Engine: Lineage ───────────────────────────────────────
+
+model LineageNode {
+  id        String   @id @db.Uuid
+  datasetId String   @map("dataset_id") @db.Uuid
+  type      String   @db.VarChar(100)
+  name      String   @db.VarChar(500)
+  metadata  Json?
+  timestamp DateTime @default(now())
+
+  dataset   Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([type])
+  @@map("lineage_nodes")
+}
+
+model LineageEdge {
+  id                 String  @id @db.Uuid
+  datasetId          String  @map("dataset_id") @db.Uuid
+  sourceId           String  @map("source_id") @db.Uuid
+  targetId           String  @map("target_id") @db.Uuid
+  transformationType String? @map("transformation_type") @db.VarChar(200)
+  metadata           Json?
+
+  dataset            Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([sourceId])
+  @@index([targetId])
+  @@map("lineage_edges")
+}
+
+model ColumnLineage {
+  id                String   @id @default(uuid()) @db.Uuid
+  datasetId         String   @map("dataset_id") @db.Uuid
+  columnName        String   @map("column_name") @db.VarChar(500)
+  upstreamSources   Json?    @map("upstream_sources")
+  downstreamTargets Json?    @map("downstream_targets")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  dataset           Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, columnName])
+  @@index([datasetId])
+  @@map("column_lineages")
+}
+
+// ─── Data Engine: Catalog ───────────────────────────────────────
+
+model DatasetTag {
+  id         String @id @default(uuid()) @db.Uuid
+  name       String @unique @db.VarChar(200)
+  usageCount Int    @default(0) @map("usage_count")
+
+  @@index([usageCount])
+  @@map("dataset_tags")
+}
+
+model DataDictionaryEntry {
+  id                  String   @id @default(uuid()) @db.Uuid
+  datasetId           String   @map("dataset_id") @db.Uuid
+  columnName          String   @map("column_name") @db.VarChar(500)
+  businessName        String?  @map("business_name") @db.VarChar(500)
+  businessDescription String?  @map("business_description") @db.Text
+  dataType            String?  @map("data_type") @db.VarChar(100)
+  format              String?  @db.VarChar(200)
+  allowedValues       Json?    @map("allowed_values")
+  validationRules     Json?    @map("validation_rules")
+  owner               String?  @db.VarChar(500)
+  lastUpdated         DateTime @default(now()) @map("last_updated")
+
+  dataset             Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, columnName])
+  @@index([datasetId])
+  @@map("data_dictionary_entries")
+}
+
+model DatasetAccessLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  datasetId       String   @map("dataset_id") @db.Uuid
+  userId          String   @map("user_id") @db.VarChar(500)
+  accessedAt      DateTime @default(now()) @map("accessed_at")
+  columnsAccessed Json?    @map("columns_accessed")
+
+  dataset         Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@index([accessedAt])
+  @@map("dataset_access_logs")
+}
+
+model DatasetUsageStats {
+  id             String   @id @default(uuid()) @db.Uuid
+  datasetId      String   @unique @map("dataset_id") @db.Uuid
+  totalQueries   Int      @default(0) @map("total_queries")
+  uniqueUsers    Int      @default(0) @map("unique_users")
+  lastAccessedAt DateTime? @map("last_accessed_at")
+  popularColumns Json?    @map("popular_columns")
+  computedAt     DateTime @default(now()) @map("computed_at")
+
+  dataset        Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@map("dataset_usage_stats")
+}
+
+// ─── Data Engine: Source Connection ─────────────────────────────
+
+model SourceConnection {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(500)
+  connectionType String   @map("connection_type") @db.VarChar(100)
+  config         Json?
+  status         String   @default("active") @db.VarChar(50)
+  lastTestedAt   DateTime? @map("last_tested_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([connectionType])
+  @@index([status])
+  @@map("source_connections")
+}
+
+// ─── Data Engine: Connector Connection ──────────────────────────
+
+model ConnectorConnection {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  userId         String    @map("user_id") @db.VarChar(500)
+  connectorType  String    @map("connector_type") @db.VarChar(100)
+  accessToken    String    @map("access_token") @db.Text
+  refreshToken   String?   @map("refresh_token") @db.Text
+  expiresAt      DateTime  @map("expires_at")
+  tokenType      String    @default("Bearer") @map("token_type") @db.VarChar(50)
+  status         String    @default("active") @db.VarChar(50)
+  revokedAt      DateTime? @map("revoked_at")
+  lastUsedAt     DateTime? @map("last_used_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([connectorType])
+  @@index([status])
+  @@map("connector_connections")
+}
+
+// ─── Data Engine: Data Source ───────────────────────────────────
+
+model DataSource {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  name           String    @db.VarChar(500)
+  type           String    @db.VarChar(100)
+  columns        String?   @db.Text
+  externalId     String?   @map("external_id") @db.VarChar(500)
+  recordCount    Int?      @map("record_count")
+  lastSyncAt     DateTime? @map("last_sync_at")
+  deletedAt      DateTime? @map("deleted_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+  syncSchedules  SyncSchedule[]
+  syncLogs       SyncLog[]
+
+  @@index([tenantId])
+  @@index([type])
+  @@map("data_sources")
+}
+
+// ─── Data Engine: Knowledge Graph ──────────────────────────────
+
+model KnowledgeGraphNode {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  entityId       String    @map("entity_id") @db.VarChar(500)
+  entityType     String    @map("entity_type") @db.VarChar(100)
+  label          String    @db.VarChar(500)
+  metadata       String?   @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([entityId])
+  @@index([entityType])
+  @@map("knowledge_graph_nodes")
+}
+
+model KnowledgeGraphEdge {
+  id             String    @id @default(uuid()) @db.Uuid
+  fromEntityId   String    @map("from_entity_id") @db.VarChar(500)
+  toEntityId     String    @map("to_entity_id") @db.VarChar(500)
+  relationship   String    @db.VarChar(200)
+  weight         Float     @default(1.0)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([fromEntityId])
+  @@index([toEntityId])
+  @@index([relationship])
+  @@map("knowledge_graph_edges")
+}
+
+// ─── Data Engine: Sync Schedule & Log ──────────────────────────
+
+model SyncSchedule {
+  id             String    @id @default(uuid()) @db.Uuid
+  sourceId       String    @unique @map("source_id") @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  frequency      String    @db.VarChar(50)
+  isActive       Boolean   @default(true) @map("is_active")
+  lastRunAt      DateTime? @map("last_run_at")
+  nextRunAt      DateTime  @map("next_run_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  source         DataSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([isActive])
+  @@map("sync_schedules")
+}
+
+model SyncLog {
+  id               String    @id @default(uuid()) @db.Uuid
+  sourceId         String    @map("source_id") @db.Uuid
+  status           String    @db.VarChar(50)
+  recordsImported  Int       @default(0) @map("records_imported")
+  duration         Int       @default(0)
+  error            String?   @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  source           DataSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId])
+  @@index([createdAt])
+  @@map("sync_logs")
+}
+
+// ─── Data Engine: Upload Session ───────────────────────────────
+
+model UploadSession {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  fileName       String    @map("file_name") @db.VarChar(500)
+  fileSize       Int       @map("file_size")
+  mimeType       String    @map("mime_type") @db.VarChar(200)
+  chunkSize      Int       @map("chunk_size")
+  totalChunks    Int       @map("total_chunks")
+  uploadedChunks String    @default("[]") @map("uploaded_chunks") @db.Text
+  status         String    @default("active") @db.VarChar(50)
+  filePath       String?   @map("file_path") @db.VarChar(1000)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("upload_sessions")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────
+
+enum DatasetSourceType {
+  file
+  api
+  manual
+  ai
+  database
+  stream
+  archive
+  image_ocr
+}
+
+enum DatasetStatus {
+  active
+  archived
+  deleted
+}
+
+enum ChangeType {
+  create
+  update
+  delete
+  merge
+  transform
+}
+
+enum EntityType {
+  dataset
+  report
+  dashboard
+  presentation
+  infographic
+  template
+  workbook
+  library_asset
+}
+
+enum TemplateCategory {
+  report
+  dashboard
+  presentation
+  infographic
+  excel
+}
+
+enum TenantPlan {
+  free
+  pro
+  enterprise
+}
+
+enum UserRole {
+  admin
+  editor
+  viewer
+}
+
+enum UserStatus {
+  active
+  suspended
+  deleted
+}
+
+enum FeatureStatus {
+  locked
+  implemented
+  tested
+}
+
+enum JobStatus {
+  pending
+  running
+  completed
+  failed
+  cancelled
+}
+
+enum CheckType {
+  completeness
+  uniqueness
+  consistency
+  accuracy
+  timeliness
+  validity
+}
+
+enum CheckResult {
+  pass
+  fail
+  warning
+}
+
+enum WidgetType {
+  chart
+  table
+  metric
+  map
+  text
+  image
+  filter
+}
+
+enum OutputFormat {
+  pdf
+  xlsx
+  docx
+  csv
+  html
+  png
+  svg
+}
+
+enum ResourceType {
+  dataset
+  dashboard
+  report
+  presentation
+  infographic
+  template
+  library
+  system
+}
+
+enum PermissionAction {
+  read
+  write
+  delete
+  admin
+}
+
+enum AssetType {
+  image
+  font
+  icon
+  template
+  document
+  video
+  audio
+}

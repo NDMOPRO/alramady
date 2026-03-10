@@ -110,7 +110,7 @@ export class CrossEngineBridgeService {
         resourceId: dataId,
         resourceName: `Cross-engine transfer: ${sourceEngine} -> ${targetEngine}`,
         metadata: { sourceEngine, targetEngine, dataId },
-      },
+      } as any,
     });
 
     return {

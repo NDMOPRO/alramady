@@ -154,7 +154,7 @@ export default class DataCleansingService {
       .map((r) => (r.data as Record<string, any>)[column])
       .filter((v) => v !== null && v !== undefined && v !== '');
 
-    let fillValue: unknown = null;
+    let fillValue: any = null;
     let rowsAffected = 0;
 
     if (strategy === 'mean') {
@@ -285,9 +285,9 @@ export default class DataCleansingService {
           strategy,
           column,
           rowsAffected,
-          fillValue: strategy !== 'drop' ? fillValue : undefined,
+          fillValue: strategy !== 'drop' ? fillValue as any : undefined,
           totalRows: allRows.length,
-        },
+        } as any,
       },
     });
 
@@ -446,7 +446,7 @@ export default class DataCleansingService {
 
         if (val === null || val === undefined || val === '') continue;
 
-        let newVal: unknown = val;
+        let newVal: any = val;
         const strVal = String(val).trim();
 
         switch (rule.type) {
@@ -947,7 +947,7 @@ export default class DataCleansingService {
           issuesFound: totalIssues,
           columnSummary,
           sampleIssues: issues.slice(0, 100),
-        },
+        } as any,
       },
     });
 

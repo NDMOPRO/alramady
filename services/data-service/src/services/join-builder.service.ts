@@ -154,7 +154,7 @@ export class JoinBuilderService {
         id: crypto.randomUUID(),
         tenantId: config.tenantId,
         name: outputName,
-        sourceType: 'computed',
+        sourceType: 'computed' as any,
         format: 'join',
         rowCount: BigInt(resultRows.length),
         columnCount: columns.length,
@@ -165,7 +165,7 @@ export class JoinBuilderService {
           leftDatasetId: config.leftDatasetId,
           rightDatasetId: config.rightDatasetId,
           joinKeys: config.joinKeys,
-        },
+        } as any,
       },
     });
 
@@ -602,7 +602,7 @@ export class JoinBuilderService {
             datasetId: newDatasetId,
             type: 'output',
             name: `Join result`,
-            metadata: { joinType: config.joinType, joinKeys: config.joinKeys },
+            metadata: { joinType: config.joinType, joinKeys: config.joinKeys } as any,
           },
         ],
       });

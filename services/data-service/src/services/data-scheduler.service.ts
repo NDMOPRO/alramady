@@ -110,7 +110,7 @@ export default class DataSchedulerService extends EventEmitter {
       },
     });
     this.importQueue = new Queue(this.QUEUE_NAME, {
-      connection: this.redisConnection,
+      connection: this.redisConnection as any,
       defaultJobOptions: {
         removeOnComplete: { age: 86400, count: 1000 },
         removeOnFail: { age: 604800, count: 5000 },
@@ -119,7 +119,7 @@ export default class DataSchedulerService extends EventEmitter {
       },
     });
     this.queueEvents = new QueueEvents(this.QUEUE_NAME, {
-      connection: this.redisConnection,
+      connection: this.redisConnection as any,
     });
     this.metricsBuffer = {
       activeJobs: 0,
@@ -138,7 +138,7 @@ export default class DataSchedulerService extends EventEmitter {
         return this.processImportJob(job);
       },
       {
-        connection: this.redisConnection,
+        connection: this.redisConnection as any,
         concurrency: this.MAX_CONCURRENT_JOBS,
         limiter: { max: 10, duration: 60000 },
       },

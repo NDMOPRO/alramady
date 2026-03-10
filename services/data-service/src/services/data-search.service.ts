@@ -132,19 +132,19 @@ export class DataSearchService {
             break;
           case 'gt':
           case '>':
-            if (parseFloat(cellValue) <= parseFloat(condVal)) matches = false;
+            if (parseFloat(cellValue as string) <= parseFloat(condVal as string)) matches = false;
             break;
           case 'gte':
           case '>=':
-            if (parseFloat(cellValue) < parseFloat(condVal)) matches = false;
+            if (parseFloat(cellValue as string) < parseFloat(condVal as string)) matches = false;
             break;
           case 'lt':
           case '<':
-            if (parseFloat(cellValue) >= parseFloat(condVal)) matches = false;
+            if (parseFloat(cellValue as string) >= parseFloat(condVal as string)) matches = false;
             break;
           case 'lte':
           case '<=':
-            if (parseFloat(cellValue) > parseFloat(condVal)) matches = false;
+            if (parseFloat(cellValue as string) > parseFloat(condVal as string)) matches = false;
             break;
           case 'contains':
             if (!String(cellValue || '').toLowerCase().includes(String(condVal).toLowerCase())) matches = false;

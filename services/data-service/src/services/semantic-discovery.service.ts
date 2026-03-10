@@ -101,7 +101,7 @@ export class SemanticDiscoveryService {
       datasetsInfo.push({
         id: dsId,
         name: ds.name,
-        columns: ds.columns.map((c) => ({ name: c.name, dataType: c.dataType })),
+        columns: ds.columns.map((c) => ({ name: c.name, dataType: c.dataType || 'string' })),
         sampleData,
       });
     }
@@ -287,7 +287,7 @@ Rules:
       });
 
       for (const col of ds.columns) {
-        const colType = this.classifyColumnType(col.dataType);
+        const colType = this.classifyColumnType(col.dataType || 'string');
         nodes.push({
           id: `attr-${dsId}-${col.name}`,
           datasetId: dsId,

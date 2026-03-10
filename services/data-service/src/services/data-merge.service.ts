@@ -338,7 +338,7 @@ export class DataMergeService {
       allDatasets.push({
         dataset: dataset as unknown as Record<string, any>,
         rows: dataRows.map(r => r.data as Record<string, any>),
-        columns: dataset.columns.map(c => ({ name: c.name, dataType: c.dataType, position: c.position })),
+        columns: dataset.columns.map(c => ({ name: c.name, dataType: c.dataType || 'string', position: c.position ?? 0 })),
       });
     }
 

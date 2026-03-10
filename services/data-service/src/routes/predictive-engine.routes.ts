@@ -63,7 +63,7 @@ router.post('/correlation', asyncHandler(async (req: Request, res: Response) => 
 router.post('/cluster', asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = req.tenant!;
   const { datasetId, columns, k } = ClusterSchema.parse(req.body);
-  const result = await service.clusterAnalysis(datasetId, tenantId, columns, k);
+  const result = await service.clusterAnalysis(datasetId, tenantId, columns, k ?? 3);
   res.json({ success: true, data: result });
 }));
 

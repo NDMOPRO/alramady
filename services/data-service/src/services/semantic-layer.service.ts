@@ -53,7 +53,7 @@ export class SemanticLayerService {
           dimensions: validated.dimensions,
           measures: validated.measures,
         },
-      },
+      } as any,
     });
   }
 
@@ -63,7 +63,7 @@ export class SemanticLayerService {
     });
     if (!model) throw new Error('Semantic model not found');
 
-    const settings = model.settings as Record<string, any> | null;
+    const settings = (model as any).settings as Record<string, any> | null;
     if (settings?.type !== 'SEMANTIC_MODEL') throw new Error('Not a semantic model');
 
     return model;
@@ -71,12 +71,12 @@ export class SemanticLayerService {
 
   async listModels(tenantId: string): Promise<unknown[]> {
     const all = await prisma.knowledgeBase.findMany({
-      where: { tenantId, deletedAt: null },
+      where: { tenantId, deletedAt: null } as any,
       orderBy: { createdAt: 'desc' },
     });
 
     return all.filter((kb) => {
-      const settings = kb.settings as Record<string, any> | null;
+      const settings = (kb as any).settings as Record<string, any> | null;
       return settings?.type === 'SEMANTIC_MODEL';
     });
   }
@@ -112,7 +112,7 @@ export class SemanticLayerService {
 
     await prisma.knowledgeBase.update({
       where: { id: modelId },
-      data: { deletedAt: new Date() },
+      data: { deletedAt: new Date() } as any,
     });
   }
 }

@@ -51,7 +51,7 @@ export class LakehouseService {
         resourceId: validated.tenantId,
         resourceName: `Lakehouse query (${validated.engine})`,
         metadata: { engine: validated.engine, queryLength: validated.query.length },
-      },
+      } as any,
     });
 
     const queue = this.getQueue(validated.engine);
@@ -94,7 +94,7 @@ export class LakehouseService {
           lakehouseSchema: validated.schema,
           fileFormat: validated.fileFormat,
           partitionBy: validated.partitionBy,
-        },
+        } as any,
       },
     });
   }

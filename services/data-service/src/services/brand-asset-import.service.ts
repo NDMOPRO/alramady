@@ -277,13 +277,13 @@ export class BrandAssetImportService {
         tenantId,
         type: 'brand_kit',
         deletedAt: null,
-      },
+      } as any,
       orderBy: { createdAt: 'desc' },
     });
 
     if (!record) return null;
 
-    const metadata = (record.metadata as Record<string, any>) ?? {};
+    const metadata = ((record as any).metadata as Record<string, any>) ?? {};
     return {
       id: record.id,
       tenantId,
@@ -293,7 +293,7 @@ export class BrandAssetImportService {
       logos: (metadata.logos as BrandLogo[]) ?? [],
       guidelines: (metadata.guidelines as Record<string, any>) ?? {},
       source: (metadata.source as string) || 'unknown',
-      lastSyncedAt: (metadata.lastSyncedAt as string) || record.updatedAt?.toISOString() || '',
+      lastSyncedAt: (metadata.lastSyncedAt as string) || (record as any).updatedAt?.toISOString() || '',
       createdAt: record.createdAt.toISOString(),
     };
   }
@@ -327,7 +327,7 @@ export class BrandAssetImportService {
           data: {
             themeConfig: JSON.parse(JSON.stringify(themeConfig)),
             updatedAt: new Date(),
-          },
+          } as any,
         });
         changes.push('Applied brand colors to dashboard', 'Updated chart color palette');
         if (headingFont) changes.push(`Applied heading font: ${headingFont}`);
@@ -339,7 +339,7 @@ export class BrandAssetImportService {
           data: {
             themeConfig: JSON.parse(JSON.stringify(themeConfig)),
             updatedAt: new Date(),
-          },
+          } as any,
         });
         changes.push('Applied brand colors to report', 'Updated cover page styling');
         break;
@@ -350,7 +350,7 @@ export class BrandAssetImportService {
           data: {
             themeConfig: JSON.parse(JSON.stringify(themeConfig)),
             updatedAt: new Date(),
-          },
+          } as any,
         });
         changes.push('Applied brand colors to slides', 'Updated slide master');
         if (brandKit.logos.length > 0) changes.push('Added logo to slide footer');
@@ -414,7 +414,7 @@ export class BrandAssetImportService {
           lastSyncedAt: new Date().toISOString(),
         })),
         createdAt: new Date(),
-      },
+      } as any,
     });
 
     return {

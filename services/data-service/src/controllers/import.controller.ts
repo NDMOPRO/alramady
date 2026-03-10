@@ -41,9 +41,9 @@ export class ImportController {
           take: limit,
           select: {
             id: true, name: true, format: true, status: true,
-            rowCount: true, columnCount: true, fileSize: true,
+            rowCount: true, columnCount: true,
             createdAt: true, updatedAt: true,
-          },
+          } as any,
         }),
         prisma.dataset.count({ where: { tenantId } }),
       ]);

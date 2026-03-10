@@ -110,7 +110,7 @@ export class WebIntelligenceService {
         tenantId,
         details: JSON.stringify({ url, extractedKeys: Object.keys(extractedData), tableCount: tables.length }),
         performedAt: new Date(),
-      },
+      } as any,
     });
 
     logger.info('Scrape complete', { jobId, title, tablesFound: tables.length });
@@ -307,7 +307,7 @@ export class WebIntelligenceService {
         tenantId,
         details: JSON.stringify({ query, resultCount: data.items?.length || 0 }),
         performedAt: new Date(),
-      },
+      } as any,
     });
 
     return (data.items || []).map((item) => ({

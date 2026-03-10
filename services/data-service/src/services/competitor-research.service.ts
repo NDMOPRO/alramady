@@ -128,7 +128,7 @@ export class CompetitorResearchService {
         tenantId,
         details: JSON.stringify({ url, dataKeys: Object.keys(extractedData) }),
         performedAt: new Date(),
-      },
+      } as any,
     });
 
     return result;
@@ -268,7 +268,7 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
           recommendationCount: parsed.recommendations.length,
         }),
         performedAt: new Date(),
-      },
+      } as any,
     });
 
     return {
@@ -329,9 +329,9 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
     });
 
     return history.map((h) => ({
-      scrapedAt: h.startedAt.toISOString(),
-      dataSnapshot: (h.result as Record<string, any>) ?? {},
-      changesDetected: ((h.result as Record<string, any>)?.changesDetected as number) ?? 0,
+      scrapedAt: h.startedAt?.toISOString() ?? new Date().toISOString(),
+      dataSnapshot: ((h as any).result as Record<string, any>) ?? {},
+      changesDetected: (((h as any).result as Record<string, any>)?.changesDetected as number) ?? 0,
     }));
   }
 
@@ -353,8 +353,8 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
       }),
     ]);
 
-    const data1 = (snap1?.result as Record<string, any>) ?? {};
-    const data2 = (snap2?.result as Record<string, any>) ?? {};
+    const data1 = ((snap1 as any)?.result as Record<string, any>) ?? {};
+    const data2 = ((snap2 as any)?.result as Record<string, any>) ?? {};
 
     const added: Record<string, any> = {};
     const removed: Record<string, any> = {};

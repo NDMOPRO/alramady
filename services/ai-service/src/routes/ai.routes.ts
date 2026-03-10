@@ -141,7 +141,7 @@ router.post('/generate/report', authMiddleware, asyncHandler(async (req: Request
 }));
 
 router.post('/generate/insights/:datasetId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.datasetId);
+  const datasetId = z.string().uuid().parse(req.params.datasetId!);
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
   const result = await generativeAi.generateInsights(datasetId, tenantId, userId);
@@ -243,7 +243,7 @@ router.get('/rag/knowledge-bases', authMiddleware, asyncHandler(async (req: Requ
 }));
 
 router.get('/rag/knowledge-bases/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const kbId = z.string().uuid().parse(req.params.id);
+  const kbId = z.string().uuid().parse(req.params.id!);
   const tenantId = req.user!.organizationId || req.user!.userId;
   const result = await ragEngine.getKnowledgeBase(kbId, tenantId);
 
@@ -256,7 +256,7 @@ router.get('/rag/knowledge-bases/:id', authMiddleware, asyncHandler(async (req: 
 }));
 
 router.post('/rag/knowledge-bases/:id/ingest', authMiddleware, upload.single('file'), asyncHandler(async (req: Request, res: Response) => {
-  const kbId = z.string().uuid().parse(req.params.id);
+  const kbId = z.string().uuid().parse(req.params.id!);
   const tenantId = req.user!.organizationId || req.user!.userId;
 
   if (!req.file) {
@@ -274,7 +274,7 @@ const queryKbSchema = z.object({
 });
 
 router.post('/rag/knowledge-bases/:id/query', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const kbId = z.string().uuid().parse(req.params.id);
+  const kbId = z.string().uuid().parse(req.params.id!);
   const { question, topK } = queryKbSchema.parse(req.body);
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
@@ -288,7 +288,7 @@ const hybridSearchSchema = z.object({
 });
 
 router.post('/rag/knowledge-bases/:id/hybrid-search', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const kbId = z.string().uuid().parse(req.params.id);
+  const kbId = z.string().uuid().parse(req.params.id!);
   const { query, topK } = hybridSearchSchema.parse(req.body);
   const result = await ragEngine.hybridSearch(kbId, query, topK);
   res.json({ success: true, data: { results: result } });
@@ -313,7 +313,7 @@ const analyzeDatasetSchema = z.object({
 });
 
 router.post('/data-ai/analyze/:datasetId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.datasetId);
+  const datasetId = z.string().uuid().parse(req.params.datasetId!);
   const { question } = analyzeDatasetSchema.parse(req.body);
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
@@ -322,7 +322,7 @@ router.post('/data-ai/analyze/:datasetId', authMiddleware, asyncHandler(async (r
 }));
 
 router.post('/data-ai/patterns/:datasetId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.datasetId);
+  const datasetId = z.string().uuid().parse(req.params.datasetId!);
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
   const result = await dataAnalysisAi.detectPatterns(datasetId, tenantId, userId);
@@ -335,14 +335,14 @@ const predictSchema = z.object({
 });
 
 router.post('/data-ai/predict/:datasetId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.datasetId);
+  const datasetId = z.string().uuid().parse(req.params.datasetId!);
   const { column, periods } = predictSchema.parse(req.body);
   const result = await dataAnalysisAi.predictTrend(datasetId, column, periods);
   res.json({ success: true, data: result });
 }));
 
 router.get('/data-ai/suggest-viz/:datasetId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.datasetId);
+  const datasetId = z.string().uuid().parse(req.params.datasetId!);
   const result = await dataAnalysisAi.suggestVisualizations(datasetId);
   res.json({ success: true, data: { visualizations: result } });
 }));
@@ -389,7 +389,7 @@ const testPromptSchema = z.object({
 });
 
 router.post('/prompts/:id/test', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const promptId = z.string().uuid().parse(req.params.id);
+  const promptId = z.string().uuid().parse(req.params.id!);
   const { variables } = testPromptSchema.parse(req.body);
   const result = await promptManagement.testPrompt(promptId, variables);
   res.json({ success: true, data: result });
@@ -403,7 +403,7 @@ const optimizePromptSchema = z.object({
 });
 
 router.post('/prompts/:id/optimize', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const promptId = z.string().uuid().parse(req.params.id);
+  const promptId = z.string().uuid().parse(req.params.id!);
   const { examples } = optimizePromptSchema.parse(req.body);
   const result = await promptManagement.optimizePrompt(promptId, examples as Array<{ input: unknown; expectedOutput: string }>);
   res.json({ success: true, data: result });
@@ -414,7 +414,7 @@ const versionPromptSchema = z.object({
 });
 
 router.post('/prompts/:id/version', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const promptId = z.string().uuid().parse(req.params.id);
+  const promptId = z.string().uuid().parse(req.params.id!);
   const { description } = versionPromptSchema.parse(req.body);
   const result = await promptManagement.versionPrompt(promptId, description);
   res.json({ success: true, data: result });

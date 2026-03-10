@@ -24,7 +24,7 @@ export class ExternalSimulationController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await externalSimulationService.getById(req.params.id);
+      const data = await externalSimulationService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class ExternalSimulationController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await externalSimulationService.update(req.params.id, req.body);
+      const data = await externalSimulationService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class ExternalSimulationController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await externalSimulationService.remove(req.params.id);
+      await externalSimulationService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'External simulation deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class ExternalSimulationController {
 
   async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await externalSimulationService.execute(req.params.id);
+      const data = await externalSimulationService.execute(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ export class ExternalSimulationController {
 
   async cancel(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await externalSimulationService.cancel(req.params.id);
+      const data = await externalSimulationService.cancel(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -79,7 +79,7 @@ export class ExternalSimulationController {
 
   async getResults(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await externalSimulationService.getResults(req.params.id);
+      const data = await externalSimulationService.getResults(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -89,8 +89,8 @@ export class ExternalSimulationController {
   // E03.07: Simulate from image
   async simulateFromImage(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId || req.user?.organizationId || 'a0000000-0000-0000-0000-000000000001';
-      const userId = req.user?.userId || req.user?.id || 'a0000000-0000-0000-0000-000000000001';
+      const tenantId = req.user!.tenantId! || req.user!.organizationId || 'a0000000-0000-0000-0000-000000000001';
+      const userId = req.user!.userId || req.user!.id! || 'a0000000-0000-0000-0000-000000000001';
       const { imageAnalysis, datasetId } = req.body;
       const data = await externalSimulationService.simulateFromImage({
         tenantId,

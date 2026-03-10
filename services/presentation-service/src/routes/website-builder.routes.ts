@@ -40,8 +40,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, options } = GenerateWebsiteBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await service.generateWebsite(presentationId, options, tenantId, userId);
     res.status(201).json({ success: true, data: result });
   }),
@@ -52,7 +52,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = GenerateLandingPageBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const result = await service.generateLandingPage(presentationId, tenantId);
     res.status(201).json({ success: true, data: result });
   }),
@@ -62,7 +62,7 @@ router.post(
   '/export/:websiteId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const websiteId = req.params.websiteId;
+    const websiteId = req.params.websiteId!;
     const buffer = await service.exportStaticSite(websiteId);
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename="website-${websiteId}.zip"`);
@@ -75,7 +75,7 @@ router.post(
   '/seo/:websiteId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const websiteId = req.params.websiteId;
+    const websiteId = req.params.websiteId!;
     const result = await service.generateSEOMetadata(websiteId);
     res.json({ success: true, data: result });
   }),
@@ -85,7 +85,7 @@ router.get(
   '/list/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.params.tenantId;
+    const tenantId = req.params.tenantId!;
     const result = await service.listWebsites(tenantId);
     res.json({ success: true, data: result });
   }),

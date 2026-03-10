@@ -303,8 +303,8 @@ router.post(
   authMiddleware,
   validate(exportOptionsSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -440,8 +440,8 @@ router.post(
   authMiddleware,
   validate(exportOptionsSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -620,8 +620,8 @@ router.post(
   authMiddleware,
   validate(googleSlidesSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -777,8 +777,8 @@ router.post(
   authMiddleware,
   validate(exportOptionsSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -891,8 +891,8 @@ router.post(
   authMiddleware,
   validate(videoExportSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1059,8 +1059,8 @@ router.post(
   authMiddleware,
   validate(htmlExportSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1233,8 +1233,8 @@ router.post(
   authMiddleware,
   validate(wordExportSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1351,8 +1351,8 @@ router.post(
   authMiddleware,
   validate(multiFormatSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1534,8 +1534,8 @@ router.post(
   authMiddleware,
   validate(publishWebSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1599,8 +1599,8 @@ router.post(
   authMiddleware,
   validate(publishLinkedInSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1739,8 +1739,8 @@ router.post(
   authMiddleware,
   validate(publishDomainSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1816,8 +1816,8 @@ router.post(
   authMiddleware,
   validate(embedSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     await loadPresentationWithSlides(presentationId, tenantId);
@@ -1873,8 +1873,8 @@ router.post(
   authMiddleware,
   validate(shareSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -1971,8 +1971,8 @@ router.post(
   authMiddleware,
   validate(scheduleSnapshotSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     await loadPresentationWithSlides(presentationId, tenantId);
@@ -2031,8 +2031,8 @@ router.post(
   authMiddleware,
   validate(socialImagesSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -2145,8 +2145,8 @@ router.post(
   authMiddleware,
   validate(landingPageSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'anonymous';
     const { presentationId } = req.params;
 
     const { presentation, slides } = await loadPresentationWithSlides(presentationId, tenantId);
@@ -2376,7 +2376,7 @@ router.get(
   '/jobs/:presentationId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const { presentationId } = req.params;
 
     // Verify presentation belongs to tenant

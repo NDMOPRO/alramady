@@ -15,7 +15,7 @@ export async function list(req: AuthRequest, res: Response, next: NextFunction) 
 
 export async function getById(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const record = await service.getById(req.params.id);
+    const record = await service.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (err) {
     next(err);
@@ -24,7 +24,7 @@ export async function getById(req: AuthRequest, res: Response, next: NextFunctio
 
 export async function create(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const record = await service.create({ ...req.body, createdBy: req.user?.id });
+    const record = await service.create({ ...req.body, createdBy: req.user!.id! });
     res.status(201).json({ success: true, data: record });
   } catch (err) {
     next(err);
@@ -33,7 +33,7 @@ export async function create(req: AuthRequest, res: Response, next: NextFunction
 
 export async function update(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const record = await service.update(req.params.id, req.body);
+    const record = await service.update(req.params.id!, req.body);
     res.json({ success: true, data: record });
   } catch (err) {
     next(err);
@@ -42,7 +42,7 @@ export async function update(req: AuthRequest, res: Response, next: NextFunction
 
 export async function remove(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const result = await service.remove(req.params.id);
+    const result = await service.remove(req.params.id!);
     res.json({ success: true, ...result });
   } catch (err) {
     next(err);
@@ -60,8 +60,8 @@ export async function getLevels(_req: AuthRequest, res: Response, next: NextFunc
 
 export async function runAnalysis(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    logger.info('Run analysis request', { userId: req.user?.id });
-    const result = await service.runAnalysis(req.body, req.user?.id);
+    logger.info('Run analysis request', { userId: req.user!.id! });
+    const result = await service.runAnalysis(req.body, req.user!.id!);
     const statusCode = result.status === 'processing' ? 202 : 200;
     res.status(statusCode).json({ success: true, data: result });
   } catch (err) {
@@ -71,7 +71,7 @@ export async function runAnalysis(req: AuthRequest, res: Response, next: NextFun
 
 export async function getResults(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const result = await service.getResults(req.params.id);
+    const result = await service.getResults(req.params.id!);
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);

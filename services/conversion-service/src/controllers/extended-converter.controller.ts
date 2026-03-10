@@ -18,8 +18,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });
@@ -55,8 +55,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });
@@ -92,8 +92,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });
@@ -132,8 +132,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });
@@ -159,8 +159,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
       const sourceFormat = req.body.sourceFormat;
       const targetFormat = req.body.targetFormat;
 
@@ -224,8 +224,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });
@@ -262,8 +262,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });
@@ -293,8 +293,8 @@ export class ExtendedConverterController {
         return;
       }
 
-      const tenantId = req.user?.organizationId || req.body.tenantId;
-      const userId = req.user?.id || req.body.userId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
+      const userId = req.user!.id! || req.body.userId;
 
       if (!tenantId || !userId) {
         res.status(400).json({ success: false, error: 'tenantId and userId are required' });

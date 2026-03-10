@@ -11,7 +11,7 @@ router.use(tenantMiddleware);
 // List cleansing operations / quality checks for a tenant
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenantId = req.user?.tenantId;
+    const tenantId = req.user!.tenantId as string;
     const page = Math.max(1, parseInt(req.query.page as string) || 1);
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string) || 20));
     const offset = (page - 1) * limit;
@@ -40,8 +40,8 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 // Get quality score for a dataset
 router.get('/:id/quality', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenantId = req.user?.tenantId;
-    const datasetId = req.params.id;
+    const tenantId = req.user!.tenantId as string;
+    const datasetId = req.params.id!;
 
     const dataset = await prisma.dataset.findFirst({
       where: { id: datasetId, tenantId },
@@ -62,8 +62,8 @@ router.get('/:id/quality', async (req: Request, res: Response, next: NextFunctio
 // Auto-clean all issues in a dataset
 router.post('/:id/auto-clean', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenantId = req.user?.tenantId;
-    const datasetId = req.params.id;
+    const tenantId = req.user!.tenantId as string;
+    const datasetId = req.params.id!;
 
     const dataset = await prisma.dataset.findFirst({
       where: { id: datasetId, tenantId },
@@ -100,8 +100,8 @@ router.post('/:id/trim-whitespace', (req, res, next) => cleansingController.trim
 // Replace values in a dataset column
 router.post('/:id/replace', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenantId = req.user?.tenantId;
-    const datasetId = req.params.id;
+    const tenantId = req.user!.tenantId as string;
+    const datasetId = req.params.id!;
     const { column, search, replace, caseSensitive } = req.body;
 
     const dataset = await prisma.dataset.findFirst({
@@ -147,8 +147,8 @@ router.post('/:id/replace', async (req: Request, res: Response, next: NextFuncti
 // Split column into multiple columns
 router.post('/:id/split-column', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tenantId = req.user?.tenantId;
-    const datasetId = req.params.id;
+    const tenantId = req.user!.tenantId as string;
+    const datasetId = req.params.id!;
     const { column, delimiter, newColumns } = req.body;
 
     const dataset = await prisma.dataset.findFirst({

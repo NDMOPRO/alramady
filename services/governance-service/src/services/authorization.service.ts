@@ -276,7 +276,7 @@ export class AuthorizationService {
           })),
           createdAt: new Date().toISOString(),
           type: 'ABAC',
-        },
+        } as Prisma.InputJsonValue,
       },
     });
 

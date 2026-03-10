@@ -24,7 +24,7 @@ export class TemplateLibraryController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await templateLibraryService.getById(req.params.id);
+      const data = await templateLibraryService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class TemplateLibraryController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await templateLibraryService.update(req.params.id, req.body);
+      const data = await templateLibraryService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class TemplateLibraryController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await templateLibraryService.remove(req.params.id);
+      await templateLibraryService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Template deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class TemplateLibraryController {
 
   async duplicate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await templateLibraryService.duplicate(req.params.id);
+      const data = await templateLibraryService.duplicate(req.params.id!);
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -80,7 +80,7 @@ export class TemplateLibraryController {
   async applyTemplate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { targetDashboardId } = req.body;
-      const data = await templateLibraryService.applyTemplate(req.params.id, targetDashboardId);
+      const data = await templateLibraryService.applyTemplate(req.params.id!, targetDashboardId);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -100,8 +100,8 @@ export class TemplateLibraryController {
   // E03.06: Create from template
   async createFromTemplate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const userId = req.user?.userId || req.user?.id || 'a0000000-0000-0000-0000-000000000001';
-      const tenantId = req.user?.tenantId || req.user?.organizationId || 'a0000000-0000-0000-0000-000000000001';
+      const userId = req.user!.userId || req.user!.id! || 'a0000000-0000-0000-0000-000000000001';
+      const tenantId = req.user!.tenantId! || req.user!.organizationId || 'a0000000-0000-0000-0000-000000000001';
       const data = await templateLibraryService.createFromTemplate({
         ...req.body,
         userId,

@@ -65,7 +65,7 @@ export class MakeWorkflowService {
           isActive: true,
           payload: {},
           createdAt: createdAt.toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -156,7 +156,7 @@ export class MakeWorkflowService {
               success: succeeded,
               triggeredAt: new Date().toISOString(),
               payloadKeys: Object.keys(payload),
-            } as Record<string, unknown>,
+            } as Prisma.InputJsonValue,
           },
         });
 
@@ -185,7 +185,7 @@ export class MakeWorkflowService {
               event: event.trim(),
               error: errorMessage,
               triggeredAt: new Date().toISOString(),
-            } as Record<string, unknown>,
+            } as Prisma.InputJsonValue,
           },
         });
 
@@ -322,7 +322,7 @@ export class MakeWorkflowService {
           webhookId,
           event: String(data.event),
           deactivatedAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -394,7 +394,7 @@ export class MakeWorkflowService {
             success,
             statusCode: response.status,
             testedAt: new Date().toISOString(),
-          } as Record<string, unknown>,
+          } as Prisma.InputJsonValue,
         },
       });
 

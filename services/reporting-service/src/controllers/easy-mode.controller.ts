@@ -23,7 +23,7 @@ export class ReportEasyModeController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportEasyModeService.getById(req.params.id);
+      const data = await reportEasyModeService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -42,7 +42,7 @@ export class ReportEasyModeController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportEasyModeService.update(req.params.id, req.body);
+      const data = await reportEasyModeService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ export class ReportEasyModeController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await reportEasyModeService.remove(req.params.id);
+      await reportEasyModeService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Report deleted successfully' });
     } catch (error) {
       next(error);
@@ -60,7 +60,7 @@ export class ReportEasyModeController {
 
   async duplicate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportEasyModeService.duplicate(req.params.id);
+      const data = await reportEasyModeService.duplicate(req.params.id!);
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ export class ReportEasyModeController {
   async generate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { outputFormat } = req.body;
-      const data = await reportEasyModeService.generate(req.params.id, outputFormat);
+      const data = await reportEasyModeService.generate(req.params.id!, outputFormat);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -79,7 +79,7 @@ export class ReportEasyModeController {
 
   async schedule(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportEasyModeService.schedule(req.params.id, req.body);
+      const data = await reportEasyModeService.schedule(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -88,7 +88,7 @@ export class ReportEasyModeController {
 
   async preview(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportEasyModeService.preview(req.params.id);
+      const data = await reportEasyModeService.preview(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -98,7 +98,7 @@ export class ReportEasyModeController {
   async exportReport(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { format } = req.body;
-      const data = await reportEasyModeService.exportReport(req.params.id, format || 'pdf');
+      const data = await reportEasyModeService.exportReport(req.params.id!, format || 'pdf');
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

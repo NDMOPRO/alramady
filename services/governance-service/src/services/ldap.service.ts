@@ -486,7 +486,7 @@ export class LdapService {
             responseTimeMs: elapsed,
             serverInfo: testResult.serverInfo as Record<string, unknown>,
             testedAt: new Date().toISOString(),
-          } as Record<string, unknown>,
+          } as Prisma.InputJsonValue,
         },
       });
 

@@ -100,7 +100,7 @@ export class SensitiveActionApprovalService {
           status: 'pending' as ApprovalStatus,
           createdAt: createdAt.toISOString(),
           expiresAt: expiresAt.toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -176,7 +176,7 @@ export class SensitiveActionApprovalService {
           approvedAt: now.toISOString(),
           createdAt: request.createdAt.toISOString(),
           expiresAt: request.expiresAt.toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -235,7 +235,7 @@ export class SensitiveActionApprovalService {
           rejectedAt: now.toISOString(),
           createdAt: request.createdAt.toISOString(),
           expiresAt: request.expiresAt.toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -274,7 +274,7 @@ export class SensitiveActionApprovalService {
             expiredAt: new Date().toISOString(),
             createdAt: request.createdAt.toISOString(),
             expiresAt: request.expiresAt.toISOString(),
-          } as Record<string, unknown>,
+          } as Prisma.InputJsonValue,
         },
       });
 
@@ -401,7 +401,7 @@ export class SensitiveActionApprovalService {
             read: false,
             readAt: null,
             createdAt: new Date().toISOString(),
-          } as Record<string, unknown>,
+          } as Prisma.InputJsonValue,
         },
       });
     }

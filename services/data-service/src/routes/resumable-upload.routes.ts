@@ -35,23 +35,23 @@ router.post('/:uploadId/chunk/:chunkIndex', upload.single('chunk'), asyncHandler
     res.status(400).json({ success: false, error: 'Chunk data is required' });
     return;
   }
-  const chunkIndex = parseInt(req.params.chunkIndex, 10);
-  const result = await service.uploadChunk(req.params.uploadId, chunkIndex, req.file.buffer);
+  const chunkIndex = parseInt(req.params.chunkIndex!, 10);
+  const result = await service.uploadChunk(req.params.uploadId!, chunkIndex, req.file.buffer);
   res.json({ success: true, data: result });
 }));
 
 router.post('/:uploadId/finalize', asyncHandler(async (req: Request, res: Response) => {
-  const filePath = await service.finalizeUpload(req.params.uploadId);
+  const filePath = await service.finalizeUpload(req.params.uploadId!);
   res.json({ success: true, data: { filePath } });
 }));
 
 router.get('/:uploadId/progress', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.getUploadProgress(req.params.uploadId);
+  const result = await service.getUploadProgress(req.params.uploadId!);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:uploadId/resume', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.resumeUpload(req.params.uploadId);
+  const result = await service.resumeUpload(req.params.uploadId!);
   res.json({ success: true, data: result });
 }));
 

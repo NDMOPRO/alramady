@@ -366,8 +366,8 @@ router.post(
   validate(replicateDocumentSchema),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const { analysis, targetFormat } = req.body;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const job = await replicateDocument(analysis, targetFormat, tenantId, userId);
 
@@ -385,8 +385,8 @@ router.post(
   validate(replicateDashboardSchema),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const { analysis } = req.body;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const job = await replicateDashboard(analysis, tenantId, userId);
 
@@ -404,8 +404,8 @@ router.post(
   validate(replicatePresentationSchema),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const { analysis } = req.body;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const job = await replicatePresentation(analysis, tenantId, userId);
 
@@ -550,7 +550,7 @@ router.get(
     const limitNum = Number(limit) || 20;
     const offset = (pageNum - 1) * limitNum;
 
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
 
     const whereClause: Record<string, unknown> = { tenantId };
     if (status) {
@@ -604,7 +604,7 @@ router.get(
   validate(jobParamsSchema, 'params'),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const { id } = req.params;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
 
     const job = await prisma.replicationJob.findFirst({
       where: {

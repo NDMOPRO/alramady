@@ -197,8 +197,8 @@ router.post(
   validate(createPresentationSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { name, theme, width, height } = req.body;
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const dimensions = width && height ? { width, height } : undefined;
     const result = await slideBuilder.createPresentation(name, theme || {}, dimensions, tenantId, userId);
     res.status(201).json({ success: true, data: result });
@@ -209,7 +209,7 @@ router.get(
   '/presentations',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -235,14 +235,14 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const presentation = await prisma.presentation.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
     if (!presentation) {
       res.status(404).json({ success: false, error: 'Presentation not found', code: 'NOT_FOUND' });
       return;
     }
     const slides = await prisma.slide.findMany({
-      where: { presentationId: req.params.id },
+      where: { presentationId: req.params.id! },
       orderBy: { slideIndex: 'asc' },
     });
     res.json({ success: true, data: { ...presentation, slides } });
@@ -253,8 +253,8 @@ router.delete(
   '/presentations/:id',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    await prisma.slide.deleteMany({ where: { presentationId: req.params.id } });
-    await prisma.presentation.delete({ where: { id: req.params.id } });
+    await prisma.slide.deleteMany({ where: { presentationId: req.params.id! } });
+    await prisma.presentation.delete({ where: { id: req.params.id! } });
     res.json({ success: true, message: 'Presentation deleted' });
   })
 );
@@ -267,7 +267,7 @@ router.post(
   validate(addSlideSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { layout, content } = req.body;
-    const result = await slideBuilder.addSlide(req.params.id, layout, content || {});
+    const result = await slideBuilder.addSlide(req.params.id!, layout, content || {});
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -276,8 +276,8 @@ router.put(
   '/presentations/:id/slides/:slideIndex',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
-    const result = await slideBuilder.updateSlide(req.params.id, slideIndex, {
+    const slideIndex = parseInt(req.params.slideIndex!);
+    const result = await slideBuilder.updateSlide(req.params.id!, slideIndex, {
       layout: req.body.layout,
       content: req.body.content,
       notes: req.body.notes,
@@ -290,8 +290,8 @@ router.delete(
   '/presentations/:id/slides/:slideIndex',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
-    const result = await slideBuilder.deleteSlide(req.params.id, slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
+    const result = await slideBuilder.deleteSlide(req.params.id!, slideIndex);
     res.json({ success: true, data: result });
   })
 );
@@ -301,7 +301,7 @@ router.put(
   authMiddleware,
   validate(reorderSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await slideBuilder.reorderSlides(req.params.id, req.body.newOrder);
+    const result = await slideBuilder.reorderSlides(req.params.id!, req.body.newOrder);
     res.json({ success: true, data: result });
   })
 );
@@ -310,8 +310,8 @@ router.post(
   '/presentations/:id/slides/:slideIndex/duplicate',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
-    const result = await slideBuilder.duplicateSlide(req.params.id, slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
+    const result = await slideBuilder.duplicateSlide(req.params.id!, slideIndex);
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -323,9 +323,9 @@ router.post(
   authMiddleware,
   validate(addTextBoxSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
     const { text, position, style } = req.body;
-    const result = await slideBuilder.addTextBox(req.params.id, slideIndex, text, position, style || {});
+    const result = await slideBuilder.addTextBox(req.params.id!, slideIndex, text, position, style || {});
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -339,9 +339,9 @@ router.post(
       res.status(400).json({ success: false, error: 'Image file is required', code: 'MISSING_FILE' });
       return;
     }
-    const slideIndex = parseInt(req.params.slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
     const position = req.body.position ? JSON.parse(req.body.position) : { x: 1, y: 1, w: 4, h: 3 };
-    const result = await slideBuilder.addImage(req.params.id, slideIndex, req.file.buffer, position);
+    const result = await slideBuilder.addImage(req.params.id!, slideIndex, req.file.buffer, position);
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -351,9 +351,9 @@ router.post(
   authMiddleware,
   validate(addShapeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
     const { shape, position, style } = req.body;
-    const result = await slideBuilder.addShape(req.params.id, slideIndex, shape, position, style || {});
+    const result = await slideBuilder.addShape(req.params.id!, slideIndex, shape, position, style || {});
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -363,9 +363,9 @@ router.post(
   authMiddleware,
   validate(addChartSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
     const { chartType, data, position } = req.body;
-    const result = await slideBuilder.addChart(req.params.id, slideIndex, chartType, data, position || {});
+    const result = await slideBuilder.addChart(req.params.id!, slideIndex, chartType, data, position || {});
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -375,9 +375,9 @@ router.post(
   authMiddleware,
   validate(addTableSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const slideIndex = parseInt(req.params.slideIndex);
+    const slideIndex = parseInt(req.params.slideIndex!);
     const { data, position, style } = req.body;
-    const result = await slideBuilder.addTable(req.params.id, slideIndex, data, position || {}, style || {});
+    const result = await slideBuilder.addTable(req.params.id!, slideIndex, data, position || {}, style || {});
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -389,7 +389,7 @@ router.put(
   authMiddleware,
   validate(themeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await slideBuilder.applyTheme(req.params.id, req.body);
+    const result = await slideBuilder.applyTheme(req.params.id!, req.body);
     res.json({ success: true, data: result });
   })
 );
@@ -399,7 +399,7 @@ router.post(
   authMiddleware,
   validate(createThemeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const result = await designEngine.createTheme(
       req.body.name,
       req.body.colors,
@@ -418,8 +418,8 @@ router.post(
   authMiddleware,
   validate(generateFromTextSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await aiGenerator.generateFromText(req.body.text, req.body.options || {}, tenantId, userId);
     res.status(201).json({ success: true, data: result });
   })
@@ -430,8 +430,8 @@ router.post(
   authMiddleware,
   validate(generateFromDataSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await aiGenerator.generateFromData(req.body.datasetId, req.body.options || {}, tenantId, userId);
     res.status(201).json({ success: true, data: result });
   })
@@ -442,8 +442,8 @@ router.post(
   authMiddleware,
   validate(generateFromOutlineSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await aiGenerator.generateFromOutline(req.body.outline, req.body.options || {}, tenantId, userId);
     res.status(201).json({ success: true, data: result });
   })
@@ -463,7 +463,7 @@ router.post(
   '/ai/speaker-notes/:id',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await aiGenerator.generateSpeakerNotes(req.params.id);
+    const result = await aiGenerator.generateSpeakerNotes(req.params.id!);
     res.json({ success: true, data: result });
   })
 );
@@ -473,7 +473,7 @@ router.post(
   authMiddleware,
   validate(translateSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await aiGenerator.translatePresentation(req.params.id, req.body.targetLanguage);
+    const result = await aiGenerator.translatePresentation(req.params.id!, req.body.targetLanguage);
     res.json({ success: true, data: result });
   })
 );
@@ -495,7 +495,7 @@ router.post(
       secondaryColor: req.body.secondaryColor || '#ffffff',
       fontFamily: req.body.fontFamily || 'Arial',
     };
-    const result = await designEngine.applyBranding(req.params.id, brand);
+    const result = await designEngine.applyBranding(req.params.id!, brand);
     res.json({ success: true, data: result });
   })
 );
@@ -516,7 +516,7 @@ router.post(
   validate(animationSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { slideIndex, elementId, animation } = req.body;
-    const result = await designEngine.addEntryAnimation(req.params.id, slideIndex, elementId, animation);
+    const result = await designEngine.addEntryAnimation(req.params.id!, slideIndex, elementId, animation);
     res.json({ success: true, data: result });
   })
 );
@@ -571,8 +571,8 @@ router.post(
       res.status(400).json({ success: false, error: 'At least one image file is required', code: 'MISSING_FILES' });
       return;
     }
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const imageBuffers = files.map((f) => f.buffer);
     const result = await imageToPpt.batchReconstruct(imageBuffers, tenantId, userId);
     res.status(201).json({ success: true, data: result });
@@ -585,9 +585,9 @@ router.get(
   '/presentations/:id/export/pptx',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const buffer = await slideBuilder.exportToPPTX(req.params.id);
+    const buffer = await slideBuilder.exportToPPTX(req.params.id!);
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-    res.setHeader('Content-Disposition', `attachment; filename="presentation-${req.params.id}.pptx"`);
+    res.setHeader('Content-Disposition', `attachment; filename="presentation-${req.params.id!}.pptx"`);
     res.setHeader('Content-Length', buffer.length.toString());
     res.send(buffer);
   })
@@ -597,9 +597,9 @@ router.get(
   '/presentations/:id/export/pdf',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const buffer = await slideBuilder.exportToPDF(req.params.id);
+    const buffer = await slideBuilder.exportToPDF(req.params.id!);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="presentation-${req.params.id}.pdf"`);
+    res.setHeader('Content-Disposition', `attachment; filename="presentation-${req.params.id!}.pdf"`);
     res.setHeader('Content-Length', buffer.length.toString());
     res.send(buffer);
   })
@@ -610,7 +610,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const format = (req.query.format as string) === 'jpeg' ? 'jpeg' : 'png';
-    const images = await designEngine.exportToImages(req.params.id, format);
+    const images = await designEngine.exportToImages(req.params.id!, format);
     const responseData = images.map((img, idx) => ({
       slideIndex: idx,
       format,
@@ -668,8 +668,8 @@ router.post(
   authMiddleware,
   validate(sourceFromTextSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await sourceProcessor.createPresentationFromSource(
       { type: 'text', content: req.body.content },
       req.body.options || {},
@@ -689,8 +689,8 @@ router.post(
       res.status(400).json({ success: false, error: 'File is required', code: 'MISSING_FILE' });
       return;
     }
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const ext = (req.file.originalname || '').split('.').pop()?.toLowerCase();
     const typeMap: Record<string, sourceProcessor.SourceType> = {
       pdf: 'pdf', docx: 'word', doc: 'word', txt: 'text',
@@ -713,8 +713,8 @@ router.post(
   authMiddleware,
   validate(sourceFromUrlSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const isYoutube = /youtube\.com|youtu\.be/i.test(req.body.url);
     const result = await sourceProcessor.createPresentationFromSource(
       { type: isYoutube ? 'youtube' : 'url', url: req.body.url },
@@ -730,8 +730,8 @@ router.post(
   '/source/from-email',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await sourceProcessor.createPresentationFromSource(
       { type: 'email', content: req.body.emailContent || req.body.content },
       req.body.options || {},
@@ -747,8 +747,8 @@ router.post(
   authMiddleware,
   validate(multiSourceSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await sourceProcessor.createPresentationFromMultipleSources(
       req.body.sources, req.body.options || {}, tenantId, userId
     );
@@ -762,8 +762,8 @@ router.post(
   authMiddleware,
   validate(reportToPresSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await sourceProcessor.convertReportToPresentation(
       req.body.content, req.body.reportType, req.body.options || {}, tenantId, userId
     );

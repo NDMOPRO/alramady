@@ -22,7 +22,7 @@ export async function list(req: AuthenticatedRequest, res: Response, next: NextF
 
 export async function getById(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await service.getById(req.params.id);
+    const record = await service.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -31,7 +31,7 @@ export async function getById(req: AuthenticatedRequest, res: Response, next: Ne
 
 export async function create(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await service.create({ ...req.body, tenantId: req.user?.tenantId || req.body.tenantId, createdBy: req.user?.userId });
+    const record = await service.create({ ...req.body, tenantId: req.user!.tenantId! || req.body.tenantId, createdBy: req.user!.userId });
     res.status(201).json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -40,7 +40,7 @@ export async function create(req: AuthenticatedRequest, res: Response, next: Nex
 
 export async function update(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await service.update(req.params.id, { ...req.body, updatedBy: req.user?.userId });
+    const record = await service.update(req.params.id!, { ...req.body, updatedBy: req.user!.userId });
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -49,7 +49,7 @@ export async function update(req: AuthenticatedRequest, res: Response, next: Nex
 
 export async function remove(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const result = await service.remove(req.params.id);
+    const result = await service.remove(req.params.id!);
     res.json({ ...result, success: true });
   } catch (error) {
     next(error);
@@ -60,7 +60,7 @@ export async function configure(req: AuthenticatedRequest, res: Response, next: 
   try {
     const config = await service.configurePrinciple({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: config });
   } catch (error) {
@@ -70,7 +70,7 @@ export async function configure(req: AuthenticatedRequest, res: Response, next: 
 
 export async function validate(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const tenantId = req.user?.tenantId || req.body.tenantId;
+    const tenantId = req.user!.tenantId! || req.body.tenantId;
     const result = await service.validateAgainstPrinciples(
       tenantId,
       req.body.matchMode,
@@ -84,7 +84,7 @@ export async function validate(req: AuthenticatedRequest, res: Response, next: N
 
 export async function checkResources(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const tenantId = req.user?.tenantId || (req.query.tenantId as string);
+    const tenantId = req.user!.tenantId! || (req.query.tenantId as string);
     const result = await service.checkResourceLimits(tenantId);
     res.json({ success: true, data: result });
   } catch (error) {

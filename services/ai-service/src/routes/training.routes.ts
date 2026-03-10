@@ -51,7 +51,7 @@ router.get('/datasets', authMiddleware, asyncHandler(async (req: Request, res: R
 
 router.get('/datasets/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const result = await datasetManager.getDataset(datasetId, tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Dataset not found' });
@@ -62,14 +62,14 @@ router.get('/datasets/:id', authMiddleware, asyncHandler(async (req: Request, re
 
 router.put('/datasets/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const result = await datasetManager.updateDataset(datasetId, tenantId, req.body);
   res.json({ success: true, data: result });
 }));
 
 router.delete('/datasets/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   await datasetManager.deleteDataset(datasetId, tenantId);
   res.json({ success: true, message: 'Dataset deleted' });
 }));
@@ -77,13 +77,13 @@ router.delete('/datasets/:id', authMiddleware, asyncHandler(async (req: Request,
 // ── Samples ─────────────────────────────────────────────────────
 
 router.post('/datasets/:id/samples', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const result = await datasetManager.addSamples({ datasetId, samples: req.body.samples });
   res.status(201).json({ success: true, data: result });
 }));
 
 router.get('/datasets/:id/samples', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 50;
   const split = req.query.split as string | undefined;
@@ -92,8 +92,8 @@ router.get('/datasets/:id/samples', authMiddleware, asyncHandler(async (req: Req
 }));
 
 router.delete('/datasets/:datasetId/samples/:sampleId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.datasetId);
-  const sampleId = z.string().uuid().parse(req.params.sampleId);
+  const datasetId = z.string().uuid().parse(req.params.datasetId!);
+  const sampleId = z.string().uuid().parse(req.params.sampleId!);
   await datasetManager.deleteSample(sampleId, datasetId);
   res.json({ success: true, message: 'Sample deleted' });
 }));
@@ -102,22 +102,22 @@ router.delete('/datasets/:datasetId/samples/:sampleId', authMiddleware, asyncHan
 
 router.post('/datasets/:id/versions', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const { description } = z.object({ description: z.string().min(1) }).parse(req.body);
   const result = await datasetManager.createVersion(datasetId, tenantId, description);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.get('/datasets/:id/versions', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const result = await datasetManager.listVersions(datasetId);
   res.json({ success: true, data: result });
 }));
 
 router.post('/datasets/:id/versions/:versionId/restore', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
-  const versionId = z.string().uuid().parse(req.params.versionId);
+  const datasetId = z.string().uuid().parse(req.params.id!);
+  const versionId = z.string().uuid().parse(req.params.versionId!);
   const result = await datasetManager.restoreVersion(datasetId, tenantId, versionId);
   res.json({ success: true, data: result });
 }));
@@ -126,14 +126,14 @@ router.post('/datasets/:id/versions/:versionId/restore', authMiddleware, asyncHa
 
 router.post('/datasets/:id/split', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const result = await datasetManager.splitDataset(datasetId, tenantId, req.body);
   res.json({ success: true, data: result });
 }));
 
 router.post('/datasets/:id/augment', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const { techniques, maxAugmentPerSample } = req.body;
   const result = await datasetManager.augmentDataset(datasetId, tenantId, techniques, maxAugmentPerSample);
   res.json({ success: true, data: result });
@@ -143,14 +143,14 @@ router.post('/datasets/:id/augment', authMiddleware, asyncHandler(async (req: Re
 
 router.get('/datasets/:id/statistics', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const result = await datasetManager.computeStatistics(datasetId, tenantId);
   res.json({ success: true, data: result });
 }));
 
 router.post('/datasets/:id/export', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const datasetId = z.string().uuid().parse(req.params.id);
+  const datasetId = z.string().uuid().parse(req.params.id!);
   const { format, split } = z.object({
     format: z.enum(['jsonl', 'csv', 'parquet']),
     split: z.string().optional(),
@@ -181,7 +181,7 @@ router.get('/models/configurations', authMiddleware, asyncHandler(async (req: Re
 
 router.get('/models/configurations/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const configId = z.string().uuid().parse(req.params.id);
+  const configId = z.string().uuid().parse(req.params.id!);
   const result = await modelBuilder.getConfiguration(configId, tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Configuration not found' });
@@ -192,14 +192,14 @@ router.get('/models/configurations/:id', authMiddleware, asyncHandler(async (req
 
 router.post('/models/configurations/:id/validate', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const configId = z.string().uuid().parse(req.params.id);
+  const configId = z.string().uuid().parse(req.params.id!);
   const result = await modelBuilder.validateConfiguration(configId, tenantId);
   res.json({ success: true, data: result });
 }));
 
 router.post('/models/configurations/:id/train', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const configId = z.string().uuid().parse(req.params.id);
+  const configId = z.string().uuid().parse(req.params.id!);
   const result = await modelBuilder.buildModel(configId, tenantId);
   res.json({ success: true, data: result });
 }));
@@ -210,7 +210,7 @@ router.get('/models/base-models', authMiddleware, asyncHandler(async (_req: Requ
 }));
 
 router.get('/models/default-hyperparameters/:taskType', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const taskType = req.params.taskType as 'classification' | 'regression' | 'ner' | 'text-generation' | 'summarization' | 'translation';
+  const taskType = req.params.taskType! as 'classification' | 'regression' | 'ner' | 'text-generation' | 'summarization' | 'translation';
   const result = modelBuilder.getDefaultHyperparameters(taskType);
   res.json({ success: true, data: result });
 }));
@@ -244,7 +244,7 @@ router.get('/tune/experiments', authMiddleware, asyncHandler(async (req: Request
 
 router.get('/tune/experiments/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const experimentId = z.string().uuid().parse(req.params.id);
+  const experimentId = z.string().uuid().parse(req.params.id!);
   const result = await tuningService.getExperiment(experimentId, tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Experiment not found' });
@@ -255,13 +255,13 @@ router.get('/tune/experiments/:id', authMiddleware, asyncHandler(async (req: Req
 
 router.get('/tune/experiments/:id/best', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const experimentId = z.string().uuid().parse(req.params.id);
+  const experimentId = z.string().uuid().parse(req.params.id!);
   const result = await tuningService.findBestConfiguration(experimentId, tenantId);
   res.json({ success: true, data: result });
 }));
 
 router.post('/tune/trials/:id/result', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const trialId = z.string().uuid().parse(req.params.id);
+  const trialId = z.string().uuid().parse(req.params.id!);
   const { metricValue, duration } = z.object({
     metricValue: z.number(),
     duration: z.number(),
@@ -304,7 +304,7 @@ router.get('/evaluations', authMiddleware, asyncHandler(async (req: Request, res
 
 router.get('/evaluations/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const evalId = z.string().uuid().parse(req.params.id);
+  const evalId = z.string().uuid().parse(req.params.id!);
   const result = await evaluationEngine.getEvaluation(evalId, tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Evaluation not found' });
@@ -343,7 +343,7 @@ router.get('/registry', authMiddleware, asyncHandler(async (req: Request, res: R
 
 router.get('/registry/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const modelId = z.string().uuid().parse(req.params.id);
+  const modelId = z.string().uuid().parse(req.params.id!);
   const result = await modelRegistry.getModel(modelId, tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Model not found' });
@@ -354,7 +354,7 @@ router.get('/registry/:id', authMiddleware, asyncHandler(async (req: Request, re
 
 router.put('/registry/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const modelId = z.string().uuid().parse(req.params.id);
+  const modelId = z.string().uuid().parse(req.params.id!);
   const result = await modelRegistry.updateModel(modelId, tenantId, req.body);
   res.json({ success: true, data: result });
 }));
@@ -362,7 +362,7 @@ router.put('/registry/:id', authMiddleware, asyncHandler(async (req: Request, re
 router.post('/registry/:id/promote', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
-  const modelId = z.string().uuid().parse(req.params.id);
+  const modelId = z.string().uuid().parse(req.params.id!);
   const { targetStatus } = z.object({ targetStatus: z.enum(['staging', 'production']) }).parse(req.body);
   const result = await modelRegistry.promoteModel(modelId, tenantId, userId, targetStatus);
   res.json({ success: true, data: result });
@@ -371,7 +371,7 @@ router.post('/registry/:id/promote', authMiddleware, asyncHandler(async (req: Re
 router.post('/registry/:id/archive', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
-  const modelId = z.string().uuid().parse(req.params.id);
+  const modelId = z.string().uuid().parse(req.params.id!);
   const result = await modelRegistry.archiveModel(modelId, tenantId, userId);
   res.json({ success: true, data: result });
 }));
@@ -389,7 +389,7 @@ router.post('/registry/rollback', authMiddleware, asyncHandler(async (req: Reque
 
 router.get('/registry/:id/history', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const modelId = z.string().uuid().parse(req.params.id);
+  const modelId = z.string().uuid().parse(req.params.id!);
   const result = await modelRegistry.getVersionHistory(modelId, tenantId);
   res.json({ success: true, data: result });
 }));
@@ -403,7 +403,7 @@ router.post('/registry/compare', authMiddleware, asyncHandler(async (req: Reques
 
 router.get('/registry/:id/lineage', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const modelId = z.string().uuid().parse(req.params.id);
+  const modelId = z.string().uuid().parse(req.params.id!);
   const result = await modelRegistry.getModelLineage(modelId, tenantId);
   res.json({ success: true, data: result });
 }));
@@ -431,7 +431,7 @@ router.get('/deployments', authMiddleware, asyncHandler(async (req: Request, res
 
 router.get('/deployments/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const deploymentId = z.string().uuid().parse(req.params.id);
+  const deploymentId = z.string().uuid().parse(req.params.id!);
   const result = await deploymentManager.getDeployment(deploymentId, tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Deployment not found' });
@@ -443,28 +443,28 @@ router.get('/deployments/:id', authMiddleware, asyncHandler(async (req: Request,
 router.post('/deployments/:id/rollback', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
   const userId = req.user!.userId;
-  const deploymentId = z.string().uuid().parse(req.params.id);
+  const deploymentId = z.string().uuid().parse(req.params.id!);
   const result = await deploymentManager.rollbackDeployment(deploymentId, tenantId, userId);
   res.json({ success: true, data: result });
 }));
 
 router.put('/deployments/:id/rate-limits', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const deploymentId = z.string().uuid().parse(req.params.id);
+  const deploymentId = z.string().uuid().parse(req.params.id!);
   const result = await deploymentManager.updateRateLimits(deploymentId, tenantId, req.body);
   res.json({ success: true, data: result });
 }));
 
 router.get('/deployments/:id/health', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const deploymentId = z.string().uuid().parse(req.params.id);
+  const deploymentId = z.string().uuid().parse(req.params.id!);
   const result = await deploymentManager.getHealthStatus(deploymentId, tenantId);
   res.json({ success: true, data: result });
 }));
 
 router.get('/deployments/:id/events', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const deploymentId = z.string().uuid().parse(req.params.id);
+  const deploymentId = z.string().uuid().parse(req.params.id!);
   const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 50;
   const result = await deploymentManager.getDeploymentEvents(deploymentId, tenantId, limit);
   res.json({ success: true, data: result });
@@ -476,21 +476,21 @@ router.get('/deployments/:id/events', authMiddleware, asyncHandler(async (req: R
 
 router.get('/monitor/:jobId', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   const metrics = await trainingMonitor.getTrainingMetrics(jobId, tenantId);
   res.json({ success: true, data: metrics });
 }));
 
 router.get('/monitor/:jobId/resources', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   const result = await trainingMonitor.getResourceUtilization(jobId, tenantId);
   res.json({ success: true, data: result });
 }));
 
 router.get('/monitor/:jobId/early-stopping', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   const patience = req.query.patience ? parseInt(req.query.patience as string, 10) : 3;
   const result = await trainingMonitor.checkEarlyStopping(jobId, tenantId, patience);
   res.json({ success: true, data: result });
@@ -498,34 +498,34 @@ router.get('/monitor/:jobId/early-stopping', authMiddleware, asyncHandler(async 
 
 router.get('/monitor/:jobId/anomalies', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   await trainingMonitor.detectAnomalies(jobId, tenantId);
   const anomalies = await trainingMonitor.getAnomalies(jobId);
   res.json({ success: true, data: anomalies });
 }));
 
 router.get('/monitor/:jobId/alerts', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   const unacknowledgedOnly = req.query.unacknowledgedOnly === 'true';
   const result = await trainingMonitor.getAlerts(jobId, { unacknowledgedOnly });
   res.json({ success: true, data: result });
 }));
 
 router.post('/monitor/alerts/:id/acknowledge', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const alertId = z.string().uuid().parse(req.params.id);
+  const alertId = z.string().uuid().parse(req.params.id!);
   await trainingMonitor.acknowledgeAlert(alertId);
   res.json({ success: true, message: 'Alert acknowledged' });
 }));
 
 router.post('/monitor/:jobId/start', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
   const tenantId = req.user!.organizationId || req.user!.userId;
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   trainingMonitor.startMonitoring(jobId, tenantId);
   res.json({ success: true, message: 'Monitoring started' });
 }));
 
 router.post('/monitor/:jobId/stop', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
-  const jobId = z.string().uuid().parse(req.params.jobId);
+  const jobId = z.string().uuid().parse(req.params.jobId!);
   trainingMonitor.stopMonitoring(jobId);
   res.json({ success: true, message: 'Monitoring stopped' });
 }));

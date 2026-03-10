@@ -256,12 +256,12 @@ export async function downloadAssetFile(
 
   return {
     stream,
-    name: asset.name,
-    mimeType: asset.mimeType,
+    name: asset.name as string,
+    mimeType: asset.mimeType as string,
     fileSize:
       typeof asset.fileSize === 'bigint'
         ? Number(asset.fileSize)
-        : asset.fileSize,
+        : (asset.fileSize as unknown as number) ?? 0,
   };
 }
 

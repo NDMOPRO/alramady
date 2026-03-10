@@ -25,9 +25,9 @@ router.post('/:id/schedule', authMiddleware, validate(uuidParamSchema, 'params')
   const { action } = req.body;
   let result;
   if (action === 'activate') {
-    result = await compareScheduleService.activate(req.params.id);
+    result = await compareScheduleService.activate(req.params.id!);
   } else if (action === 'deactivate') {
-    result = await compareScheduleService.deactivate(req.params.id);
+    result = await compareScheduleService.deactivate(req.params.id!);
   } else {
     res.status(400).json({ success: false, error: 'Invalid action. Use "activate" or "deactivate".' });
     return;

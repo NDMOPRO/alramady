@@ -125,7 +125,7 @@ export function errorHandler(
   }
 
   if (err.constructor.name === 'PrismaClientKnownRequestError') {
-    const prismaErr = err as { code: string; meta?: Record<string, unknown> };
+    const prismaErr = err as unknown as { code: string; meta?: Record<string, unknown> };
     logger.warn('Prisma known error', {
       requestId,
       prismaCode: prismaErr.code,

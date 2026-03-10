@@ -382,8 +382,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = GenerateContentSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const slides: Array<{
       title: string;
@@ -425,8 +425,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = GenerateSpeakerNotesSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const { slides } = await fetchPresentationWithSlides(body.presentationId, tenantId);
 
@@ -472,8 +472,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = GenerateImagesSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const { slides } = await fetchPresentationWithSlides(body.presentationId, tenantId);
 
@@ -524,8 +524,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = GenerateVideoSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const result = await videoService.generateVideoFromPresentation({
       presentationId: body.presentationId,
@@ -606,7 +606,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = SummarizeSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     let textToSummarize = body.text || '';
     if (body.presentationId) {
@@ -663,7 +663,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = TranslateSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     let textToTranslate = body.text || '';
     if (body.presentationId) {
@@ -866,7 +866,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = MagicWriteSchema.parse(req.body);
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
 
     const completion = await openai.chat.completions.create({
       model: process.env.OPENAI_MODEL || 'gpt-4o',
@@ -1228,8 +1228,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = GenerateAvatarSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const result = await avatarService.generateAvatar(
       {
@@ -1387,7 +1387,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = AutoFormatSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     const { slides } = await fetchPresentationWithSlides(body.presentationId, tenantId);
 
@@ -1501,7 +1501,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = BrandVoiceSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     let textToProcess = body.text || '';
     if (body.presentationId) {
@@ -1556,7 +1556,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = ExecutiveSummarySchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     let content = body.content || '';
     if (body.presentationId) {
@@ -1634,8 +1634,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = CRMPresentationSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const crmContext = [
       `Company: ${body.crmData.companyName}`,
@@ -1824,7 +1824,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = DesignSuggestionsSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     const { presentation, slides } = await fetchPresentationWithSlides(body.presentationId, tenantId);
 

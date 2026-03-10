@@ -374,8 +374,8 @@ router.post(
       return;
     }
 
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const name = req.body.name || req.file.originalname.replace(/\.(pptx?|ppt)$/i, '');
 
     const result = await parsePptxBuffer(req.file.buffer, tenantId, userId, name);
@@ -403,8 +403,8 @@ router.post(
   validate(importGoogleSlidesSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { url, name, importOptions } = req.body;
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const slidesId = extractGoogleSlidesId(url);
     if (!slidesId) {
@@ -470,8 +470,8 @@ router.post(
   validate(importCanvaSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { designUrl, accessToken, name } = req.body;
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     // Extract design ID from Canva URL
     const canvaIdMatch = designUrl.match(/design\/([a-zA-Z0-9_-]+)/);
@@ -602,8 +602,8 @@ router.post(
       return;
     }
 
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const result = await parsePdfToSlides(req.file.buffer, tenantId, userId);
 
@@ -634,8 +634,8 @@ router.post(
   validate(googleConnectSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { authCode, redirectUri } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     // Exchange authorization code for tokens
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
@@ -732,8 +732,8 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = req.params;
     const { folderId, fileName } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     const presentation = await prisma.presentation.findFirst({
       where: { id: presentationId, tenantId },
@@ -840,8 +840,8 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = req.params;
     const { googleSlidesId, direction } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     const presentation = await prisma.presentation.findFirst({
       where: { id: presentationId, tenantId },
@@ -1013,7 +1013,7 @@ router.post(
   validate(microsoftConnectSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { authCode, redirectUri } = req.body;
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
 
     const tokenResponse = await fetch('https://login.microsoftonline.com/common/oauth2/v2.0/token', {
       method: 'POST',
@@ -1105,8 +1105,8 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = req.params;
     const { folderId, fileName } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     const presentation = await prisma.presentation.findFirst({
       where: { id: presentationId, tenantId },
@@ -1396,7 +1396,7 @@ router.get(
   '/connectors',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
 
     // Fetch user's connected integrations
     const connected = await prisma.presentationIntegration.findMany({
@@ -1429,8 +1429,8 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const { type } = req.params;
     const { config, authToken } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     const connectorDef = AVAILABLE_CONNECTORS.find(c => c.type === type);
     if (!connectorDef) {
@@ -1505,7 +1505,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { type } = req.params;
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
 
     const connectorDef = AVAILABLE_CONNECTORS.find(c => c.type === type);
     if (!connectorDef) {
@@ -1550,7 +1550,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { type } = req.params;
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
 
     const connectorDef = AVAILABLE_CONNECTORS.find(c => c.type === type);
     if (!connectorDef) {
@@ -1605,8 +1605,8 @@ router.post(
   validate(skillSaveSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { name, description, workflow, triggerType } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     const skill = await prisma.automationSkill.create({
       data: {
@@ -1641,7 +1641,7 @@ router.get(
   '/skills',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -1679,8 +1679,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const skill = await prisma.automationSkill.findFirst({
       where: { id, tenantId },
@@ -1810,7 +1810,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
 
     const skill = await prisma.automationSkill.findFirst({
       where: { id, tenantId },
@@ -1841,8 +1841,8 @@ router.post(
   validate(scheduledTaskSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { name, taskType, schedule, config, isActive } = req.body;
-    const userId = req.user?.userId || 'anonymous';
-    const tenantId = req.user?.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
 
     const nextRunAt = parseCronExpression(schedule);
 
@@ -1880,7 +1880,7 @@ router.get(
   '/scheduled',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -1919,7 +1919,7 @@ router.put(
   validate(scheduledTaskUpdateSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
 
     const task = await prisma.scheduledPresentationTask.findFirst({
       where: { id, tenantId },
@@ -1965,7 +1965,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
 
     const task = await prisma.scheduledPresentationTask.findFirst({
       where: { id, tenantId },
@@ -1994,7 +1994,7 @@ router.get(
   '/media-library',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 30;
     const skip = (page - 1) * limit;
@@ -2055,7 +2055,7 @@ router.post(
       return;
     }
 
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
     const presentationId = req.body.presentationId || 'library';
     const altText = req.body.altText || req.file.originalname;
 

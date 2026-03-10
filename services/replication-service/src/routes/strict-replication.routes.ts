@@ -222,7 +222,7 @@ router.put(
   authMiddleware,
   validate(modeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const { mode } = req.body;
     const config = getTenantMode(tenantId);
     config.mode = mode;
@@ -250,7 +250,7 @@ router.put(
   authMiddleware,
   validate(strictModeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const config = getTenantMode(tenantId);
     config.switches = { ...config.switches, ...req.body };
     config.updatedAt = new Date().toISOString();
@@ -265,7 +265,7 @@ router.post(
   authMiddleware,
   validate(strictConfigSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const config = getTenantMode(tenantId);
     config.thresholds = { ...config.thresholds, ...req.body };
     config.updatedAt = new Date().toISOString();
@@ -283,7 +283,7 @@ router.post(
   '/capture',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const body = req.body || {};
     const width = body.width || 1920;
     const height = body.height || 1080;
@@ -367,7 +367,7 @@ router.post(
   '/extract-structure',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const fileType = req.body?.fileType || 'image';
     const mode = req.body?.mode || 'STRICT_REPLICATION';
 
@@ -464,8 +464,8 @@ router.post(
   authMiddleware,
   validate(reconstructSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'system';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'system';
     const { analysis, mode } = req.body;
 
     const jobId = crypto.randomUUID();
@@ -493,7 +493,7 @@ router.post(
           namedRanges: [],
           mode,
           pivotTables: [],
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
         elementCount: (analysis.elements || []).length,
         sourceDimensions: analysis.dimensions || { width: 1920, height: 1080 },
       },
@@ -509,7 +509,7 @@ router.post(
   '/to-live-system',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const { cdrId, targetType } = req.body;
 
     const result = {
@@ -547,8 +547,8 @@ router.post(
   '/image-to-dashboard',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'system';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'system';
     const { imageAnalysis, datasetId } = req.body;
 
     const jobId = crypto.randomUUID();
@@ -570,7 +570,7 @@ router.post(
           interactive: true,
           crossFilter: true,
           drillDown: true,
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
         elementCount: (imageAnalysis?.elements || []).length,
         sourceDimensions: imageAnalysis?.dimensions || { width: 1920, height: 1080 },
       },
@@ -591,8 +591,8 @@ router.post(
   authMiddleware,
   validate(transformSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'system';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'system';
     const { source, target, fileId, cdrId } = req.body;
 
     const jobId = crypto.randomUUID();
@@ -610,7 +610,7 @@ router.post(
           sourceCdrId: cdrId,
           transformationType: 'any_to_any',
           fidelityPreserved: true,
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
         elementCount: 0,
         sourceDimensions: { width: 0, height: 0 },
       },
@@ -627,7 +627,7 @@ router.post(
   authMiddleware,
   validate(exportSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const { cdrId, format } = req.body;
 
     const result = {
@@ -651,8 +651,8 @@ router.post(
   '/visual-replicate',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
-    const userId = req.user?.userId || req.user?.id || 'system';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
+    const userId = req.user!.userId || req.user!.id! || 'system';
     const { targetFormat } = req.body;
 
     const jobId = crypto.randomUUID();
@@ -667,7 +667,7 @@ router.post(
           type: 'visual_replication',
           pipeline: ['capture', 'decompose', 'reconstruct', 'render', 'verify'],
           pipelineStatus: 'completed',
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
         elementCount: 0,
         sourceDimensions: { width: 1920, height: 1080 },
       },
@@ -765,7 +765,7 @@ router.post(
   authMiddleware,
   validate(cdrBuildSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const { elements, layout, mode } = req.body;
 
     const cdrId = crypto.randomUUID();
@@ -869,7 +869,7 @@ router.post(
   '/verify',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const config = getTenantMode(tenantId);
     const { sourceElements, resultElements, sourceHash, resultHash } = req.body;
 
@@ -926,7 +926,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { jobId } = req.params;
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     const job = await prisma.replicationJob.findFirst({
       where: { id: jobId, tenantId },
@@ -975,7 +975,7 @@ router.get(
   '/drift-report',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
 
     const recentJobs = await prisma.replicationJob.findMany({
       where: { tenantId },
@@ -1339,7 +1339,7 @@ router.post(
   '/src/enforce',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || 'default';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || 'default';
     const config = getTenantMode(tenantId);
 
     const { SRCEnforcement } = await import('../replication/constitution/src-enforcement.js');

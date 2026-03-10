@@ -6,7 +6,7 @@ export class ConverterController {
     try {
       const file = req.file;
       if (!file) { res.status(400).json({ error: 'No file uploaded' }); return; }
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { targetFormat } = req.body;
       if (!targetFormat) { res.status(400).json({ error: 'targetFormat is required' }); return; }
 
@@ -35,7 +35,7 @@ export class ConverterController {
 
   async convertMarkdownToHTML(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { markdown } = req.body;
       if (!markdown) { res.status(400).json({ error: 'markdown content is required' }); return; }
       const result = await converterService.convertMarkdownToHTML(markdown, tenantId);
@@ -45,7 +45,7 @@ export class ConverterController {
 
   async convertHTMLtoMarkdown(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { html } = req.body;
       if (!html) { res.status(400).json({ error: 'html content is required' }); return; }
       const result = await converterService.convertHTMLtoMarkdown(html, tenantId);
@@ -57,7 +57,7 @@ export class ConverterController {
     try {
       const files = req.files as Express.Multer.File[];
       if (!files || files.length === 0) { res.status(400).json({ error: 'No files uploaded' }); return; }
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { targetFormat } = req.body;
       if (!targetFormat) { res.status(400).json({ error: 'targetFormat is required' }); return; }
       const result = await converterService.batchConvert(files, targetFormat, tenantId);
@@ -67,7 +67,7 @@ export class ConverterController {
 
   async listConversions(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { page, limit } = req.query;
       const result = await converterService.listConversions(tenantId, { page: Number(page) || 1, limit: Number(limit) || 20 });
       res.json({ success: true, ...result });

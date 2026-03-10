@@ -139,7 +139,7 @@ export class SsoService {
           ssoUrl: validated.ssoUrl,
           enabled: validated.enabled,
           registeredAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -222,7 +222,7 @@ export class SsoService {
           pkceEnabled: validated.pkceEnabled,
           enabled: validated.enabled,
           registeredAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -449,7 +449,7 @@ export class SsoService {
           providerName: provider.name,
           mappedRole,
           loginAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -542,7 +542,7 @@ export class SsoService {
           protocol: provider.protocol,
           enabled,
           toggledAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 

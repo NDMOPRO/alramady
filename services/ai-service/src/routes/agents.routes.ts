@@ -57,7 +57,7 @@ router.post(
   '/agents/proactive/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = z.string().min(1).parse(req.params.tenantId);
+    const tenantId = z.string().min(1).parse(req.params.tenantId!);
 
     const insights = await orchestrator.runProactiveAnalysis(tenantId);
 
@@ -172,7 +172,7 @@ router.get(
   '/agent-studio/:id',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().uuid().parse(req.params.id);
+    const id = z.string().uuid().parse(req.params.id!);
 
     const config = await agentStudio.getAgentConfig(id);
 
@@ -194,7 +194,7 @@ router.put(
   '/agent-studio/:id',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().uuid().parse(req.params.id);
+    const id = z.string().uuid().parse(req.params.id!);
     const body = updateAgentConfigSchema.parse(req.body);
 
     const result = await agentStudio.updateAgentConfig(id, body);
@@ -207,7 +207,7 @@ router.delete(
   '/agent-studio/:id',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().uuid().parse(req.params.id);
+    const id = z.string().uuid().parse(req.params.id!);
 
     const result = await agentStudio.deleteAgentConfig(id);
 
@@ -223,7 +223,7 @@ router.post(
   '/agent-studio/:id/test',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().uuid().parse(req.params.id);
+    const id = z.string().uuid().parse(req.params.id!);
     const { input } = testAgentSchema.parse(req.body);
 
     const result = await agentStudio.testAgent(id, input);
@@ -236,7 +236,7 @@ router.post(
   '/agent-studio/:id/deploy',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().uuid().parse(req.params.id);
+    const id = z.string().uuid().parse(req.params.id!);
 
     const result = await agentStudio.deployAgent(id);
 
@@ -248,7 +248,7 @@ router.get(
   '/agent-studio/:id/history',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().uuid().parse(req.params.id);
+    const id = z.string().uuid().parse(req.params.id!);
 
     const history = await agentStudio.getAgentExecutionHistory(id);
 
@@ -264,7 +264,7 @@ router.get(
   '/proactive/alerts/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = z.string().min(1).parse(req.params.tenantId);
+    const tenantId = z.string().min(1).parse(req.params.tenantId!);
 
     const alerts = await proactiveAI.getAlerts(tenantId);
 
@@ -276,7 +276,7 @@ router.post(
   '/proactive/alerts/:id/dismiss',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const id = z.string().min(1).parse(req.params.id);
+    const id = z.string().min(1).parse(req.params.id!);
 
     const result = await proactiveAI.dismissAlert(id);
 
@@ -313,7 +313,7 @@ router.post(
   '/proactive/configure/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = z.string().min(1).parse(req.params.tenantId);
+    const tenantId = z.string().min(1).parse(req.params.tenantId!);
     const body = configureThresholdsSchema.parse(req.body);
 
     const result = await proactiveAI.configureThresholds(tenantId, body);
@@ -326,7 +326,7 @@ router.post(
   '/proactive/insights/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = z.string().min(1).parse(req.params.tenantId);
+    const tenantId = z.string().min(1).parse(req.params.tenantId!);
 
     const insights = await proactiveAI.generateAutomatedInsights(tenantId);
 
@@ -363,7 +363,7 @@ router.post(
   '/proactive/suggest-dashboards/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = z.string().min(1).parse(req.params.tenantId);
+    const tenantId = z.string().min(1).parse(req.params.tenantId!);
 
     const suggestions = await proactiveAI.suggestDashboards(tenantId);
 
@@ -378,7 +378,7 @@ router.post(
   '/proactive/suggest-reports/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = z.string().min(1).parse(req.params.tenantId);
+    const tenantId = z.string().min(1).parse(req.params.tenantId!);
 
     const suggestions = await proactiveAI.suggestReports(tenantId);
 

@@ -22,7 +22,7 @@ export class AdvancedModeController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await advancedModeService.getById(req.params.id);
+      const data = await advancedModeService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -41,7 +41,7 @@ export class AdvancedModeController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await advancedModeService.update(req.params.id, req.body);
+      const data = await advancedModeService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -50,7 +50,7 @@ export class AdvancedModeController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await advancedModeService.remove(req.params.id);
+      await advancedModeService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Advanced-mode dashboard deleted successfully' });
     } catch (error) {
       next(error);
@@ -63,7 +63,7 @@ export class AdvancedModeController {
    */
   async executeQuery(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const dashboardId = req.params.id;
+      const dashboardId = req.params.id!;
       const { query, params, timeout, maxRows } = req.body;
 
       if (!query) {

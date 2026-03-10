@@ -24,7 +24,7 @@ export class ReportExternalSimulationController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportExternalSimulationService.getById(req.params.id);
+      const data = await reportExternalSimulationService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class ReportExternalSimulationController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportExternalSimulationService.update(req.params.id, req.body);
+      const data = await reportExternalSimulationService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class ReportExternalSimulationController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await reportExternalSimulationService.remove(req.params.id);
+      await reportExternalSimulationService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Report external simulation deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class ReportExternalSimulationController {
 
   async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportExternalSimulationService.execute(req.params.id);
+      const data = await reportExternalSimulationService.execute(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ export class ReportExternalSimulationController {
 
   async getResults(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportExternalSimulationService.getResults(req.params.id);
+      const data = await reportExternalSimulationService.getResults(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

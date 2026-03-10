@@ -67,30 +67,30 @@ router.get('/search', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 router.get('/:id/metadata', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.extractMetadata(req.params.id);
+  const result = await service.extractMetadata(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:id/dictionary', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.generateDataDictionary(req.params.id);
+  const result = await service.generateDataDictionary(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:id/usage', asyncHandler(async (req: Request, res: Response) => {
   const days = parseInt(req.query.days as string) || 30;
-  const result = await service.getUsageStatistics(req.params.id, days);
+  const result = await service.getUsageStatistics(req.params.id!, days);
   res.json({ success: true, data: result });
 }));
 
 router.post('/:id/tags', asyncHandler(async (req: Request, res: Response) => {
   const { tags } = z.object({ tags: z.array(z.string().min(1)) }).parse(req.body);
-  const result = await service.addTags(req.params.id, tags);
+  const result = await service.addTags(req.params.id!, tags);
   res.json({ success: true, data: result });
 }));
 
 router.delete('/:id/tags', asyncHandler(async (req: Request, res: Response) => {
   const { tags } = z.object({ tags: z.array(z.string().min(1)) }).parse(req.body);
-  const result = await service.removeTags(req.params.id, tags);
+  const result = await service.removeTags(req.params.id!, tags);
   res.json({ success: true, data: result });
 }));
 
@@ -103,7 +103,7 @@ router.post('/:id/lineage', asyncHandler(async (req: Request, res: Response) => 
       transformationType: z.string().min(1),
     }),
   }).parse(req.body);
-  const result = await service.trackColumnLineage(req.params.id, body.columnName, body.upstreamSource);
+  const result = await service.trackColumnLineage(req.params.id!, body.columnName, body.upstreamSource);
   res.json({ success: true, data: result });
 }));
 
@@ -115,12 +115,12 @@ router.post('/:id/schema-impact', asyncHandler(async (req: Request, res: Respons
       newType: z.string().optional(),
     })),
   }).parse(req.body);
-  const result = await service.analyzeSchemaChangeImpact(req.params.id, changes);
+  const result = await service.analyzeSchemaChangeImpact(req.params.id!, changes);
   res.json({ success: true, data: result });
 }));
 
 router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
-  await service.deleteDataset(req.params.id);
+  await service.deleteDataset(req.params.id!);
   res.json({ success: true, message: 'Dataset removed from catalog' });
 }));
 

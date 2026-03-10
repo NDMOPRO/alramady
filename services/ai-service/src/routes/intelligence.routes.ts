@@ -254,7 +254,7 @@ router.post(
 router.get(
   '/context/:userId',
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = z.string().min(1).parse(req.params.userId);
+    const userId = z.string().min(1).parse(req.params.userId!);
     const { tenantId } = extractAuth(req);
 
     const workingMemory = contextMemory.getWorkingMemory(tenantId, userId);
@@ -280,7 +280,7 @@ router.get(
 router.get(
   '/suggestions/:userId',
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = z.string().min(1).parse(req.params.userId);
+    const userId = z.string().min(1).parse(req.params.userId!);
     const { tenantId } = extractAuth(req);
 
     const [recommendations, insights] = await Promise.all([

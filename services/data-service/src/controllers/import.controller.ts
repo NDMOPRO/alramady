@@ -26,7 +26,7 @@ export class ImportController {
 
   async listImports(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
 
       const page = Math.max(1, parseInt(req.query.page as string) || 1);
@@ -60,11 +60,11 @@ export class ImportController {
 
   async getImportStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
 
       const dataset = await prisma.dataset.findFirst({
-        where: { id: req.params.id, tenantId },
+        where: { id: req.params.id!, tenantId },
       });
 
       if (!dataset) {
@@ -86,8 +86,8 @@ export class ImportController {
         return;
       }
 
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       if (!tenantId || !userId) {
         res.status(401).json({ success: false, error: 'Unauthorized' });
         return;
@@ -117,8 +117,8 @@ export class ImportController {
         return;
       }
 
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       if (!tenantId || !userId) {
         res.status(401).json({ success: false, error: 'Unauthorized' });
         return;
@@ -159,8 +159,8 @@ export class ImportController {
         return;
       }
 
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       if (!tenantId || !userId) {
         res.status(401).json({ success: false, error: 'Unauthorized' });
         return;

@@ -23,7 +23,7 @@ export class FullEditorController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await fullEditorService.getById(req.params.id);
+      const data = await fullEditorService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -42,7 +42,7 @@ export class FullEditorController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await fullEditorService.update(req.params.id, req.body);
+      const data = await fullEditorService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ export class FullEditorController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await fullEditorService.remove(req.params.id);
+      await fullEditorService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Full editor session deleted successfully' });
     } catch (error) {
       next(error);
@@ -60,7 +60,7 @@ export class FullEditorController {
 
   async saveSnapshot(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await fullEditorService.saveSnapshot(req.params.id, req.body);
+      const data = await fullEditorService.saveSnapshot(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -94,7 +94,7 @@ export class FullEditorController {
   async convertToReport(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { dashboardId } = req.params;
-      const userId = req.user?.userId || req.user?.id || 'a0000000-0000-0000-0000-000000000001';
+      const userId = req.user!.userId || req.user!.id! || 'a0000000-0000-0000-0000-000000000001';
       const data = await fullEditorService.convertToReport(dashboardId, userId);
       res.status(200).json({ success: true, data });
     } catch (error) {

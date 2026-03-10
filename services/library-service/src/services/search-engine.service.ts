@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import * as crypto from 'crypto';
 
 // ─── Interfaces ──────────────────────────────────────────────────────
@@ -184,7 +184,7 @@ export default class SearchEngineService {
         category: doc.category || 'uncategorized',
         fileType: doc.fileType,
         tokens: allTokens,
-        metadata: doc.metadata as Record<string, unknown>,
+        metadata: doc.metadata as Prisma.InputJsonValue,
         updatedAt: new Date(),
       },
       create: {
@@ -197,7 +197,7 @@ export default class SearchEngineService {
         category: doc.category || 'uncategorized',
         fileType: doc.fileType,
         tokens: allTokens,
-        metadata: doc.metadata as Record<string, unknown>,
+        metadata: doc.metadata as Prisma.InputJsonValue,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -317,8 +317,8 @@ export default class SearchEngineService {
       filteredDocs.sort((a, b) => {
         const docA = this.documentStore.get(a.docId)!;
         const docB = this.documentStore.get(b.docId)!;
-        const valA = (docA as Record<string, unknown>)[request.sortBy!] || '';
-        const valB = (docB as Record<string, unknown>)[request.sortBy!] || '';
+        const valA = (docA as unknown as Record<string, unknown>)[request.sortBy!] || '';
+        const valB = (docB as unknown as Record<string, unknown>)[request.sortBy!] || '';
         const cmp = String(valA).localeCompare(String(valB));
         return request.sortOrder === 'desc' ? -cmp : cmp;
       });
@@ -390,7 +390,7 @@ export default class SearchEngineService {
 
   private matchesFilters(doc: IndexedDocument, filters: SearchFilter[]): boolean {
     for (const filter of filters) {
-      const fieldValue = (doc as Record<string, unknown>)[filter.field] ?? doc.metadata[filter.field];
+      const fieldValue = (doc as unknown as Record<string, unknown>)[filter.field] ?? doc.metadata[filter.field];
       const isNot = filter.operator === 'not';
       let matches = false;
 
@@ -558,7 +558,7 @@ export default class SearchEngineService {
         const doc = this.documentStore.get(docId);
         if (!doc) continue;
 
-        const value = (doc as Record<string, unknown>)[field] ?? doc.metadata[field];
+        const value = (doc as unknown as Record<string, unknown>)[field] ?? doc.metadata[field];
         if (value === null || value === undefined) continue;
 
         if (Array.isArray(value)) {
@@ -677,7 +677,7 @@ export default class SearchEngineService {
         userId: analytics.userId,
         resultCount: analytics.resultCount,
         queryTime: analytics.queryTime,
-        filters: analytics.filters as Record<string, unknown>,
+        filters: analytics.filters as Prisma.InputJsonValue,
         timestamp: analytics.timestamp,
       },
     }).catch(() => {

@@ -25,8 +25,8 @@ export async function generateComparison(
     const result = await generateSideBySideComparison({
       originalDocumentId,
       replicaDocumentId,
-      tenantId: req.user?.tenantId || '',
-      userId: req.user?.userId || '',
+      tenantId: req.user!.tenantId! || '',
+      userId: req.user!.userId || '',
       originalImageBuffer: originalFile.buffer,
       replicaImageBuffer: replicaFile.buffer,
       outputWidth: outputWidth ? parseInt(outputWidth, 10) : 1920,

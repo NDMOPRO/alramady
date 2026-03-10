@@ -24,7 +24,7 @@ export class ReportTemplateLibraryController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportTemplateLibraryService.getById(req.params.id);
+      const data = await reportTemplateLibraryService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class ReportTemplateLibraryController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportTemplateLibraryService.update(req.params.id, req.body);
+      const data = await reportTemplateLibraryService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class ReportTemplateLibraryController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await reportTemplateLibraryService.remove(req.params.id);
+      await reportTemplateLibraryService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Report template deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class ReportTemplateLibraryController {
 
   async duplicate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportTemplateLibraryService.duplicate(req.params.id);
+      const data = await reportTemplateLibraryService.duplicate(req.params.id!);
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -80,7 +80,7 @@ export class ReportTemplateLibraryController {
   async applyTemplate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { targetReportId } = req.body;
-      const data = await reportTemplateLibraryService.applyTemplate(req.params.id, targetReportId);
+      const data = await reportTemplateLibraryService.applyTemplate(req.params.id!, targetReportId);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

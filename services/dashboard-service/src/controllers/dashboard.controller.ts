@@ -4,8 +4,8 @@ import { dashboardService } from '../services/dashboard.service';
 export class DashboardController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { name, layout } = req.body;
       if (!name) { res.status(400).json({ error: 'name is required' }); return; }
       const result = await dashboardService.createDashboard(name, tenantId, userId, layout);
@@ -15,15 +15,15 @@ export class DashboardController {
 
   async get(req: Request, res: Response, next: NextFunction) {
     try {
-      const tenantId = req.user?.tenantId;
-      const result = await dashboardService.getDashboard(req.params.id, tenantId);
+      const tenantId = req.user!.tenantId as string;
+      const result = await dashboardService.getDashboard(req.params.id!, tenantId);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { page, limit, search } = req.query;
       const result = await dashboardService.listDashboards(tenantId, { page: Number(page) || 1, limit: Number(limit) || 20, search: search as string });
       res.json({ success: true, ...result });
@@ -34,7 +34,7 @@ export class DashboardController {
     try {
       const { type, config, datasetId, position } = req.body;
       if (!type || !position) { res.status(400).json({ error: 'type and position required' }); return; }
-      const result = await dashboardService.addWidget(req.params.id, { type, config: config || {}, datasetId, position });
+      const result = await dashboardService.addWidget(req.params.id!, { type, config: config || {}, datasetId, position });
       res.status(201).json({ success: true, data: result });
     } catch (error) { next(error); }
   }
@@ -51,7 +51,7 @@ export class DashboardController {
 
   async renderWidgetChart(req: Request, res: Response, next: NextFunction) {
     try {
-      const imageBuffer = await dashboardService.renderWidgetChart(req.params.widgetId);
+      const imageBuffer = await dashboardService.renderWidgetChart(req.params.widgetId!);
       res.setHeader('Content-Type', 'image/png');
       res.send(imageBuffer);
     } catch (error) { next(error); }
@@ -59,8 +59,8 @@ export class DashboardController {
 
   async exportPDF(req: Request, res: Response, next: NextFunction) {
     try {
-      const tenantId = req.user?.tenantId;
-      const pdfBuffer = await dashboardService.exportToPDF(req.params.id, tenantId);
+      const tenantId = req.user!.tenantId as string;
+      const pdfBuffer = await dashboardService.exportToPDF(req.params.id!, tenantId);
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="dashboard.pdf"`);
       res.send(pdfBuffer);
@@ -69,24 +69,24 @@ export class DashboardController {
 
   async deleteWidget(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await dashboardService.deleteWidget(req.params.id, req.params.widgetId);
+      const result = await dashboardService.deleteWidget(req.params.id!, req.params.widgetId!);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      const tenantId = req.user?.tenantId;
-      const result = await dashboardService.deleteDashboard(req.params.id, tenantId);
+      const tenantId = req.user!.tenantId as string;
+      const result = await dashboardService.deleteDashboard(req.params.id!, tenantId);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
   }
 
   async duplicate(req: Request, res: Response, next: NextFunction) {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
-      const result = await dashboardService.duplicateDashboard(req.params.id, tenantId, userId);
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
+      const result = await dashboardService.duplicateDashboard(req.params.id!, tenantId, userId);
       res.status(201).json({ success: true, data: result });
     } catch (error) { next(error); }
   }

@@ -41,7 +41,7 @@ router.get(
   '/',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.tenantId || req.user?.organizationId || '';
+    const tenantId = req.user!.tenantId! || req.user!.organizationId || '';
     const flags = await featureFlagsService.listFlags(tenantId);
     res.json({ success: true, data: flags });
   })
@@ -52,7 +52,7 @@ router.post(
   authMiddleware,
   validate(createFlagSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.tenantId || req.user?.organizationId || '';
+    const tenantId = req.user!.tenantId! || req.user!.organizationId || '';
     const { key, defaultValue, description } = req.body;
     const flag = await featureFlagsService.createFlag(key, tenantId, defaultValue, description);
     res.status(201).json({ success: true, data: flag });
@@ -64,7 +64,7 @@ router.put(
   authMiddleware,
   validate(updateFlagSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const flag = await featureFlagsService.updateFlag(req.params.id, req.body);
+    const flag = await featureFlagsService.updateFlag(req.params.id!, req.body);
     res.json({ success: true, data: flag });
   })
 );
@@ -76,7 +76,7 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const { userIds, roleIds, percentage, resultValue, priority } = req.body;
     const rule = await featureFlagsService.addRule(
-      req.params.id,
+      req.params.id!,
       { userIds, roleIds, percentage },
       resultValue,
       priority
@@ -90,7 +90,7 @@ router.get(
   authMiddleware,
   validate(evaluateSchema, 'query'),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.tenantId || req.user?.organizationId || '';
+    const tenantId = req.user!.tenantId! || req.user!.organizationId || '';
     const { flagKey, userId } = req.query as { flagKey: string; userId: string };
     const enabled = await featureFlagsService.evaluate(flagKey, userId, tenantId);
     res.json({ success: true, data: { flagKey, userId, enabled } });

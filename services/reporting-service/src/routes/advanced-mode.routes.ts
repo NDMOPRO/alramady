@@ -21,7 +21,7 @@ router.post('/:id/execute-query', authMiddleware, validate(uuidParamSchema, 'par
 router.post('/:id/generate', authMiddleware, validate(uuidParamSchema, 'params'), reportAdvancedModeController.generate.bind(reportAdvancedModeController));
 router.post('/:id/generate-multi', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const formats = req.body.formats || ['pdf'];
-  const result = await reportAdvancedModeService.generate(req.params.id, formats);
+  const result = await reportAdvancedModeService.generate(req.params.id!, formats);
   res.json({ success: true, data: result });
 }));
 

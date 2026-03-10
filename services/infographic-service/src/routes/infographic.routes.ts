@@ -163,7 +163,7 @@ router.get(
     if (search) where.title = { contains: search, mode: 'insensitive' };
 
     const [infographics, total] = await Promise.all([
-      (prisma as unknown as Record<string, unknown>).infographic.findMany({
+      (prisma as any).infographic.findMany({
         where,
         skip,
         take,
@@ -179,7 +179,7 @@ router.get(
           updatedAt: true,
         },
       }),
-      (prisma as unknown as Record<string, unknown>).infographic.count({ where }),
+      (prisma as any).infographic.count({ where }),
     ]);
 
     const totalPages = Math.ceil(total / take);
@@ -208,7 +208,7 @@ router.get(
     const { id } = req.params;
     const tenantId = req.user!.organizationId || req.user!.userId;
 
-    const infographic = await (prisma as unknown as Record<string, unknown>).infographic.findFirst({
+    const infographic = await (prisma as any).infographic.findFirst({
       where: { id, tenantId: tenantId },
     });
 
@@ -247,7 +247,7 @@ router.put(
     const tenantId = req.user!.organizationId || req.user!.userId;
     const updates = req.body;
 
-    const existing = await (prisma as unknown as Record<string, unknown>).infographic.findFirst({
+    const existing = await (prisma as any).infographic.findFirst({
       where: { id, tenantId: tenantId },
     });
 
@@ -265,7 +265,7 @@ router.put(
     if (updates.template !== undefined) updateData.type = updates.template;
     if (updates.status !== undefined) updateData.status = updates.status;
 
-    const updated = await (prisma as unknown as Record<string, unknown>).infographic.update({
+    const updated = await (prisma as any).infographic.update({
       where: { id },
       data: updateData,
     });
@@ -287,7 +287,7 @@ router.delete(
     const { id } = req.params;
     const tenantId = req.user!.organizationId || req.user!.userId;
 
-    const existing = await (prisma as unknown as Record<string, unknown>).infographic.findFirst({
+    const existing = await (prisma as any).infographic.findFirst({
       where: { id, tenantId: tenantId },
     });
 
@@ -300,7 +300,7 @@ router.delete(
       return;
     }
 
-    await (prisma as unknown as Record<string, unknown>).infographic.delete({ where: { id } });
+    await (prisma as any).infographic.delete({ where: { id } });
 
     res.json({
       success: true,

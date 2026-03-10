@@ -50,10 +50,10 @@ export async function generateFromData(
   tenantId: string,
   userId: string
 ): Promise<Record<string, unknown>> {
-  const prismaExt = prisma as unknown as Record<string, Record<string, (...args: unknown[]) => Promise<unknown>>>;
+  const prismaExt = prisma as unknown as Record<string, Record<string, (...args: any[]) => Promise<any>>>;
   const dataset = await prismaExt.datasets.findUnique({
     where: { id: datasetId },
-  });
+  }) as Record<string, any> | null;
 
   if (!dataset) {
     throw new Error(`Dataset with id ${datasetId} not found`);
@@ -127,34 +127,35 @@ Include relevant statistics from the data. Use appropriate section types. Positi
     userId
   );
 
+  const infographicId = infographic.id as string;
   const results: Record<string, unknown>[] = [];
 
   if (layout.sections && Array.isArray(layout.sections)) {
     for (const section of layout.sections) {
-      const result = await addSection(infographic.id, section.type, section.content, section.position);
+      const result = await addSection(infographicId, section.type, section.content, section.position);
       results.push({ type: 'section', ...result });
     }
   }
 
   if (layout.statistics && Array.isArray(layout.statistics)) {
     for (const stat of layout.statistics) {
-      const result = await addStatistic(infographic.id, stat.value, stat.label, stat.icon, stat.position);
+      const result = await addStatistic(infographicId, stat.value, stat.label, stat.icon, stat.position);
       results.push({ type: 'statistic', ...result });
     }
   }
 
   if (layout.timeline && layout.timeline.events) {
-    const result = await addTimeline(infographic.id, layout.timeline.events, layout.timeline.position);
+    const result = await addTimeline(infographicId, layout.timeline.events, layout.timeline.position);
     results.push({ type: 'timeline', ...result });
   }
 
   if (layout.comparison && layout.comparison.items) {
-    const result = await addComparison(infographic.id, layout.comparison.items, layout.comparison.position);
+    const result = await addComparison(infographicId, layout.comparison.items, layout.comparison.position);
     results.push({ type: 'comparison', ...result });
   }
 
   if (layout.flowchart && layout.flowchart.steps) {
-    const result = await addFlowchart(infographic.id, layout.flowchart.steps, layout.flowchart.position);
+    const result = await addFlowchart(infographicId, layout.flowchart.steps, layout.flowchart.position);
     results.push({ type: 'flowchart', ...result });
   }
 
@@ -229,34 +230,35 @@ Extract key facts, numbers, dates, and create appropriate sections. Return only 
     userId
   );
 
+  const infographicId = infographic.id as string;
   const results: Record<string, unknown>[] = [];
 
   if (layout.sections && Array.isArray(layout.sections)) {
     for (const section of layout.sections) {
-      const result = await addSection(infographic.id, section.type, section.content, section.position);
+      const result = await addSection(infographicId, section.type, section.content, section.position);
       results.push({ type: 'section', ...result });
     }
   }
 
   if (layout.statistics && Array.isArray(layout.statistics)) {
     for (const stat of layout.statistics) {
-      const result = await addStatistic(infographic.id, stat.value, stat.label, stat.icon, stat.position);
+      const result = await addStatistic(infographicId, stat.value, stat.label, stat.icon, stat.position);
       results.push({ type: 'statistic', ...result });
     }
   }
 
   if (layout.timeline && layout.timeline.events) {
-    const result = await addTimeline(infographic.id, layout.timeline.events, layout.timeline.position);
+    const result = await addTimeline(infographicId, layout.timeline.events, layout.timeline.position);
     results.push({ type: 'timeline', ...result });
   }
 
   if (layout.comparison && layout.comparison.items) {
-    const result = await addComparison(infographic.id, layout.comparison.items, layout.comparison.position);
+    const result = await addComparison(infographicId, layout.comparison.items, layout.comparison.position);
     results.push({ type: 'comparison', ...result });
   }
 
   if (layout.flowchart && layout.flowchart.steps) {
-    const result = await addFlowchart(infographic.id, layout.flowchart.steps, layout.flowchart.position);
+    const result = await addFlowchart(infographicId, layout.flowchart.steps, layout.flowchart.position);
     results.push({ type: 'flowchart', ...result });
   }
 

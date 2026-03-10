@@ -34,7 +34,7 @@ router.post('/', authMiddleware, asyncHandler(async (req: Request, res: Response
 
 // GET /:id - get distribution config
 router.get('/:id', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const config = await prisma.distributionConfig.findUnique({ where: { id: req.params.id } });
+  const config = await prisma.distributionConfig.findUnique({ where: { id: req.params.id! } });
   if (!config) {
     res.status(404).json({ success: false, error: 'Distribution config not found', code: 'NOT_FOUND' });
     return;
@@ -44,13 +44,13 @@ router.get('/:id', authMiddleware, validate(uuidParamSchema, 'params'), asyncHan
 
 // DELETE /:id - delete distribution config
 router.delete('/:id', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  await distributionService.deleteDistributionConfig(req.params.id);
+  await distributionService.deleteDistributionConfig(req.params.id!);
   res.json({ success: true, message: 'Distribution config deleted successfully' });
 }));
 
 // POST /:id/send - distribute report
 router.post('/:id/send', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await distributionService.distributeReport(req.params.id);
+  const result = await distributionService.distributeReport(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
@@ -58,14 +58,14 @@ router.post('/:id/send', authMiddleware, validate(uuidParamSchema, 'params'), as
 router.get('/:id/history', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 20;
-  const result = await distributionService.getDistributionHistory(req.params.id, { limit, offset: (page - 1) * limit });
+  const result = await distributionService.getDistributionHistory(req.params.id!, { limit, offset: (page - 1) * limit });
   res.json({ success: true, data: result });
 }));
 
 // GET /:id/analytics - get distribution analytics
 router.get('/:id/analytics', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const days = parseInt(req.query.days as string) || 30;
-  const result = await distributionService.getDistributionAnalytics(req.params.id, days);
+  const result = await distributionService.getDistributionAnalytics(req.params.id!, days);
   res.json({ success: true, data: result });
 }));
 
@@ -73,7 +73,7 @@ router.get('/:id/analytics', authMiddleware, validate(uuidParamSchema, 'params')
 router.post('/track/:trackingId', asyncHandler(async (req: Request, res: Response) => {
   const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
   const userAgent = req.headers['user-agent'] || 'unknown';
-  await distributionService.trackReadReceipt(req.params.trackingId, ipAddress, userAgent);
+  await distributionService.trackReadReceipt(req.params.trackingId!, ipAddress, userAgent);
   res.json({ success: true, message: 'Read receipt tracked' });
 }));
 
@@ -81,7 +81,7 @@ router.post('/track/:trackingId', asyncHandler(async (req: Request, res: Respons
 router.post('/:id/verify-access', asyncHandler(async (req: Request, res: Response) => {
   const { password } = req.body;
   const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
-  const result = await distributionService.verifyAccess(req.params.id, password);
+  const result = await distributionService.verifyAccess(req.params.id!, password);
   res.json({ success: true, data: result });
 }));
 

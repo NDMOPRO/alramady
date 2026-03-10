@@ -28,23 +28,23 @@ router.post('/', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 router.post('/:sourceId/execute', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.executeSyncJob(req.params.sourceId);
+  const result = await service.executeSyncJob(req.params.sourceId!);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:sourceId/logs', asyncHandler(async (req: Request, res: Response) => {
   const limit = parseInt(req.query.limit as string) || 50;
-  const result = await service.getSyncLogs(req.params.sourceId, limit);
+  const result = await service.getSyncLogs(req.params.sourceId!, limit);
   res.json({ success: true, data: result });
 }));
 
 router.post('/:sourceId/pause', asyncHandler(async (req: Request, res: Response) => {
-  await service.pauseSync(req.params.sourceId);
+  await service.pauseSync(req.params.sourceId!);
   res.json({ success: true, message: 'Sync paused' });
 }));
 
 router.post('/:sourceId/resume', asyncHandler(async (req: Request, res: Response) => {
-  await service.resumeSync(req.params.sourceId);
+  await service.resumeSync(req.params.sourceId!);
   res.json({ success: true, message: 'Sync resumed' });
 }));
 

@@ -151,7 +151,7 @@ export class WorkflowService {
           currentStep: 0,
           steps,
           submittedAt: new Date().toISOString(),
-        },
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -346,7 +346,7 @@ export class WorkflowService {
             comment,
             decidedAt: new Date().toISOString(),
           },
-        },
+        } as Prisma.InputJsonValue,
       },
     });
 

@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../utils/prisma';
 import { NotFoundError } from '../middleware/errorHandler';
 import { cacheGet, cacheSet, cacheDel } from '../utils/redis';
@@ -403,7 +404,7 @@ export class MatchingService {
 
     const updated = await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await Promise.all([
@@ -524,7 +525,7 @@ export class MatchingService {
 
     const updated = await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await Promise.all([

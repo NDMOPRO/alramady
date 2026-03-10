@@ -5,8 +5,8 @@ import { ragService } from '../services/rag.service';
 export class AIController {
   async analyzeText(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { text } = req.body;
       if (!text) { res.status(400).json({ error: 'text is required' }); return; }
       const result = await nlpService.analyzeText(text, tenantId, userId);
@@ -16,8 +16,8 @@ export class AIController {
 
   async extractEntities(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { text } = req.body;
       if (!text) { res.status(400).json({ error: 'text is required' }); return; }
       const result = await nlpService.extractEntities(text, tenantId, userId);
@@ -27,8 +27,8 @@ export class AIController {
 
   async analyzeSentiment(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { text } = req.body;
       if (!text) { res.status(400).json({ error: 'text is required' }); return; }
       const result = await nlpService.analyzeSentiment(text, tenantId, userId);
@@ -65,8 +65,8 @@ export class AIController {
 
   async chat(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { messages, model, temperature, maxTokens } = req.body;
       if (!messages || !Array.isArray(messages)) { res.status(400).json({ error: 'messages array required' }); return; }
       const result = await nlpService.chatCompletion(messages, tenantId, userId, { model, temperature, maxTokens });
@@ -76,8 +76,8 @@ export class AIController {
 
   async generateInsights(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { datasetId } = req.params;
       const result = await nlpService.generateInsights(datasetId, tenantId, userId);
       res.json({ success: true, data: result });
@@ -86,7 +86,7 @@ export class AIController {
 
   async createKnowledgeBase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { name, description } = req.body;
       if (!name) { res.status(400).json({ error: 'name is required' }); return; }
       const result = await ragService.createKnowledgeBase(name, description || '', tenantId);
@@ -106,8 +106,8 @@ export class AIController {
 
   async queryKnowledgeBase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const userId = req.user?.id;
+      const tenantId = req.user!.tenantId as string;
+      const userId = req.user!.id as string;
       const { knowledgeBaseId } = req.params;
       const { question, topK } = req.body;
       if (!question) { res.status(400).json({ error: 'question is required' }); return; }
@@ -118,7 +118,7 @@ export class AIController {
 
   async listKnowledgeBases(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const result = await ragService.listKnowledgeBases(tenantId);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
@@ -126,7 +126,7 @@ export class AIController {
 
   async deleteKnowledgeBase(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const result = await ragService.deleteKnowledgeBase(req.params.knowledgeBaseId);
+      const result = await ragService.deleteKnowledgeBase(req.params.knowledgeBaseId!);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
   }

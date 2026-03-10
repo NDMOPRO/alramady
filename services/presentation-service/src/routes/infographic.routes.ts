@@ -484,7 +484,7 @@ router.post(
   authMiddleware,
   validate(generateSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, description, type, data, style, dimensions, tags } = req.body;
 
@@ -564,7 +564,7 @@ router.get(
   '/library',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -771,7 +771,7 @@ router.post(
   authMiddleware,
   validate(timelineSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, items, direction, style, tags } = req.body;
 
@@ -814,7 +814,7 @@ router.post(
   authMiddleware,
   validate(comparisonSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, items, comparisonStyle, style, tags } = req.body;
 
@@ -852,7 +852,7 @@ router.post(
   authMiddleware,
   validate(hierarchicalSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, root, hierarchyStyle, style, tags } = req.body;
 
@@ -889,7 +889,7 @@ router.post(
   authMiddleware,
   validate(processSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, steps, processStyle, style, tags } = req.body;
 
@@ -927,7 +927,7 @@ router.post(
   authMiddleware,
   validate(statisticalSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, dataPoints, chartType, showLabels, showLegend, animated, style, tags } = req.body;
 
@@ -989,7 +989,7 @@ router.post(
   authMiddleware,
   validate(geographicSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, mapType, region, dataPoints, heatmapMode, showLabels, style, tags } = req.body;
 
@@ -1347,7 +1347,7 @@ router.post(
   authMiddleware,
   validate(heatmapSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { title, data, rowLabels, columnLabels, colorRange, showValues, style, tags } = req.body;
 
@@ -1825,7 +1825,7 @@ router.post(
   authMiddleware,
   validate(nlqSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const userId = req.user!.userId;
     const { query, datasetId, context, style, tags } = req.body;
 

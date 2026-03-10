@@ -28,7 +28,7 @@ router.get('/', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 router.get('/related/:fileId', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.getRelatedFiles(req.params.fileId);
+  const result = await service.getRelatedFiles(req.params.fileId!);
   res.json({ success: true, data: result });
 }));
 

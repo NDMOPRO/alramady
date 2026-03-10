@@ -180,7 +180,7 @@ router.get(
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
     const report = await prisma.reportDefinition.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!report) {
@@ -193,12 +193,12 @@ router.get(
     }
 
     const buildOutputs = await prisma.reportBuildOutput.findMany({
-      where: { reportId: req.params.id },
+      where: { reportId: req.params.id! },
       orderBy: { createdAt: 'desc' },
     });
 
     const schedules = await prisma.reportSchedule.findMany({
-      where: { reportId: req.params.id },
+      where: { reportId: req.params.id! },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -274,7 +274,7 @@ router.put(
   validate(updateReportSchema, 'body'),
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.reportDefinition.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -299,7 +299,7 @@ router.put(
     }
 
     const updated = await prisma.reportDefinition.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: updateData,
     });
 
@@ -318,7 +318,7 @@ router.delete(
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.reportDefinition.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -330,17 +330,17 @@ router.delete(
       return;
     }
 
-    await prisma.reportOutput.deleteMany({ where: { reportId: req.params.id } });
-    await prisma.reportSchedule.deleteMany({ where: { reportId: req.params.id } });
-    await prisma.reportDefinition.delete({ where: { id: req.params.id } });
-    await deleteRuntimeReportRecord(req.params.id);
+    await prisma.reportOutput.deleteMany({ where: { reportId: req.params.id! } });
+    await prisma.reportSchedule.deleteMany({ where: { reportId: req.params.id! } });
+    await prisma.reportDefinition.delete({ where: { id: req.params.id! } });
+    await deleteRuntimeReportRecord(req.params.id!);
 
-    logger.info('Report deleted', { reportId: req.params.id, userId: req.user!.userId });
+    logger.info('Report deleted', { reportId: req.params.id!, userId: req.user!.userId });
 
     res.json({
       success: true,
       message: 'Report and associated data deleted successfully',
-      deletedId: req.params.id,
+      deletedId: req.params.id!,
     });
   })
 );
@@ -353,7 +353,7 @@ router.post(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await reportBuilderService.buildReport(req.params.id);
+    const result = await reportBuilderService.buildReport(req.params.id!);
 
     res.json({
       success: true,
@@ -372,7 +372,7 @@ router.post(
   validate(idParamSchema, 'params'),
   validate(addSectionSchema, 'body'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await reportBuilderService.addSection(req.params.id, {
+    const result = await reportBuilderService.addSection(req.params.id!, {
       type: req.body.type,
       content: req.body.content,
       position: req.body.position,
@@ -392,7 +392,7 @@ router.post(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await reportBuilderService.addTableOfContents(req.params.id);
+    const result = await reportBuilderService.addTableOfContents(req.params.id!);
 
     res.json({
       success: true,
@@ -409,7 +409,7 @@ router.put(
   validate(idParamSchema, 'params'),
   validate(headerSchema, 'body'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await reportBuilderService.addHeader(req.params.id, req.body);
+    const result = await reportBuilderService.addHeader(req.params.id!, req.body);
 
     res.json({
       success: true,
@@ -426,7 +426,7 @@ router.put(
   validate(idParamSchema, 'params'),
   validate(footerSchema, 'body'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await reportBuilderService.addFooter(req.params.id, req.body);
+    const result = await reportBuilderService.addFooter(req.params.id!, req.body);
 
     res.json({
       success: true,
@@ -472,7 +472,7 @@ router.post(
   validate(renderTemplateSchema, 'body'),
   asyncHandler(async (req: Request, res: Response) => {
     const renderedHtml = await templateEngineService.renderTemplate(
-      req.params.id,
+      req.params.id!,
       req.body.data
     );
 
@@ -480,7 +480,7 @@ router.post(
       success: true,
       data: {
         html: renderedHtml,
-        templateId: req.params.id,
+        templateId: req.params.id!,
         renderedAt: new Date().toISOString(),
       },
       message: 'Template rendered successfully',
@@ -502,10 +502,10 @@ router.get(
       margins: req.query.margins ? JSON.parse(req.query.margins as string) : undefined,
     };
 
-    const pdfBuffer = await templateEngineService.exportToPDF(req.params.id, options);
+    const pdfBuffer = await templateEngineService.exportToPDF(req.params.id!, options);
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id}.pdf"`);
+    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id!}.pdf"`);
     res.setHeader('Content-Length', pdfBuffer.length.toString());
     res.send(pdfBuffer);
   })
@@ -517,10 +517,10 @@ router.get(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const docxBuffer = await templateEngineService.exportToWord(req.params.id);
+    const docxBuffer = await templateEngineService.exportToWord(req.params.id!);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id}.docx"`);
+    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id!}.docx"`);
     res.setHeader('Content-Length', docxBuffer.length.toString());
     res.send(docxBuffer);
   })
@@ -532,10 +532,10 @@ router.get(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const htmlContent = await templateEngineService.exportToHTML(req.params.id);
+    const htmlContent = await templateEngineService.exportToHTML(req.params.id!);
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id}.html"`);
+    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id!}.html"`);
     res.send(htmlContent);
   })
 );
@@ -546,10 +546,10 @@ router.get(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const excelBuffer = await templateEngineService.exportToExcel(req.params.id);
+    const excelBuffer = await templateEngineService.exportToExcel(req.params.id!);
 
     res.setHeader('Content-Type', 'application/vnd.ms-excel');
-    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id}.xls"`);
+    res.setHeader('Content-Disposition', `attachment; filename="report_${req.params.id!}.xls"`);
     res.setHeader('Content-Length', excelBuffer.length.toString());
     res.send(excelBuffer);
   })
@@ -569,7 +569,7 @@ router.post(
     const resolvedTenantId = tenantId || req.user!.organizationId || 'default';
 
     const schedule = await scheduledReportsService.scheduleReport(
-      req.params.id,
+      req.params.id!,
       cronExpression,
       recipients,
       format,
@@ -591,7 +591,7 @@ router.get(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await scheduledReportsService.listSchedules(req.params.id);
+    const result = await scheduledReportsService.listSchedules(req.params.id!);
 
     res.json({
       success: true,
@@ -606,7 +606,7 @@ router.put(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await scheduledReportsService.pauseSchedule(req.params.id);
+    const result = await scheduledReportsService.pauseSchedule(req.params.id!);
 
     res.json({
       success: true,
@@ -622,7 +622,7 @@ router.put(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await scheduledReportsService.resumeSchedule(req.params.id);
+    const result = await scheduledReportsService.resumeSchedule(req.params.id!);
 
     res.json({
       success: true,
@@ -638,7 +638,7 @@ router.get(
   authMiddleware,
   validate(idParamSchema, 'params'),
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await scheduledReportsService.getScheduleHistory(req.params.id);
+    const result = await scheduledReportsService.getScheduleHistory(req.params.id!);
 
     res.json({
       success: true,
@@ -659,7 +659,7 @@ router.post(
     const { recipients, format } = req.body;
 
     const result = await scheduledReportsService.sendReport(
-      req.params.id,
+      req.params.id!,
       recipients,
       format
     );

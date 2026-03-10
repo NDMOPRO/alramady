@@ -143,7 +143,7 @@ router.get(
   '/templates/:id',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
 
       if (!templateId) {
         res.status(400).json({
@@ -188,7 +188,7 @@ router.put(
   '/templates/:id',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
       const { name, content, variables, category, isPublished } = req.body;
 
       if (!templateId) {
@@ -258,7 +258,7 @@ router.delete(
   '/templates/:id',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
 
       if (!templateId) {
         res.status(400).json({
@@ -318,7 +318,7 @@ router.post(
   '/templates/:id/render',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
       const { data } = req.body;
 
       if (!templateId) {
@@ -354,7 +354,7 @@ router.post(
   '/templates/:id/preview',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
       const { previewData } = req.body;
 
       if (!templateId) {
@@ -383,7 +383,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = extractUserId(req);
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
 
       if (!templateId) {
         res.status(400).json({
@@ -412,7 +412,7 @@ router.post(
     try {
       const tenantId = extractTenantId(req);
       const userId = extractUserId(req);
-      const documentId = req.params.documentId;
+      const documentId = req.params.documentId!;
 
       if (!documentId) {
         res.status(400).json({
@@ -439,7 +439,7 @@ router.post(
   '/templates/:id/variables',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
       const { name, type, defaultValue } = req.body;
 
       if (!templateId) {
@@ -475,7 +475,7 @@ router.post(
   '/templates/:id/validate',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
 
       if (!templateId) {
         res.status(400).json({
@@ -503,7 +503,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = extractUserId(req);
-      const templateId = req.params.id;
+      const templateId = req.params.id!;
       const { rating } = req.body;
 
       if (!templateId) {

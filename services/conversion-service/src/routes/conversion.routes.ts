@@ -118,8 +118,8 @@ router.post(
   upload.single('file'),
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
     if (!requireFile(req, res)) return;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     logger.info('PDF to Word conversion request', { filename: req.file!.originalname, userId });
 
@@ -146,8 +146,8 @@ router.post(
   upload.single('file'),
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
     if (!requireFile(req, res)) return;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     logger.info('Word to PDF conversion request', { filename: req.file!.originalname, userId });
 
@@ -174,8 +174,8 @@ router.post(
   upload.single('file'),
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
     if (!requireFile(req, res)) return;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     logger.info('Excel to PDF conversion request', { filename: req.file!.originalname, userId });
 
@@ -221,8 +221,8 @@ router.post(
   '/convert/html-to-pdf',
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
     const validated = htmlToPdfSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     logger.info('HTML to PDF conversion request', { htmlLength: validated.html.length, userId });
 
@@ -394,8 +394,8 @@ router.post(
     }
 
     const validated = batchConvertSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     logger.info('Batch conversion request', {
       fileCount: files.length,
@@ -470,8 +470,8 @@ router.post(
   '/pipeline',
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
     const validated = createPipelineSchema.parse(req.body);
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     logger.info('Create pipeline request', {
       name: validated.name,
@@ -500,7 +500,7 @@ router.post(
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
     if (!requireFile(req, res)) return;
 
-    const pipelineId = req.params.id;
+    const pipelineId = req.params.id!;
 
     logger.info('Execute pipeline request', {
       pipelineId,
@@ -531,8 +531,8 @@ router.post(
 router.get(
   '/jobs/:id',
   wrapAsync(async (req: Request, res: Response, _next: NextFunction) => {
-    const jobId = req.params.id;
-    const tenantId = req.user?.organizationId || req.user?.userId || 'default';
+    const jobId = req.params.id!;
+    const tenantId = req.user!.organizationId || req.user!.userId || 'default';
 
     logger.info('Get conversion job request', { jobId, tenantId });
 

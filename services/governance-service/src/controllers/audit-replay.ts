@@ -25,7 +25,7 @@ export async function list(req: Request, res: Response, next: NextFunction): Pro
 
 export async function getById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await auditService.getById(req.params.id);
+    const record = await auditService.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -36,9 +36,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
   try {
     const record = await auditService.create({
       ...req.body,
-      createdBy: req.user?.userId,
+      createdBy: req.user!.userId,
     });
-    logger.info('Audit log created via API', { id: record.id, userId: req.user?.userId });
+    logger.info('Audit log created via API', { id: record.id, userId: req.user!.userId });
     res.status(201).json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -47,9 +47,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await auditService.update(req.params.id, {
+    const record = await auditService.update(req.params.id!, {
       ...req.body,
-      updatedBy: req.user?.userId,
+      updatedBy: req.user!.userId,
     });
     res.json({ success: true, data: record });
   } catch (error) {
@@ -59,7 +59,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
 
 export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    await auditService.remove(req.params.id);
+    await auditService.remove(req.params.id!);
     res.json({ success: true, message: 'Audit log deleted successfully' });
   } catch (error) {
     next(error);

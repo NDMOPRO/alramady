@@ -61,7 +61,7 @@ router.post(
         filePath: tmpPath,
         fileType: body.fileType || 'image',
         languages: body.languages || ['ar', 'en'],
-        options: body.options as Record<string, unknown>,
+        options: body.options as any,
       });
 
       res.json({ success: true, data: result });
@@ -101,7 +101,7 @@ router.post(
       const result = await pdfService.analyzePdf({
         fileId: `upload_${Date.now()}`,
         filePath: tmpPath,
-        options: body.options as Record<string, unknown>,
+        options: body.options as any,
       });
 
       res.json({ success: true, data: result });

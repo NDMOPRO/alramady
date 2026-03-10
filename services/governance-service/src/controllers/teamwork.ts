@@ -23,7 +23,7 @@ export async function list(req: Request, res: Response, next: NextFunction): Pro
 
 export async function getById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await teamworkService.getById(req.params.id);
+    const record = await teamworkService.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -34,9 +34,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
   try {
     const record = await teamworkService.create({
       ...req.body,
-      createdBy: req.user?.userId,
+      createdBy: req.user!.userId,
     });
-    logger.info('Team created via API', { id: record.id, userId: req.user?.userId });
+    logger.info('Team created via API', { id: record.id, userId: req.user!.userId });
     res.status(201).json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -45,9 +45,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await teamworkService.update(req.params.id, {
+    const record = await teamworkService.update(req.params.id!, {
       ...req.body,
-      updatedBy: req.user?.userId,
+      updatedBy: req.user!.userId,
     });
     res.json({ success: true, data: record });
   } catch (error) {
@@ -57,7 +57,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
 
 export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    await teamworkService.remove(req.params.id);
+    await teamworkService.remove(req.params.id!);
     res.json({ success: true, message: 'Team deleted successfully' });
   } catch (error) {
     next(error);
@@ -66,7 +66,7 @@ export async function remove(req: Request, res: Response, next: NextFunction): P
 
 export async function getMembers(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const result = await teamworkService.getMembers(req.params.id);
+    const result = await teamworkService.getMembers(req.params.id!);
     res.json({ success: true, data: result });
   } catch (error) {
     next(error);
@@ -81,7 +81,7 @@ export async function addMember(req: Request, res: Response, next: NextFunction)
       return;
     }
 
-    const result = await teamworkService.addMember(req.params.id, userId, role || 'member');
+    const result = await teamworkService.addMember(req.params.id!, userId, role || 'member');
     res.status(201).json({ success: true, data: result });
   } catch (error) {
     next(error);
@@ -90,7 +90,7 @@ export async function addMember(req: Request, res: Response, next: NextFunction)
 
 export async function removeMember(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const result = await teamworkService.removeMember(req.params.id, req.params.userId);
+    const result = await teamworkService.removeMember(req.params.id!, req.params.userId!);
     res.json({ success: true, data: result });
   } catch (error) {
     next(error);

@@ -15,7 +15,7 @@ export class MatrixController {
         sortBy: sortBy as string,
         sortOrder: sortOrder as 'asc' | 'desc',
         search: search as string,
-        tenantId: req.user?.organizationId,
+        tenantId: req.user!.organizationId,
         sourceFormat,
         targetFormat,
       });
@@ -46,7 +46,7 @@ export class MatrixController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const entry = await matrixService.create({
-        tenantId: req.user?.organizationId || req.body.tenantId,
+        tenantId: req.user!.organizationId || req.body.tenantId,
         sourceFormat: req.body.sourceFormat,
         targetFormat: req.body.targetFormat,
         sourcePath: req.body.sourcePath || `matrix://${req.body.sourceFormat}-to-${req.body.targetFormat}`,
@@ -145,7 +145,7 @@ export class MatrixController {
 
   async getStats(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const stats = await matrixService.getConversionStats(req.user?.organizationId);
+      const stats = await matrixService.getConversionStats(req.user!.organizationId);
 
       res.status(200).json({
         success: true,

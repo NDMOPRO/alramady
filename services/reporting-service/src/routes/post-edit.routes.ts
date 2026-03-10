@@ -18,18 +18,18 @@ router.post('/', authMiddleware, validate(reportPostEditCreateSchema), reportPos
 router.put('/:id', authMiddleware, validate(uuidParamSchema, 'params'), validate(reportPostEditUpdateSchema), reportPostEditController.update.bind(reportPostEditController));
 router.delete('/:id', authMiddleware, validate(uuidParamSchema, 'params'), reportPostEditController.remove.bind(reportPostEditController));
 router.post('/:id/sections/:sectionId', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await reportPostEditService.applySectionEdit(req.params.id, req.params.sectionId, req.body, req.user!.userId);
+  const result = await reportPostEditService.applySectionEdit(req.params.id!, req.params.sectionId!, req.body, req.user!.userId);
   res.json({ success: true, data: result });
 }));
 router.get('/:id/versions', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await reportPostEditService.getVersionDiff(req.params.id);
+  const result = await reportPostEditService.getVersionDiff(req.params.id!);
   res.json({ success: true, data: result });
 }));
 router.post('/:id/publish', authMiddleware, validate(uuidParamSchema, 'params'), reportPostEditController.publish.bind(reportPostEditController));
 router.post('/:id/revert', authMiddleware, validate(uuidParamSchema, 'params'), reportPostEditController.revert.bind(reportPostEditController));
 router.post('/:id/re-export', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const format = req.body.format || 'pdf';
-  const result = await reportPostEditService.reexport(req.params.id, format);
+  const result = await reportPostEditService.reexport(req.params.id!, format);
   res.json({ success: true, data: result });
 }));
 router.get('/history/:reportId', authMiddleware, reportPostEditController.getHistory.bind(reportPostEditController));

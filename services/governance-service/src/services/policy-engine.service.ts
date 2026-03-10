@@ -4,6 +4,7 @@
  * يغطي: F-04286, F-04289
  */
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../utils/prisma';
 import { cacheGet, cacheSet, cacheDel } from '../utils/redis';
 import { logger } from '../utils/logger';
@@ -179,7 +180,7 @@ export class PolicyEngineService {
         description: policy.description,
         resource: policy.resource,
         action: policy.action,
-        conditions: JSON.parse(JSON.stringify(policy.conditions)) as Record<string, unknown>,
+        conditions: JSON.parse(JSON.stringify(policy.conditions)) as Prisma.InputJsonValue,
         effect: policy.effect,
         priority: policy.priority,
         enabled: policy.enabled,
@@ -505,7 +506,7 @@ export class PolicyEngineService {
         action: `policy_evaluation:${action}`,
         entityType: resource,
         entityId: policyId,
-        changes: JSON.parse(JSON.stringify(context)) as Record<string, unknown>,
+        changes: JSON.parse(JSON.stringify(context)) as Prisma.InputJsonValue,
         createdAt: new Date(),
       },
     });

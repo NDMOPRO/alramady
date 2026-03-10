@@ -24,7 +24,7 @@ export class CompareScheduleController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await compareScheduleService.getById(req.params.id);
+      const data = await compareScheduleService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class CompareScheduleController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await compareScheduleService.update(req.params.id, req.body);
+      const data = await compareScheduleService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class CompareScheduleController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await compareScheduleService.remove(req.params.id);
+      await compareScheduleService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Compare schedule deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class CompareScheduleController {
 
   async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await compareScheduleService.execute(req.params.id);
+      const data = await compareScheduleService.execute(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ export class CompareScheduleController {
 
   async getResults(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await compareScheduleService.getResults(req.params.id);
+      const data = await compareScheduleService.getResults(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -79,7 +79,7 @@ export class CompareScheduleController {
 
   async activate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await compareScheduleService.activate(req.params.id);
+      const data = await compareScheduleService.activate(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -88,7 +88,7 @@ export class CompareScheduleController {
 
   async deactivate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await compareScheduleService.deactivate(req.params.id);
+      const data = await compareScheduleService.deactivate(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

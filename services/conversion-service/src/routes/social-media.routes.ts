@@ -82,7 +82,7 @@ router.get(
   '/posts/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.params.tenantId;
+    const tenantId = req.params.tenantId!;
     const platform = (req.query.platform as SocialPlatform | undefined) || null;
     const page = parseInt(req.query.page as string) || 1;
     const result = await service.getPublishHistory(tenantId, platform, page);
@@ -94,7 +94,7 @@ router.delete(
   '/post/:postId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const postId = req.params.postId;
+    const postId = req.params.postId!;
     const result = await service.cancelScheduledPost(postId);
     res.json({ success: true, data: result });
   }),
@@ -104,7 +104,7 @@ router.get(
   '/analytics/:postId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const postId = req.params.postId;
+    const postId = req.params.postId!;
     const result = await service.getPostAnalytics(postId);
     res.json({ success: true, data: result });
   }),

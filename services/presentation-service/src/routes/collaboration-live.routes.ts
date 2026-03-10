@@ -1145,7 +1145,7 @@ router.post(
   validate(workspaceSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const userId = req.user!.userId;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { name, description, presentationIds, members, settings } = req.body;
 
     const workspaceId = crypto.randomUUID();

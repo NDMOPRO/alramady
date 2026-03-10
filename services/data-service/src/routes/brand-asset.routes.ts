@@ -95,7 +95,7 @@ router.post('/extract', upload.array('files', 20), asyncHandler(async (req: Requ
 }));
 
 router.get('/kit/:tenantId', asyncHandler(async (req: Request, res: Response) => {
-  const tenantId = req.params.tenantId;
+  const tenantId = req.params.tenantId!;
   const result = await service.getBrandKit(tenantId);
   if (!result) {
     res.status(404).json({ success: false, error: 'No brand kit found for this tenant', code: 'NOT_FOUND' });

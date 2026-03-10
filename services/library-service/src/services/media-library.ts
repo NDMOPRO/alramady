@@ -80,7 +80,7 @@ export async function getById(id: string) {
 }
 
 export async function create(data: Record<string, unknown>) {
-  const record = await prisma.mediaAsset.create({ data });
+  const record = await prisma.mediaAsset.create({ data: data as any });
   logger.info('Media asset created', { id: record.id, name: record.name, category: record.category });
   await cacheDel(`${CACHE_PREFIX}:list:*`);
   return record;

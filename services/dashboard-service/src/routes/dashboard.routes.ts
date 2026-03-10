@@ -337,8 +337,8 @@ router.post(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { name, layout, config } = req.body;
-      const tenantId = req.user?.organizationId ?? req.user?.userId ?? 'default';
-      const userId = req.user?.userId ?? 'anonymous';
+      const tenantId = req.user!.organizationId ?? req.user!.userId ?? 'default';
+      const userId = req.user!.userId ?? 'anonymous';
       const dashboard = await dashboardBuilder.createDashboard(name, layout, config, tenantId, userId);
       res.status(201).json({ success: true, data: dashboard });
     } catch (err) {
@@ -352,7 +352,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tenantId = req.user?.organizationId ?? req.user?.userId ?? 'default';
+      const tenantId = req.user!.organizationId ?? req.user!.userId ?? 'default';
       const page = parseInt(req.query.page as string, 10) || 1;
       const limit = parseInt(req.query.limit as string, 10) || 20;
       const filters = {
@@ -377,7 +377,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const dashboard = await dashboardBuilder.getDashboard(req.params.id);
+      const dashboard = await dashboardBuilder.getDashboard(req.params.id!);
       res.status(200).json({ success: true, data: dashboard });
     } catch (err) {
       next(err);
@@ -391,8 +391,8 @@ router.put(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { name, layout, config } = req.body;
-      const tenantId = req.user?.organizationId ?? req.user?.userId ?? 'default';
-      const userId = req.user?.userId ?? 'anonymous';
+      const tenantId = req.user!.organizationId ?? req.user!.userId ?? 'default';
+      const userId = req.user!.userId ?? 'anonymous';
       const dashboard = await dashboardBuilder.createDashboard(
         name ?? 'Updated Dashboard', layout ?? {}, config ?? {}, tenantId, userId
       );
@@ -414,10 +414,10 @@ router.delete(
       await prisma.$queryRawUnsafe(
         `UPDATE dashboards SET status = 'deleted', updated_at = $1 WHERE id = $2`,
         now,
-        req.params.id
+        req.params.id!
       );
       await prisma.$disconnect();
-      res.status(200).json({ success: true, data: { id: req.params.id, deletedAt: now } });
+      res.status(200).json({ success: true, data: { id: req.params.id!, deletedAt: now } });
     } catch (err) {
       next(err);
     }
@@ -432,7 +432,7 @@ router.post(
   validate(addWidgetSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const widget = await dashboardBuilder.addWidget(req.params.id, req.body);
+      const widget = await dashboardBuilder.addWidget(req.params.id!, req.body);
       res.status(201).json({ success: true, data: widget });
     } catch (err) {
       next(err);
@@ -446,7 +446,7 @@ router.put(
   validate(updateWidgetSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const widget = await dashboardBuilder.updateWidget(req.params.id, req.params.widgetId, req.body);
+      const widget = await dashboardBuilder.updateWidget(req.params.id!, req.params.widgetId!, req.body);
       res.status(200).json({ success: true, data: widget });
     } catch (err) {
       next(err);
@@ -459,7 +459,7 @@ router.delete(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await dashboardBuilder.removeWidget(req.params.id, req.params.widgetId);
+      const result = await dashboardBuilder.removeWidget(req.params.id!, req.params.widgetId!);
       res.status(200).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -473,7 +473,7 @@ router.put(
   validate(reorderWidgetsSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await dashboardBuilder.reorderWidgets(req.params.id, req.body.positions);
+      const result = await dashboardBuilder.reorderWidgets(req.params.id!, req.body.positions);
       res.status(200).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -488,8 +488,8 @@ router.post(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userId = req.user?.userId ?? 'anonymous';
-      const result = await dashboardBuilder.duplicateDashboard(req.params.id, userId);
+      const userId = req.user!.userId ?? 'anonymous';
+      const result = await dashboardBuilder.duplicateDashboard(req.params.id!, userId);
       res.status(201).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -669,8 +669,8 @@ router.post(
   validate(createKPISchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tenantId = req.user?.organizationId ?? req.user?.userId ?? 'default';
-      const userId = req.user?.userId ?? 'anonymous';
+      const tenantId = req.user!.organizationId ?? req.user!.userId ?? 'default';
+      const userId = req.user!.userId ?? 'anonymous';
       const { name, dataSource, formula, target, thresholds } = req.body;
       const kpi = await kpiEngine.createKPI(name, dataSource, formula, target, thresholds, tenantId, userId);
       res.status(201).json({ success: true, data: kpi });
@@ -685,7 +685,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await kpiEngine.calculateKPI(req.params.id);
+      const result = await kpiEngine.calculateKPI(req.params.id!);
       res.status(200).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -700,7 +700,7 @@ router.get(
     try {
       const start = req.query.start ? new Date(req.query.start as string) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
       const end = req.query.end ? new Date(req.query.end as string) : new Date();
-      const result = await kpiEngine.getKPIHistory(req.params.id, { start, end });
+      const result = await kpiEngine.getKPIHistory(req.params.id!, { start, end });
       res.status(200).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -715,7 +715,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { condition, recipients } = req.body;
-      const alert = await kpiEngine.setKPIAlert(req.params.id, condition, recipients);
+      const alert = await kpiEngine.setKPIAlert(req.params.id!, condition, recipients);
       res.status(201).json({ success: true, data: alert });
     } catch (err) {
       next(err);
@@ -747,7 +747,7 @@ router.post(
   validate(createFilterSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const filter = await filterEngine.createFilter(req.params.id, req.body.config);
+      const filter = await filterEngine.createFilter(req.params.id!, req.body.config);
       res.status(201).json({ success: true, data: filter });
     } catch (err) {
       next(err);
@@ -761,7 +761,7 @@ router.post(
   validate(applyFilterSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await filterEngine.applyFilter(req.params.id, req.params.filterId, req.body.value);
+      const result = await filterEngine.applyFilter(req.params.id!, req.params.filterId!, req.body.value);
       res.status(200).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -777,7 +777,7 @@ router.post(
   validate(bindDatasetSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const result = await filterEngine.bindDataset(req.params.widgetId, req.body.datasetId, req.body.mapping);
+      const result = await filterEngine.bindDataset(req.params.widgetId!, req.body.datasetId, req.body.mapping);
       res.status(200).json({ success: true, data: result });
     } catch (err) {
       next(err);
@@ -822,7 +822,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const theme = await themeEngine.getTheme(req.params.id);
+      const theme = await themeEngine.getTheme(req.params.id!);
       res.status(200).json({ success: true, data: theme });
     } catch (err) {
       next(err);
@@ -838,7 +838,7 @@ router.get(
       const mode = req.query.mode === 'dark' || req.query.mode === 'light'
         ? (req.query.mode as ThemeMode)
         : undefined;
-      const preview = await themeEngine.generateThemePreview(req.params.id, mode);
+      const preview = await themeEngine.generateThemePreview(req.params.id!, mode);
       res.set('Content-Type', 'image/png');
       res.set('Content-Length', String(preview.imageBuffer.length));
       res.status(200).send(preview.imageBuffer);
@@ -853,7 +853,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const css = await themeEngine.exportThemeCSS(req.params.id);
+      const css = await themeEngine.exportThemeCSS(req.params.id!);
       res.set('Content-Type', 'text/css; charset=utf-8');
       res.status(200).send(css);
     } catch (err) {
@@ -867,7 +867,7 @@ router.post(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const theme = await themeEngine.createRtlVariant(req.params.id);
+      const theme = await themeEngine.createRtlVariant(req.params.id!);
       res.status(201).json({ success: true, data: theme });
     } catch (err) {
       next(err);
@@ -880,7 +880,7 @@ router.post(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const theme = await themeEngine.createDarkLightVariant(req.params.id);
+      const theme = await themeEngine.createDarkLightVariant(req.params.id!);
       res.status(201).json({ success: true, data: theme });
     } catch (err) {
       next(err);
@@ -894,7 +894,7 @@ router.put(
   validate(applyBrandKitSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const theme = await themeEngine.applyBrandKit(req.params.id, req.body);
+      const theme = await themeEngine.applyBrandKit(req.params.id!, req.body);
       res.status(200).json({ success: true, data: theme });
     } catch (err) {
       next(err);
@@ -907,7 +907,7 @@ router.get(
   authMiddleware,
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tenantId = req.user?.tenantId ?? req.user?.organizationId;
+      const tenantId = req.user!.tenantId! ?? req.user!.organizationId;
       const appearance = await platformAppearanceService.getAppearance(tenantId);
       res.status(200).json({ success: true, data: appearance });
     } catch (err) {
@@ -922,7 +922,7 @@ router.put(
   validate(updateAppearanceSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const tenantId = req.user?.tenantId ?? req.user?.organizationId;
+      const tenantId = req.user!.tenantId! ?? req.user!.organizationId;
       const appearance = await platformAppearanceService.updateAppearance(tenantId, req.body);
       res.status(200).json({ success: true, data: appearance });
     } catch (err) {
@@ -940,9 +940,9 @@ router.get(
     try {
       const width = parseInt(req.query.width as string, 10) || undefined;
       const height = parseInt(req.query.height as string, 10) || undefined;
-      const buffer = await filterEngine.exportToPDF(req.params.id, { width, height });
+      const buffer = await filterEngine.exportToPDF(req.params.id!, { width, height });
       res.set('Content-Type', 'image/png');
-      res.set('Content-Disposition', `attachment; filename="dashboard-${req.params.id}.png"`);
+      res.set('Content-Disposition', `attachment; filename="dashboard-${req.params.id!}.png"`);
       res.set('Content-Length', String(buffer.length));
       res.status(200).send(buffer);
     } catch (err) {
@@ -958,10 +958,10 @@ router.get(
     try {
       const format = (req.query.format as string) === 'jpeg' ? 'jpeg' : 'png';
       const resolution = parseFloat(req.query.resolution as string) || undefined;
-      const buffer = await filterEngine.exportToImage(req.params.id, format, resolution);
+      const buffer = await filterEngine.exportToImage(req.params.id!, format, resolution);
       const contentType = format === 'jpeg' ? 'image/jpeg' : 'image/png';
       res.set('Content-Type', contentType);
-      res.set('Content-Disposition', `attachment; filename="dashboard-${req.params.id}.${format}"`);
+      res.set('Content-Disposition', `attachment; filename="dashboard-${req.params.id!}.${format}"`);
       res.set('Content-Length', String(buffer.length));
       res.status(200).send(buffer);
     } catch (err) {

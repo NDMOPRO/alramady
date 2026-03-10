@@ -64,7 +64,7 @@ router.get('/', asyncHandler(async (req: Request, res: Response) => {
 
 router.get('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = req.tenant!;
-  const result = await service.getKpiById(req.params.id, tenantId);
+  const result = await service.getKpiById(req.params.id!, tenantId);
   res.json({ success: true, data: result });
 }));
 
@@ -72,25 +72,25 @@ router.put('/:id', asyncHandler(async (req: Request, res: Response) => {
   const body = CreateKpiBody.partial().parse(req.body);
   const { tenantId, userId } = req.tenant!;
   const changeReason = (req.body.changeReason as string) || 'Updated via API';
-  const result = await service.updateKpi(req.params.id, tenantId, { ...body, changeReason, requestedBy: userId });
+  const result = await service.updateKpi(req.params.id!, tenantId, { ...body, changeReason, requestedBy: userId });
   res.json({ success: true, data: result });
 }));
 
 router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { tenantId, userId } = req.tenant!;
-  await service.deleteKpi(req.params.id, tenantId, userId);
+  await service.deleteKpi(req.params.id!, tenantId, userId);
   res.json({ success: true, message: 'KPI deleted' });
 }));
 
 router.post('/:id/calculate', asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = req.tenant!;
-  const result = await service.calculateKpi({ kpiId: req.params.id, forceRefresh: false }, tenantId);
+  const result = await service.calculateKpi({ kpiId: req.params.id!, forceRefresh: false }, tenantId);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:id/history', asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = req.tenant!;
-  const result = await service.getVersionHistory(req.params.id, tenantId);
+  const result = await service.getVersionHistory(req.params.id!, tenantId);
   res.json({ success: true, data: result });
 }));
 

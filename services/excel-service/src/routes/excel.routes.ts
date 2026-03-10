@@ -205,7 +205,7 @@ router.post(
   validate(createWorkbookSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { name, sheets, tenantId } = req.body;
-    const userId = req.user?.userId || 'anonymous';
+    const userId = req.user!.userId || 'anonymous';
     const result = await spreadsheetEngineService.createWorkbook(name, sheets, tenantId, userId);
     logger.info('Workbook created via API', { workbookId: result.workbookId });
     res.status(201).json({
@@ -224,8 +224,8 @@ router.post(
       res.status(400).json({ success: false, error: 'No file uploaded' });
       return;
     }
-    const tenantId = req.body.tenantId || req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.body.tenantId || req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await spreadsheetEngineService.openWorkbook(
       req.file.buffer,
       req.file.originalname,
@@ -337,10 +337,10 @@ router.get(
     const result = await spreadsheetEngineService.getCellRange(
       id,
       parseInt(sheet, 10),
-      parseInt(startRow, 10),
-      parseInt(startCol, 10),
-      parseInt(endRow, 10),
-      parseInt(endCol, 10)
+      parseInt(startRow!, 10),
+      parseInt(startCol!, 10),
+      parseInt(endRow!, 10),
+      parseInt(endCol!, 10)
     );
     res.status(200).json({ success: true, data: result });
   })

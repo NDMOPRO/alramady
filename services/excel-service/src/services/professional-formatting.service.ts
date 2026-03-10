@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { logger } from '../utils/logger.js';
 import { getThemeConfig, getAllThemes } from '../utils/theme-presets.js';
 import type {
@@ -102,7 +103,7 @@ class ProfessionalFormattingService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await cacheDel(`workbook:${workbookId}:*`);

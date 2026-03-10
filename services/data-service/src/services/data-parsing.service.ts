@@ -193,7 +193,7 @@ export default class DataParsingService {
 
       await this.prisma.datasetColumn.update({
         where: { id: col.id },
-        data: { statsJson: JSON.parse(JSON.stringify(stat)),
+        data: { statsJson: JSON.parse(JSON.stringify(stat)) },
       });
     }
 

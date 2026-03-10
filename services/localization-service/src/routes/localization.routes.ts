@@ -51,8 +51,8 @@ function asyncHandler(fn: (req: Request, res: Response, next: NextFunction) => P
 }
 
 function requireUserContext(req: Request): { userId: string; tenantId: string } {
-  const userId = req.user?.userId;
-  const tenantId = req.user?.organizationId || req.user?.tenantId;
+  const userId = req.user!.userId;
+  const tenantId = req.user!.organizationId || req.user!.tenantId;
 
   if (!userId || !tenantId) {
     throw new Error('Authenticated user and tenant context are required');
@@ -558,7 +558,7 @@ router.get(
         WHERE id = $1::uuid
         LIMIT 1
       `,
-      req.params.id
+      req.params.id!
     );
 
     if (rows.length === 0) {
@@ -759,7 +759,7 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const body = z.object({ targetLocale: z.string().min(2).max(10) }).parse(req.body);
     const { userId, tenantId } = requireUserContext(req);
-    const result = await localizePresentation(req.params.id, body.targetLocale, tenantId, userId);
+    const result = await localizePresentation(req.params.id!, body.targetLocale, tenantId, userId);
     res.status(200).json({ success: true, data: result });
   })
 );
@@ -770,7 +770,7 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const body = z.object({ targetLocale: z.string().min(2).max(10) }).parse(req.body);
     const { userId, tenantId } = requireUserContext(req);
-    const result = await localizeReport(req.params.id, body.targetLocale, tenantId, userId);
+    const result = await localizeReport(req.params.id!, body.targetLocale, tenantId, userId);
     res.status(200).json({ success: true, data: result });
   })
 );
@@ -781,7 +781,7 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const body = z.object({ targetLocale: z.string().min(2).max(10) }).parse(req.body);
     const { userId, tenantId } = requireUserContext(req);
-    const result = await localizeDashboard(req.params.id, body.targetLocale, tenantId, userId);
+    const result = await localizeDashboard(req.params.id!, body.targetLocale, tenantId, userId);
     res.status(200).json({ success: true, data: result });
   })
 );
@@ -816,7 +816,7 @@ router.get(
   '/glossaries/:id/terms',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const result = await getGlossaryTerms(req.params.id, typeof req.query.search === 'string' ? req.query.search : undefined);
+    const result = await getGlossaryTerms(req.params.id!, typeof req.query.search === 'string' ? req.query.search : undefined);
     res.status(200).json({ success: true, data: result });
   })
 );
@@ -831,7 +831,7 @@ router.post(
       context: z.string().optional(),
     }).parse(req.body);
 
-    const result = await addTerm(req.params.id, body.source, body.target, body.context);
+    const result = await addTerm(req.params.id!, body.source, body.target, body.context);
     res.status(201).json({ success: true, data: result });
   })
 );
@@ -841,7 +841,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = z.object({ text: z.string().min(1) }).parse(req.body);
-    const result = await enforceGlossary(body.text, req.params.id);
+    const result = await enforceGlossary(body.text, req.params.id!);
     res.status(200).json({ success: true, data: result });
   })
 );

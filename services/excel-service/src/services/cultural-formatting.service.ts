@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { logger } from '../utils/logger.js';
 import { getLocaleConfig, getCulturalFormatConfig } from '../utils/locale-config.js';
 import type { CulturalFormatConfig } from '../types/formatting.types.js';
@@ -88,7 +89,7 @@ export class CulturalFormattingService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await cacheDel(`${CACHE_PREFIX}:${workbookId}`);
@@ -131,7 +132,7 @@ export class CulturalFormattingService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await cacheDel(`${CACHE_PREFIX}:${workbookId}`);
@@ -185,7 +186,7 @@ export class CulturalFormattingService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await cacheDel(`${CACHE_PREFIX}:${workbookId}`);
@@ -243,7 +244,7 @@ export class CulturalFormattingService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await cacheDel(`${CACHE_PREFIX}:${workbookId}`);
@@ -296,7 +297,7 @@ export class CulturalFormattingService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheetsJson as Prisma.InputJsonValue },
     });
 
     await cacheDel(`${CACHE_PREFIX}:${workbookId}`);

@@ -101,7 +101,7 @@ export class SMSNotificationService {
           status,
           messageLength: message.trim().length,
           sentAt: sentAt.toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -262,7 +262,7 @@ export class SMSNotificationService {
           used: isValid ? true : otpData.used,
           verified: isValid,
           verifiedAt: isValid ? new Date().toISOString() : null,
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 

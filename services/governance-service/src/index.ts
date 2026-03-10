@@ -222,7 +222,7 @@ app.patch('/api/v1/governance/users/:id', authMiddleware, asyncHandler(async (re
       ...(payload.status !== undefined ? { status: payload.status as never } : {}),
       ...(payload.locale !== undefined ? { locale: payload.locale as never } : {}),
       ...(payload.timezone !== undefined ? { timezone: payload.timezone } : {}),
-      ...(payload.preferences !== undefined ? { preferences: payload.preferences } : {}),
+      ...(payload.preferences !== undefined ? { preferences: payload.preferences as Prisma.InputJsonValue } : {}),
       updatedAt: new Date(),
     },
     select: {

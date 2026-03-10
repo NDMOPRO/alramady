@@ -71,7 +71,7 @@ export async function createTemplate(
       type: type,
       engine: engine,
       content: content,
-      variables: variables as unknown as Record<string, unknown>[],
+      variables: variables as Prisma.InputJsonValue[],
       category: category,
       tenantId: tenantId,
       userId: userId,
@@ -416,7 +416,7 @@ export async function duplicateTemplate(
       type: originalTemplate.type,
       engine: originalTemplate.engine,
       content: originalTemplate.content,
-      variables: originalTemplate.variables as unknown as Record<string, unknown>[],
+      variables: originalTemplate.variables as Prisma.InputJsonValue[],
       category: originalTemplate.category,
       tenantId: originalTemplate.tenantId,
       userId: userId,
@@ -508,7 +508,7 @@ export async function createFromExisting(
       type: 'report',
       engine: 'handlebars',
       content: templateContent,
-      variables: extractedVariables as unknown as Record<string, unknown>[],
+      variables: extractedVariables as Prisma.InputJsonValue[],
       category: 'auto-generated',
       tenantId: tenantId,
       userId: userId,
@@ -582,7 +582,7 @@ export async function addVariable(
   const updatedTemplate = await prisma.template.update({
     where: { id: templateId },
     data: {
-      variables: updatedVariables as unknown as Record<string, unknown>[],
+      variables: updatedVariables as Prisma.InputJsonValue[],
       updatedAt: new Date(),
     },
   });

@@ -15,7 +15,7 @@ export class MatchingController {
         sortOrder: sortOrder as 'asc' | 'desc',
         search: search as string,
         workbookId,
-        tenantId: req.user?.organizationId,
+        tenantId: req.user!.organizationId,
       });
 
       res.status(200).json({
@@ -45,8 +45,8 @@ export class MatchingController {
     try {
       const matching = await matchingService.create({
         ...req.body,
-        tenant_id: req.user?.organizationId || req.body.tenantId,
-        created_by: req.user?.userId || 'system',
+        tenant_id: req.user!.organizationId || req.body.tenantId,
+        created_by: req.user!.userId || 'system',
       });
 
       logger.info('Matching workbook created', { workbookId: matching.id, name: matching.name });

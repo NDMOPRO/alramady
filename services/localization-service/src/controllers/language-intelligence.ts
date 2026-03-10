@@ -27,7 +27,7 @@ export async function getById(req: Request, res: Response, next: NextFunction): 
     const tenantId = authReq.user?.tenantId;
     if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
     const job = await prisma.localizationJob.findFirst({
-      where: { id: req.params.id, tenantId },
+      where: { id: req.params.id!, tenantId },
     });
     if (!job) { res.status(404).json({ success: false, error: 'Not found' }); return; }
     res.json({ success: true, data: job });
@@ -64,11 +64,11 @@ export async function update(req: Request, res: Response, next: NextFunction): P
     const tenantId = authReq.user?.tenantId;
     if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
     const existing = await prisma.localizationJob.findFirst({
-      where: { id: req.params.id, tenantId },
+      where: { id: req.params.id!, tenantId },
     });
     if (!existing) { res.status(404).json({ success: false, error: 'Not found' }); return; }
     const updated = await prisma.localizationJob.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: {
         ...(req.body.sourceLanguage && { sourceLanguage: req.body.sourceLanguage }),
         ...(req.body.targetLanguage && { targetLanguage: req.body.targetLanguage }),
@@ -89,10 +89,10 @@ export async function remove(req: Request, res: Response, next: NextFunction): P
     const tenantId = authReq.user?.tenantId;
     if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
     const existing = await prisma.localizationJob.findFirst({
-      where: { id: req.params.id, tenantId },
+      where: { id: req.params.id!, tenantId },
     });
     if (!existing) { res.status(404).json({ success: false, error: 'Not found' }); return; }
-    await prisma.localizationJob.delete({ where: { id: req.params.id } });
+    await prisma.localizationJob.delete({ where: { id: req.params.id! } });
     res.json({ success: true });
   } catch (error) {
     next(error);
@@ -103,7 +103,7 @@ export async function analyzeContext(req: AuthenticatedRequest, res: Response, n
   try {
     const result = await service.analyzeContext({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: result });
   } catch (error) {
@@ -115,7 +115,7 @@ export async function buildSemanticMap(req: AuthenticatedRequest, res: Response,
   try {
     const result = await service.buildSemanticMap({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: result });
   } catch (error) {
@@ -127,7 +127,7 @@ export async function translateTechnicalTerms(req: AuthenticatedRequest, res: Re
   try {
     const result = await service.translateTechnicalTerms({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: result });
   } catch (error) {
@@ -139,7 +139,7 @@ export async function translateAbbreviations(req: AuthenticatedRequest, res: Res
   try {
     const result = await service.translateAbbreviations({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: result });
   } catch (error) {
@@ -149,7 +149,7 @@ export async function translateAbbreviations(req: AuthenticatedRequest, res: Res
 
 export async function getDomainTerms(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const domain = req.params.domain || req.query.domain as string;
+    const domain = req.params.domain! || req.query.domain as string;
     const targetLanguage = (req.query.targetLanguage as string) || 'ar';
     const result = await service.getDomainTerms(domain, targetLanguage);
     res.json({ success: true, data: result });

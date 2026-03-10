@@ -24,7 +24,7 @@ export async function list(req: Request, res: Response, next: NextFunction): Pro
 
 export async function getById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await compareService.getById(req.params.id);
+    const record = await compareService.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -35,9 +35,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
   try {
     const record = await compareService.create({
       ...req.body,
-      createdBy: req.user?.userId,
+      createdBy: req.user!.userId,
     });
-    logger.info('Comparison created via API', { id: record.id, userId: req.user?.userId });
+    logger.info('Comparison created via API', { id: record.id, userId: req.user!.userId });
     res.status(201).json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -46,9 +46,9 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await compareService.update(req.params.id, {
+    const record = await compareService.update(req.params.id!, {
       ...req.body,
-      updatedBy: req.user?.userId,
+      updatedBy: req.user!.userId,
     });
     res.json({ success: true, data: record });
   } catch (error) {
@@ -58,7 +58,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
 
 export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    await compareService.remove(req.params.id);
+    await compareService.remove(req.params.id!);
     res.json({ success: true, message: 'Comparison deleted successfully' });
   } catch (error) {
     next(error);

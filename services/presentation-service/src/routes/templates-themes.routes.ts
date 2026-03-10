@@ -1246,7 +1246,7 @@ router.post(
   authMiddleware,
   validate(createTemplateSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user?.userId || req.user?.id || '';
+    const userId = req.user!.userId || req.user!.id! || '';
     const body = req.body;
 
     const id = crypto.randomUUID();
@@ -1361,7 +1361,7 @@ router.post(
   validate(fromPresentationSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, name, category, description } = req.body;
-    const userId = req.user?.userId || req.user?.id || '';
+    const userId = req.user!.userId || req.user!.id! || '';
 
     const presentation = await prisma.presentation.findUnique({
       where: { id: presentationId },
@@ -1430,7 +1430,7 @@ router.post(
       return;
     }
 
-    const userId = req.user?.userId || req.user?.id || '';
+    const userId = req.user!.userId || req.user!.id! || '';
     const originalName = req.file.originalname || 'imported-template';
     const ext = originalName.split('.').pop()?.toLowerCase();
 
@@ -1481,7 +1481,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const template = await prisma.slideTemplate.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!template) {
@@ -1500,7 +1500,7 @@ router.put(
   validate(updateTemplateSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.slideTemplate.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -1534,7 +1534,7 @@ router.put(
     if (req.body.metadata !== undefined) updateData.metadata = req.body.metadata;
 
     const template = await prisma.slideTemplate.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: updateData,
     });
 
@@ -1548,7 +1548,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.slideTemplate.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -1556,7 +1556,7 @@ router.delete(
       return;
     }
 
-    await prisma.slideTemplate.delete({ where: { id: req.params.id } });
+    await prisma.slideTemplate.delete({ where: { id: req.params.id! } });
 
     res.json({ success: true, message: 'Template deleted successfully' });
   })
@@ -1567,10 +1567,10 @@ router.post(
   '/templates/:id/duplicate',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user?.userId || req.user?.id || '';
+    const userId = req.user!.userId || req.user!.id! || '';
 
     const source = await prisma.slideTemplate.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!source) {
@@ -1618,7 +1618,7 @@ router.post(
   validate(shareTemplateSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const template = await prisma.slideTemplate.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!template) {
@@ -1634,7 +1634,7 @@ router.post(
       userId: uid,
       permission: permission || 'view',
       sharedAt: new Date().toISOString(),
-      sharedBy: req.user?.userId || req.user?.id || '',
+      sharedBy: req.user!.userId || req.user!.id! || '',
     }));
 
     const mergedShares = [
@@ -1645,7 +1645,7 @@ router.post(
     ];
 
     const updated = await prisma.slideTemplate.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: {
         metadata: {
           ...currentMetadata,
@@ -1676,7 +1676,7 @@ router.post(
   authMiddleware,
   validate(createThemeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || '';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
 
     const colors = {
       primary: req.body.colors.primary,
@@ -1718,7 +1718,7 @@ router.get(
   '/themes',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || '';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -1762,7 +1762,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const theme = await prisma.theme.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!theme) {
@@ -1781,7 +1781,7 @@ router.put(
   validate(updateThemeSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.theme.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -1803,16 +1803,16 @@ router.put(
     if (req.body.isDefault !== undefined) {
       updateData.isDefault = req.body.isDefault;
       if (req.body.isDefault) {
-        const tenantId = req.user?.organizationId || req.user?.tenantId || '';
+        const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
         await prisma.theme.updateMany({
-          where: { tenantId, isDefault: true, id: { not: req.params.id } },
+          where: { tenantId, isDefault: true, id: { not: req.params.id! } },
           data: { isDefault: false },
         });
       }
     }
 
     const theme = await prisma.theme.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: updateData,
     });
 
@@ -1826,7 +1826,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.theme.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -1843,7 +1843,7 @@ router.delete(
       return;
     }
 
-    await prisma.theme.delete({ where: { id: req.params.id } });
+    await prisma.theme.delete({ where: { id: req.params.id! } });
 
     res.json({ success: true, message: 'Theme deleted successfully' });
   })
@@ -1935,7 +1935,7 @@ router.post(
   authMiddleware,
   upload.single('file'),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || '';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
 
     let themeData: Record<string, unknown>;
 
@@ -1978,7 +1978,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const theme = await prisma.theme.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!theme) {
@@ -2021,7 +2021,7 @@ router.post(
   authMiddleware,
   validate(brandKitSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || '';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
     const body = req.body;
 
     const existingBrandKit = await prisma.theme.findFirst({
@@ -2089,7 +2089,7 @@ router.get(
   '/brand-kit',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || '';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
 
     const brandKit = await prisma.theme.findFirst({
       where: {
@@ -2132,8 +2132,8 @@ router.post(
   '/brand-kit/apply/:presentationId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.user?.organizationId || req.user?.tenantId || '';
-    const presentationId = req.params.presentationId;
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || '';
+    const presentationId = req.params.presentationId!;
 
     const presentation = await prisma.presentation.findUnique({
       where: { id: presentationId },
@@ -2294,7 +2294,7 @@ router.post(
   authMiddleware,
   validate(createMasterSlideSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user?.userId || req.user?.id || '';
+    const userId = req.user!.userId || req.user!.id! || '';
     const body = req.body;
 
     const defaultHeaderStyle = {
@@ -2390,7 +2390,7 @@ router.put(
   validate(updateMasterSlideSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.masterSlide.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -2411,14 +2411,14 @@ router.put(
       updateData.isDefault = req.body.isDefault;
       if (req.body.isDefault) {
         await prisma.masterSlide.updateMany({
-          where: { isDefault: true, id: { not: req.params.id } },
+          where: { isDefault: true, id: { not: req.params.id! } },
           data: { isDefault: false },
         });
       }
     }
 
     const masterSlide = await prisma.masterSlide.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: updateData,
     });
 
@@ -2432,7 +2432,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const existing = await prisma.masterSlide.findUnique({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
     });
 
     if (!existing) {
@@ -2441,7 +2441,7 @@ router.delete(
     }
 
     const templatesUsingMaster = await prisma.slideTemplate.count({
-      where: { masterSlideId: req.params.id },
+      where: { masterSlideId: req.params.id! },
     });
 
     if (templatesUsingMaster > 0) {
@@ -2453,7 +2453,7 @@ router.delete(
       return;
     }
 
-    await prisma.masterSlide.delete({ where: { id: req.params.id } });
+    await prisma.masterSlide.delete({ where: { id: req.params.id! } });
 
     res.json({ success: true, message: 'Master slide deleted successfully' });
   })
@@ -2702,7 +2702,7 @@ router.post(
   authMiddleware,
   validate(createArchetypeSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user?.userId || req.user?.id || '';
+    const userId = req.user!.userId || req.user!.id! || '';
     const body = req.body;
 
     const archetype = {

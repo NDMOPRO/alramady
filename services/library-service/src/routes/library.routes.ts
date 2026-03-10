@@ -171,7 +171,7 @@ router.get(
   '/assets/:id',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const assetId = req.params.id;
+      const assetId = req.params.id!;
 
       if (!assetId) {
         res.status(400).json({
@@ -198,7 +198,7 @@ router.get(
   '/assets/:id/download',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const assetId = req.params.id;
+      const assetId = req.params.id!;
       const tenantId = extractTenantId(req);
 
       if (!assetId) {
@@ -231,7 +231,7 @@ router.delete(
   '/assets/:id',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const assetId = req.params.id;
+      const assetId = req.params.id!;
       const userId = extractUserId(req);
 
       if (!assetId) {
@@ -259,7 +259,7 @@ router.put(
   '/assets/:id/move',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const assetId = req.params.id;
+      const assetId = req.params.id!;
       const { folderId } = req.body;
 
       if (!assetId) {
@@ -295,7 +295,7 @@ router.post(
   '/assets/:id/thumbnail',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const assetId = req.params.id;
+      const assetId = req.params.id!;
       const size = parseInt(req.body.size as string, 10) || 200;
 
       if (!assetId) {
@@ -308,7 +308,7 @@ router.post(
 
       const asset = await getAsset(assetId);
 
-      if (!asset.mimeType.startsWith('image/')) {
+      if (!(asset.mimeType as string).startsWith('image/')) {
         res.status(400).json({
           success: false,
           error: 'Thumbnails can only be generated for image assets',
@@ -320,8 +320,9 @@ router.post(
       const http = await import('http');
 
       const fileBuffer = await new Promise<Buffer>((resolve, reject) => {
-        const protocol = asset.downloadUrl.startsWith('https') ? https : http;
-        protocol.get(asset.downloadUrl, (response: { on: (event: string, cb: (data: Buffer) => void) => void }) => {
+        const downloadUrl = asset.downloadUrl as string;
+        const protocol = downloadUrl.startsWith('https') ? https : http;
+        protocol.get(downloadUrl, (response: { on: (event: string, cb: (data: Buffer) => void) => void }) => {
           const chunks: Buffer[] = [];
           response.on('data', (chunk: Buffer) => chunks.push(chunk));
           response.on('end', () => resolve(Buffer.concat(chunks)));
@@ -398,7 +399,7 @@ router.put(
   '/folders/:id/move',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const folderId = req.params.id;
+      const folderId = req.params.id!;
       const { newParentId } = req.body;
 
       if (!folderId) {
@@ -426,7 +427,7 @@ router.delete(
   '/folders/:id',
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const folderId = req.params.id;
+      const folderId = req.params.id!;
 
       if (!folderId) {
         res.status(400).json({

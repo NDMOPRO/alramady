@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import OpenAI from 'openai';
 import { z } from 'zod';
 import { prisma } from '../utils/prisma';
@@ -353,7 +354,7 @@ Return ONLY valid JSON.`;
       sessionId,
       question: validated.question,
       answer,
-      sources: sources as unknown as Record<string, unknown>,
+      sources: sources as unknown as Prisma.InputJsonValue,
       confidence,
       processingMs,
       tokensUsed: totalTokens,

@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { logger } from '../utils/logger.js';
 import type {
   ExcelDimensions,
@@ -86,7 +87,7 @@ export class ExcelMatchingService {
 
     const updated = await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheetsJson },
+      data: { sheetsJson: sheetsJson as unknown as Prisma.InputJsonValue },
     });
 
     await Promise.all([

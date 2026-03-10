@@ -22,7 +22,7 @@ export class ReportAdvancedModeController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportAdvancedModeService.getById(req.params.id);
+      const data = await reportAdvancedModeService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -41,7 +41,7 @@ export class ReportAdvancedModeController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportAdvancedModeService.update(req.params.id, req.body);
+      const data = await reportAdvancedModeService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -50,7 +50,7 @@ export class ReportAdvancedModeController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await reportAdvancedModeService.remove(req.params.id);
+      await reportAdvancedModeService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Advanced report deleted successfully' });
     } catch (error) {
       next(error);
@@ -59,7 +59,7 @@ export class ReportAdvancedModeController {
 
   async executeQuery(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportAdvancedModeService.executeQuery(req.params.id, req.body);
+      const data = await reportAdvancedModeService.executeQuery(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -69,7 +69,7 @@ export class ReportAdvancedModeController {
   async generate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { formats } = req.body;
-      const data = await reportAdvancedModeService.generate(req.params.id, formats);
+      const data = await reportAdvancedModeService.generate(req.params.id!, formats);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

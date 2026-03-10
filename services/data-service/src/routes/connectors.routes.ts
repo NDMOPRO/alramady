@@ -33,7 +33,7 @@ router.get('/connections', async (req: Request, res: Response, next: NextFunctio
 // Get OAuth authorization URL
 router.get('/auth/:type', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const type = req.params.type as ConnectorType;
+    const type = req.params.type! as ConnectorType;
     const tenantId = req.tenant!.tenantId;
     const userId = req.tenant!.userId;
     const authUrl = registry.getAuthUrl(type, tenantId, userId);
@@ -46,7 +46,7 @@ router.get('/auth/:type', (req: Request, res: Response, next: NextFunction) => {
 // OAuth callback handler
 router.get('/callback/:type', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const type = req.params.type as ConnectorType;
+    const type = req.params.type! as ConnectorType;
     const code = req.query.code as string;
     const state = req.query.state as string;
 
@@ -69,7 +69,7 @@ router.get('/callback/:type', async (req: Request, res: Response, next: NextFunc
 router.post('/connections/:id/test', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tenantId = req.tenant!.tenantId;
-    const connectionId = req.params.id;
+    const connectionId = req.params.id!;
 
     const connection = await prisma.connectorConnection.findFirst({
       where: { id: connectionId, tenantId },
@@ -94,7 +94,7 @@ router.post('/connections/:id/test', async (req: Request, res: Response, next: N
 router.get('/connections/:id/files', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tenantId = req.tenant!.tenantId;
-    const connectionId = req.params.id;
+    const connectionId = req.params.id!;
 
     const connection = await prisma.connectorConnection.findFirst({
       where: { id: connectionId, tenantId },
@@ -131,7 +131,7 @@ router.get('/connections/:id/files', async (req: Request, res: Response, next: N
 router.post('/connections/:id/import', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tenantId = req.tenant!.tenantId;
-    const connectionId = req.params.id;
+    const connectionId = req.params.id!;
     const { fileId, options } = req.body;
 
     if (!fileId) {
@@ -168,8 +168,8 @@ router.post('/connections/:id/import', async (req: Request, res: Response, next:
 router.get('/connections/:id/download/:fileId', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tenantId = req.tenant!.tenantId;
-    const connectionId = req.params.id;
-    const fileId = req.params.fileId;
+    const connectionId = req.params.id!;
+    const fileId = req.params.fileId!;
 
     const connection = await prisma.connectorConnection.findFirst({
       where: { id: connectionId, tenantId },
@@ -197,7 +197,7 @@ router.get('/connections/:id/download/:fileId', async (req: Request, res: Respon
 router.delete('/connections/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tenantId = req.tenant!.tenantId;
-    const connectionId = req.params.id;
+    const connectionId = req.params.id!;
 
     await registry.revokeConnection(connectionId, tenantId);
     res.json({ success: true, message: 'تم إلغاء الاتصال بنجاح' });

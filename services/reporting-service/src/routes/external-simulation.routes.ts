@@ -23,7 +23,7 @@ router.put('/:id', authMiddleware, validate(uuidParamSchema, 'params'), validate
 router.delete('/:id', authMiddleware, validate(uuidParamSchema, 'params'), reportExternalSimulationController.remove.bind(reportExternalSimulationController));
 router.post('/:id/execute', authMiddleware, validate(uuidParamSchema, 'params'), reportExternalSimulationController.execute.bind(reportExternalSimulationController));
 router.post('/:id/reproduce', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await reportExternalSimulationService.reproduceReport(req.params.id);
+  const result = await reportExternalSimulationService.reproduceReport(req.params.id!);
   res.json({ success: true, data: result });
 }));
 router.get('/:id/results', authMiddleware, validate(uuidParamSchema, 'params'), reportExternalSimulationController.getResults.bind(reportExternalSimulationController));

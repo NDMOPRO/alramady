@@ -49,8 +49,8 @@ function validate(schema: z.ZodSchema) {
 
 function extractUserContext(req: Request): { tenantId: string; userId: string } {
   return {
-    tenantId: req.user?.organizationId || 'default',
-    userId: req.user?.userId || 'anonymous',
+    tenantId: req.user!.organizationId || 'default',
+    userId: req.user!.userId || 'anonymous',
   };
 }
 

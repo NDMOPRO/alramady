@@ -549,7 +549,7 @@ Return JSON: { paragraphs, lines, words, readingOrder, fullText, rotation }`,
             },
             confidence: (line.confidence || 0) / 100,
             wordIds: lineWordIds,
-            baseline: (line.baseline as Record<string, unknown>)?.y as number || line.bbox?.y1 || 0,
+            baseline: (line.baseline as unknown as Record<string, unknown>)?.y as number || line.bbox?.y1 || 0,
           });
         }
       }
@@ -820,7 +820,7 @@ Return JSON: { charts: [...] }`,
         data: {
           id: result.id,
           tenantId: 'system',
-          sourceFormat: (result.metadata.ocrEngine || 'IMAGE').toUpperCase() as string,
+          sourceFormat: (result.metadata.ocrEngine || 'IMAGE').toUpperCase() as any,
           targetFormat: 'STRUCTURED_TEXT',
           sourceFile: result.fileId,
           status: 'COMPLETED',

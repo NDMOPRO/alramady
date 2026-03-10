@@ -79,7 +79,7 @@ interface FormatConversionOptions {
 
 interface ImageFilter {
   type: 'blur' | 'sharpen' | 'grayscale' | 'negate' | 'normalize' | 'gamma' | 'tint' | 'modulate' | 'threshold' | 'median' | 'linear' | 'recomb' | 'clahe';
-  params: Record<string, unknown>;
+  params: Record<string, any>;
 }
 
 interface BatchProcessingResult {

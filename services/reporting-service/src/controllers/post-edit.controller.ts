@@ -24,7 +24,7 @@ export class ReportPostEditController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportPostEditService.getById(req.params.id);
+      const data = await reportPostEditService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class ReportPostEditController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportPostEditService.update(req.params.id, req.body);
+      const data = await reportPostEditService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class ReportPostEditController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await reportPostEditService.remove(req.params.id);
+      await reportPostEditService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Report post-edit deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class ReportPostEditController {
 
   async publish(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportPostEditService.publish(req.params.id);
+      const data = await reportPostEditService.publish(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ export class ReportPostEditController {
 
   async revert(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportPostEditService.revert(req.params.id);
+      const data = await reportPostEditService.revert(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -79,7 +79,7 @@ export class ReportPostEditController {
 
   async getHistory(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportPostEditService.getHistory(req.params.reportId);
+      const data = await reportPostEditService.getHistory(req.params.reportId!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -88,7 +88,7 @@ export class ReportPostEditController {
 
   async applyWatermark(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await reportPostEditService.applyWatermark(req.params.id, req.body);
+      const data = await reportPostEditService.applyWatermark(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

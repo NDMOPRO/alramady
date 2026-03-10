@@ -14,7 +14,7 @@ export class UniversalController {
         sortBy: sortBy as string,
         sortOrder: sortOrder as 'asc' | 'desc',
         search: search as string,
-        tenantId: req.user?.organizationId,
+        tenantId: req.user!.organizationId,
         status,
       });
 
@@ -44,7 +44,7 @@ export class UniversalController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const job = await universalService.create({
-        tenantId: req.user?.organizationId || req.body.tenantId,
+        tenantId: req.user!.organizationId || req.body.tenantId,
         sourcePath: req.body.sourcePath,
         targetFormat: req.body.targetFormat,
         outputPath: req.body.outputPath,
@@ -108,7 +108,7 @@ export class UniversalController {
         preserveFormatting, preserveImages, preserveLinks,
         ocrEnabled, ocrLanguage, quality,
       } = req.body;
-      const tenantId = req.user?.organizationId || req.body.tenantId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
 
       const result = await universalService.convert(sourcePath, targetFormat, tenantId, {
         preserveFormatting,
@@ -137,7 +137,7 @@ export class UniversalController {
   async batchConvert(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { files } = req.body;
-      const tenantId = req.user?.organizationId || req.body.tenantId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
 
       const result = await universalService.batchConvert(files, tenantId);
 

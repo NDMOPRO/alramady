@@ -14,7 +14,7 @@ export class UdrController {
         sortBy: sortBy as string,
         sortOrder: sortOrder as 'asc' | 'desc',
         search: search as string,
-        tenantId: req.user?.organizationId,
+        tenantId: req.user!.organizationId,
         sourceFormat,
       });
 
@@ -44,7 +44,7 @@ export class UdrController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const udr = await udrService.create({
-        tenant_id: req.user?.organizationId || req.body.tenantId,
+        tenant_id: req.user!.organizationId || req.body.tenantId,
         source_format: req.body.documentType || req.body.sourceFormat,
         source_path: req.body.sourcePath || `udr://${req.body.documentName}`,
         output_path: req.body.outputPath,
@@ -101,7 +101,7 @@ export class UdrController {
   async convertToUdr(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { sourcePath, sourceFormat } = req.body;
-      const tenantId = req.user?.organizationId || req.body.tenantId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
 
       const result = await udrService.convertToUdr(sourcePath, sourceFormat, tenantId);
 
@@ -119,7 +119,7 @@ export class UdrController {
   async convertFromUdr(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { udrPath, targetFormat } = req.body;
-      const tenantId = req.user?.organizationId || req.body.tenantId;
+      const tenantId = req.user!.organizationId || req.body.tenantId;
 
       const result = await udrService.convertFromUdr(udrPath, targetFormat, tenantId);
 

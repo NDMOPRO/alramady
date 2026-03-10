@@ -168,13 +168,13 @@ export async function applyTemplate(id: string, templateId: string, userId: stri
   const template = await templateModel.findUnique({ where: { id: templateId } });
   if (!template) throw new NotFoundError('Infographic template');
 
-  const templateConfig = template.configJson || {};
+  const templateConfig = (template.configJson || {}) as Record<string, any>;
   await model.update({
     where: { id },
     data: {
       templateId,
       elementsJson: templateConfig.elements || record.elementsJson,
-      styleJson: { ...record.styleJson, ...templateConfig.style },
+      styleJson: { ...(record.styleJson as Record<string, unknown>), ...templateConfig.style },
     },
   });
   await cacheDel(`${CACHE_PREFIX}:${id}`);
@@ -206,7 +206,7 @@ export async function getTemplates(category?: string) {
 export async function addSection(id: string, section: Record<string, unknown>, userId: string) {
   const record = await getById(id, userId);
   const { addSection: builderAddSection } = await import('./infographic-builder.service.js');
-  const result = await builderAddSection(id, section.type as 'header' | 'stats' | 'timeline' | 'comparison' | 'flowchart' | 'text', section.content || {}, section.position as Record<string, unknown>);
+  const result = await builderAddSection(id, section.type as 'header' | 'stats' | 'timeline' | 'comparison' | 'flowchart' | 'text', (section.content || {}) as Record<string, unknown>, section.position as any);
 
   await cacheDel(`${CACHE_PREFIX}:${id}`);
   logger.info('Section added to infographic', { id, sectionType: section.type });
@@ -280,7 +280,7 @@ export async function analyzeData(id: string, userId: string) {
 
   const { suggestStyle } = await import('./ai-infographic.service.js');
   const contentSummary = elements.map((el: Record<string, unknown>) => el.type || '').join(', ');
-  const styleRecommendation = await suggestStyle(contentSummary || record.title || '');
+  const styleRecommendation = await suggestStyle(contentSummary || (record.title as string) || '');
 
   const suggestedCharts = ['bar', 'line', 'pie', 'donut'].filter(() => dataPoints > 0);
 

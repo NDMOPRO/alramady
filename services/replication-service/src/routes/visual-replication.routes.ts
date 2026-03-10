@@ -129,8 +129,8 @@ router.post(
       return;
     }
 
-    const tenantId = req.user?.organizationId || req.user?.tenantId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const result = await visualReplicationService.reconstructDashboard(
       req.file.buffer,
@@ -170,8 +170,8 @@ router.post(
       return;
     }
 
-    const tenantId = req.user?.organizationId || req.user?.tenantId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const imageBuffers = files
       .sort((a, b) => {
@@ -222,8 +222,8 @@ router.post(
       return;
     }
 
-    const tenantId = req.user?.organizationId || req.user?.tenantId || req.user?.userId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || req.user!.tenantId! || req.user!.userId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const imageBuffers = files
       .sort((a, b) => {

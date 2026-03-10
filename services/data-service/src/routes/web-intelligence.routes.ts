@@ -73,13 +73,13 @@ router.post('/monitor', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 router.delete('/monitor/:monitorId', asyncHandler(async (req: Request, res: Response) => {
-  const monitorId = req.params.monitorId;
+  const monitorId = req.params.monitorId!;
   await service.stopMonitoring(monitorId);
   res.json({ success: true, message: 'Monitoring stopped' });
 }));
 
 router.get('/data/:tenantId', asyncHandler(async (req: Request, res: Response) => {
-  const jobId = req.params.tenantId;
+  const jobId = req.params.tenantId!;
   const result = await service.getScrapedData(jobId);
   if (!result) {
     res.status(404).json({ success: false, error: 'Scraped data not found', code: 'NOT_FOUND' });

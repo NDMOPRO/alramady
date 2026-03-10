@@ -63,8 +63,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, options } = GenerateVideoBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await videoService.generateVideoFromPresentation({
       presentationId,
       tenantId,
@@ -101,8 +101,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = GenerateAvatarBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
     const result = await avatarService.generateAvatar(
       {
         style: body.style as 'professional' | 'casual' | 'corporate' | 'arabic_traditional' | 'custom',
@@ -122,7 +122,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { avatarId, count } = AvatarVariationsBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const result = await avatarService.generateAvatarVariations(avatarId, count, tenantId);
     res.status(201).json({ success: true, data: result });
   }),
@@ -133,7 +133,7 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { avatarId, narrationText } = AnimationSequenceBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const result = await avatarService.generateAnimationSequence(avatarId, narrationText, tenantId);
     res.status(201).json({ success: true, data: result });
   }),
@@ -143,7 +143,7 @@ router.get(
   '/avatars/:tenantId',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const tenantId = req.params.tenantId;
+    const tenantId = req.params.tenantId!;
     const result = await avatarService.listAvatars(tenantId);
     res.json({ success: true, data: result });
   }),
@@ -153,8 +153,8 @@ router.delete(
   '/avatar/:id',
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
-    const avatarId = req.params.id;
-    const tenantId = req.user?.organizationId || 'default';
+    const avatarId = req.params.id!;
+    const tenantId = req.user!.organizationId || 'default';
     await avatarService.deleteAvatar(avatarId, tenantId);
     res.json({ success: true, message: 'Avatar deleted' });
   }),

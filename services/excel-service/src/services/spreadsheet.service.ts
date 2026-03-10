@@ -2,7 +2,7 @@ import ExcelJS from 'exceljs';
 import * as XLSX from 'xlsx';
 import { Parser as FormulaParser } from 'hot-formula-parser';
 import Decimal from 'decimal.js';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { logger } from '../utils/logger';
 
 interface FormulaCoord {
@@ -91,7 +91,7 @@ export class SpreadsheetService {
       data: {
         tenantId,
         name,
-        sheetsJson: sheetsData,
+        sheetsJson: sheetsData as unknown as Prisma.InputJsonValue,
         formulasJson: {},
         createdBy: userId,
       },
@@ -166,7 +166,7 @@ export class SpreadsheetService {
       data: {
         tenantId,
         name: filename.replace(/\.[^.]+$/, ''),
-        sheetsJson: sheetsData,
+        sheetsJson: sheetsData as unknown as Prisma.InputJsonValue,
         formulasJson: allFormulas,
         createdBy: userId,
       },
@@ -230,7 +230,7 @@ export class SpreadsheetService {
         const columns = Object.keys(data);
         if (col <= columns.length) {
           data[columns[col - 1]] = value;
-          await prisma.dataRow.update({ where: { id: dataRow.id }, data: { data } });
+          await prisma.dataRow.update({ where: { id: dataRow.id }, data: { data: data as Prisma.InputJsonValue } });
         }
       }
     }
@@ -339,7 +339,7 @@ export class SpreadsheetService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheets },
+      data: { sheetsJson: sheets as unknown as Prisma.InputJsonValue },
     });
 
     return { workbookId, sheets };
@@ -360,7 +360,7 @@ export class SpreadsheetService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheets, formulasJson: formulas },
+      data: { sheetsJson: sheets as unknown as Prisma.InputJsonValue, formulasJson: formulas as Prisma.InputJsonValue },
     });
 
     return { workbookId, removedSheet: removedSheet.name, remainingSheets: sheets };
@@ -436,7 +436,7 @@ export class SpreadsheetService {
 
     await prisma.workbook.update({
       where: { id: workbookId },
-      data: { sheetsJson: sheets },
+      data: { sheetsJson: sheets as unknown as Prisma.InputJsonValue },
     });
 
     return { workbookId, sheetName, range, style };

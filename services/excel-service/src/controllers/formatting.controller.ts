@@ -8,7 +8,7 @@ const formattingService = new FormattingService();
 export class FormattingController {
   async list(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.organizationId;
+      const tenantId = req.user!.organizationId;
       const workbooks = await prisma.workbook.findMany({
         where: { tenantId },
         take: Number(req.query.limit) || 20,
@@ -24,7 +24,7 @@ export class FormattingController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const workbook = await prisma.workbook.findUniqueOrThrow({ where: { id: req.params.id } });
+      const workbook = await prisma.workbook.findUniqueOrThrow({ where: { id: req.params.id! } });
       res.status(200).json({ success: true, data: workbook });
     } catch (error) {
       next(error);
@@ -36,8 +36,8 @@ export class FormattingController {
       const workbook = await prisma.workbook.create({
         data: {
           name: req.body.name || 'Untitled',
-          tenantId: req.user?.organizationId || req.body.tenantId,
-          createdBy: req.user?.userId || 'system',
+          tenantId: req.user!.organizationId || req.body.tenantId,
+          createdBy: req.user!.userId || 'system',
           sheetsJson: req.body.sheetsJson || [],
           formulasJson: req.body.formulasJson || {},
         },
@@ -52,10 +52,10 @@ export class FormattingController {
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const workbook = await prisma.workbook.update({
-        where: { id: req.params.id },
+        where: { id: req.params.id! },
         data: req.body,
       });
-      logger.info('Formatting workbook updated', { workbookId: req.params.id });
+      logger.info('Formatting workbook updated', { workbookId: req.params.id! });
       res.status(200).json({ success: true, data: workbook });
     } catch (error) {
       next(error);
@@ -64,8 +64,8 @@ export class FormattingController {
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await prisma.workbook.delete({ where: { id: req.params.id } });
-      logger.info('Formatting workbook deleted', { workbookId: req.params.id });
+      await prisma.workbook.delete({ where: { id: req.params.id! } });
+      logger.info('Formatting workbook deleted', { workbookId: req.params.id! });
       res.status(200).json({ success: true, message: 'Formatting workbook deleted successfully' });
     } catch (error) {
       next(error);

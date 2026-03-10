@@ -166,7 +166,7 @@ export default function RelationsPage() {
               <div className="flex flex-col items-center justify-center py-16 text-gray-400">
                 <GitBranch className="h-16 w-16 mb-4 opacity-30" />
                 <p className="text-lg font-medium">اختر مجموعتين أو أكثر</p>
-                <p className="text-sm">ثم اضغط "اكتشاف العلاقات" لعرض الروابط</p>
+                <p className="text-sm">ثم اضغط &ldquo;اكتشاف العلاقات&rdquo; لعرض الروابط</p>
               </div>
             )}
 

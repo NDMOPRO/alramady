@@ -75,13 +75,13 @@ router.post('/monitor', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 router.delete('/monitor/:monitorId', asyncHandler(async (req: Request, res: Response) => {
-  const monitorId = req.params.monitorId;
+  const monitorId = req.params.monitorId!;
   await service.stopMonitoring(monitorId);
   res.json({ success: true, message: 'Monitoring stopped' });
 }));
 
 router.get('/monitor/:monitorId/history', asyncHandler(async (req: Request, res: Response) => {
-  const monitorId = req.params.monitorId;
+  const monitorId = req.params.monitorId!;
   const limit = parseInt(req.query.limit as string) || 50;
   const result = await service.getMonitoringHistory(monitorId, limit);
   res.json({ success: true, data: result });

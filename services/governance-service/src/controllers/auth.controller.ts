@@ -35,7 +35,7 @@ export class AuthController {
 
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const userId = req.user?.id;
+      const userId = req.user!.id as string;
       const { refreshToken } = req.body;
       const result = await authService.logout(userId, refreshToken || '');
       res.json({ success: true, data: result });
@@ -56,7 +56,7 @@ export class AuthController {
 
   async enable2FA(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const userId = req.user?.id;
+      const userId = req.user!.id as string;
       const result = await authService.enable2FA(userId);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
@@ -76,7 +76,7 @@ export class AuthController {
 
   async getAuditLog(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
+      const tenantId = req.user!.tenantId as string;
       const { page, limit, userId, action, entityType, startDate, endDate } = req.query;
       const dateRange = startDate && endDate
         ? { start: new Date(startDate as string), end: new Date(endDate as string) }
@@ -92,8 +92,8 @@ export class AuthController {
 
   async getAuditTrail(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const tenantId = req.user?.tenantId;
-      const result = await auditService.getAuditTrail(req.params.entityId, tenantId);
+      const tenantId = req.user!.tenantId as string;
+      const result = await auditService.getAuditTrail(req.params.entityId!, tenantId);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
   }
@@ -102,7 +102,7 @@ export class AuthController {
     try {
       const { start, end } = req.query;
       const dateRange = start && end ? { start: new Date(start as string), end: new Date(end as string) } : { start: new Date(0), end: new Date() };
-      const result = await auditService.getUserActivity(req.params.userId, dateRange);
+      const result = await auditService.getUserActivity(req.params.userId!, dateRange);
       res.json({ success: true, data: result });
     } catch (error) { next(error); }
   }

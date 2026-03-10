@@ -223,8 +223,8 @@ function asyncHandler(fn: (req: Request, res: Response, next: NextFunction) => P
 }
 
 function getTenantAndUser(req: Request): { tenantId: string; userId: string } {
-  const tenantId = req.user?.organizationId || req.headers['x-tenant-id'] as string || '';
-  const userId = req.user?.userId || '';
+  const tenantId = req.user!.organizationId || req.headers['x-tenant-id'] as string || '';
+  const userId = req.user!.userId || '';
   if (!tenantId) throw new Error('Tenant ID is required');
   if (!userId) throw new Error('User ID is required');
   return { tenantId, userId };
@@ -399,7 +399,7 @@ router.post('/import/folder', upload.array('files', 100), asyncHandler(async (re
 // ═══════════════════════════════════════════════════════════════════════
 
 router.post('/parse/structured/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const dataset = await readingService.getById(req.params.id);
+  const dataset = await readingService.getById(req.params.id!);
   res.json({ success: true, data: dataset });
 }));
 
@@ -413,7 +413,7 @@ router.post('/parse/chunk/:id', validate(datasetIdParams, 'params'), asyncHandle
   const { tenantId } = getTenantAndUser(req);
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 100;
-  const rows = await sourcesService.getDatasetRows(req.params.id, tenantId, { page, limit });
+  const rows = await sourcesService.getDatasetRows(req.params.id!, tenantId, { page, limit });
   res.json({ success: true, data: rows });
 }));
 
@@ -435,37 +435,37 @@ router.post('/parse/validate', asyncHandler(async (req: Request, res: Response) 
 // ═══════════════════════════════════════════════════════════════════════
 
 router.post('/cleanse/duplicates/:id', validate(datasetIdParams, 'params'), validate(cleanseColumnsSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.removeDuplicates(req.params.id, req.body.columns, req.body.threshold);
+  const result = await cleansingService.removeDuplicates(req.params.id!, req.body.columns, req.body.threshold);
   res.json({ success: true, data: result });
 }));
 
 router.post('/cleanse/missing/:id', validate(datasetIdParams, 'params'), validate(cleanseMissingSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.handleMissing(req.params.id, req.body.column, req.body.strategy);
+  const result = await cleansingService.handleMissing(req.params.id!, req.body.column, req.body.strategy);
   res.json({ success: true, data: result });
 }));
 
 router.post('/cleanse/normalize/:id', validate(datasetIdParams, 'params'), validate(normalizeSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.normalizeValues(req.params.id, req.body.column, req.body.method);
+  const result = await cleansingService.normalizeValues(req.params.id!, req.body.column, req.body.method);
   res.json({ success: true, data: result });
 }));
 
 router.post('/cleanse/standardize/:id', validate(datasetIdParams, 'params'), validate(standardizeSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.normalizeValues(req.params.id, req.body.column, 'minmax');
+  const result = await cleansingService.normalizeValues(req.params.id!, req.body.column, 'minmax');
   res.json({ success: true, data: result });
 }));
 
 router.post('/cleanse/outliers/:id', validate(datasetIdParams, 'params'), validate(outlierSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.detectOutliers(req.params.id, req.body.column, req.body.method);
+  const result = await cleansingService.detectOutliers(req.params.id!, req.body.column, req.body.method);
   res.json({ success: true, data: result });
 }));
 
 router.post('/cleanse/trim/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.trimWhitespace(req.params.id);
+  const result = await cleansingService.trimWhitespace(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
 router.post('/cleanse/validate-types/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await cleansingService.validateDataTypes(req.params.id);
+  const result = await cleansingService.validateDataTypes(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
@@ -479,42 +479,42 @@ router.post('/transform/merge', validate(mergeSchema), asyncHandler(async (req: 
 }));
 
 router.post('/transform/pivot/:id', validate(datasetIdParams, 'params'), validate(pivotSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.pivotTable(req.params.id, req.body.rowFields, req.body.columnField, req.body.valueField, req.body.aggregation || 'sum');
+  const result = await transformService.pivotTable(req.params.id!, req.body.rowFields, req.body.columnField, req.body.valueField, req.body.aggregation || 'sum');
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/unpivot/:id', validate(datasetIdParams, 'params'), validate(unpivotSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.unpivotTable(req.params.id, req.body.idColumns, req.body.valueColumns);
+  const result = await transformService.unpivotTable(req.params.id!, req.body.idColumns, req.body.valueColumns);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/aggregate/:id', validate(datasetIdParams, 'params'), validate(aggregateSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.aggregateData(req.params.id, req.body.groupBy, req.body.aggregations);
+  const result = await transformService.aggregateData(req.params.id!, req.body.groupBy, req.body.aggregations);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/filter/:id', validate(datasetIdParams, 'params'), validate(filterSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.filterData(req.params.id, req.body.conditions);
+  const result = await transformService.filterData(req.params.id!, req.body.conditions);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/sort/:id', validate(datasetIdParams, 'params'), validate(sortSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.sortData(req.params.id, req.body.columns);
+  const result = await transformService.sortData(req.params.id!, req.body.columns);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/calculated-column/:id', validate(datasetIdParams, 'params'), validate(calculatedColumnSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.addCalculatedColumn(req.params.id, req.body.name, req.body.formula);
+  const result = await transformService.addCalculatedColumn(req.params.id!, req.body.name, req.body.formula);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/split-column/:id', validate(datasetIdParams, 'params'), validate(splitColumnSchema), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.splitColumn(req.params.id, req.body.column, req.body.delimiter);
+  const result = await transformService.splitColumn(req.params.id!, req.body.column, req.body.delimiter);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.post('/transform/transpose/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await transformService.transposeData(req.params.id);
+  const result = await transformService.transposeData(req.params.id!);
   res.status(201).json({ success: true, data: result });
 }));
 
@@ -555,45 +555,45 @@ router.get('/export/csv/:id', validate(datasetIdParams, 'params'), asyncHandler(
   const { tenantId } = getTenantAndUser(req);
   const delimiter = (req.query.delimiter as string) || ',';
   const encoding = (req.query.encoding as string) || 'utf-8';
-  const result = await sourcesService.exportCSV(req.params.id, tenantId, { delimiter, encoding });
+  const result = await sourcesService.exportCSV(req.params.id!, tenantId, { delimiter, encoding });
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id}.csv"`);
+  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id!}.csv"`);
   res.send(result);
 }));
 
 router.get('/export/excel/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = getTenantAndUser(req);
-  const result = await sourcesService.exportExcel(req.params.id, tenantId);
+  const result = await sourcesService.exportExcel(req.params.id!, tenantId);
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id}.xlsx"`);
+  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id!}.xlsx"`);
   res.send(result);
 }));
 
 router.get('/export/json/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = getTenantAndUser(req);
   const format = (req.query.format as 'json' | 'jsonl') || 'json';
-  const result = await sourcesService.exportJSON(req.params.id, tenantId, { format });
+  const result = await sourcesService.exportJSON(req.params.id!, tenantId, { format });
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id}.json"`);
+  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id!}.json"`);
   res.send(result);
 }));
 
 router.get('/export/pdf/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = getTenantAndUser(req);
-  const dataset = await sourcesService.getDataset(req.params.id, tenantId);
-  const pdfBuffer = await dataExportService.exportPDF(req.params.id, {
-    title: dataset.name || `Export ${req.params.id}`,
+  const dataset = await sourcesService.getDataset(req.params.id!, tenantId);
+  const pdfBuffer = await dataExportService.exportPDF(req.params.id!, {
+    title: dataset.name || `Export ${req.params.id!}`,
     orientation: (req.query.orientation as string) || 'portrait',
   });
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id}.pdf"`);
+  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id!}.pdf"`);
   res.send(pdfBuffer);
 }));
 
 router.get('/export/sql/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const { tenantId } = getTenantAndUser(req);
-  const dataset = await sourcesService.getDataset(req.params.id, tenantId);
-  const rows = await sourcesService.getDatasetRows(req.params.id, tenantId, { page: 1, limit: 50000 });
+  const dataset = await sourcesService.getDataset(req.params.id!, tenantId);
+  const rows = await sourcesService.getDatasetRows(req.params.id!, tenantId, { page: 1, limit: 50000 });
   const tableName = (dataset.name || 'data_export').replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();
   const dataRows = (rows as { rows?: Record<string, unknown>[] }).rows || rows;
   const allRows = Array.isArray(dataRows) ? dataRows : [];
@@ -610,7 +610,7 @@ router.get('/export/sql/:id', validate(datasetIdParams, 'params'), asyncHandler(
     sql += `INSERT INTO "${tableName}" (${columns.map(c => `"${c}"`).join(', ')}) VALUES (${values.join(', ')});\n`;
   }
   res.setHeader('Content-Type', 'application/sql');
-  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id}.sql"`);
+  res.setHeader('Content-Disposition', `attachment; filename="export_${req.params.id!}.sql"`);
   res.send(sql);
 }));
 
@@ -653,7 +653,7 @@ router.get('/visualize/chart/:id', validate(datasetIdParams, 'params'), asyncHan
     width: req.query.width ? Number(req.query.width) : undefined,
     height: req.query.height ? Number(req.query.height) : undefined,
   });
-  const buffer = await vizService.generateChart(req.params.id, parsed.chartType, {
+  const buffer = await vizService.generateChart(req.params.id!, parsed.chartType, {
     xColumn: parsed.xColumn,
     yColumn: parsed.yColumn,
     title: parsed.title,
@@ -661,7 +661,7 @@ router.get('/visualize/chart/:id', validate(datasetIdParams, 'params'), asyncHan
     height: parsed.height,
   });
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Content-Disposition', `inline; filename="chart_${req.params.id}.png"`);
+  res.setHeader('Content-Disposition', `inline; filename="chart_${req.params.id!}.png"`);
   res.send(buffer);
 }));
 
@@ -669,17 +669,17 @@ router.get('/visualize/heatmap/:id', validate(datasetIdParams, 'params'), asyncH
   const { columns } = heatmapQuery.parse(req.query);
   const columnList = columns.split(',').map(c => c.trim()).filter(Boolean);
   if (columnList.length < 2) { res.status(400).json({ success: false, error: 'At least 2 columns required' }); return; }
-  const buffer = await vizService.generateHeatmap(req.params.id, columnList);
+  const buffer = await vizService.generateHeatmap(req.params.id!, columnList);
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Content-Disposition', `inline; filename="heatmap_${req.params.id}.png"`);
+  res.setHeader('Content-Disposition', `inline; filename="heatmap_${req.params.id!}.png"`);
   res.send(buffer);
 }));
 
 router.get('/visualize/histogram/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
   const { column, bins } = histogramQuery.parse(req.query);
-  const buffer = await vizService.generateHistogram(req.params.id, column, bins);
+  const buffer = await vizService.generateHistogram(req.params.id!, column, bins);
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Content-Disposition', `inline; filename="histogram_${req.params.id}.png"`);
+  res.setHeader('Content-Disposition', `inline; filename="histogram_${req.params.id!}.png"`);
   res.send(buffer);
 }));
 
@@ -687,14 +687,14 @@ router.get('/visualize/boxplot/:id', validate(datasetIdParams, 'params'), asyncH
   const columnsRaw = req.query.columns as string || '';
   const columnList = columnsRaw.split(',').map(c => c.trim()).filter(Boolean);
   if (columnList.length === 0) { res.status(400).json({ success: false, error: 'columns query parameter is required' }); return; }
-  const buffer = await vizService.generateBoxplot(req.params.id, columnList);
+  const buffer = await vizService.generateBoxplot(req.params.id!, columnList);
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('Content-Disposition', `inline; filename="boxplot_${req.params.id}.png"`);
+  res.setHeader('Content-Disposition', `inline; filename="boxplot_${req.params.id!}.png"`);
   res.send(buffer);
 }));
 
 router.get('/visualize/statistics/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const stats = await vizService.getStatistics(req.params.id);
+  const stats = await vizService.getStatistics(req.params.id!);
   res.json({ success: true, data: stats });
 }));
 
@@ -702,7 +702,7 @@ router.get('/visualize/correlation/:id', validate(datasetIdParams, 'params'), as
   const { columns } = correlationQuery.parse(req.query);
   const columnList = columns.split(',').map(c => c.trim()).filter(Boolean);
   if (columnList.length < 2) { res.status(400).json({ success: false, error: 'At least 2 columns required' }); return; }
-  const correlation = await vizService.getCorrelation(req.params.id, columnList);
+  const correlation = await vizService.getCorrelation(req.params.id!, columnList);
   res.json({ success: true, data: correlation });
 }));
 
@@ -728,7 +728,7 @@ router.get('/search/filter/:id', validate(datasetIdParams, 'params'), asyncHandl
   } catch {
     res.status(400).json({ success: false, error: 'conditions must be valid JSON array' }); return;
   }
-  const result = await searchService.filterSearch(req.params.id, conditions);
+  const result = await searchService.filterSearch(req.params.id!, conditions);
   res.json({ success: true, data: result });
 }));
 
@@ -740,7 +740,7 @@ router.get('/search/aggregation/:id', validate(datasetIdParams, 'params'), async
   } catch {
     res.status(400).json({ success: false, error: 'aggs must be valid JSON array' }); return;
   }
-  const result = await searchService.aggregationSearch(req.params.id, aggs);
+  const result = await searchService.aggregationSearch(req.params.id!, aggs);
   res.json({ success: true, data: result });
 }));
 
@@ -752,7 +752,7 @@ router.get('/search/suggest', asyncHandler(async (req: Request, res: Response) =
 }));
 
 router.post('/search/index/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await searchService.indexDataset(req.params.id);
+  const result = await searchService.indexDataset(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
@@ -768,12 +768,12 @@ router.post('/search/reindex', asyncHandler(async (req: Request, res: Response) 
 
 router.post('/versions/:id', validate(datasetIdParams, 'params'), validate(createVersionSchema), asyncHandler(async (req: Request, res: Response) => {
   const { userId } = getTenantAndUser(req);
-  const result = await versioningService.createVersion(req.params.id, req.body.description, userId);
+  const result = await versioningService.createVersion(req.params.id!, req.body.description, userId);
   res.status(201).json({ success: true, data: result });
 }));
 
 router.get('/versions/:id', validate(datasetIdParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const versions = await versioningService.listVersions(req.params.id);
+  const versions = await versioningService.listVersions(req.params.id!);
   res.json({ success: true, data: versions });
 }));
 
@@ -781,18 +781,18 @@ router.post('/versions/restore/:versionId', validate(versionIdParams, 'params'),
   const { userId } = getTenantAndUser(req);
   const { datasetId } = req.body;
   if (!datasetId) { res.status(400).json({ success: false, error: 'datasetId is required in body' }); return; }
-  const result = await versioningService.restoreVersion(datasetId, req.params.versionId, userId);
+  const result = await versioningService.restoreVersion(datasetId, req.params.versionId!, userId);
   res.json({ success: true, data: result });
 }));
 
 router.get('/versions/compare/:v1/:v2', validate(compareParams, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await versioningService.compareVersions(req.params.v1, req.params.v2);
+  const result = await versioningService.compareVersions(req.params.v1!, req.params.v2!);
   res.json({ success: true, data: result });
 }));
 
 router.post('/versions/branch/:id', validate(datasetIdParams, 'params'), validate(branchSchema), asyncHandler(async (req: Request, res: Response) => {
   const { userId } = getTenantAndUser(req);
-  const result = await versioningService.branchDataset(req.params.id, req.body.name, userId);
+  const result = await versioningService.branchDataset(req.params.id!, req.body.name, userId);
   res.status(201).json({ success: true, data: result });
 }));
 

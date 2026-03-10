@@ -58,7 +58,7 @@ router.get('/sessions/:id/history', authMiddleware, async (req: Request, res: Re
       res.status(401).json({ success: false, error: 'Unauthorized' });
       return;
     }
-    const history = await observerService.getSessionHistory(req.params.id, user.userId);
+    const history = await observerService.getSessionHistory(req.params.id!, user.userId);
     res.json({ success: true, data: history });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Internal server error';

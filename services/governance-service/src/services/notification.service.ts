@@ -53,7 +53,7 @@ export class NotificationService {
           read: false,
           readAt: null,
           createdAt: new Date().toISOString(),
-        },
+        } as Prisma.InputJsonValue,
       },
     });
 

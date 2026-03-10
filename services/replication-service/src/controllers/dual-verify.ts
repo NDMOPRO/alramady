@@ -23,7 +23,7 @@ export async function list(req: AuthenticatedRequest, res: Response, next: NextF
 
 export async function getById(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await service.getById(req.params.id);
+    const record = await service.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -32,7 +32,7 @@ export async function getById(req: AuthenticatedRequest, res: Response, next: Ne
 
 export async function create(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await service.create({ ...req.body, createdBy: req.user?.userId });
+    const record = await service.create({ ...req.body, createdBy: req.user!.userId });
     res.status(201).json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -41,7 +41,7 @@ export async function create(req: AuthenticatedRequest, res: Response, next: Nex
 
 export async function update(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const record = await service.update(req.params.id, { ...req.body, updatedBy: req.user?.userId });
+    const record = await service.update(req.params.id!, { ...req.body, updatedBy: req.user!.userId });
     res.json({ success: true, data: record });
   } catch (error) {
     next(error);
@@ -50,7 +50,7 @@ export async function update(req: AuthenticatedRequest, res: Response, next: Nex
 
 export async function remove(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const result = await service.remove(req.params.id);
+    const result = await service.remove(req.params.id!);
     res.json({ ...result, success: true });
   } catch (error) {
     next(error);
@@ -74,8 +74,8 @@ export async function executeDualVerification(req: AuthenticatedRequest, res: Re
     const result = await service.executeDualVerification({
       originalDocumentId: req.body.originalDocumentId,
       replicaDocumentId: req.body.replicaDocumentId,
-      tenantId: req.user?.tenantId || req.body.tenantId,
-      userId: req.user?.userId || req.body.userId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
+      userId: req.user!.userId || req.body.userId,
       originalImageBuffer: originalFile.buffer,
       replicaImageBuffer: replicaFile.buffer,
       matchMode: req.body.matchMode || 'STRICT',
@@ -95,7 +95,7 @@ export async function executeDualVerification(req: AuthenticatedRequest, res: Re
 
 export async function analyzeDeviations(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const result = await service.analyzeDeviations(req.params.verificationId);
+    const result = await service.analyzeDeviations(req.params.verificationId!);
     res.json({ success: true, data: result });
   } catch (error) {
     next(error);

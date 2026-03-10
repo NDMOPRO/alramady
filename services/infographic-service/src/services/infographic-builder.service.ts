@@ -47,7 +47,7 @@ interface FlowchartStep {
 interface InfographicElement {
   id: string;
   type: 'header' | 'stats' | 'timeline' | 'comparison' | 'flowchart' | 'text' | 'statistic';
-  content: Record<string, unknown>;
+  content: Record<string, any>;
   position: Position;
   createdAt: string;
 }

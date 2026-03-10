@@ -25,7 +25,7 @@ export class EasyModeController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await easyModeService.getById(req.params.id);
+      const data = await easyModeService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -44,7 +44,7 @@ export class EasyModeController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await easyModeService.update(req.params.id, req.body);
+      const data = await easyModeService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -53,7 +53,7 @@ export class EasyModeController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await easyModeService.remove(req.params.id);
+      await easyModeService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Easy-mode dashboard deleted successfully' });
     } catch (error) {
       next(error);
@@ -62,7 +62,7 @@ export class EasyModeController {
 
   async duplicate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await easyModeService.duplicate(req.params.id);
+      const data = await easyModeService.duplicate(req.params.id!);
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -71,7 +71,7 @@ export class EasyModeController {
 
   async publish(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await easyModeService.publish(req.params.id);
+      const data = await easyModeService.publish(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

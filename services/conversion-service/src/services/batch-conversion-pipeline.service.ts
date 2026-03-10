@@ -945,7 +945,7 @@ class BatchConversionPipelineService {
     const errorBreakdown: Record<string, number> = {};
 
     for (const activity of activities) {
-      const meta = activity.metadata as Record<string, unknown>;
+      const meta = activity.metadata as Record<string, any>;
       if (activity.type === 'batch_conversion_result') {
         totalJobs++;
         if (meta?.status === 'completed') {

@@ -24,7 +24,7 @@ export class PerformanceController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await performanceService.getById(req.params.id);
+      const data = await performanceService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ export class PerformanceController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await performanceService.update(req.params.id, req.body);
+      const data = await performanceService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -52,7 +52,7 @@ export class PerformanceController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await performanceService.remove(req.params.id);
+      await performanceService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Performance metric deleted successfully' });
     } catch (error) {
       next(error);
@@ -61,7 +61,7 @@ export class PerformanceController {
 
   async getSummary(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await performanceService.getSummary(req.params.dashboardId);
+      const data = await performanceService.getSummary(req.params.dashboardId!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -70,7 +70,7 @@ export class PerformanceController {
 
   async optimize(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await performanceService.optimize(req.params.dashboardId);
+      const data = await performanceService.optimize(req.params.dashboardId!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -80,7 +80,7 @@ export class PerformanceController {
   // E03.08: Get semantic layer
   async getSemanticLayer(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await performanceService.getSemanticLayer(req.params.dashboardId);
+      const data = await performanceService.getSemanticLayer(req.params.dashboardId!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -90,7 +90,7 @@ export class PerformanceController {
   // E03.08: Precompute aggregations
   async precomputeAggregations(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await performanceService.precomputeAggregations(req.params.dashboardId);
+      const data = await performanceService.precomputeAggregations(req.params.dashboardId!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

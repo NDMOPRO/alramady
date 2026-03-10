@@ -259,7 +259,7 @@ router.post(
   validate(entranceAnimationSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId, elementId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { preset, trigger, timing, properties } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -319,7 +319,7 @@ router.post(
   validate(exitAnimationSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId, elementId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { effect, trigger, direction, timing, properties } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -417,7 +417,7 @@ router.post(
   validate(emphasisAnimationSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId, elementId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { emphasis, trigger, timing, color } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -527,7 +527,7 @@ router.post(
   validate(motionPathSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId, elementId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { path: motionPoints, trigger, timing, easing } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -628,7 +628,7 @@ router.put(
   validate(slideTransitionSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { type, duration, delay, direction, easing, advanceOnClick, advanceAfter } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -665,7 +665,7 @@ router.post(
   validate(cinematicAutoSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { style, transitionDuration, animationDuration, staggerDelay } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -803,7 +803,7 @@ router.post(
   validate(applyPresetSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { presetName, overrideExisting, slideIds } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -876,7 +876,7 @@ router.put(
   validate(timingUpdateSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId, elementId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
     if (!owned) {
@@ -936,7 +936,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId, elementId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const animationId = req.query.animationId as string | undefined;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -990,7 +990,7 @@ router.put(
   validate(reorderAnimationsSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { animationIds } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -1051,7 +1051,7 @@ router.post(
   validate(animationSequenceSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { name, animations, loopCount } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
@@ -1127,7 +1127,7 @@ router.get(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId, slideId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);
     if (!owned) {
@@ -1173,7 +1173,7 @@ router.post(
   validate(smartAnimateSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { presentationId } = req.params;
-    const tenantId = req.user?.organizationId || 'default';
+    const tenantId = req.user!.organizationId || 'default';
     const { intensity, preferEntrance, preferEmphasis, maxAnimationsPerSlide } = req.body;
 
     const owned = await verifyPresentationOwnership(presentationId, tenantId);

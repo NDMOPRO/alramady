@@ -16,7 +16,7 @@ router.get('/', authMiddleware, reportTemplateLibraryController.list.bind(report
 router.get('/categories', authMiddleware, reportTemplateLibraryController.getCategories.bind(reportTemplateLibraryController));
 router.get('/:id', authMiddleware, validate(uuidParamSchema, 'params'), reportTemplateLibraryController.getById.bind(reportTemplateLibraryController));
 router.get('/:id/preview', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await reportTemplateLibraryService.getPreview(req.params.id);
+  const result = await reportTemplateLibraryService.getPreview(req.params.id!);
   res.json({ success: true, data: result });
 }));
 router.post('/', authMiddleware, validate(reportTemplateCreateSchema), reportTemplateLibraryController.create.bind(reportTemplateLibraryController));
@@ -28,7 +28,7 @@ router.post('/:id/save-as-template', authMiddleware, validate(uuidParamSchema, '
   const { name, category } = req.body;
   const userId = req.user!.userId;
   const tenantId = req.user!.organizationId || 'default';
-  const result = await reportTemplateLibraryService.saveReportAsTemplate(req.params.id, name, category, userId, tenantId);
+  const result = await reportTemplateLibraryService.saveReportAsTemplate(req.params.id!, name, category, userId, tenantId);
   res.status(201).json({ success: true, data: result });
 }));
 

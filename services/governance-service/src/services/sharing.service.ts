@@ -131,7 +131,7 @@ export class SharingService {
             expiresAt: validated.expiresAt || null,
             allowReshare: validated.allowReshare,
             sharedAt: new Date().toISOString(),
-          } as Record<string, unknown>,
+          } as Prisma.InputJsonValue,
         },
       });
 
@@ -229,7 +229,7 @@ export class SharingService {
           passwordProtected: validated.passwordProtected,
           allowAnonymous: validated.allowAnonymous,
           createdAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -310,7 +310,7 @@ export class SharingService {
           useNumber: linkData.currentUses,
           maxUses: linkData.maxUses,
           accessedAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -369,7 +369,7 @@ export class SharingService {
             targetType: shareData.targetType,
             targetId: shareData.targetId,
             revokedAt: new Date().toISOString(),
-          } as Record<string, unknown>,
+          } as Prisma.InputJsonValue,
         },
       });
 
@@ -410,7 +410,7 @@ export class SharingService {
             detailsJson: {
               linkId: validated.shareId,
               revokedAt: new Date().toISOString(),
-            } as Record<string, unknown>,
+            } as Prisma.InputJsonValue,
           },
         });
 

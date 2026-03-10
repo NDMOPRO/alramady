@@ -844,7 +844,7 @@ async function storePivot(pivot: StoredPivot): Promise<void> {
     (sheets as Record<string, unknown>)['_pivots'] = pivots;
     await prisma.workbook.update({
       where: { id: workbook.id },
-      data: { sheetsJson: sheets as unknown as Record<string, unknown> },
+      data: { sheetsJson: sheets as Prisma.InputJsonValue },
     });
   }
 }
@@ -935,7 +935,7 @@ async function removePivotFromStorage(pivotId: string, workbookId: string): Prom
       );
       await prisma.workbook.update({
         where: { id: workbookId },
-        data: { sheetsJson: sheets as unknown as Record<string, unknown> },
+        data: { sheetsJson: sheets as Prisma.InputJsonValue },
       });
     }
   }

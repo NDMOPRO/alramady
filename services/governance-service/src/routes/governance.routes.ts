@@ -318,7 +318,7 @@ router.post(
   authMiddleware,
   validate(assignRoleSchema),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
-    const roleId = req.params.id;
+    const roleId = req.params.id!;
     const { userId } = req.body;
     const result = await authorizationService.assignRole(userId, roleId);
     res.status(200).json({

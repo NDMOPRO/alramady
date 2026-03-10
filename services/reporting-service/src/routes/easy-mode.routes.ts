@@ -25,7 +25,7 @@ router.delete('/:id', authMiddleware, validate(uuidParamSchema, 'params'), repor
 router.post('/:id/duplicate', authMiddleware, validate(uuidParamSchema, 'params'), reportEasyModeController.duplicate.bind(reportEasyModeController));
 router.post('/:id/generate', authMiddleware, validate(uuidParamSchema, 'params'), reportEasyModeController.generate.bind(reportEasyModeController));
 router.post('/:id/auto-layout', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {
-  const result = await reportEasyModeService.autoCompose(req.params.id);
+  const result = await reportEasyModeService.autoCompose(req.params.id!);
   res.json({ success: true, data: result });
 }));
 router.post('/:id/ai-summary', authMiddleware, validate(uuidParamSchema, 'params'), asyncHandler(async (req: Request, res: Response) => {

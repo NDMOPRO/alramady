@@ -324,7 +324,6 @@ export default function LiteralMatchPage() {
   const [activeTab, setActiveTab] = useState<string>('pipeline');
   const [selectedMode, setSelectedMode] = useState<ReplicationMode>('STRICT_REPLICATION');
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [analysisData, setAnalysisData] = useState<Record<string, any> | null>(null);
   const [ocrLanguage, setOcrLanguage] = useState<'ar' | 'en' | 'auto'>('auto');
   const [comparisonView, setComparisonView] = useState<'side-by-side' | 'overlay' | 'diff'>('side-by-side');
@@ -397,7 +396,6 @@ export default function LiteralMatchPage() {
   const replicateMutation = useMutation({
     mutationFn: (file: File) =>
       analyzeImage(file),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSuccess: (data: any) => {
       setAnalysisData(data);
       setCurrentJobId(data.id ?? 'analysis-' + Date.now());

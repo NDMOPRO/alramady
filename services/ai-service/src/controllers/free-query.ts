@@ -15,7 +15,7 @@ export async function list(req: AuthRequest, res: Response, next: NextFunction) 
 
 export async function getById(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const record = await service.getById(req.params.id);
+    const record = await service.getById(req.params.id!);
     res.json({ success: true, data: record });
   } catch (err) {
     next(err);
@@ -24,7 +24,7 @@ export async function getById(req: AuthRequest, res: Response, next: NextFunctio
 
 export async function create(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const record = await service.create({ ...req.body, createdBy: req.user?.id });
+    const record = await service.create({ ...req.body, createdBy: req.user!.id! });
     res.status(201).json({ success: true, data: record });
   } catch (err) {
     next(err);
@@ -33,7 +33,7 @@ export async function create(req: AuthRequest, res: Response, next: NextFunction
 
 export async function update(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const record = await service.update(req.params.id, req.body);
+    const record = await service.update(req.params.id!, req.body);
     res.json({ success: true, data: record });
   } catch (err) {
     next(err);
@@ -42,7 +42,7 @@ export async function update(req: AuthRequest, res: Response, next: NextFunction
 
 export async function remove(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const result = await service.remove(req.params.id);
+    const result = await service.remove(req.params.id!);
     res.json({ success: true, ...result });
   } catch (err) {
     next(err);
@@ -51,8 +51,8 @@ export async function remove(req: AuthRequest, res: Response, next: NextFunction
 
 export async function ask(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    logger.info('Free query ask', { userId: req.user?.id });
-    const result = await service.ask(req.body, req.user?.id);
+    logger.info('Free query ask', { userId: req.user!.id! });
+    const result = await service.ask(req.body, req.user!.id!);
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);
@@ -61,8 +61,8 @@ export async function ask(req: AuthRequest, res: Response, next: NextFunction) {
 
 export async function conversation(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    logger.info('Conversation request', { userId: req.user?.id });
-    const result = await service.conversation(req.body, req.user?.id);
+    logger.info('Conversation request', { userId: req.user!.id! });
+    const result = await service.conversation(req.body, req.user!.id!);
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);
@@ -71,7 +71,7 @@ export async function conversation(req: AuthRequest, res: Response, next: NextFu
 
 export async function history(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    const result = await service.getHistory(req.params.conversationId);
+    const result = await service.getHistory(req.params.conversationId!);
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);

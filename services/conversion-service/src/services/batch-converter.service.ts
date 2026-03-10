@@ -190,7 +190,7 @@ export class BatchConverterService {
         tenantId,
         userId,
         sourceFormat: 'BATCH',
-        targetFormat: targetFormat.toUpperCase() as string,
+        targetFormat: targetFormat.toUpperCase() as any,
         sourceFilename: `batch_${files.length}_files`,
         outputFilename: `batch_result_${batchId}`,
         status: failed === 0 ? 'COMPLETED' : failed === files.length ? 'FAILED' : 'FAILED',
@@ -498,7 +498,7 @@ export class BatchConverterService {
           break;
         }
         case 'xlsx_to_csv': {
-          const r = await formatConverterService.convertExcelToCSV(currentBuffer, step.options?.sheetIndex);
+          const r = await formatConverterService.convertExcelToCSV(currentBuffer, step.options?.sheetIndex as number | undefined);
           currentBuffer = Buffer.from(r.csv, 'utf-8');
           currentFilename = r.outputFilename;
           break;

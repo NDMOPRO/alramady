@@ -128,7 +128,7 @@ export class CommentsService {
         action: validated.parentId ? 'comment.reply_created' : 'comment.created',
         entityType: 'comment',
         entityId: commentId,
-        detailsJson: commentData as Record<string, unknown>,
+        detailsJson: commentData as Prisma.InputJsonValue,
       },
     });
 
@@ -242,7 +242,7 @@ export class CommentsService {
         action: 'comment.updated',
         entityType: 'comment',
         entityId: validated.commentId,
-        detailsJson: updatedComment as Record<string, unknown>,
+        detailsJson: updatedComment as Prisma.InputJsonValue,
       },
     });
 
@@ -306,7 +306,7 @@ export class CommentsService {
           originalAuthor: comment.userId as string,
           deletedBy: userId,
           deletedAt: new Date().toISOString(),
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 
@@ -610,7 +610,7 @@ export class CommentsService {
           resolution: validated.resolution,
           resolvedBy: validated.userId,
           resolvedAt: updatedDiscussion.resolvedAt,
-        } as Record<string, unknown>,
+        } as Prisma.InputJsonValue,
       },
     });
 

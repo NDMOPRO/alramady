@@ -27,7 +27,7 @@ export async function getById(req: Request, res: Response, next: NextFunction): 
     const tenantId = authReq.user?.tenantId;
     if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
     const item = await prisma.localizedContent.findFirst({
-      where: { id: req.params.id, tenantId, contentType: 'rtl-layout' },
+      where: { id: req.params.id!, tenantId, contentType: 'rtl-layout' },
     });
     if (!item) { res.status(404).json({ success: false, error: 'Not found' }); return; }
     res.json({ success: true, data: item });
@@ -66,11 +66,11 @@ export async function update(req: Request, res: Response, next: NextFunction): P
     const tenantId = authReq.user?.tenantId;
     if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
     const existing = await prisma.localizedContent.findFirst({
-      where: { id: req.params.id, tenantId, contentType: 'rtl-layout' },
+      where: { id: req.params.id!, tenantId, contentType: 'rtl-layout' },
     });
     if (!existing) { res.status(404).json({ success: false, error: 'Not found' }); return; }
     const updated = await prisma.localizedContent.update({
-      where: { id: req.params.id },
+      where: { id: req.params.id! },
       data: {
         ...(req.body.content && { content: JSON.stringify(req.body.content) }),
         ...(req.body.status && { status: req.body.status }),
@@ -89,10 +89,10 @@ export async function remove(req: Request, res: Response, next: NextFunction): P
     const tenantId = authReq.user?.tenantId;
     if (!tenantId) { res.status(401).json({ success: false, error: 'Unauthorized' }); return; }
     const existing = await prisma.localizedContent.findFirst({
-      where: { id: req.params.id, tenantId, contentType: 'rtl-layout' },
+      where: { id: req.params.id!, tenantId, contentType: 'rtl-layout' },
     });
     if (!existing) { res.status(404).json({ success: false, error: 'Not found' }); return; }
-    await prisma.localizedContent.delete({ where: { id: req.params.id } });
+    await prisma.localizedContent.delete({ where: { id: req.params.id! } });
     res.json({ success: true });
   } catch (error) {
     next(error);

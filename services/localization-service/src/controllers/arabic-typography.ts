@@ -12,7 +12,7 @@ export async function list(_req: Request, res: Response, next: NextFunction): Pr
 
 export async function getById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    res.json({ success: true, data: { id: req.params.id } });
+    res.json({ success: true, data: { id: req.params.id! } });
   } catch (error) {
     next(error);
   }
@@ -28,7 +28,7 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    res.json({ success: true, data: { id: req.params.id, ...req.body } });
+    res.json({ success: true, data: { id: req.params.id!, ...req.body } });
   } catch (error) {
     next(error);
   }
@@ -36,7 +36,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
 
 export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    res.json({ success: true, data: { id: req.params.id } });
+    res.json({ success: true, data: { id: req.params.id! } });
   } catch (error) {
     next(error);
   }
@@ -55,7 +55,7 @@ export async function processDiacritics(req: AuthenticatedRequest, res: Response
   try {
     const result = await service.processDiacritics({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: result });
   } catch (error) {
@@ -67,7 +67,7 @@ export async function applyUthmaniScript(req: AuthenticatedRequest, res: Respons
   try {
     const result = service.applyUthmaniScript({
       ...req.body,
-      tenantId: req.user?.tenantId || req.body.tenantId,
+      tenantId: req.user!.tenantId! || req.body.tenantId,
     });
     res.json({ success: true, data: result });
   } catch (error) {

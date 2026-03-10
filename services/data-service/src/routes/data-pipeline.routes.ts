@@ -56,36 +56,36 @@ router.post('/', asyncHandler(async (req: Request, res: Response) => {
 
 router.post('/:id/execute', asyncHandler(async (req: Request, res: Response) => {
   const params = req.body.params as Record<string, unknown> | undefined;
-  const result = await service.executePipeline(req.params.id, params);
+  const result = await service.executePipeline(req.params.id!, params);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:id/monitor', asyncHandler(async (req: Request, res: Response) => {
-  const result = await service.getMonitoringDashboard(req.params.id);
+  const result = await service.getMonitoringDashboard(req.params.id!);
   res.json({ success: true, data: result });
 }));
 
 router.get('/:id/executions/:executionId/logs', asyncHandler(async (req: Request, res: Response) => {
   const level = req.query.level as string | undefined;
-  const result = await service.getExecutionLogs(req.params.executionId, level);
+  const result = await service.getExecutionLogs(req.params.executionId!, level);
   res.json({ success: true, data: result });
 }));
 
 router.post('/:id/schedule', asyncHandler(async (req: Request, res: Response) => {
   const { cronExpression } = z.object({ cronExpression: z.string().min(5) }).parse(req.body);
-  const result = await service.schedulePipeline(req.params.id, cronExpression);
+  const result = await service.schedulePipeline(req.params.id!, cronExpression);
   res.json({ success: true, data: result });
 }));
 
 router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
-  await service.deletePipeline(req.params.id);
+  await service.deletePipeline(req.params.id!);
   res.json({ success: true, message: 'Pipeline deleted' });
 }));
 
 router.post('/:id/clone', asyncHandler(async (req: Request, res: Response) => {
   const { name } = z.object({ name: z.string().min(1).max(500) }).parse(req.body);
   const { userId } = req.tenant!;
-  const result = await service.clonePipeline(req.params.id, name, userId);
+  const result = await service.clonePipeline(req.params.id!, name, userId);
   res.status(201).json({ success: true, data: result });
 }));
 

@@ -221,7 +221,7 @@ export class FeatureFlagsService {
     const rule = await this.prisma.featureFlagRule.create({
       data: {
         flagId,
-        conditions: conditions as Record<string, unknown>,
+        conditions: conditions as Prisma.InputJsonValue,
         resultValue,
         priority,
         createdAt: new Date(),

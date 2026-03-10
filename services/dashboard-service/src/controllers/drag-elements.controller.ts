@@ -23,7 +23,7 @@ export class DragElementsController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await dragElementsService.getById(req.params.id);
+      const data = await dragElementsService.getById(req.params.id!);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -42,7 +42,7 @@ export class DragElementsController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await dragElementsService.update(req.params.id, req.body);
+      const data = await dragElementsService.update(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ export class DragElementsController {
 
   async remove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await dragElementsService.remove(req.params.id);
+      await dragElementsService.remove(req.params.id!);
       res.status(200).json({ success: true, message: 'Drag element deleted successfully' });
     } catch (error) {
       next(error);
@@ -102,7 +102,7 @@ export class DragElementsController {
   async configureDrillDown(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { levels } = req.body;
-      const data = await dragElementsService.configureDrillDown(req.params.id, levels);
+      const data = await dragElementsService.configureDrillDown(req.params.id!, levels);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -112,7 +112,7 @@ export class DragElementsController {
   // E03.03: Configure alerts
   async configureAlert(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const data = await dragElementsService.configureAlert(req.params.id, req.body);
+      const data = await dragElementsService.configureAlert(req.params.id!, req.body);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);
@@ -124,7 +124,7 @@ export class DragElementsController {
     try {
       const { dashboardId, presentationId, slideIndex } = req.body;
       const data = await dragElementsService.exportToPresentation({
-        elementId: req.params.id,
+        elementId: req.params.id!,
         dashboardId,
         presentationId,
         slideIndex,
@@ -139,7 +139,7 @@ export class DragElementsController {
   async updatePosition(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { dashboardId, position } = req.body;
-      const data = await dragElementsService.updatePosition(req.params.id, dashboardId, position);
+      const data = await dragElementsService.updatePosition(req.params.id!, dashboardId, position);
       res.status(200).json({ success: true, data });
     } catch (error) {
       next(error);

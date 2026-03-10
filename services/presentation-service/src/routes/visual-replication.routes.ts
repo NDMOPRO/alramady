@@ -46,8 +46,8 @@ router.post(
   authMiddleware,
   asyncHandler(async (req: Request, res: Response) => {
     const body = ReplicateDesignBody.parse(req.body);
-    const tenantId = req.user?.organizationId || 'default';
-    const userId = req.user?.userId || 'anonymous';
+    const tenantId = req.user!.organizationId || 'default';
+    const userId = req.user!.userId || 'anonymous';
 
     const result = await service.replicateDesign({
       sourceImagePath: body.sourceImagePath,

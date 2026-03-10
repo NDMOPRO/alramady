@@ -58,7 +58,7 @@ router.post('/process-file', asyncHandler(async (req: Request, res: Response) =>
     stages.map((s) => ({
       type: s.type,
       column: s.column,
-      params: s.params as Record<string, unknown>,
+      params: s.params as Record<string, any>,
     })),
   );
 

@@ -74,7 +74,7 @@ describe('ReportBuilderService', () => {
       }),
     );
     expect(result.sectionCount).toBe(1);
-    expect(result.renderedSections[0]).toEqual(
+    expect((result as any).renderedSections[0]).toEqual(
       expect.objectContaining({
         type: 'table',
         renderedContent: expect.objectContaining({

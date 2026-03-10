@@ -12,7 +12,7 @@ export function validate(schema: ZodSchema | ValidationTarget, source: 'body' | 
     try {
       if ('parse' in schema && typeof (schema as ZodSchema).parse === 'function') {
         const result = (schema as ZodSchema).parse(req[source]);
-        (req as unknown as Record<string, unknown>)[source] = result;
+        (req as unknown as Record<string, any>)[source] = result;
         next();
         return;
       }
@@ -48,7 +48,7 @@ export function validate(schema: ZodSchema | ValidationTarget, source: 'body' | 
             });
           });
         } else {
-          (req as unknown as Record<string, unknown>).query = queryResult.data;
+          (req as unknown as Record<string, any>).query = queryResult.data;
         }
       }
 
@@ -64,7 +64,7 @@ export function validate(schema: ZodSchema | ValidationTarget, source: 'body' | 
             });
           });
         } else {
-          (req as unknown as Record<string, unknown>).params = paramsResult.data;
+          (req as unknown as Record<string, any>).params = paramsResult.data;
         }
       }
 

@@ -212,14 +212,14 @@ function tokenizeFormula(formula: string): FToken[] {
 class FormulaEvaluator {
   private tokens: FToken[];
   private pos: number;
-  private row: Record<string, unknown>;
-  private allData: Record<string, unknown>[];
+  private row: Record<string, any>;
+  private allData: Record<string, any>[];
   private rowIndex: number;
 
   constructor(
     tokens: FToken[],
-    row: Record<string, unknown>,
-    allData: Record<string, unknown>[],
+    row: Record<string, any>,
+    allData: Record<string, any>[],
     rowIndex: number
   ) {
     this.tokens = tokens;
@@ -916,7 +916,7 @@ export class FormulaEngineService {
 
   evaluateFormula(
     formula: string,
-    data: Record<string, unknown>[],
+    data: Record<string, any>[],
     rowIndex?: number
   ): FormulaResult {
     try {
@@ -961,7 +961,7 @@ export class FormulaEngineService {
       orderBy: { rowIndex: 'asc' },
     });
 
-    const allData = rows.map(r => r.data as Record<string, unknown>);
+    const allData = rows.map(r => r.data as Record<string, any>);
 
     // Evaluate formula for each row
     const errors: Array<{ rowIndex: number; error: string }> = [];
@@ -972,7 +972,7 @@ export class FormulaEngineService {
       if (result.type === 'error') {
         errors.push({ rowIndex: i, error: result.error || 'Unknown error' });
       } else {
-        const updatedData = { ...(rows[i].data as Record<string, unknown>), [name]: result.value };
+        const updatedData = { ...(rows[i].data as Record<string, any>), [name]: result.value };
         await this.prisma.dataRow.update({
           where: { id: rows[i].id },
           data: { data: updatedData as Prisma.InputJsonValue },
@@ -1014,7 +1014,7 @@ export class FormulaEngineService {
 
   evaluateBatch(
     formulas: BatchFormulaInput[],
-    data: Record<string, unknown>[]
+    data: Record<string, any>[]
   ): BatchFormulaResult {
     const results: BatchFormulaResult['results'] = [];
     let totalErrors = 0;

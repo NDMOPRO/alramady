@@ -181,10 +181,10 @@ export class GoogleSheetsConnector implements IConnector {
       h ? String(h) : `Column_${idx + 1}`
     );
 
-    const data: Record<string, unknown>[] = [];
+    const data: Record<string, any>[] = [];
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      const record: Record<string, unknown> = {};
+      const record: Record<string, any> = {};
       for (let j = 0; j < headers.length; j++) {
         record[headers[j]] = row[j] ?? null;
       }

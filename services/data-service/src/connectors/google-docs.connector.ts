@@ -128,7 +128,7 @@ export class GoogleDocsConnector implements IConnector {
     const docs = google.docs({ version: 'v1', auth: this.oauth2Client });
     const doc = await docs.documents.get({ documentId });
 
-    const data: Record<string, unknown>[] = [];
+    const data: Record<string, any>[] = [];
     const body = doc.data.body?.content ?? [];
 
     for (const element of body) {

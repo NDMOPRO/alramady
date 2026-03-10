@@ -45,7 +45,7 @@ export interface ConnectorListResult {
 }
 
 export interface ConnectorImportResult {
-  data: Record<string, unknown>[];
+  data: Record<string, any>[];
   columns: string[];
   rowCount: number;
   sourceId: string;

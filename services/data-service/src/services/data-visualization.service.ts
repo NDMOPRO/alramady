@@ -32,7 +32,7 @@ export class DataVisualizationService {
     const yValues: number[] = [];
 
     for (const row of rows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       const xVal = data[config.xColumn];
       const yVal = parseFloat(data[config.yColumn]);
       if (xVal !== undefined && xVal !== null && !isNaN(yVal)) {
@@ -57,7 +57,7 @@ export class DataVisualizationService {
 
     const chartCanvas = new ChartJSNodeCanvas({ width, height, backgroundColour: '#ffffff' });
 
-    const datasets: Record<string, unknown>[] = chartType === 'scatter'
+    const datasets: Record<string, any>[] = chartType === 'scatter'
       ? [{
           label: `${config.xColumn} vs ${config.yColumn}`,
           data: xValues.map((x, i) => ({ x: parseFloat(x) || i, y: yValues[i] })),
@@ -125,7 +125,7 @@ export class DataVisualizationService {
     }
 
     for (const row of rows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       for (const col of columns) {
         const val = parseFloat(data[col]);
         if (!isNaN(val)) {
@@ -232,7 +232,7 @@ export class DataVisualizationService {
 
     const values: number[] = [];
     for (const row of rows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       const val = parseFloat(data[column]);
       if (!isNaN(val) && isFinite(val)) {
         values.push(val);
@@ -320,7 +320,7 @@ export class DataVisualizationService {
     for (const col of columns) {
       const values: number[] = [];
       for (const row of rows) {
-        const data = row.data as Record<string, unknown>;
+        const data = row.data as Record<string, any>;
         const val = parseFloat(data[col]);
         if (!isNaN(val) && isFinite(val)) {
           values.push(val);
@@ -449,7 +449,7 @@ export class DataVisualizationService {
       for (const col of allCols) {
         const vals: number[] = [];
         for (const row of rows.slice(0, 100)) {
-          const d = row.data as Record<string, unknown>;
+          const d = row.data as Record<string, any>;
           const v = parseFloat(d[col]);
           if (!isNaN(v)) vals.push(v);
         }
@@ -466,7 +466,7 @@ export class DataVisualizationService {
       let nullCount = 0;
 
       for (const row of rows) {
-        const data = row.data as Record<string, unknown>;
+        const data = row.data as Record<string, any>;
         const val = data[col.name];
         if (val === null || val === undefined || val === '') {
           nullCount++;
@@ -535,7 +535,7 @@ export class DataVisualizationService {
     }
 
     for (const row of rows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       let allValid = true;
       const parsed: Record<string, number> = {};
       for (const col of columns) {

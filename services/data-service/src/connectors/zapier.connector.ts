@@ -77,7 +77,7 @@ export class ZapierConnector implements IConnector {
 
   async sendToZap(
     webhookUrl: string,
-    data: Record<string, unknown>
+    data: Record<string, any>
   ): Promise<void> {
     const res = await fetch(webhookUrl, {
       method: 'POST',
@@ -97,7 +97,7 @@ export class ZapierConnector implements IConnector {
   }
 
   receiveFromZap(
-    payload: Record<string, unknown>
+    payload: Record<string, any>
   ): ConnectorImportResult {
     const columns = Object.keys(payload);
     return {

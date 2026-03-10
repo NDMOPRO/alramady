@@ -113,7 +113,7 @@ function getOpenAIClient(): OpenAI {
 async function callOpenAIClassification(
   fileName: string,
   columnNames: string[],
-  sampleRows: Record<string, unknown>[]
+  sampleRows: Record<string, any>[]
 ): Promise<AiClassificationResponse> {
   const openai = getOpenAIClient();
 
@@ -330,7 +330,7 @@ export class ClassificationService {
   ) {
     await this.getById(id);
 
-    const updateData: Record<string, unknown> = {};
+    const updateData: Record<string, any> = {};
     if (data.classifiedType !== undefined) updateData.classifiedType = data.classifiedType;
     if (data.confidence !== undefined) updateData.confidence = data.confidence;
     if (data.aiModel !== undefined) updateData.aiModel = data.aiModel;
@@ -408,20 +408,20 @@ export class ClassificationService {
     if (columnNames.length === 0 && dataRows.length > 0) {
       const firstRow = dataRows[0].data;
       if (firstRow !== null && typeof firstRow === 'object' && !Array.isArray(firstRow)) {
-        columnNames = Object.keys(firstRow as Record<string, unknown>);
+        columnNames = Object.keys(firstRow as Record<string, any>);
       }
     }
 
-    // 4. Convert DataRow.data (Json) to plain Record<string, unknown>[]
-    const sampleRows: Record<string, unknown>[] = dataRows
+    // 4. Convert DataRow.data (Json) to plain Record<string, any>[]
+    const sampleRows: Record<string, any>[] = dataRows
       .map((row) => {
         const d = row.data;
         if (d !== null && typeof d === 'object' && !Array.isArray(d)) {
-          return d as Record<string, unknown>;
+          return d as Record<string, any>;
         }
         return null;
       })
-      .filter((r): r is Record<string, unknown> => r !== null);
+      .filter((r): r is Record<string, any> => r !== null);
 
     if (columnNames.length === 0) {
       throw new Error(
@@ -496,7 +496,7 @@ export class ClassificationService {
   async classifyFile(
     fileName: string,
     columnNames: string[],
-    sampleRows: Record<string, unknown>[]
+    sampleRows: Record<string, any>[]
   ): Promise<ClassificationResult> {
     const validated = ClassifyFileInputSchema.parse({ fileName, columnNames, sampleRows });
 

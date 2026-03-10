@@ -180,7 +180,7 @@ export class ConnectorRegistry {
       lastUsedAt: Date | null;
     }>
   > {
-    const where: Record<string, unknown> = { tenantId, status: 'active' };
+    const where: Record<string, any> = { tenantId, status: 'active' };
     if (userId) where.userId = userId;
 
     const connections = await this.listConnectionsWithSchemaFallback(where);
@@ -266,7 +266,7 @@ export class ConnectorRegistry {
     }
   }
 
-  private async listConnectionsWithSchemaFallback(where: Record<string, unknown>): Promise<
+  private async listConnectionsWithSchemaFallback(where: Record<string, any>): Promise<
     Array<{
       id: string;
       connectorType: string;

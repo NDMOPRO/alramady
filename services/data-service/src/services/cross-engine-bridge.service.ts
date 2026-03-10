@@ -73,7 +73,7 @@ export class CrossEngineBridgeService {
     );
 
     // Record the transfer in bridge payloads and lineage
-    const payload = await prisma.bridgePayload.create({
+    const payload = await (prisma as any).bridgePayload.create({
       data: {
         tenantId,
         userId,
@@ -89,7 +89,7 @@ export class CrossEngineBridgeService {
       },
     });
 
-    await prisma.dataLineage.create({
+    await (prisma as any).dataLineage.create({
       data: {
         payloadId: payload.id,
         tenantId,
@@ -136,7 +136,7 @@ export class CrossEngineBridgeService {
   }
 
   async getTransferHistory(tenantId: string): Promise<unknown[]> {
-    return prisma.bridgePayload.findMany({
+    return (prisma as any).bridgePayload.findMany({
       where: { tenantId, dataType: 'cross-engine-transfer' },
       orderBy: { createdAt: 'desc' },
       take: 50,

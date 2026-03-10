@@ -26,7 +26,7 @@ interface StreamingConfig {
 
 interface PipelineStage {
   name: string;
-  transform: (batch: Record<string, unknown>[]) => Promise<Record<string, unknown>[]>;
+  transform: (batch: Record<string, any>[]) => Promise<Record<string, any>[]>;
 }
 
 interface PipelineStats {
@@ -74,11 +74,11 @@ export class StreamingPipelineService {
     const rl = createInterface({ input: fileStream, crlfDelay: Infinity });
 
     let headers: string[] = [];
-    let currentBatch: Record<string, unknown>[] = [];
+    let currentBatch: Record<string, any>[] = [];
     let lineNumber = 0;
     const activeBatches: Promise<void>[] = [];
 
-    const processBatch = async (batch: Record<string, unknown>[]): Promise<void> => {
+    const processBatch = async (batch: Record<string, any>[]): Promise<void> => {
       let processed = batch;
       for (const stage of stages) {
         try {
@@ -108,7 +108,7 @@ export class StreamingPipelineService {
         continue;
       }
 
-      const row: Record<string, unknown> = {};
+      const row: Record<string, any> = {};
       for (let i = 0; i < headers.length; i++) {
         row[headers[i]] = this.inferType(values[i]);
       }
@@ -204,11 +204,11 @@ export class StreamingPipelineService {
     let rowsFailed = 0;
     let batchesCompleted = 0;
 
-    let currentBatch: Record<string, unknown>[] = [];
+    let currentBatch: Record<string, any>[] = [];
 
     const batchTransform = new Transform({
       objectMode: true,
-      async transform(chunk: Record<string, unknown>, _encoding, callback) {
+      async transform(chunk: Record<string, any>, _encoding, callback) {
         currentBatch.push(chunk);
         if (currentBatch.length >= cfg.batchSize) {
           let processed = [...currentBatch];
@@ -278,7 +278,7 @@ export class StreamingPipelineService {
       {
         name: 'normalize',
         transform: async (batch) => batch.map((row) => {
-          const normalized: Record<string, unknown> = {};
+          const normalized: Record<string, any> = {};
           for (const [key, value] of Object.entries(row)) {
             const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '_');
             normalized[normalizedKey] = typeof value === 'string' ? value.trim() : value;
@@ -307,7 +307,7 @@ export class StreamingPipelineService {
   }
 
   createTransformPipeline(
-    transformations: Array<{ type: string; column: string; params: Record<string, unknown> }>,
+    transformations: Array<{ type: string; column: string; params: Record<string, any> }>,
   ): PipelineStage[] {
     return transformations.map((t) => ({
       name: `transform_${t.type}_${t.column}`,

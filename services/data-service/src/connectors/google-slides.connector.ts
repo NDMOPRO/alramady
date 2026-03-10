@@ -140,7 +140,7 @@ export class GoogleSlidesConnector implements IConnector {
   ): Promise<ConnectorImportResult> {
     const slides = await this.importPresentation(token, presentationId);
 
-    const data: Record<string, unknown>[] = [];
+    const data: Record<string, any>[] = [];
     for (const slide of slides) {
       for (const element of slide.elements) {
         data.push({

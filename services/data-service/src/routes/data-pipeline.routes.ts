@@ -55,7 +55,7 @@ router.post('/', asyncHandler(async (req: Request, res: Response) => {
 }));
 
 router.post('/:id/execute', asyncHandler(async (req: Request, res: Response) => {
-  const params = req.body.params as Record<string, unknown> | undefined;
+  const params = req.body.params as Record<string, any> | undefined;
   const result = await service.executePipeline(req.params.id!, params);
   res.json({ success: true, data: result });
 }));

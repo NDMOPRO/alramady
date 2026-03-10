@@ -15,12 +15,12 @@ interface QueryPartition {
   partitionId: string;
   offset: number;
   limit: number;
-  filter?: Record<string, unknown>;
+  filter?: Record<string, any>;
 }
 
 interface PartitionResult {
   partitionId: string;
-  rows: Record<string, unknown>[];
+  rows: Record<string, any>[];
   rowCount: number;
   executionTimeMs: number;
 }
@@ -39,7 +39,7 @@ interface DistributedQueryResult {
   totalRows: number;
   partitions: number;
   executionTimeMs: number;
-  data: Record<string, unknown>[];
+  data: Record<string, any>[];
   aggregates?: AggregateResult[];
   memoryUsageMb: number;
 }
@@ -57,7 +57,7 @@ export class DistributedQueryService {
     tenantId: string,
     query: {
       select?: string[];
-      where?: Record<string, unknown>;
+      where?: Record<string, any>;
       groupBy?: string[];
       orderBy?: { column: string; direction: 'asc' | 'desc' }[];
       limit?: number;
@@ -113,7 +113,7 @@ export class DistributedQueryService {
 
     if (query.select && query.select.length > 0) {
       allRows = allRows.map((row) => {
-        const selected: Record<string, unknown> = {};
+        const selected: Record<string, any> = {};
         for (const col of query.select!) {
           if (col in row) selected[col] = row[col];
         }
@@ -203,12 +203,12 @@ export class DistributedQueryService {
     const startTime = Date.now();
     const rowRepository = (
       prisma as unknown as {
-        dataRow?: { findMany: (args: Record<string, unknown>) => Promise<Array<{ data: Prisma.JsonValue }>> };
-        datasetRow?: { findMany: (args: Record<string, unknown>) => Promise<Array<{ data: Prisma.JsonValue }>> };
+        dataRow?: { findMany: (args: Record<string, any>) => Promise<Array<{ data: Prisma.JsonValue }>> };
+        datasetRow?: { findMany: (args: Record<string, any>) => Promise<Array<{ data: Prisma.JsonValue }>> };
       }
     ).dataRow ?? (
       prisma as unknown as {
-        datasetRow?: { findMany: (args: Record<string, unknown>) => Promise<Array<{ data: Prisma.JsonValue }>> };
+        datasetRow?: { findMany: (args: Record<string, any>) => Promise<Array<{ data: Prisma.JsonValue }>> };
       }
     ).datasetRow;
 
@@ -224,7 +224,7 @@ export class DistributedQueryService {
     });
 
     const parsedRows = rows.map((row: { data: Prisma.JsonValue }) => {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       return data;
     });
 
@@ -237,9 +237,9 @@ export class DistributedQueryService {
   }
 
   private applyFilter(
-    rows: Record<string, unknown>[],
-    filter: Record<string, unknown>,
-  ): Record<string, unknown>[] {
+    rows: Record<string, any>[],
+    filter: Record<string, any>,
+  ): Record<string, any>[] {
     return rows.filter((row) => {
       for (const [key, condition] of Object.entries(filter)) {
         const value = row[key];
@@ -250,7 +250,7 @@ export class DistributedQueryService {
         }
 
         if (typeof condition === 'object' && condition !== null) {
-          const cond = condition as Record<string, unknown>;
+          const cond = condition as Record<string, any>;
           if ('eq' in cond && value !== cond.eq) return false;
           if ('neq' in cond && value === cond.neq) return false;
           if ('gt' in cond && (typeof value !== 'number' || value <= (cond.gt as number))) return false;
@@ -268,7 +268,7 @@ export class DistributedQueryService {
   }
 
   private computeAggregates(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     aggregates: Array<{ function: string; column: string }>,
   ): AggregateResult[] {
     return aggregates.map((agg) => {
@@ -293,11 +293,11 @@ export class DistributedQueryService {
   }
 
   private applyGroupBy(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     groupColumns: string[],
     aggregates?: Array<{ function: string; column: string }>,
-  ): Record<string, unknown>[] {
-    const groups = new Map<string, Record<string, unknown>[]>();
+  ): Record<string, any>[] {
+    const groups = new Map<string, Record<string, any>[]>();
 
     for (const row of rows) {
       const key = groupColumns.map((col) => String(row[col] ?? 'null')).join('|');
@@ -306,9 +306,9 @@ export class DistributedQueryService {
       groups.set(key, group);
     }
 
-    const result: Record<string, unknown>[] = [];
+    const result: Record<string, any>[] = [];
     for (const [, groupRows] of groups) {
-      const representative: Record<string, unknown> = {};
+      const representative: Record<string, any> = {};
 
       for (const col of groupColumns) {
         representative[col] = groupRows[0][col];
@@ -341,9 +341,9 @@ export class DistributedQueryService {
   }
 
   private applyOrderBy(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     orderBy: Array<{ column: string; direction: 'asc' | 'desc' }>,
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     return [...rows].sort((a, b) => {
       for (const { column, direction } of orderBy) {
         const valA = a[column];

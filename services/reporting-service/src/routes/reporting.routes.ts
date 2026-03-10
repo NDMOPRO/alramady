@@ -140,9 +140,11 @@ router.get(
   authMiddleware,
   validate(paginationSchema, 'query'),
   asyncHandler(async (req: Request, res: Response) => {
-    const { page, limit, sortBy, sortOrder, search } = req.query as Record<string, string | undefined>;
+    const { page: pageStr, limit: limitStr, sortBy, sortOrder, search } = req.query as Record<string, string | undefined>;
 
-    const skip = ((page || 1) - 1) * (limit || 20);
+    const page = Number(pageStr) || 1;
+    const limit = Number(limitStr) || 20;
+    const skip = (page - 1) * limit;
     const where: Record<string, any> = {};
     if (search) {
       where.OR = [
@@ -154,7 +156,7 @@ router.get(
       prisma.reportDefinition.findMany({
         where,
         skip,
-        take: limit || 20,
+        take: limit,
         orderBy: { [sortBy || 'createdAt']: sortOrder || 'desc' },
       }),
       prisma.reportDefinition.count({ where }),
@@ -164,10 +166,10 @@ router.get(
       success: true,
       data,
       pagination: {
-        page: page || 1,
-        limit: limit || 20,
+        page,
+        limit,
         total,
-        totalPages: Math.ceil(total / (limit || 20)),
+        totalPages: Math.ceil(total / limit),
       },
     });
   })

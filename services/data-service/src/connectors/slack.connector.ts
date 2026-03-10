@@ -130,7 +130,7 @@ export class SlackConnector implements IConnector {
     limit?: number
   ): Promise<ConnectorImportResult> {
     const client = this.createClient(token);
-    const allMessages: Record<string, unknown>[] = [];
+    const allMessages: Record<string, any>[] = [];
     const maxMessages = limit ?? 500;
     let cursor: string | undefined;
 
@@ -170,7 +170,7 @@ export class SlackConnector implements IConnector {
 
   async fetchUsers(token: ConnectorToken): Promise<ConnectorImportResult> {
     const client = this.createClient(token);
-    const allUsers: Record<string, unknown>[] = [];
+    const allUsers: Record<string, any>[] = [];
     let cursor: string | undefined;
 
     do {

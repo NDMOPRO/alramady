@@ -87,7 +87,7 @@ export class OneDriveConnector implements IConnector {
       throw new Error(`Microsoft token exchange failed: ${error}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: data.refresh_token as string,
@@ -118,7 +118,7 @@ export class OneDriveConnector implements IConnector {
       throw new Error(`Microsoft token refresh failed: ${res.status}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: (data.refresh_token as string) ?? refreshToken,
@@ -154,7 +154,7 @@ export class OneDriveConnector implements IConnector {
       // Use search endpoint for queries
       const searchEndpoint = `/me/drive/root/search(q='${encodeURIComponent(options.query)}')`;
       const res = await this.graphRequest(token, `${searchEndpoint}?${params}`);
-      const data = await res.json() as Record<string, unknown>;
+      const data = await res.json() as Record<string, any>;
 
       return {
         files: ((data.value ?? []) as GraphDriveItem[]).map((item: GraphDriveItem) => this.mapDriveItem(item)),
@@ -167,7 +167,7 @@ export class OneDriveConnector implements IConnector {
       const res = await fetch(options.pageToken, {
         headers: { Authorization: `Bearer ${token.accessToken}` },
       });
-      const data = await res.json() as Record<string, unknown>;
+      const data = await res.json() as Record<string, any>;
       return {
         files: ((data.value ?? []) as GraphDriveItem[]).map((item: GraphDriveItem) => this.mapDriveItem(item)),
         nextPageToken: (data['@odata.nextLink'] as string) ?? undefined,
@@ -175,7 +175,7 @@ export class OneDriveConnector implements IConnector {
     }
 
     const res = await this.graphRequest(token, `${endpoint}?${params}`);
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
 
     return {
       files: ((data.value ?? []) as GraphDriveItem[]).map((item: GraphDriveItem) => this.mapDriveItem(item)),
@@ -190,7 +190,7 @@ export class OneDriveConnector implements IConnector {
       throw new Error(`Failed to get file info: ${infoRes.status}`);
     }
 
-    const info = await infoRes.json() as Record<string, unknown>;
+    const info = await infoRes.json() as Record<string, any>;
     const downloadUrl = info['@microsoft.graph.downloadUrl'] as string | undefined;
 
     if (!downloadUrl) {
@@ -210,7 +210,7 @@ export class OneDriveConnector implements IConnector {
     fileId: string
   ): Promise<ConnectorImportResult> {
     const infoRes = await this.graphRequest(token, `/me/drive/items/${fileId}`);
-    const info = await infoRes.json() as Record<string, unknown>;
+    const info = await infoRes.json() as Record<string, any>;
 
     const buffer = await this.downloadFile(token, fileId);
 
@@ -229,7 +229,7 @@ export class OneDriveConnector implements IConnector {
       token,
       '/me/drive/sharedWithMe?$select=id,name,size,lastModifiedDateTime,webUrl,file,folder'
     );
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return ((data.value ?? []) as GraphDriveItem[]).map((item: GraphDriveItem) => this.mapDriveItem(item));
   }
 
@@ -238,7 +238,7 @@ export class OneDriveConnector implements IConnector {
       token,
       '/me/drive/recent?$select=id,name,size,lastModifiedDateTime,webUrl,file,folder&$top=25'
     );
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return ((data.value ?? []) as GraphDriveItem[]).map((item: GraphDriveItem) => this.mapDriveItem(item));
   }
 

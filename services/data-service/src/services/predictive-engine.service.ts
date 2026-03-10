@@ -227,7 +227,7 @@ export class PredictiveEngineService {
     const yVals: number[] = [];
 
     for (const dr of dataRows) {
-      const data = dr.data as Record<string, unknown>;
+      const data = dr.data as Record<string, any>;
       const targetVal = Number(data[targetColumn]);
       if (isNaN(targetVal)) continue;
 
@@ -332,7 +332,7 @@ export class PredictiveEngineService {
     for (const colName of targetColumns) {
       const values: number[] = [];
       for (const dr of dataRows) {
-        const data = dr.data as Record<string, unknown>;
+        const data = dr.data as Record<string, any>;
         const num = Number(data[colName]);
         values.push(num);
       }
@@ -400,7 +400,7 @@ export class PredictiveEngineService {
     // Extract and normalize data
     const rawPoints: number[][] = [];
     for (const dr of dataRows) {
-      const data = dr.data as Record<string, unknown>;
+      const data = dr.data as Record<string, any>;
       const point: number[] = [];
       let valid = true;
       for (const col of columns) {
@@ -528,7 +528,7 @@ export class PredictiveEngineService {
 
     const values: number[] = [];
     for (const dr of dataRows) {
-      const data = dr.data as Record<string, unknown>;
+      const data = dr.data as Record<string, any>;
       const num = Number(data[column]);
       if (!isNaN(num)) {
         values.push(num);

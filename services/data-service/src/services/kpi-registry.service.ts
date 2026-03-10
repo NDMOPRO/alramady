@@ -506,7 +506,7 @@ export class KpiRegistryService {
     const jsonbFields = new Set(['variables', 'tags']);
 
     for (const [jsKey, dbCol] of Object.entries(fieldMap)) {
-      const val = (validated as Record<string, unknown>)[jsKey];
+      const val = (validated as Record<string, any>)[jsKey];
       if (val !== undefined) {
         setClauses.push(`${dbCol} = $${paramIdx++}`);
         setParams.push(val);
@@ -1034,7 +1034,7 @@ export class KpiRegistryService {
       };
 
       for (const [jsKey, dbCol] of Object.entries(dbFieldMap)) {
-        const val = (proposedChanges as Record<string, unknown>)[jsKey];
+        const val = (proposedChanges as Record<string, any>)[jsKey];
         if (val !== undefined) {
           setClauses.push(`${dbCol} = $${paramIdx++}`);
           setParams.push(val);
@@ -1459,7 +1459,7 @@ export class KpiRegistryService {
 
     for (const field of fields) {
       const oldVal = original[field];
-      const newVal = (proposed as Record<string, unknown>)[field];
+      const newVal = (proposed as Record<string, any>)[field];
 
       if (newVal !== undefined) {
         const oldStr = JSON.stringify(oldVal);

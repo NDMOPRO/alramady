@@ -54,7 +54,7 @@ interface JoinResult {
 
 interface JoinPreviewResult {
   columns: string[];
-  rows: Record<string, unknown>[];
+  rows: Record<string, any>[];
   totalEstimatedRows: number;
   leftRowsMatched: number;
   rightRowsMatched: number;
@@ -67,7 +67,7 @@ interface DatasetInfo {
     name: string;
     dataType: string | null;
   }>;
-  rows: Record<string, unknown>[];
+  rows: Record<string, any>[];
 }
 
 // ─── Service ───────────────────────────────────────────────────────
@@ -276,7 +276,7 @@ export class JoinBuilderService {
         name: c.name,
         dataType: c.dataType,
       })),
-      rows: rows.map(r => r.data as Record<string, unknown>),
+      rows: rows.map(r => r.data as Record<string, any>),
     };
   }
 
@@ -407,20 +407,20 @@ export class JoinBuilderService {
   }
 
   private performJoin(
-    leftRows: Record<string, unknown>[],
-    rightRows: Record<string, unknown>[],
+    leftRows: Record<string, any>[],
+    rightRows: Record<string, any>[],
     joinType: JoinConfig['joinType'],
     joinKeys: JoinKey[],
     leftName: string,
     rightName: string
   ): {
-    resultRows: Record<string, unknown>[];
+    resultRows: Record<string, any>[];
     leftMatched: number;
     rightMatched: number;
     leftUnmatched: number;
     rightUnmatched: number;
   } {
-    const resultRows: Record<string, unknown>[] = [];
+    const resultRows: Record<string, any>[] = [];
 
     // Detect column collisions
     const leftCols = leftRows.length > 0 ? new Set(Object.keys(leftRows[0])) : new Set<string>();
@@ -435,7 +435,7 @@ export class JoinBuilderService {
     }
 
     // Build right index
-    const rightIndex = new Map<string, Record<string, unknown>[]>();
+    const rightIndex = new Map<string, Record<string, any>[]>();
     for (const rRow of rightRows) {
       const key = joinKeys.map(jk => String(rRow[jk.rightColumn] ?? '').toLowerCase().trim()).join('|||');
       const bucket = rightIndex.get(key);
@@ -447,14 +447,14 @@ export class JoinBuilderService {
     }
 
     // Build null rows for outer joins
-    const rightNullRow: Record<string, unknown> = {};
+    const rightNullRow: Record<string, any> = {};
     for (const col of rightCols) {
       if (joinKeyCols.has(col)) continue;
       const outputCol = collidingCols.has(col) ? `${rightName}.${col}` : col;
       rightNullRow[outputCol] = null;
     }
 
-    const leftNullRow: Record<string, unknown> = {};
+    const leftNullRow: Record<string, any> = {};
     for (const col of leftCols) {
       leftNullRow[col] = null;
     }
@@ -525,13 +525,13 @@ export class JoinBuilderService {
   }
 
   private mergeRows(
-    left: Record<string, unknown>,
-    right: Record<string, unknown>,
+    left: Record<string, any>,
+    right: Record<string, any>,
     collidingCols: Set<string>,
     joinKeyCols: Set<string>,
     rightName: string
-  ): Record<string, unknown> {
-    const merged: Record<string, unknown> = { ...left };
+  ): Record<string, any> {
+    const merged: Record<string, any> = { ...left };
     for (const [col, val] of Object.entries(right)) {
       if (joinKeyCols.has(col)) continue;
       const outputCol = collidingCols.has(col) ? `${rightName}.${col}` : col;
@@ -541,7 +541,7 @@ export class JoinBuilderService {
   }
 
   private countMatchedRightRows(
-    rightRows: Record<string, unknown>[],
+    rightRows: Record<string, any>[],
     matchedKeys: Set<string>,
     joinKeys: JoinKey[]
   ): number {

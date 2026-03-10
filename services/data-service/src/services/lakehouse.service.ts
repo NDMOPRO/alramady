@@ -89,7 +89,7 @@ export class LakehouseService {
       where: { id: validated.datasetId },
       data: {
         metadata: {
-          ...(dataset.metadata as Record<string, unknown> || {}),
+          ...(dataset.metadata as Record<string, any> || {}),
           lakehouseEnabled: true,
           lakehouseSchema: validated.schema,
           fileFormat: validated.fileFormat,
@@ -106,7 +106,7 @@ export class LakehouseService {
     });
 
     return datasets.filter((d) => {
-      const meta = d.metadata as Record<string, unknown> | null;
+      const meta = d.metadata as Record<string, any> | null;
       return meta?.lakehouseEnabled === true;
     });
   }

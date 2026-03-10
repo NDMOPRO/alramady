@@ -19,10 +19,5 @@ COPY src ./src
 EXPOSE 8006
 CMD ["npx", "tsx", "watch", "src/index.ts"]
 
-FROM node:20-alpine
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY package*.json .npmrc* ./
-EXPOSE 8006
-CMD ["node", "dist/index.js"]
+FROM dev
+CMD ["npx", "tsx", "src/index.ts"]

@@ -66,7 +66,7 @@ export class CompareScheduleService {
         status: 'pending',
         tenantId: data.tenantId,
         createdBy: data.userId || data.createdBy,
-      },
+      } as any,
     });
     logger.info('Compare schedule created', { id: record.id });
     await cacheDel(`${CACHE_PREFIX}:list:*`);

@@ -102,7 +102,7 @@ export class HubSpotConnector implements IConnector {
 
   async fetchContacts(token: ConnectorToken): Promise<ConnectorImportResult> {
     const client = this.createClient(token);
-    const allRecords: Record<string, unknown>[] = [];
+    const allRecords: Record<string, any>[] = [];
     let after: string | undefined;
 
     do {
@@ -134,7 +134,7 @@ export class HubSpotConnector implements IConnector {
 
   async fetchDeals(token: ConnectorToken): Promise<ConnectorImportResult> {
     const client = this.createClient(token);
-    const allRecords: Record<string, unknown>[] = [];
+    const allRecords: Record<string, any>[] = [];
     let after: string | undefined;
 
     do {
@@ -166,7 +166,7 @@ export class HubSpotConnector implements IConnector {
 
   async fetchCompanies(token: ConnectorToken): Promise<ConnectorImportResult> {
     const client = this.createClient(token);
-    const allRecords: Record<string, unknown>[] = [];
+    const allRecords: Record<string, any>[] = [];
     let after: string | undefined;
 
     do {

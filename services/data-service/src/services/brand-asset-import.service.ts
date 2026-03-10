@@ -18,7 +18,7 @@ interface BrandKit {
   colors: BrandColor[];
   fonts: BrandFont[];
   logos: BrandLogo[];
-  guidelines: Record<string, unknown>;
+  guidelines: Record<string, any>;
   source: string;
   lastSyncedAt: string;
   createdAt: string;
@@ -82,7 +82,7 @@ export class BrandAssetImportService {
 
     const fileData = await fileResponse.json() as {
       name: string;
-      document: { children: Array<Record<string, unknown>> };
+      document: { children: Array<Record<string, any>> };
       styles: Record<string, { name: string; styleType: string; description: string }>;
     };
 
@@ -283,7 +283,7 @@ export class BrandAssetImportService {
 
     if (!record) return null;
 
-    const metadata = (record.metadata as Record<string, unknown>) ?? {};
+    const metadata = (record.metadata as Record<string, any>) ?? {};
     return {
       id: record.id,
       tenantId,
@@ -291,7 +291,7 @@ export class BrandAssetImportService {
       colors: (metadata.colors as BrandColor[]) ?? [],
       fonts: (metadata.fonts as BrandFont[]) ?? [],
       logos: (metadata.logos as BrandLogo[]) ?? [],
-      guidelines: (metadata.guidelines as Record<string, unknown>) ?? {},
+      guidelines: (metadata.guidelines as Record<string, any>) ?? {},
       source: (metadata.source as string) || 'unknown',
       lastSyncedAt: (metadata.lastSyncedAt as string) || record.updatedAt?.toISOString() || '',
       createdAt: record.createdAt.toISOString(),
@@ -432,7 +432,7 @@ export class BrandAssetImportService {
   }
 
   private extractFigmaStyles(
-    nodes: Array<Record<string, unknown>>,
+    nodes: Array<Record<string, any>>,
     colors: BrandColor[],
     fonts: BrandFont[],
     imageNodeIds: string[],
@@ -476,7 +476,7 @@ export class BrandAssetImportService {
         if (nodeId) imageNodeIds.push(nodeId);
       }
 
-      const children = node.children as Array<Record<string, unknown>> | undefined;
+      const children = node.children as Array<Record<string, any>> | undefined;
       if (children) {
         this.extractFigmaStyles(children, colors, fonts, imageNodeIds);
       }

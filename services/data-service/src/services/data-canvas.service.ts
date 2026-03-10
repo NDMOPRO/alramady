@@ -47,7 +47,7 @@ export class DataCanvasService {
     const validated = CanvasPipelineSchema.parse(input);
     const payloadId = randomUUID();
 
-    const payload = await prisma.bridgePayload.create({
+    const payload = await (prisma as any).bridgePayload.create({
       data: {
         id: payloadId,
         tenantId: validated.tenantId,
@@ -80,7 +80,7 @@ export class DataCanvasService {
     pipelineId: string;
     status: string;
   }> {
-    const pipeline = await prisma.bridgePayload.findFirst({
+    const pipeline = await (prisma as any).bridgePayload.findFirst({
       where: { id: pipelineId, tenantId, dataType: 'canvas-pipeline' },
     });
     if (!pipeline) throw new Error('Pipeline not found');
@@ -93,7 +93,7 @@ export class DataCanvasService {
       definition: pipeline.payload,
     });
 
-    await prisma.bridgePayload.update({
+    await (prisma as any).bridgePayload.update({
       where: { id: pipelineId },
       data: { status: 'PROCESSING' },
     });
@@ -102,7 +102,7 @@ export class DataCanvasService {
   }
 
   async listPipelines(tenantId: string): Promise<unknown[]> {
-    return prisma.bridgePayload.findMany({
+    return (prisma as any).bridgePayload.findMany({
       where: { tenantId, dataType: 'canvas-pipeline' },
       orderBy: { createdAt: 'desc' },
       select: {
@@ -116,7 +116,7 @@ export class DataCanvasService {
   }
 
   async getPipeline(pipelineId: string, tenantId: string): Promise<unknown> {
-    const pipeline = await prisma.bridgePayload.findFirst({
+    const pipeline = await (prisma as any).bridgePayload.findFirst({
       where: { id: pipelineId, tenantId, dataType: 'canvas-pipeline' },
     });
     if (!pipeline) throw new Error('Pipeline not found');
@@ -124,11 +124,11 @@ export class DataCanvasService {
   }
 
   async deletePipeline(pipelineId: string, tenantId: string): Promise<void> {
-    const pipeline = await prisma.bridgePayload.findFirst({
+    const pipeline = await (prisma as any).bridgePayload.findFirst({
       where: { id: pipelineId, tenantId, dataType: 'canvas-pipeline' },
     });
     if (!pipeline) throw new Error('Pipeline not found');
 
-    await prisma.bridgePayload.delete({ where: { id: pipelineId } });
+    await (prisma as any).bridgePayload.delete({ where: { id: pipelineId } });
   }
 }

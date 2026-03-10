@@ -65,7 +65,7 @@ export class ReportExternalSimulationService {
         ...data,
         status: 'pending',
         createdBy: data.userId || data.createdBy,
-      },
+      } as any,
     });
     logger.info('Report external simulation created', { id: record.id });
     await cacheDel(`${CACHE_PREFIX}:list:*`);
@@ -219,9 +219,9 @@ export class ReportExternalSimulationService {
         report = null;
       }
       if (report) {
-        existingReportData.title = report.title;
-        existingReportData.sectionsCount = report.sections?.length ?? 0;
-        existingReportData.sectionNames = report.sections?.map((s: { title: string }) => s.title) ?? [];
+        existingReportData.title = (report as any).title;
+        existingReportData.sectionsCount = (report as any).sections?.length ?? 0;
+        existingReportData.sectionNames = (report as any).sections?.map((s: { title: string }) => s.title) ?? [];
       }
     }
 

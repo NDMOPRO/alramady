@@ -68,7 +68,7 @@ export class TeamsConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Teams token exchange failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: data.refresh_token as string,
@@ -94,7 +94,7 @@ export class TeamsConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Teams token refresh failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: (data.refresh_token as string) ?? refreshToken,
@@ -150,7 +150,7 @@ export class TeamsConnector implements IConnector {
     const client = this.createGraphClient(token);
     const response = await client.api('/me/joinedTeams').get();
 
-    return (response.value ?? []).map((team: Record<string, unknown>) => ({
+    return (response.value ?? []).map((team: Record<string, any>) => ({
       id: String(team.id),
       displayName: String(team.displayName ?? ''),
       description: String(team.description ?? ''),
@@ -164,7 +164,7 @@ export class TeamsConnector implements IConnector {
     const client = this.createGraphClient(token);
     const response = await client.api(`/teams/${teamId}/channels`).get();
 
-    return (response.value ?? []).map((ch: Record<string, unknown>) => ({
+    return (response.value ?? []).map((ch: Record<string, any>) => ({
       id: String(ch.id),
       displayName: String(ch.displayName ?? ''),
     }));
@@ -181,11 +181,11 @@ export class TeamsConnector implements IConnector {
       .top(50)
       .get();
 
-    const messages: Record<string, unknown>[] = (response.value ?? []).map(
-      (msg: Record<string, unknown>) => ({
+    const messages: Record<string, any>[] = (response.value ?? []).map(
+      (msg: Record<string, any>) => ({
         id: msg.id,
         createdDateTime: msg.createdDateTime,
-        from: (msg.from as Record<string, Record<string, unknown>>)?.user?.displayName ?? 'Unknown',
+        from: (msg.from as Record<string, Record<string, any>>)?.user?.displayName ?? 'Unknown',
         body: ((msg.body as Record<string, string>)?.content ?? '').replace(/<[^>]*>/g, ''),
         importance: msg.importance ?? 'normal',
         messageType: msg.messageType ?? 'message',

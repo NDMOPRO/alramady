@@ -210,7 +210,7 @@ export class ImportController {
 
       const isSupported = supportedFormats.includes(ext);
 
-      const preview: Record<string, unknown> = {
+      const preview: Record<string, any> = {
         filename: file.originalname,
         size: file.size,
         sizeFormatted: file.size >= 1e6 ? `${(file.size / 1e6).toFixed(1)} MB` : `${(file.size / 1e3).toFixed(1)} KB`,

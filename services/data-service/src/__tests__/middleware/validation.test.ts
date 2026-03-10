@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { validate, uuidParamSchema, capacityCreateSchema, classificationCreateSchema } from '../../middleware/validation';
 
-function createMockReqRes(data: Record<string, unknown> = {}, source: 'body' | 'params' = 'body') {
+function createMockReqRes(data: Record<string, any> = {}, source: 'body' | 'params' = 'body') {
   const req: Partial<Request> = { body: {}, query: {}, params: {} as any };
   (req as any)[source] = data;
   const res: Partial<Response> = {

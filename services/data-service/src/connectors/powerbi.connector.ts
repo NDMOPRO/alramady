@@ -70,7 +70,7 @@ export class PowerBIConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Power BI token exchange failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: data.refresh_token as string,
@@ -100,7 +100,7 @@ export class PowerBIConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Power BI token refresh failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: (data.refresh_token as string) ?? refreshToken,
@@ -159,8 +159,8 @@ export class PowerBIConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Power BI datasets list failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
-    return ((data.value ?? []) as Array<Record<string, unknown>>).map((ds) => ({
+    const data = await res.json() as Record<string, any>;
+    return ((data.value ?? []) as Array<Record<string, any>>).map((ds) => ({
       id: String(ds.id),
       name: String(ds.name),
       addRowsAPIEnabled: Boolean(ds.addRowsAPIEnabled),
@@ -184,8 +184,8 @@ export class PowerBIConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Power BI dataset fetch failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
-    const rows = (data.value ?? []) as Array<Record<string, unknown>>;
+    const data = await res.json() as Record<string, any>;
+    const rows = (data.value ?? []) as Array<Record<string, any>>;
     const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
 
     return {

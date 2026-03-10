@@ -82,7 +82,7 @@ export class CalendlyConnector implements IConnector {
     token: ConnectorToken,
     userUri: string
   ): Promise<ConnectorImportResult> {
-    const allEvents: Record<string, unknown>[] = [];
+    const allEvents: Record<string, any>[] = [];
     let pageToken: string | undefined;
 
     do {
@@ -99,8 +99,8 @@ export class CalendlyConnector implements IConnector {
 
       if (!res.ok) throw new Error(`Calendly events fetch failed: ${res.status}`);
 
-      const data = await res.json() as Record<string, unknown>;
-      const events = (data.collection ?? []) as Array<Record<string, unknown>>;
+      const data = await res.json() as Record<string, any>;
+      const events = (data.collection ?? []) as Array<Record<string, any>>;
 
       for (const event of events) {
         allEvents.push({
@@ -136,7 +136,7 @@ export class CalendlyConnector implements IConnector {
     eventUri: string
   ): Promise<ConnectorImportResult> {
     const eventUuid = eventUri.split('/').pop() ?? '';
-    const allInvitees: Record<string, unknown>[] = [];
+    const allInvitees: Record<string, any>[] = [];
     let pageToken: string | undefined;
 
     do {
@@ -150,8 +150,8 @@ export class CalendlyConnector implements IConnector {
 
       if (!res.ok) throw new Error(`Calendly invitees fetch failed: ${res.status}`);
 
-      const data = await res.json() as Record<string, unknown>;
-      const invitees = (data.collection ?? []) as Array<Record<string, unknown>>;
+      const data = await res.json() as Record<string, any>;
+      const invitees = (data.collection ?? []) as Array<Record<string, any>>;
 
       for (const invitee of invitees) {
         allInvitees.push({
@@ -185,7 +185,7 @@ export class CalendlyConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Calendly user fetch failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return String((data.resource as Record<string, string>)?.uri ?? '');
   }
 }

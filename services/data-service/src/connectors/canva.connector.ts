@@ -118,8 +118,8 @@ export class CanvaConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Canva designs list failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
-    return ((data.items ?? []) as Array<Record<string, unknown>>).map((d) => ({
+    const data = await res.json() as Record<string, any>;
+    return ((data.items ?? []) as Array<Record<string, any>>).map((d) => ({
       id: String(d.id),
       title: String(d.title ?? 'Untitled'),
       thumbnailUrl: String((d.thumbnail as Record<string, string>)?.url ?? ''),
@@ -132,13 +132,13 @@ export class CanvaConnector implements IConnector {
   private async getDesign(
     token: ConnectorToken,
     designId: string
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, any>> {
     const res = await fetch(`${this.baseUrl}/designs/${designId}`, {
       headers: { Authorization: `Bearer ${token.accessToken}` },
     });
 
     if (!res.ok) throw new Error(`Canva design fetch failed: ${res.status}`);
 
-    return (await res.json()) as Record<string, unknown>;
+    return (await res.json()) as Record<string, any>;
   }
 }

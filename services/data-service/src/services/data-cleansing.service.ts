@@ -49,7 +49,7 @@ export default class DataCleansingService {
     let duplicateGroups = 0;
 
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       const keyParts = columns.map((col) => {
         const val = data[col];
         if (val === null || val === undefined) return '__NULL__';
@@ -151,7 +151,7 @@ export default class DataCleansingService {
     }
 
     const values = allRows
-      .map((r) => (r.data as Record<string, unknown>)[column])
+      .map((r) => (r.data as Record<string, any>)[column])
       .filter((v) => v !== null && v !== undefined && v !== '');
 
     let fillValue: unknown = null;
@@ -204,7 +204,7 @@ export default class DataCleansingService {
     }
 
     for (let i = 0; i < allRows.length; i++) {
-      const data = allRows[i].data as Record<string, unknown>;
+      const data = allRows[i].data as Record<string, any>;
       const val = data[column];
       const isMissing = val === null || val === undefined || val === '';
 
@@ -221,7 +221,7 @@ export default class DataCleansingService {
       if (strategy === 'forward') {
         currentFill = null;
         for (let j = i - 1; j >= 0; j--) {
-          const prevVal = (allRows[j].data as Record<string, unknown>)[column];
+          const prevVal = (allRows[j].data as Record<string, any>)[column];
           if (prevVal !== null && prevVal !== undefined && prevVal !== '') {
             currentFill = prevVal;
             break;
@@ -229,7 +229,7 @@ export default class DataCleansingService {
         }
         if (currentFill === null) {
           for (let j = i + 1; j < allRows.length; j++) {
-            const nextVal = (allRows[j].data as Record<string, unknown>)[column];
+            const nextVal = (allRows[j].data as Record<string, any>)[column];
             if (nextVal !== null && nextVal !== undefined && nextVal !== '') {
               currentFill = nextVal;
               break;
@@ -239,7 +239,7 @@ export default class DataCleansingService {
       } else if (strategy === 'backward') {
         currentFill = null;
         for (let j = i + 1; j < allRows.length; j++) {
-          const nextVal = (allRows[j].data as Record<string, unknown>)[column];
+          const nextVal = (allRows[j].data as Record<string, any>)[column];
           if (nextVal !== null && nextVal !== undefined && nextVal !== '') {
             currentFill = nextVal;
             break;
@@ -247,7 +247,7 @@ export default class DataCleansingService {
         }
         if (currentFill === null) {
           for (let j = i - 1; j >= 0; j--) {
-            const prevVal = (allRows[j].data as Record<string, unknown>)[column];
+            const prevVal = (allRows[j].data as Record<string, any>)[column];
             if (prevVal !== null && prevVal !== undefined && prevVal !== '') {
               currentFill = prevVal;
               break;
@@ -327,8 +327,8 @@ export default class DataCleansingService {
     const numericEntries = allRows
       .map((r) => ({
         id: r.id,
-        value: Number((r.data as Record<string, unknown>)[column]),
-        data: r.data as Record<string, unknown>,
+        value: Number((r.data as Record<string, any>)[column]),
+        data: r.data as Record<string, any>,
       }))
       .filter((e) => !isNaN(e.value));
 
@@ -441,7 +441,7 @@ export default class DataCleansingService {
       let modifiedCount = 0;
 
       for (const row of allRows) {
-        const data = row.data as Record<string, unknown>;
+        const data = row.data as Record<string, any>;
         const val = data[rule.column];
 
         if (val === null || val === undefined || val === '') continue;
@@ -624,7 +624,7 @@ export default class DataCleansingService {
     const entries = allRows
       .map((r) => ({
         rowIndex: r.rowIndex,
-        value: Number((r.data as Record<string, unknown>)[column]),
+        value: Number((r.data as Record<string, any>)[column]),
       }))
       .filter((e) => !isNaN(e.value));
 
@@ -751,7 +751,7 @@ export default class DataCleansingService {
     let totalCellsCleaned = 0;
 
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       let rowChanged = false;
 
       for (const col of stringCols) {
@@ -849,7 +849,7 @@ export default class DataCleansingService {
       let invalidCount = 0;
 
       for (const row of allRows) {
-        const data = row.data as Record<string, unknown>;
+        const data = row.data as Record<string, any>;
         const val = data[col.name];
 
         if (val === null || val === undefined || val === '') {

@@ -51,7 +51,7 @@ export class ImportService {
     }
   }
 
-  private async insertRows(datasetId: string, data: Record<string, unknown>[]): Promise<void> {
+  private async insertRows(datasetId: string, data: Record<string, any>[]): Promise<void> {
     const CHUNK = 500;
     for (let i = 0; i < data.length; i += CHUNK) {
       const chunk = data.slice(i, i + CHUNK);
@@ -66,7 +66,7 @@ export class ImportService {
     }
   }
 
-  private async insertIngestionJob(datasetId: string, filename: string, format: string, rowCount: number, extra?: Record<string, unknown>): Promise<void> {
+  private async insertIngestionJob(datasetId: string, filename: string, format: string, rowCount: number, extra?: Record<string, any>): Promise<void> {
     try {
       await prisma.$executeRawUnsafe(
         `INSERT INTO ingestion_jobs (id, dataset_id, status, source_type, config, progress, row_count)
@@ -114,9 +114,9 @@ export class ImportService {
 
     const columns: ColumnDef[] = (parsed.meta.fields || []).map((name, index) => ({
       name,
-      dataType: this.inferColumnType(parsed.data.slice(0, 100) as Record<string, unknown>[], name),
+      dataType: this.inferColumnType(parsed.data.slice(0, 100) as Record<string, any>[], name),
       position: index,
-      nullable: (parsed.data as Record<string, unknown>[]).some(row => row[name] === null || row[name] === '' || row[name] === undefined),
+      nullable: (parsed.data as Record<string, any>[]).some(row => row[name] === null || row[name] === '' || row[name] === undefined),
     }));
 
     const checksum = createHash('sha256').update(file).digest('hex');
@@ -124,7 +124,7 @@ export class ImportService {
 
     const ds = await this.insertDataset(tenantId, baseName, 'CSV', file.length, parsed.data.length, columns.length, columns, userId);
     await this.insertColumns(ds.id, columns);
-    await this.insertRows(ds.id, parsed.data as Record<string, unknown>[]);
+    await this.insertRows(ds.id, parsed.data as Record<string, any>[]);
     await this.insertIngestionJob(ds.id, filename, 'CSV', parsed.data.length, { encoding });
     await this.indexElastic(ds.id, ds.name, 'CSV', columns.map(c => c.name), parsed.data.length, tenantId);
 
@@ -139,14 +139,14 @@ export class ImportService {
 
   async importExcel(file: Buffer, filename: string, tenantId: string, userId: string) {
     const workbook = XLSX.read(file, { type: 'buffer', cellDates: true, cellStyles: true });
-    const allData: Record<string, unknown>[] = [];
+    const allData: Record<string, any>[] = [];
     const allColumns: ColumnDef[] = [];
 
     const sheetName = workbook.SheetNames[0];
     if (!sheetName) throw new Error('Excel file has no sheets');
 
     const sheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: null }) as Record<string, unknown>[];
+    const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: null }) as Record<string, any>[];
 
     if (jsonData.length > 0) {
       const headers = Object.keys(jsonData[0]);
@@ -178,7 +178,7 @@ export class ImportService {
 
   async importJSON(file: Buffer, filename: string, tenantId: string, userId: string) {
     const content = file.toString('utf-8');
-    let data: Record<string, unknown>[];
+    let data: Record<string, any>[];
 
     if (content.trim().startsWith('[')) {
       data = JSON.parse(content);
@@ -227,13 +227,13 @@ export class ImportService {
 
     const data = rawData.map((item: unknown) => this.flattenObject(item));
     const allKeys = new Set<string>();
-    data.forEach((row: Record<string, unknown>) => Object.keys(row).forEach(k => allKeys.add(k)));
+    data.forEach((row: Record<string, any>) => Object.keys(row).forEach(k => allKeys.add(k)));
 
     const columns: ColumnDef[] = Array.from(allKeys).map((name, index) => ({
       name,
       dataType: this.inferColumnType(data.slice(0, 100), name),
       position: index,
-      nullable: data.some((row: Record<string, unknown>) => row[name] === null || row[name] === undefined),
+      nullable: data.some((row: Record<string, any>) => row[name] === null || row[name] === undefined),
     }));
 
     const baseName = filename.replace(/\.[^.]+$/, '');
@@ -254,7 +254,7 @@ export class ImportService {
     const lines = text.split('\n').filter(l => l.trim().length > 0);
 
     const tableLines = lines.filter(l => l.includes('\t') || l.split(/\s{2,}/).length > 2);
-    let data: Record<string, unknown>[] = [];
+    let data: Record<string, any>[] = [];
     let columns: ColumnDef[] = [];
 
     if (tableLines.length > 1) {
@@ -264,7 +264,7 @@ export class ImportService {
 
       for (let i = 1; i < tableLines.length; i++) {
         const values = tableLines[i].split(separator).map(v => v.trim());
-        const row: Record<string, unknown> = {};
+        const row: Record<string, any> = {};
         headers.forEach((h, idx) => { row[h] = values[idx] || null; });
         data.push(row);
       }
@@ -317,7 +317,7 @@ export class ImportService {
 
     const ds = await this.insertDataset(tenantId, baseName, 'TXT', file.length, data.length, columns.length, { columns, encoding, checksum }, userId);
     await this.insertColumns(ds.id, columns);
-    await this.insertRows(ds.id, data as unknown as Record<string, unknown>[]);
+    await this.insertRows(ds.id, data as unknown as Record<string, any>[]);
     await this.insertIngestionJob(ds.id, filename, 'TXT', data.length, { encoding });
     await this.indexElastic(ds.id, ds.name, 'TXT', columns.map(c => c.name), data.length, tenantId);
 
@@ -355,7 +355,7 @@ export class ImportService {
 
     const ds = await this.insertDataset(tenantId, baseName, 'DOCX', file.length, data.length, columns.length, { columns, checksum, totalWords: rawText.split(/\s+/).length }, userId);
     await this.insertColumns(ds.id, columns);
-    await this.insertRows(ds.id, data as unknown as Record<string, unknown>[]);
+    await this.insertRows(ds.id, data as unknown as Record<string, any>[]);
     await this.insertIngestionJob(ds.id, filename, 'DOCX', data.length);
     await this.indexElastic(ds.id, ds.name, 'DOCX', columns.map(c => c.name), data.length, tenantId);
 
@@ -433,7 +433,7 @@ export class ImportService {
 
     const ds = await this.insertDataset(tenantId, baseName, 'PPTX', file.length, data.length, columns.length, { columns, checksum, totalSlides: slides.length }, userId);
     await this.insertColumns(ds.id, columns);
-    await this.insertRows(ds.id, data as unknown as Record<string, unknown>[]);
+    await this.insertRows(ds.id, data as unknown as Record<string, any>[]);
     await this.insertIngestionJob(ds.id, filename, 'PPTX', data.length);
     await this.indexElastic(ds.id, ds.name, 'PPTX', columns.map(c => c.name), data.length, tenantId);
 
@@ -465,13 +465,13 @@ export class ImportService {
       throw new Error(`Archive "${filename}" contains no processable files`);
     }
 
-    const results: Array<Record<string, unknown>> = [];
+    const results: Array<Record<string, any>> = [];
     const errors: Array<{ filename: string; error: string }> = [];
 
     for (const ef of extractedFiles) {
       try {
         const ext = ef.filename.split('.').pop()?.toLowerCase() || '';
-        let result: Record<string, unknown>;
+        let result: Record<string, any>;
         switch (ext) {
           case 'csv': case 'tsv': result = await this.importCSV(ef.buffer, ef.filename, tenantId, userId); break;
           case 'xlsx': case 'xls': result = await this.importExcel(ef.buffer, ef.filename, tenantId, userId); break;
@@ -553,7 +553,7 @@ export class ImportService {
     const ds = await this.insertDataset(tenantId, baseName, 'IMAGE_OCR', file.length, data.length, columns.length,
       { columns, checksum, ocrConfidence: confidence, ocrLanguages: languages }, userId);
     await this.insertColumns(ds.id, columns);
-    await this.insertRows(ds.id, data as unknown as Record<string, unknown>[]);
+    await this.insertRows(ds.id, data as unknown as Record<string, any>[]);
     await this.insertIngestionJob(ds.id, filename, 'IMAGE_OCR', data.length, { ocrConfidence: confidence });
     await this.indexElastic(ds.id, ds.name, 'IMAGE_OCR', columns.map(c => c.name), data.length, tenantId);
 
@@ -562,7 +562,7 @@ export class ImportService {
 
   // ── Utility methods ─────────────────────────────────────────────────
 
-  private inferColumnType(data: Record<string, unknown>[], columnName: string): string {
+  private inferColumnType(data: Record<string, any>[], columnName: string): string {
     const sample = data.slice(0, 100).map(r => r[columnName]).filter(v => v !== null && v !== undefined && v !== '');
     if (sample.length === 0) return 'string';
 
@@ -583,12 +583,12 @@ export class ImportService {
     return avgLength > 200 ? 'text' : 'string';
   }
 
-  private computeColumnStats(data: Record<string, unknown>[], columnName: string, dataType: string): Record<string, unknown> {
+  private computeColumnStats(data: Record<string, any>[], columnName: string, dataType: string): Record<string, any> {
     const values = data.map(r => r[columnName]).filter(v => v !== null && v !== undefined);
     const nullCount = data.length - values.length;
     const uniqueCount = new Set(values.map(String)).size;
 
-    const stats: Record<string, unknown> = {
+    const stats: Record<string, any> = {
       totalCount: data.length,
       nullCount,
       uniqueCount,
@@ -623,9 +623,9 @@ export class ImportService {
     return stats;
   }
 
-  private flattenObject(obj: unknown, prefix: string = ''): Record<string, unknown> {
-    const result: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+  private flattenObject(obj: unknown, prefix: string = ''): Record<string, any> {
+    const result: Record<string, any> = {};
+    for (const [key, value] of Object.entries(obj as Record<string, any>)) {
       const newKey = prefix ? `${prefix}.${key}` : key;
       if (value && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
         Object.assign(result, this.flattenObject(value, newKey));

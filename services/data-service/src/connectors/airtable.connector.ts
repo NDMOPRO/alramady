@@ -90,7 +90,7 @@ export class AirtableConnector implements IConnector {
     const airtable = new Airtable({ apiKey });
     const base = airtable.base(baseId);
 
-    const allRecords: Record<string, unknown>[] = [];
+    const allRecords: Record<string, any>[] = [];
     const columnsSet = new Set<string>();
 
     await new Promise<void>((resolve, reject) => {
@@ -99,7 +99,7 @@ export class AirtableConnector implements IConnector {
         .eachPage(
           (records, fetchNextPage) => {
             for (const record of records) {
-              const row: Record<string, unknown> = { _id: record.id };
+              const row: Record<string, any> = { _id: record.id };
               for (const [key, value] of Object.entries(record.fields)) {
                 columnsSet.add(key);
                 row[key] = value;
@@ -145,11 +145,11 @@ export class AirtableConnector implements IConnector {
       throw new Error(`Airtable schema fetch failed: ${res.status}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
-    return ((data.tables ?? []) as Array<Record<string, unknown>>).map((t: Record<string, unknown>) => ({
+    const data = await res.json() as Record<string, any>;
+    return ((data.tables ?? []) as Array<Record<string, any>>).map((t: Record<string, any>) => ({
       id: t.id as string,
       name: t.name as string,
-      fields: ((t.fields as Array<Record<string, unknown>>) ?? []).map((f) => ({
+      fields: ((t.fields as Array<Record<string, any>>) ?? []).map((f) => ({
         name: f.name as string,
         type: f.type as string,
       })),

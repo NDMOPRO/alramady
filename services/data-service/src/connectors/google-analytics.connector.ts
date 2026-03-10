@@ -22,7 +22,7 @@ interface AnalyticsReport {
   dimensions: string[];
   metrics: string[];
   dateRange: { startDate: string; endDate: string };
-  rows: Record<string, unknown>[];
+  rows: Record<string, any>[];
   rowCount: number;
   metadata: {
     propertyName: string;
@@ -196,9 +196,9 @@ export class GoogleAnalyticsConnector implements IConnector {
     const metricHeaders =
       res.data.metricHeaders?.map((h: analyticsdata_v1beta.Schema$MetricHeader) => h.name!) ?? [];
 
-    const rows: Record<string, unknown>[] = (res.data.rows ?? []).map(
+    const rows: Record<string, any>[] = (res.data.rows ?? []).map(
       (row: analyticsdata_v1beta.Schema$Row) => {
-        const record: Record<string, unknown> = {};
+        const record: Record<string, any> = {};
         row.dimensionValues?.forEach((val: analyticsdata_v1beta.Schema$DimensionValue, i: number) => {
           record[dimensionHeaders[i]] = val.value;
         });
@@ -242,7 +242,7 @@ export class GoogleAnalyticsConnector implements IConnector {
   async getRealtimeReport(
     token: ConnectorToken,
     propertyId: string
-  ): Promise<Record<string, unknown>[]> {
+  ): Promise<Record<string, any>[]> {
     this.oauth2Client.setCredentials({ access_token: token.accessToken });
     const analytics = google.analyticsdata({
       version: 'v1beta',

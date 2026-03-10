@@ -65,7 +65,7 @@ export class OutlookConnector implements IConnector {
       throw new Error(`Microsoft token exchange failed: ${res.status}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: data.refresh_token as string,
@@ -93,7 +93,7 @@ export class OutlookConnector implements IConnector {
       throw new Error(`Microsoft token refresh failed: ${res.status}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: (data.refresh_token as string) ?? refreshToken,
@@ -164,8 +164,8 @@ export class OutlookConnector implements IConnector {
       .orderby('receivedDateTime DESC')
       .get();
 
-    const emails: Record<string, unknown>[] = (response.value ?? []).map(
-      (msg: Record<string, unknown>) => ({
+    const emails: Record<string, any>[] = (response.value ?? []).map(
+      (msg: Record<string, any>) => ({
         subject: msg.subject,
         from: (msg.from as Record<string, Record<string, string>>)?.emailAddress?.address ?? '',
         fromName: (msg.from as Record<string, Record<string, string>>)?.emailAddress?.name ?? '',
@@ -202,8 +202,8 @@ export class OutlookConnector implements IConnector {
       .top(200)
       .get();
 
-    const events: Record<string, unknown>[] = (response.value ?? []).map(
-      (evt: Record<string, unknown>) => ({
+    const events: Record<string, any>[] = (response.value ?? []).map(
+      (evt: Record<string, any>) => ({
         subject: evt.subject,
         startDateTime: (evt.start as Record<string, string>)?.dateTime ?? '',
         endDateTime: (evt.end as Record<string, string>)?.dateTime ?? '',
@@ -233,8 +233,8 @@ export class OutlookConnector implements IConnector {
       .top(500)
       .get();
 
-    const contacts: Record<string, unknown>[] = (response.value ?? []).map(
-      (c: Record<string, unknown>) => ({
+    const contacts: Record<string, any>[] = (response.value ?? []).map(
+      (c: Record<string, any>) => ({
         displayName: c.displayName,
         email: ((c.emailAddresses as Array<Record<string, string>>) ?? [])[0]?.address ?? '',
         phone: ((c.businessPhones as string[]) ?? [])[0] ?? '',

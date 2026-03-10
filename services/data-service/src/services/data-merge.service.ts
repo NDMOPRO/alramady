@@ -25,7 +25,7 @@ export class DataMergeService {
       where: { datasetId: sourceDatasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const sourceData = sourceRows.map(r => r.data as Record<string, unknown>);
+    const sourceData = sourceRows.map(r => r.data as Record<string, any>);
 
     const lookupDataset = await this.prisma.dataset.findUniqueOrThrow({
       where: { id: lookupDatasetId },
@@ -35,7 +35,7 @@ export class DataMergeService {
       where: { datasetId: lookupDatasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const lookupData = lookupRows.map(r => r.data as Record<string, unknown>);
+    const lookupData = lookupRows.map(r => r.data as Record<string, any>);
 
     const lookupMap = new Map<string, unknown>();
     for (const row of lookupData) {
@@ -48,7 +48,7 @@ export class DataMergeService {
     let matchCount = 0;
     let missCount = 0;
     const resultColumnName = `vlookup_${returnCol}`;
-    const updatedRows: Record<string, unknown>[] = [];
+    const updatedRows: Record<string, any>[] = [];
 
     for (const row of sourceData) {
       const newRow = { ...row };
@@ -136,13 +136,13 @@ export class DataMergeService {
       where: { datasetId: sourceId },
       orderBy: { rowIndex: 'asc' },
     });
-    const sourceData = sourceRows.map(r => r.data as Record<string, unknown>);
+    const sourceData = sourceRows.map(r => r.data as Record<string, any>);
 
     const targetRows = await this.prisma.dataRow.findMany({
       where: { datasetId: targetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const targetData = targetRows.map(r => r.data as Record<string, unknown>);
+    const targetData = targetRows.map(r => r.data as Record<string, any>);
 
     const levenshtein = (a: string, b: string): number => {
       const aLen = a.length;
@@ -181,8 +181,8 @@ export class DataMergeService {
     const matches: Array<{
       sourceIndex: number;
       targetIndex: number;
-      sourceRow: Record<string, unknown>;
-      targetRow: Record<string, unknown>;
+      sourceRow: Record<string, any>;
+      targetRow: Record<string, any>;
       scores: Record<string, number>;
       avgScore: number;
     }> = [];
@@ -224,7 +224,7 @@ export class DataMergeService {
 
     matches.sort((a, b) => b.avgScore - a.avgScore);
 
-    const matchRows: Record<string, unknown>[] = matches.map((m, idx) => ({
+    const matchRows: Record<string, any>[] = matches.map((m, idx) => ({
       match_index: idx,
       source_row_index: m.sourceIndex,
       target_row_index: m.targetIndex,
@@ -325,7 +325,7 @@ export class DataMergeService {
 
     logger.info('Starting dataset concatenation', { datasetIds, axis });
 
-    const allDatasets: { dataset: Record<string, unknown>; rows: Record<string, unknown>[]; columns: Array<{ name: string; dataType: string; position: number }> }[] = [];
+    const allDatasets: { dataset: Record<string, any>; rows: Record<string, any>[]; columns: Array<{ name: string; dataType: string; position: number }> }[] = [];
     for (const dsId of datasetIds) {
       const dataset = await this.prisma.dataset.findUniqueOrThrow({
         where: { id: dsId },
@@ -336,13 +336,13 @@ export class DataMergeService {
         orderBy: { rowIndex: 'asc' },
       });
       allDatasets.push({
-        dataset: dataset as unknown as Record<string, unknown>,
-        rows: dataRows.map(r => r.data as Record<string, unknown>),
+        dataset: dataset as unknown as Record<string, any>,
+        rows: dataRows.map(r => r.data as Record<string, any>),
         columns: dataset.columns.map(c => ({ name: c.name, dataType: c.dataType, position: c.position })),
       });
     }
 
-    let resultRows: Record<string, unknown>[] = [];
+    let resultRows: Record<string, any>[] = [];
     let resultColumnNames: string[] = [];
 
     if (axis === 'vertical') {
@@ -354,7 +354,7 @@ export class DataMergeService {
 
       for (const ds of allDatasets) {
         for (const row of ds.rows) {
-          const normalizedRow: Record<string, unknown> = {};
+          const normalizedRow: Record<string, any> = {};
           for (const colName of resultColumnNames) {
             normalizedRow[colName] = row[colName] !== undefined ? row[colName] : null;
           }
@@ -373,7 +373,7 @@ export class DataMergeService {
       }
 
       for (let i = 0; i < maxRowCount; i++) {
-        const combinedRow: Record<string, unknown> = {};
+        const combinedRow: Record<string, any> = {};
         let colIdx = 0;
         for (const ds of allDatasets) {
           const row = ds.rows[i] || {};
@@ -472,8 +472,8 @@ export class DataMergeService {
       orderBy: { rowIndex: 'asc' },
     });
 
-    const rows1 = rows1Raw.map(r => r.data as Record<string, unknown>);
-    const rows2 = rows2Raw.map(r => r.data as Record<string, unknown>);
+    const rows1 = rows1Raw.map(r => r.data as Record<string, any>);
+    const rows2 = rows2Raw.map(r => r.data as Record<string, any>);
 
     const cols1 = new Set(dataset1.columns.map(c => c.name));
     const cols2 = new Set(dataset2.columns.map(c => c.name));
@@ -482,11 +482,11 @@ export class DataMergeService {
     const removedColumns = [...cols1].filter(c => !cols2.has(c));
     const commonColumns = [...cols1].filter(c => cols2.has(c));
 
-    const rowToKey = (row: Record<string, unknown>, cols: string[]): string => {
+    const rowToKey = (row: Record<string, any>, cols: string[]): string => {
       return cols.map(c => JSON.stringify(row[c] ?? null)).join('|||');
     };
 
-    const map1 = new Map<string, { row: Record<string, unknown>; index: number }>();
+    const map1 = new Map<string, { row: Record<string, any>; index: number }>();
     for (let i = 0; i < rows1.length; i++) {
       const key = rowToKey(rows1[i], commonColumns);
       if (!map1.has(key)) {
@@ -494,7 +494,7 @@ export class DataMergeService {
       }
     }
 
-    const map2 = new Map<string, { row: Record<string, unknown>; index: number }>();
+    const map2 = new Map<string, { row: Record<string, any>; index: number }>();
     for (let i = 0; i < rows2.length; i++) {
       const key = rowToKey(rows2[i], commonColumns);
       if (!map2.has(key)) {
@@ -502,8 +502,8 @@ export class DataMergeService {
       }
     }
 
-    const addedRows: Array<{ index: number; row: Record<string, unknown> }> = [];
-    const removedRows: Array<{ index: number; row: Record<string, unknown> }> = [];
+    const addedRows: Array<{ index: number; row: Record<string, any> }> = [];
+    const removedRows: Array<{ index: number; row: Record<string, any> }> = [];
     const changedRows: Array<{
       index1: number;
       index2: number;
@@ -551,7 +551,7 @@ export class DataMergeService {
       ? Math.round((totalChangedFields / totalFields) * 10000) / 100
       : 0;
 
-    const diffRows: Record<string, unknown>[] = [];
+    const diffRows: Record<string, any>[] = [];
     for (const added of addedRows) {
       diffRows.push({ diff_type: 'added', row_index: added.index, ...added.row });
     }
@@ -623,8 +623,8 @@ export class DataMergeService {
       orderBy: { rowIndex: 'asc' },
     });
 
-    const sourceRows = sourceRowsRaw.map(r => r.data as Record<string, unknown>);
-    const targetRows = targetRowsRaw.map(r => r.data as Record<string, unknown>);
+    const sourceRows = sourceRowsRaw.map(r => r.data as Record<string, any>);
+    const targetRows = targetRowsRaw.map(r => r.data as Record<string, any>);
 
     const matchValues = (sourceVal: unknown, targetVal: unknown, matchType: string): boolean => {
       const sStr = String(sourceVal ?? '').trim();
@@ -768,7 +768,7 @@ export class DataMergeService {
           { name: 'status', dataType: 'string', position: 3 },
           { name: 'discrepancy_count', dataType: 'integer', position: 4 },
           { name: 'discrepancies', dataType: 'text', position: 5 },
-        ] as unknown as Record<string, unknown>,
+        ] as unknown as Record<string, any>,
         status: 'active',
         createdBy: sourceDataset.createdBy,
       },
@@ -842,7 +842,7 @@ export class DataMergeService {
     };
   }
 
-  private inferColumnType(data: Record<string, unknown>[], columnName: string): string {
+  private inferColumnType(data: Record<string, any>[], columnName: string): string {
     const sample = data.slice(0, 100).map(r => r[columnName]).filter(v => v !== null && v !== undefined && v !== '');
     if (sample.length === 0) return 'string';
 

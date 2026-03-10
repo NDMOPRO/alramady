@@ -34,7 +34,7 @@ import { PrismaClient } from '@prisma/client';
 describe('FormulaEngineService', () => {
   let service: FormulaEngineService;
 
-  const sampleData: Record<string, unknown>[] = [
+  const sampleData: Record<string, any>[] = [
     { name: 'Alice', age: 30, salary: 50000, active: true },
     { name: 'Bob', age: 25, salary: 60000, active: false },
     { name: 'Charlie', age: 35, salary: 45000, active: true },

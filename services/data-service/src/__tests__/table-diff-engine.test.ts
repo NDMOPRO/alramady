@@ -17,7 +17,7 @@ jest.mock('../utils/logger', () => ({
 // Helper to create snapshot payload
 function makeSnapshot(
   schema: Array<{ name: string; dataType: string; position: number; nullable: boolean }>,
-  rows: Array<{ rowIndex: number; data: Record<string, unknown> }>
+  rows: Array<{ rowIndex: number; data: Record<string, any> }>
 ): string {
   const rowHashes = rows.map((r) =>
     createHash('md5').update(JSON.stringify(r.data)).digest('hex')

@@ -697,14 +697,14 @@ export class ReportDiffService {
       const b = pointsB[i];
 
       if (a === undefined && b !== undefined) {
-        const label = typeof b === 'object' && b !== null ? (b.label ?? b.name ?? `Point ${i}`) : `Point ${i}`;
+        const label = typeof b === 'object' && b !== null ? ((b as any).label ?? (b as any).name ?? `Point ${i}`) : `Point ${i}`;
         changes.push({ field: String(label), oldValue: null, newValue: b, changeType: 'added' });
       } else if (a !== undefined && b === undefined) {
-        const label = typeof a === 'object' && a !== null ? (a.label ?? a.name ?? `Point ${i}`) : `Point ${i}`;
+        const label = typeof a === 'object' && a !== null ? ((a as any).label ?? (a as any).name ?? `Point ${i}`) : `Point ${i}`;
         changes.push({ field: String(label), oldValue: a, newValue: null, changeType: 'removed' });
       } else if (!deepEqual(a, b)) {
         const label =
-          typeof a === 'object' && a !== null ? (a.label ?? a.name ?? `Point ${i}`) : `Point ${i}`;
+          typeof a === 'object' && a !== null ? ((a as any).label ?? (a as any).name ?? `Point ${i}`) : `Point ${i}`;
 
         if (isNumeric(a) && isNumeric(b)) {
           changes.push({
@@ -719,15 +719,15 @@ export class ReportDiffService {
           typeof b === 'object' &&
           a !== null &&
           b !== null &&
-          isNumeric(a.value) &&
-          isNumeric(b.value)
+          isNumeric((a as any).value) &&
+          isNumeric((b as any).value)
         ) {
           changes.push({
             field: String(label),
-            oldValue: a.value,
-            newValue: b.value,
+            oldValue: (a as any).value,
+            newValue: (b as any).value,
             changeType: 'changed',
-            percentageChange: percentChange(b.value, a.value),
+            percentageChange: percentChange((b as any).value, (a as any).value),
           });
         } else {
           changes.push({

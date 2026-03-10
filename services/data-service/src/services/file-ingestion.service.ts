@@ -216,10 +216,10 @@ export default class FileIngestionService {
       throw new Error(`CSV file "${filename}" has no detectable columns`);
     }
 
-    const sampleRows = (parsed.data as Record<string, unknown>[]).slice(0, 200);
+    const sampleRows = (parsed.data as Record<string, any>[]).slice(0, 200);
     const columns: ColumnMeta[] = fields.map((name, index) => {
       const colType = this.inferColumnType(sampleRows.map((r) => r[name]));
-      const hasNulls = (parsed.data as Record<string, unknown>[]).some(
+      const hasNulls = (parsed.data as Record<string, any>[]).some(
         (row) => row[name] === null || row[name] === '' || row[name] === undefined
       );
       return { name, index, dataType: colType, nullable: hasNulls };
@@ -244,14 +244,14 @@ export default class FileIngestionService {
           delimiter: bestDelimiter,
           checksum,
           parseErrors: parsed.errors.length,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
     });
 
     for (const col of columns) {
-      const colValues = (parsed.data as Record<string, unknown>[]).map((r) => r[col.name]);
+      const colValues = (parsed.data as Record<string, any>[]).map((r) => r[col.name]);
       const stats = this.computeColumnStats(colValues, col.dataType);
       await this.prisma.datasetColumn.create({
         data: {
@@ -266,14 +266,14 @@ export default class FileIngestionService {
     }
 
     const CHUNK_SIZE = 1000;
-    const rows = parsed.data as Record<string, unknown>[];
+    const rows = parsed.data as Record<string, any>[];
     for (let offset = 0; offset < rows.length; offset += CHUNK_SIZE) {
       const chunk = rows.slice(offset, offset + CHUNK_SIZE);
       await this.prisma.dataRow.createMany({
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
       logger.debug(`CSV import: stored rows ${offset}-${offset + chunk.length - 1}`, {
@@ -328,7 +328,7 @@ export default class FileIngestionService {
       throw new Error(`Excel file "${filename}" contains no worksheets`);
     }
 
-    const allData: Record<string, unknown>[] = [];
+    const allData: Record<string, any>[] = [];
     const allColumns: ColumnMeta[] = [];
     let globalColIndex = 0;
 
@@ -345,10 +345,10 @@ export default class FileIngestionService {
       throw new Error(`Excel file "${filename}" has no headers in the first row`);
     }
 
-    const sheetData: Record<string, unknown>[] = [];
+    const sheetData: Record<string, any>[] = [];
     primarySheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
       if (rowNumber === 1) return;
-      const rowData: Record<string, unknown> = {};
+      const rowData: Record<string, any> = {};
       headers.forEach((header, idx) => {
         const cell = row.getCell(idx + 1);
         let value: unknown = cell.value;
@@ -400,7 +400,7 @@ export default class FileIngestionService {
           activeSheet: primarySheet.name,
           columns: allColumns,
           checksum,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -428,7 +428,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -472,7 +472,7 @@ export default class FileIngestionService {
     await this.checkQuota(tenantId, 0, file.length);
 
     const content = file.toString('utf-8').trim();
-    let data: Record<string, unknown>[];
+    let data: Record<string, any>[];
 
     if (content.startsWith('[')) {
       const parsed = JSON.parse(content);
@@ -525,7 +525,7 @@ export default class FileIngestionService {
         sizeBytes: BigInt(file.length),
         rowCount: BigInt(data.length),
         columnCount: columns.length,
-        schemaJson: { columns, checksum, isJsonl: content.includes('\n') && !content.startsWith('[') } as Prisma.InputJsonValue,
+        schemaJson: { columns, checksum, isJsonl: content.includes('\n') && !content.startsWith('[') } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -553,7 +553,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -631,7 +631,7 @@ export default class FileIngestionService {
       rawData = [rawData];
     }
 
-    const data: Record<string, unknown>[] = rawData.map((item: unknown) => this.flattenObject(item));
+    const data: Record<string, any>[] = rawData.map((item: unknown) => this.flattenObject(item));
 
     const allKeys = new Set<string>();
     data.forEach((row) => Object.keys(row).forEach((k) => allKeys.add(k)));
@@ -662,7 +662,7 @@ export default class FileIngestionService {
         sizeBytes: BigInt(file.length),
         rowCount: BigInt(data.length),
         columnCount: columns.length,
-        schemaJson: { rootElement: rootKey, columns, checksum } as Prisma.InputJsonValue,
+        schemaJson: { rootElement: rootKey, columns, checksum } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -687,7 +687,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -775,7 +775,7 @@ export default class FileIngestionService {
       (l) => l.includes('\t') || l.split(/\s{2,}/).length > 2
     );
 
-    let data: Record<string, unknown>[] = [];
+    let data: Record<string, any>[] = [];
     let columns: ColumnMeta[] = [];
 
     if (tableLines.length > 1) {
@@ -794,7 +794,7 @@ export default class FileIngestionService {
       } else {
         for (let i = 1; i < tableLines.length; i++) {
           const values = tableLines[i].split(separator).map((v) => v.trim());
-          const row: Record<string, unknown> = {};
+          const row: Record<string, any> = {};
           headers.forEach((h, idx) => {
             row[h] = values[idx] || null;
           });
@@ -841,7 +841,7 @@ export default class FileIngestionService {
           columns,
           checksum,
           isTabular: tableLines.length > 1,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -866,7 +866,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -1214,15 +1214,15 @@ export default class FileIngestionService {
     }
 
     const avgLength =
-      sample.reduce((sum, v) => sum + String(v).length, 0) / sampleSize;
+      sample.reduce((sum: number, v: any) => sum + String(v).length, 0) / sampleSize;
     return avgLength > 200 ? 'text' : 'string';
   }
 
   private flattenObject(
     obj: unknown,
     prefix: string = ''
-  ): Record<string, unknown> {
-    const result: Record<string, unknown> = {};
+  ): Record<string, any> {
+    const result: Record<string, any> = {};
 
     if (obj === null || obj === undefined) {
       return result;
@@ -1248,12 +1248,12 @@ export default class FileIngestionService {
     return result;
   }
 
-  private computeColumnStats(values: unknown[], dataType: string): Record<string, unknown> {
+  private computeColumnStats(values: unknown[], dataType: string): Record<string, any> {
     const nonNull = values.filter((v) => v !== null && v !== undefined && v !== '');
     const nullCount = values.length - nonNull.length;
     const uniqueValues = new Set(nonNull.map(String));
 
-    const stats: Record<string, unknown> = {
+    const stats: Record<string, any> = {
       totalCount: values.length,
       nullCount,
       uniqueCount: uniqueValues.size,
@@ -1361,7 +1361,7 @@ export default class FileIngestionService {
           checksum,
           totalLines: lines.length,
           nonEmptyLines: nonEmptyLines.length,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -1389,7 +1389,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -1488,8 +1488,8 @@ export default class FileIngestionService {
       throw new Error(`Google Sheet "${targetSheet}" has no headers`);
     }
 
-    const data: Record<string, unknown>[] = dataRows.map((row: string[]) => {
-      const obj: Record<string, unknown> = {};
+    const data: Record<string, any>[] = dataRows.map((row: string[]) => {
+      const obj: Record<string, any> = {};
       headers.forEach((header: string, idx: number) => {
         const cellValue = idx < row.length ? row[idx] : null;
         if (cellValue === null || cellValue === undefined || cellValue === '') {
@@ -1538,7 +1538,7 @@ export default class FileIngestionService {
           allSheets: sheetNames,
           columns,
           checksum: contentHash,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -1566,7 +1566,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -1619,7 +1619,7 @@ export default class FileIngestionService {
       tenantId,
     });
 
-    let rows: Record<string, unknown>[];
+    let rows: Record<string, any>[];
     let columnDefs: Array<{ name: string; dataType: string }>;
 
     if (config.type === 'postgresql') {
@@ -1663,7 +1663,7 @@ export default class FileIngestionService {
         const query = config.query || `SELECT * FROM \`${config.table}\``;
         const [resultRows, fields] = await connection.execute(query);
 
-        rows = resultRows as Record<string, unknown>[];
+        rows = resultRows as Record<string, any>[];
         columnDefs = (fields as mysql.FieldPacket[]).map((f) => ({
           name: f.name,
           dataType: this.mapMysqlType(f.type ?? 0),
@@ -1711,7 +1711,7 @@ export default class FileIngestionService {
           table: config.table,
           columns,
           checksum: contentHash,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -1739,7 +1739,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -1859,7 +1859,7 @@ export default class FileIngestionService {
           childDatasets: batchResult.results
             .filter((r) => r.status === 'fulfilled' && r.result)
             .map((r) => ({ id: r.result!.id, name: r.filename, format: r.result!.format })),
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2013,7 +2013,7 @@ export default class FileIngestionService {
           childDatasets: batchResult.results
             .filter((r) => r.status === 'fulfilled' && r.result)
             .map((r) => ({ id: r.result!.id, name: r.filename, format: r.result!.format })),
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2124,7 +2124,7 @@ export default class FileIngestionService {
           totalWords: rawText.split(/\s+/).length,
           totalCharacters: rawText.length,
           hasHtml: htmlContent.length > 0,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2152,7 +2152,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -2274,7 +2274,7 @@ export default class FileIngestionService {
           totalLines: lines.length,
           nonEmptyLines: lines.filter((l) => l.trim().length > 0).length,
           totalCharacters: content.length,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2302,7 +2302,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -2393,7 +2393,7 @@ export default class FileIngestionService {
           reportSource: true,
           originalFormat: ext,
           detectedMime: mimeType,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
       },
     });
 
@@ -2511,7 +2511,7 @@ export default class FileIngestionService {
           checksum,
           totalSlides: slides.length,
           slidesWithNotes: slides.filter((s) => s.notes.length > 0).length,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2536,7 +2536,7 @@ export default class FileIngestionService {
       data: data.map((row, idx) => ({
         datasetId: dataset.id,
         rowIndex: idx,
-        data: row as unknown as Prisma.InputJsonValue,
+        data: row as unknown as unknown as Prisma.InputJsonValue,
       })),
     });
 
@@ -2609,7 +2609,7 @@ export default class FileIngestionService {
       (l) => l.includes('\t') || l.split(/\s{3,}/).length > 2
     );
 
-    let parsedData: Record<string, unknown>[];
+    let parsedData: Record<string, any>[];
     let columns: ColumnMeta[];
 
     if (tableLines.length > 2) {
@@ -2623,7 +2623,7 @@ export default class FileIngestionService {
         parsedData = [];
         for (let i = 1; i < tableLines.length; i++) {
           const values = tableLines[i].split(separator).map((v) => v.trim());
-          const row: Record<string, unknown> = {};
+          const row: Record<string, any> = {};
           headers.forEach((h, idx) => {
             row[h] = values[idx] || null;
           });
@@ -2682,7 +2682,7 @@ export default class FileIngestionService {
           ocrLanguages: languages,
           isTabular: tableLines.length > 2,
           totalWords: (ocrData as unknown as { words?: unknown[] }).words?.length || 0,
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2710,7 +2710,7 @@ export default class FileIngestionService {
         data: chunk.map((row, idx) => ({
           datasetId: dataset.id,
           rowIndex: offset + idx,
-          data: row as unknown as Prisma.InputJsonValue,
+          data: row as unknown as unknown as Prisma.InputJsonValue,
         })),
       });
     }
@@ -2789,7 +2789,7 @@ export default class FileIngestionService {
       { name: 'confidence', index: 2, dataType: 'float', nullable: false },
     ];
 
-    const fieldRows: Record<string, unknown>[] = [
+    const fieldRows: Record<string, any>[] = [
       { field: 'vendor', value: extraction.vendor, confidence },
       { field: 'date', value: extraction.date, confidence },
       { field: 'receipt_number', value: extraction.receiptNumber, confidence },
@@ -2826,7 +2826,7 @@ export default class FileIngestionService {
           ocrLanguages: languages,
           extractedFields: extraction,
           fullText: fullText.substring(0, 5000),
-        } as Prisma.InputJsonValue,
+        } as unknown as Prisma.InputJsonValue,
         status: 'active',
         createdBy: userId,
       },
@@ -2851,7 +2851,7 @@ export default class FileIngestionService {
       data: fieldRows.map((row, idx) => ({
         datasetId: dataset.id,
         rowIndex: idx,
-        data: row as unknown as Prisma.InputJsonValue,
+        data: row as unknown as unknown as Prisma.InputJsonValue,
       })),
     });
 

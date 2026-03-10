@@ -119,7 +119,7 @@ router.post('/:id/replace', async (req: Request, res: Response, next: NextFuncti
 
     let replacedCount = 0;
     for (const row of rows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       if (data[column] !== undefined) {
         const val = String(data[column]);
         const regex = new RegExp(
@@ -166,7 +166,7 @@ router.post('/:id/split-column', async (req: Request, res: Response, next: NextF
 
     let splitCount = 0;
     for (const row of rows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       if (data[column] !== undefined) {
         const parts = String(data[column]).split(delimiter);
         const colNames = newColumns || parts.map((_: string, i: number) => `${column}_${i + 1}`);

@@ -10,7 +10,7 @@ interface PatternResult {
   column: string;
   description: string;
   confidence: number;
-  details: Record<string, unknown>;
+  details: Record<string, any>;
 }
 
 interface AnomalyRecord {
@@ -115,7 +115,7 @@ export class PatternDiscoveryService {
       select: { data: true, rowIndex: true },
     });
 
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
     if (rows.length === 0) {
       logger.warn('Dataset has no rows', { datasetId });
       return [];
@@ -200,7 +200,7 @@ export class PatternDiscoveryService {
     });
 
     const rows = dataRows.map(r => ({
-      data: r.data as Record<string, unknown>,
+      data: r.data as Record<string, any>,
       rowIndex: r.rowIndex,
     }));
 

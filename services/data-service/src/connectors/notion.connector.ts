@@ -100,13 +100,13 @@ export class NotionConnector implements IConnector {
     databaseId: string
   ): Promise<ConnectorImportResult> {
     const notion = this.createClient(token);
-    const allRows: Record<string, unknown>[] = [];
+    const allRows: Record<string, any>[] = [];
     let columns: string[] = [];
     let hasMore = true;
     let startCursor: string | undefined;
 
     while (hasMore) {
-      const response = await (notion.databases as unknown as { query: (args: { database_id: string; start_cursor?: string; page_size?: number }) => Promise<{ results: Array<Record<string, unknown>>; has_more: boolean; next_cursor: string | null }> }).query({
+      const response = await (notion.databases as unknown as { query: (args: { database_id: string; start_cursor?: string; page_size?: number }) => Promise<{ results: Array<Record<string, any>>; has_more: boolean; next_cursor: string | null }> }).query({
         database_id: databaseId,
         start_cursor: startCursor,
         page_size: 100,
@@ -114,13 +114,13 @@ export class NotionConnector implements IConnector {
 
       for (const page of response.results) {
         if (!('properties' in page)) continue;
-        const row: Record<string, unknown> = {};
+        const row: Record<string, any> = {};
 
-        for (const [propName, propValue] of Object.entries(page.properties as Record<string, unknown>)) {
+        for (const [propName, propValue] of Object.entries(page.properties as Record<string, any>)) {
           if (!columns.includes(propName)) {
             columns.push(propName);
           }
-          row[propName] = this.extractPropertyValue(propValue as Record<string, unknown>);
+          row[propName] = this.extractPropertyValue(propValue as Record<string, any>);
         }
 
         allRows.push(row);
@@ -149,19 +149,19 @@ export class NotionConnector implements IConnector {
     const page = await notion.pages.retrieve({ page_id: pageId });
     const blocks = await this.fetchAllBlocks(notion, pageId);
 
-    const data: Record<string, unknown>[] = [];
+    const data: Record<string, any>[] = [];
     const columns = ['type', 'content', 'hasChildren'];
 
     for (const block of blocks) {
       if (!('type' in block)) continue;
       const blockType = block.type as string;
-      const blockData = (block as Record<string, unknown>)[blockType] as Record<string, unknown> | undefined;
+      const blockData = (block as Record<string, any>)[blockType] as Record<string, any> | undefined;
       const richText = blockData?.rich_text as Array<{ plain_text: string }> | undefined;
 
       data.push({
         type: blockType,
         content: richText?.map((t) => t.plain_text).join('') ?? '',
-        hasChildren: (block as Record<string, unknown>).has_children ?? false,
+        hasChildren: (block as Record<string, any>).has_children ?? false,
       });
     }
 
@@ -189,7 +189,7 @@ export class NotionConnector implements IConnector {
       page_size: 100,
     });
 
-    const results: NotionDatabase[] = (response.results as Array<Record<string, unknown>>)
+    const results: NotionDatabase[] = (response.results as Array<Record<string, any>>)
       .filter((r) => r.object === 'database')
       .map((db) => ({
         id: db.id as string,
@@ -197,7 +197,7 @@ export class NotionConnector implements IConnector {
         description: 'description' in db ? (db.description as Array<{ plain_text: string }>)?.map((t) => t.plain_text).join('') : '',
         url: 'url' in db ? (db.url as string) : '',
         properties: Object.fromEntries(
-          Object.entries('properties' in db ? (db.properties as Record<string, unknown>) : {}).map(([key, val]) => [
+          Object.entries('properties' in db ? (db.properties as Record<string, any>) : {}).map(([key, val]) => [
             key,
             { type: (val as Record<string, string>).type, name: key },
           ])
@@ -210,8 +210,8 @@ export class NotionConnector implements IConnector {
   private async fetchAllBlocks(
     notion: Client,
     blockId: string
-  ): Promise<Array<Record<string, unknown>>> {
-    const allBlocks: Array<Record<string, unknown>> = [];
+  ): Promise<Array<Record<string, any>>> {
+    const allBlocks: Array<Record<string, any>> = [];
     let hasMore = true;
     let startCursor: string | undefined;
 
@@ -222,7 +222,7 @@ export class NotionConnector implements IConnector {
         page_size: 100,
       });
 
-      allBlocks.push(...(response.results as Array<Record<string, unknown>>));
+      allBlocks.push(...(response.results as Array<Record<string, any>>));
       hasMore = response.has_more;
       startCursor = response.next_cursor ?? undefined;
     }
@@ -230,7 +230,7 @@ export class NotionConnector implements IConnector {
     return allBlocks;
   }
 
-  private extractPropertyValue(prop: Record<string, unknown>): unknown {
+  private extractPropertyValue(prop: Record<string, any>): unknown {
     const type = prop.type as string;
     const value = prop[type];
 
@@ -253,11 +253,11 @@ export class NotionConnector implements IConnector {
       case 'phone_number':
         return value ?? null;
       case 'formula':
-        return this.extractFormulaValue(value as Record<string, unknown>);
+        return this.extractFormulaValue(value as Record<string, any>);
       case 'relation':
         return (value as Array<{ id: string }>)?.map((r) => r.id).join(', ') ?? '';
       case 'rollup':
-        return this.extractRollupValue(value as Record<string, unknown>);
+        return this.extractRollupValue(value as Record<string, any>);
       case 'people':
         return (value as Array<{ name: string }>)?.map((p) => p.name).join(', ') ?? '';
       case 'files':
@@ -269,24 +269,24 @@ export class NotionConnector implements IConnector {
     }
   }
 
-  private extractFormulaValue(formula: Record<string, unknown>): unknown {
+  private extractFormulaValue(formula: Record<string, any>): unknown {
     const formulaType = formula.type as string;
     return formula[formulaType] ?? null;
   }
 
-  private extractRollupValue(rollup: Record<string, unknown>): unknown {
+  private extractRollupValue(rollup: Record<string, any>): unknown {
     const rollupType = rollup.type as string;
     if (rollupType === 'array') {
-      return (rollup.array as Array<Record<string, unknown>>)?.map(
+      return (rollup.array as Array<Record<string, any>>)?.map(
         (item) => this.extractPropertyValue(item)
       );
     }
     return rollup[rollupType] ?? null;
   }
 
-  private extractPageTitle(properties: Record<string, unknown>): string {
+  private extractPageTitle(properties: Record<string, any>): string {
     for (const prop of Object.values(properties)) {
-      const p = prop as Record<string, unknown>;
+      const p = prop as Record<string, any>;
       if (p.type === 'title') {
         const titleParts = p.title as Array<{ plain_text: string }> | undefined;
         return titleParts?.map((t) => t.plain_text).join('') ?? '';

@@ -11,7 +11,7 @@ interface KGNode {
   entityId: string;
   entityType: string;
   label: string;
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
 }
 
 interface KGEdge {
@@ -95,7 +95,7 @@ export class KnowledgeGraphService {
     tenantId: string,
     entityId: string,
     entityType: string,
-    metadata: Record<string, unknown>
+    metadata: Record<string, any>
   ): Promise<KGNode> {
     const existing = await this.prisma.knowledgeGraphNode.findFirst({
       where: { entityId, tenantId },
@@ -227,7 +227,7 @@ export class KnowledgeGraphService {
         entityId: n.entityId,
         entityType: n.entityType,
         label: n.label,
-        metadata: typeof n.metadata === 'string' ? JSON.parse(n.metadata) : (n.metadata as unknown as Record<string, unknown>) ?? {},
+        metadata: typeof n.metadata === 'string' ? JSON.parse(n.metadata) : (n.metadata as unknown as Record<string, any>) ?? {},
       })),
       edges: edges.map((e) => ({
         id: e.id,

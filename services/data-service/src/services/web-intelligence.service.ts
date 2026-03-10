@@ -16,7 +16,7 @@ interface ScrapeResult {
   url: string;
   title: string;
   content: string;
-  extractedData: Record<string, unknown>;
+  extractedData: Record<string, any>;
   tables: Array<{ headers: string[]; rows: string[][] }>;
   metadata: Record<string, string>;
   scrapedAt: string;
@@ -32,8 +32,8 @@ interface MonitorConfig {
 }
 
 interface SnapshotComparison {
-  added: Record<string, unknown>;
-  removed: Record<string, unknown>;
+  added: Record<string, any>;
+  removed: Record<string, any>;
   changed: Array<{ key: string; before: unknown; after: unknown }>;
   changeCount: number;
 }
@@ -70,7 +70,7 @@ export class WebIntelligenceService {
     const title = $('title').text().trim() || $('h1').first().text().trim() || '';
     const content = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 10000);
 
-    const extractedData: Record<string, unknown> = {};
+    const extractedData: Record<string, any> = {};
     for (const [key, selector] of Object.entries(selectors)) {
       const elements = $(selector);
       if (elements.length === 0) {
@@ -105,7 +105,7 @@ export class WebIntelligenceService {
     await prisma.auditLog.create({
       data: {
         action: 'web_scrape',
-        entityType: 'web_intelligence',
+        entityType: 'web_intelligence' as any,
         entityId: jobId,
         tenantId,
         details: JSON.stringify({ url, extractedKeys: Object.keys(extractedData), tableCount: tables.length }),
@@ -167,7 +167,7 @@ export class WebIntelligenceService {
         config: JSON.parse(JSON.stringify({ url, selectors, tenantId })),
         isActive: true,
         createdAt: new Date(),
-      },
+      } as any,
     });
 
     const initial = await this.scrapeUrl(url, selectors, tenantId);
@@ -179,7 +179,7 @@ export class WebIntelligenceService {
         startedAt: new Date(),
         completedAt: new Date(),
         result: JSON.parse(JSON.stringify(initial.extractedData)),
-      },
+      } as any,
     });
 
     logger.info('Web monitoring set up', { monitorId, url, frequency });
@@ -196,8 +196,8 @@ export class WebIntelligenceService {
 
   async stopMonitoring(monitorId: string): Promise<void> {
     await prisma.scheduledJob.update({
-      where: { jobId: monitorId },
-      data: { isActive: false },
+      where: { jobId: monitorId } as any,
+      data: { isActive: false } as any,
     });
     logger.info('Web monitoring stopped', { monitorId });
   }
@@ -212,13 +212,13 @@ export class WebIntelligenceService {
 
     return {
       id: jobId,
-      url: ((history.result as Record<string, unknown>)?.url as string) || '',
-      title: ((history.result as Record<string, unknown>)?.title as string) || '',
-      content: ((history.result as Record<string, unknown>)?.content as string) || '',
-      extractedData: (history.result as Record<string, unknown>) ?? {},
+      url: (((history as any).result as Record<string, any>)?.url as string) || '',
+      title: (((history as any).result as Record<string, any>)?.title as string) || '',
+      content: (((history as any).result as Record<string, any>)?.content as string) || '',
+      extractedData: ((history as any).result as Record<string, any>) ?? {},
       tables: [],
       metadata: {},
-      scrapedAt: history.startedAt.toISOString(),
+      scrapedAt: history.startedAt?.toISOString() ?? new Date().toISOString(),
     };
   }
 
@@ -242,11 +242,11 @@ export class WebIntelligenceService {
       }),
     ]);
 
-    const data1 = (snap1?.result as Record<string, unknown>) ?? {};
-    const data2 = (snap2?.result as Record<string, unknown>) ?? {};
+    const data1 = ((snap1 as any)?.result as Record<string, any>) ?? {};
+    const data2 = ((snap2 as any)?.result as Record<string, any>) ?? {};
 
-    const added: Record<string, unknown> = {};
-    const removed: Record<string, unknown> = {};
+    const added: Record<string, any> = {};
+    const removed: Record<string, any> = {};
     const changed: Array<{ key: string; before: unknown; after: unknown }> = [];
 
     const allKeys = new Set([...Object.keys(data1), ...Object.keys(data2)]);
@@ -302,7 +302,7 @@ export class WebIntelligenceService {
     await prisma.auditLog.create({
       data: {
         action: 'web_search',
-        entityType: 'web_intelligence',
+        entityType: 'web_intelligence' as any,
         entityId: randomUUID(),
         tenantId,
         details: JSON.stringify({ query, resultCount: data.items?.length || 0 }),
@@ -317,7 +317,7 @@ export class WebIntelligenceService {
     }));
   }
 
-  private extractTablesFromHtml($: ReturnType<typeof import('cheerio')['load']>, cheerio: typeof import('cheerio')): Array<{ headers: string[]; rows: string[][] }> {
+  private extractTablesFromHtml($: any, cheerio: any): Array<{ headers: string[]; rows: string[][] }> {
     const tables: Array<{ headers: string[]; rows: string[][] }> = [];
 
     $('table').each((_: number, table: unknown) => {

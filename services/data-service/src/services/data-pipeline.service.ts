@@ -9,7 +9,7 @@ export interface PipelineStep {
   id: string;
   name: string;
   type: 'extract' | 'transform' | 'load' | 'validate' | 'enrich';
-  config: Record<string, unknown>;
+  config: Record<string, any>;
   dependsOn: string[];
   retryPolicy: RetryPolicy;
   timeout: number;
@@ -50,7 +50,7 @@ export interface StepResult {
   completedAt?: Date;
   rowsProcessed: number;
   errorMessage?: string;
-  outputData?: Record<string, unknown>;
+  outputData?: Record<string, any>;
 }
 
 export interface PipelineMetrics {
@@ -65,7 +65,7 @@ export interface PipelineMetrics {
 export interface ValidationRule {
   field: string;
   type: 'required' | 'type_check' | 'range' | 'regex' | 'custom';
-  params: Record<string, unknown>;
+  params: Record<string, any>;
   errorMessage: string;
 }
 
@@ -75,7 +75,7 @@ export interface PipelineTemplate {
   description: string;
   category: string;
   steps: Omit<PipelineStep, 'id'>[];
-  defaultConfig: Record<string, unknown>;
+  defaultConfig: Record<string, any>;
 }
 
 export interface ScheduleEntry {
@@ -146,7 +146,7 @@ export class DataPipelineService {
     return { ...definition, id: pipeline.id };
   }
 
-  async executePipeline(pipelineId: string, params?: Record<string, unknown>): Promise<PipelineExecution> {
+  async executePipeline(pipelineId: string, params?: Record<string, any>): Promise<PipelineExecution> {
     const pipelineDef = await this.getPipelineDefinition(pipelineId);
     if (!pipelineDef) {
       throw new Error(`Pipeline ${pipelineId} not found`);
@@ -190,7 +190,7 @@ export class DataPipelineService {
     const topologicalOrder = this.computeTopologicalOrder(pipelineDef.steps);
     const stepMap = new Map(pipelineDef.steps.map(s => [s.id, s]));
     const completedSteps = new Set<string>();
-    const stepOutputs = new Map<string, Record<string, unknown>>();
+    const stepOutputs = new Map<string, Record<string, any>>();
 
     try {
       for (const stepId of topologicalOrder!) {
@@ -242,14 +242,14 @@ export class DataPipelineService {
   private async executeStep(
     step: PipelineStep,
     execution: PipelineExecution,
-    previousOutputs: Map<string, Record<string, unknown>>,
-    params?: Record<string, unknown>,
+    previousOutputs: Map<string, Record<string, any>>,
+    params?: Record<string, any>,
   ): Promise<StepResult> {
     const stepResult = execution.stepResults.find(r => r.stepId === step.id)!;
     stepResult.status = 'running';
     stepResult.startedAt = new Date();
 
-    const inputData: Record<string, unknown> = {};
+    const inputData: Record<string, any> = {};
     for (const depId of step.dependsOn) {
       const depOutput = previousOutputs.get(depId);
       if (depOutput) {
@@ -301,26 +301,26 @@ export class DataPipelineService {
 
   private async runStepLogic(
     step: PipelineStep,
-    inputData: Record<string, unknown>,
-    params: Record<string, unknown>,
-  ): Promise<{ rowsProcessed: number; outputData: Record<string, unknown> }> {
+    inputData: Record<string, any>,
+    params: Record<string, any>,
+  ): Promise<{ rowsProcessed: number; outputData: Record<string, any> }> {
     const mergedConfig = { ...step.config, ...params };
     let rowsProcessed = 0;
-    let outputData: Record<string, unknown> = {};
+    let outputData: Record<string, any> = {};
 
     switch (step.type) {
       case 'extract': {
         const sourceType = mergedConfig.sourceType as string;
         const query = mergedConfig.query as string;
         const batchSize = (mergedConfig.batchSize as number) || 1000;
-        let allRecords: Record<string, unknown>[] = [];
+        let allRecords: Record<string, any>[] = [];
         let offset = 0;
         let hasMore = true;
 
         while (hasMore) {
           const batch = await this.prisma.$queryRawUnsafe(
             `${query} LIMIT ${batchSize} OFFSET ${offset}`,
-          ) as Record<string, unknown>[];
+          ) as Record<string, any>[];
           allRecords = allRecords.concat(batch);
           rowsProcessed += batch.length;
           offset += batchSize;
@@ -343,16 +343,16 @@ export class DataPipelineService {
       }
 
       case 'transform': {
-        const records = (inputData.records as Record<string, unknown>[]) || [];
+        const records = (inputData.records as Record<string, any>[]) || [];
         const transformType = mergedConfig.transformType as string;
-        const transformedRecords: Record<string, unknown>[] = [];
+        const transformedRecords: Record<string, any>[] = [];
 
         for (const record of records) {
           let transformed = { ...record };
 
           if (transformType === 'map') {
             const mappings = mergedConfig.mappings as Record<string, string>;
-            const mapped: Record<string, unknown> = {};
+            const mapped: Record<string, any> = {};
             for (const [targetField, sourceField] of Object.entries(mappings)) {
               mapped[targetField] = transformed[sourceField];
             }
@@ -376,7 +376,7 @@ export class DataPipelineService {
             transformed.__aggField = aggField;
             transformed.__aggOp = aggOp;
           } else if (transformType === 'enrich') {
-            const enrichFields = mergedConfig.enrichFields as Record<string, unknown>;
+            const enrichFields = mergedConfig.enrichFields as Record<string, any>;
             for (const [key, value] of Object.entries(enrichFields || {})) {
               transformed[`enriched_${key}`] = value;
             }
@@ -397,7 +397,7 @@ export class DataPipelineService {
       }
 
       case 'load': {
-        const records = (inputData.records as Record<string, unknown>[]) || [];
+        const records = (inputData.records as Record<string, any>[]) || [];
         const targetTable = mergedConfig.targetTable as string;
         const loadMode = (mergedConfig.loadMode as string) || 'append';
         const batchSize = (mergedConfig.batchSize as number) || 500;
@@ -433,10 +433,10 @@ export class DataPipelineService {
       }
 
       case 'validate': {
-        const records = (inputData.records as Record<string, unknown>[]) || [];
+        const records = (inputData.records as Record<string, any>[]) || [];
         const rules = (mergedConfig.validationRules as ValidationRule[]) || [];
-        const validRecords: Record<string, unknown>[] = [];
-        const invalidRecords: { record: Record<string, unknown>; errors: string[] }[] = [];
+        const validRecords: Record<string, any>[] = [];
+        const invalidRecords: { record: Record<string, any>; errors: string[] }[] = [];
 
         for (const record of records) {
           const errors: string[] = [];
@@ -483,18 +483,18 @@ export class DataPipelineService {
       }
 
       case 'enrich': {
-        const records = (inputData.records as Record<string, unknown>[]) || [];
+        const records = (inputData.records as Record<string, any>[]) || [];
         const enrichSource = mergedConfig.enrichSource as string;
         const lookupField = mergedConfig.lookupField as string;
-        const enrichedRecords: Record<string, unknown>[] = [];
+        const enrichedRecords: Record<string, any>[] = [];
 
         const lookupValues = records.map(r => r[lookupField]).filter(Boolean);
         const lookupResults = await this.prisma.$queryRawUnsafe(
           `SELECT * FROM "${enrichSource}" WHERE "${lookupField}" = ANY($1)`,
           lookupValues,
-        ) as Record<string, unknown>[];
+        ) as Record<string, any>[];
 
-        const lookupMap = new Map<string, Record<string, unknown>>();
+        const lookupMap = new Map<string, Record<string, any>>();
         for (const result of lookupResults) {
           lookupMap.set(String(result[lookupField]), result);
         }
@@ -531,8 +531,8 @@ export class DataPipelineService {
   private async executeParallelSteps(
     steps: PipelineStep[],
     execution: PipelineExecution,
-    previousOutputs: Map<string, Record<string, unknown>>,
-    params?: Record<string, unknown>,
+    previousOutputs: Map<string, Record<string, any>>,
+    params?: Record<string, any>,
   ): Promise<Map<string, StepResult>> {
     const results = new Map<string, StepResult>();
     const promises = steps.map(async (step) => {
@@ -774,11 +774,11 @@ export class DataPipelineService {
   }
 
   async validateBetweenSteps(
-    sourceStepOutput: Record<string, unknown>,
+    sourceStepOutput: Record<string, any>,
     targetStep: PipelineStep,
   ): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
-    const records = sourceStepOutput.records as Record<string, unknown>[] | undefined;
+    const records = sourceStepOutput.records as Record<string, any>[] | undefined;
 
     if (!records || !Array.isArray(records)) {
       errors.push('Source step did not produce records array');
@@ -823,7 +823,7 @@ export class DataPipelineService {
     templateId: string,
     name: string,
     createdBy: string,
-    configOverrides?: Record<string, unknown>,
+    configOverrides?: Record<string, any>,
   ): Promise<PipelineDefinition> {
     const template = await this.prisma.pipelineTemplate.findUnique({
       where: { id: templateId },
@@ -900,7 +900,7 @@ export class DataPipelineService {
   }
 
   async listTemplates(category?: string): Promise<PipelineTemplate[]> {
-    const whereClause: Record<string, unknown> = {};
+    const whereClause: Record<string, any> = {};
     if (category) {
       whereClause.category = category;
     }
@@ -1070,7 +1070,7 @@ export class DataPipelineService {
     logs: { stepId: string; level: string; message: string; timestamp: Date }[];
     totalCount: number;
   }> {
-    const whereClause: Record<string, unknown> = { executionId };
+    const whereClause: Record<string, any> = { executionId };
     if (level) {
       whereClause.level = level;
     }

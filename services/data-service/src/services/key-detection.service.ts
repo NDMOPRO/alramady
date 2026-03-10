@@ -402,7 +402,7 @@ export class KeyDetectionService {
     });
 
     return rows.map((r) => {
-      const data = r.data as Record<string, unknown>;
+      const data = r.data as Record<string, any>;
       const result: DataRow = {};
       for (const [key, value] of Object.entries(data)) {
         if (value === null || value === undefined) {

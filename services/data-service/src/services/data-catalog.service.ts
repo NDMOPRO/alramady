@@ -130,7 +130,7 @@ export class DataCatalogService {
         qualityScore: qualityScore.overallScore,
         qualityDetails: JSON.stringify(qualityScore),
         createdBy: input.owner,
-        tenantId: (input as Record<string, unknown>).tenantId as string || '00000000-0000-0000-0000-000000000000',
+        tenantId: (input as Record<string, any>).tenantId as string || '00000000-0000-0000-0000-000000000000',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -214,7 +214,7 @@ export class DataCatalogService {
       for (const col of tableInfo) {
         const sampleResult = await this.prisma.$queryRawUnsafe(
           `SELECT DISTINCT "${col.column_name}" FROM "${sourceConnection}" LIMIT 5`,
-        ) as Record<string, unknown>[];
+        ) as Record<string, any>[];
         const samples = sampleResult.map(r => r[col.column_name]);
 
         const statsResult = await this.prisma.$queryRawUnsafe(
@@ -339,8 +339,8 @@ export class DataCatalogService {
     page: number = 1,
     pageSize: number = 20,
   ): Promise<CatalogSearchResult> {
-    const must: Record<string, unknown>[] = [];
-    const filter: Record<string, unknown>[] = [];
+    const must: Record<string, any>[] = [];
+    const filter: Record<string, any>[] = [];
 
     if (query && query.trim().length > 0) {
       must.push({
@@ -715,7 +715,7 @@ export class DataCatalogService {
     }
 
     const pipelinesUsingDataset = await this.prisma.pipeline.findMany({
-      where: { steps: { path: [], string_contains: datasetId } } as Record<string, unknown>,
+      where: { steps: { path: [], string_contains: datasetId } } as Record<string, any>,
     });
     for (const pipeline of pipelinesUsingDataset) {
       affectedPipelines.push({ id: pipeline.id, name: pipeline.name });

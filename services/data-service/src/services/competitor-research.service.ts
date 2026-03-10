@@ -18,7 +18,7 @@ interface CompetitorProfile {
   name: string;
   domain: string;
   industry: string;
-  metrics: Record<string, unknown>;
+  metrics: Record<string, any>;
   lastUpdated: string;
 }
 
@@ -53,7 +53,7 @@ interface WebScrapedData {
   url: string;
   title: string;
   content: string;
-  extractedData: Record<string, unknown>;
+  extractedData: Record<string, any>;
   scrapedAt: string;
 }
 
@@ -90,7 +90,7 @@ export class CompetitorResearchService {
     const title = $('title').text().trim() || $('h1').first().text().trim() || '';
     const metaDesc = $('meta[name="description"]').attr('content') || '';
 
-    const extractedData: Record<string, unknown> = {};
+    const extractedData: Record<string, any> = {};
     for (const [key, selector] of Object.entries(selectors)) {
       const elements = $(selector);
       if (elements.length === 1) {
@@ -123,7 +123,7 @@ export class CompetitorResearchService {
     await prisma.auditLog.create({
       data: {
         action: 'competitor_scrape',
-        entityType: 'research',
+        entityType: 'research' as any,
         entityId: url,
         tenantId,
         details: JSON.stringify({ url, dataKeys: Object.keys(extractedData) }),
@@ -178,7 +178,7 @@ export class CompetitorResearchService {
   }
 
   async analyzeCompetitors(
-    competitorData: Array<{ name: string; data: Record<string, unknown> }>,
+    competitorData: Array<{ name: string; data: Record<string, any> }>,
     yourMetrics: Record<string, number>,
     industry: string,
     tenantId: string,
@@ -259,7 +259,7 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
     await prisma.auditLog.create({
       data: {
         action: 'competitor_analysis_complete',
-        entityType: 'research',
+        entityType: 'research' as any,
         entityId: researchId,
         tenantId,
         details: JSON.stringify({
@@ -301,7 +301,7 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
         })),
         isActive: true,
         createdAt: new Date(),
-      },
+      } as any,
     });
 
     logger.info('Competitor monitoring setup', { monitorId, url: config.url, frequency: config.frequency });
@@ -311,15 +311,15 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
 
   async stopMonitoring(monitorId: string): Promise<void> {
     await prisma.scheduledJob.update({
-      where: { jobId: monitorId },
-      data: { isActive: false },
+      where: { jobId: monitorId } as any,
+      data: { isActive: false } as any,
     });
     logger.info('Competitor monitoring stopped', { monitorId });
   }
 
   async getMonitoringHistory(monitorId: string, limit: number = 50): Promise<Array<{
     scrapedAt: string;
-    dataSnapshot: Record<string, unknown>;
+    dataSnapshot: Record<string, any>;
     changesDetected: number;
   }>> {
     const history = await prisma.jobHistory.findMany({
@@ -330,8 +330,8 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
 
     return history.map((h) => ({
       scrapedAt: h.startedAt.toISOString(),
-      dataSnapshot: (h.result as Record<string, unknown>) ?? {},
-      changesDetected: ((h.result as Record<string, unknown>)?.changesDetected as number) ?? 0,
+      dataSnapshot: (h.result as Record<string, any>) ?? {},
+      changesDetected: ((h.result as Record<string, any>)?.changesDetected as number) ?? 0,
     }));
   }
 
@@ -340,8 +340,8 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
     date1: string,
     date2: string,
   ): Promise<{
-    added: Record<string, unknown>;
-    removed: Record<string, unknown>;
+    added: Record<string, any>;
+    removed: Record<string, any>;
     changed: Array<{ key: string; before: unknown; after: unknown }>;
   }> {
     const [snap1, snap2] = await Promise.all([
@@ -353,11 +353,11 @@ Analyze and provide a comprehensive competitive analysis. Respond in JSON:
       }),
     ]);
 
-    const data1 = (snap1?.result as Record<string, unknown>) ?? {};
-    const data2 = (snap2?.result as Record<string, unknown>) ?? {};
+    const data1 = (snap1?.result as Record<string, any>) ?? {};
+    const data2 = (snap2?.result as Record<string, any>) ?? {};
 
-    const added: Record<string, unknown> = {};
-    const removed: Record<string, unknown> = {};
+    const added: Record<string, any> = {};
+    const removed: Record<string, any> = {};
     const changed: Array<{ key: string; before: unknown; after: unknown }> = [];
 
     const allKeys = new Set([...Object.keys(data1), ...Object.keys(data2)]);

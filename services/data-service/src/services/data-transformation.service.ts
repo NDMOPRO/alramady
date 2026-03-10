@@ -23,7 +23,7 @@ export class DataTransformationService {
 
     logger.info('Starting dataset merge', { datasetIds, joinType, joinColumns });
 
-    const allDatasets: { id: string; rows: Record<string, unknown>[]; columns: string[] }[] = [];
+    const allDatasets: { id: string; rows: Record<string, any>[]; columns: string[] }[] = [];
 
     for (const dsId of datasetIds) {
       const dataset = await this.prisma.dataset.findUniqueOrThrow({
@@ -34,20 +34,20 @@ export class DataTransformationService {
         where: { datasetId: dsId },
         orderBy: { rowIndex: 'asc' },
       });
-      const rows = dataRows.map(r => r.data as Record<string, unknown>);
+      const rows = dataRows.map(r => r.data as Record<string, any>);
       const columns = dataset.columns.map(c => c.name);
       allDatasets.push({ id: dsId, rows, columns });
     }
 
-    const buildKey = (row: Record<string, unknown>): string => {
+    const buildKey = (row: Record<string, any>): string => {
       return joinColumns.map(col => String(row[col] ?? '__NULL__')).join('|||');
     };
 
-    let mergedRows: Record<string, unknown>[] = allDatasets[0].rows.map(row => ({ ...row }));
+    let mergedRows: Record<string, any>[] = allDatasets[0].rows.map(row => ({ ...row }));
 
     for (let i = 1; i < allDatasets.length; i++) {
       const rightDataset = allDatasets[i];
-      const rightIndex = new Map<string, Record<string, unknown>[]>();
+      const rightIndex = new Map<string, Record<string, any>[]>();
       for (const row of rightDataset.rows) {
         const key = buildKey(row);
         if (!rightIndex.has(key)) {
@@ -57,7 +57,7 @@ export class DataTransformationService {
       }
 
       const leftIndex = new Map<string, boolean>();
-      const newMerged: Record<string, unknown>[] = [];
+      const newMerged: Record<string, any>[] = [];
       const rightNonJoinCols = rightDataset.columns.filter(c => !joinColumns.includes(c));
 
       for (const leftRow of mergedRows) {
@@ -67,7 +67,7 @@ export class DataTransformationService {
         if (rightMatches && rightMatches.length > 0) {
           leftIndex.set(key, true);
           for (const rightRow of rightMatches) {
-            const combined: Record<string, unknown> = { ...leftRow };
+            const combined: Record<string, any> = { ...leftRow };
             for (const col of rightNonJoinCols) {
               const targetCol = combined.hasOwnProperty(col) ? `${col}_${i + 1}` : col;
               combined[targetCol] = rightRow[col];
@@ -75,7 +75,7 @@ export class DataTransformationService {
             newMerged.push(combined);
           }
         } else if (joinType === 'left' || joinType === 'outer') {
-          const combined: Record<string, unknown> = { ...leftRow };
+          const combined: Record<string, any> = { ...leftRow };
           for (const col of rightNonJoinCols) {
             const targetCol = combined.hasOwnProperty(col) ? `${col}_${i + 1}` : col;
             combined[targetCol] = null;
@@ -90,7 +90,7 @@ export class DataTransformationService {
         for (const rightRow of rightDataset.rows) {
           const key = buildKey(rightRow);
           if (!leftIndex.has(key)) {
-            const combined: Record<string, unknown> = {};
+            const combined: Record<string, any> = {};
             for (const col of joinColumns) {
               combined[col] = rightRow[col];
             }
@@ -195,7 +195,7 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     const colValues = [...new Set(rows.map(r => String(r[colField] ?? 'null')))].sort();
 
@@ -227,10 +227,10 @@ export class DataTransformationService {
       }
     };
 
-    const pivotRows: Record<string, unknown>[] = [];
+    const pivotRows: Record<string, any>[] = [];
     for (const [groupKey, colMap] of groupMap.entries()) {
       const keyParts = groupKey.split('|||');
-      const pivotRow: Record<string, unknown> = {};
+      const pivotRow: Record<string, any> = {};
       rowFields.forEach((field, idx) => {
         pivotRow[field] = keyParts[idx];
       });
@@ -321,12 +321,12 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
-    const unpivotedRows: Record<string, unknown>[] = [];
+    const unpivotedRows: Record<string, any>[] = [];
     for (const row of rows) {
       for (const valCol of valueColumns) {
-        const newRow: Record<string, unknown> = {};
+        const newRow: Record<string, any> = {};
         for (const idCol of idColumns) {
           newRow[idCol] = row[idCol];
         }
@@ -410,9 +410,9 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
-    const groupMap = new Map<string, Record<string, unknown>[]>();
+    const groupMap = new Map<string, Record<string, any>[]>();
     for (const row of rows) {
       const key = groupBy.map(g => String(row[g] ?? '__NULL__')).join('|||');
       if (!groupMap.has(key)) {
@@ -449,10 +449,10 @@ export class DataTransformationService {
       }
     };
 
-    const aggregatedRows: Record<string, unknown>[] = [];
+    const aggregatedRows: Record<string, any>[] = [];
     for (const [key, groupRows] of groupMap.entries()) {
       const keyParts = key.split('|||');
-      const aggRow: Record<string, unknown> = {};
+      const aggRow: Record<string, any> = {};
       groupBy.forEach((g, idx) => {
         aggRow[g] = keyParts[idx] === '__NULL__' ? null : keyParts[idx];
       });
@@ -541,9 +541,9 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
-    const evaluateCondition = (row: Record<string, unknown>, cond: { column: string; operator: string; value: unknown }): boolean => {
+    const evaluateCondition = (row: Record<string, any>, cond: { column: string; operator: string; value: unknown }): boolean => {
       const cellValue = row[cond.column];
       const compareValue = cond.value;
 
@@ -621,7 +621,7 @@ export class DataTransformationService {
         sizeBytes: BigInt(JSON.stringify(filteredRows).length),
         rowCount: BigInt(filteredRows.length),
         columnCount: dataset.columnCount,
-        schemaJson: dataset.schemaJson as Record<string, unknown>,
+        schemaJson: dataset.schemaJson as Record<string, any>,
         status: 'active',
         createdBy: dataset.createdBy,
       },
@@ -681,7 +681,7 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     const sortedRows = [...rows].sort((a, b) => {
       for (const sortCol of columns) {
@@ -715,7 +715,7 @@ export class DataTransformationService {
         sizeBytes: BigInt(JSON.stringify(sortedRows).length),
         rowCount: BigInt(sortedRows.length),
         columnCount: dataset.columnCount,
-        schemaJson: dataset.schemaJson as Record<string, unknown>,
+        schemaJson: dataset.schemaJson as Record<string, any>,
         status: 'active',
         createdBy: dataset.createdBy,
       },
@@ -770,17 +770,17 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     const existingColumns = dataset.columns.map(c => c.name);
     const compiledExpression = mathjs.compile(formula);
 
-    const updatedRows: Record<string, unknown>[] = [];
+    const updatedRows: Record<string, any>[] = [];
     const errors: { rowIndex: number; error: string }[] = [];
 
     for (let i = 0; i < rows.length; i++) {
       const row = { ...rows[i] };
-      const scope: Record<string, unknown> = {};
+      const scope: Record<string, any> = {};
       for (const col of existingColumns) {
         const val = row[col];
         const numVal = parseFloat(String(val));
@@ -868,7 +868,7 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     let maxParts = 0;
     for (const row of rows) {
@@ -884,7 +884,7 @@ export class DataTransformationService {
       newColumnNames.push(`${column}_${i + 1}`);
     }
 
-    const updatedRows: Record<string, unknown>[] = [];
+    const updatedRows: Record<string, any>[] = [];
     for (const row of rows) {
       const newRow = { ...row };
       const value = String(row[column] ?? '');
@@ -957,14 +957,14 @@ export class DataTransformationService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     const columnNames = dataset.columns.map(c => c.name);
     const transposedColumnNames = ['field', ...rows.map((_, idx) => `row_${idx + 1}`)];
 
-    const transposedRows: Record<string, unknown>[] = [];
+    const transposedRows: Record<string, any>[] = [];
     for (const colName of columnNames) {
-      const transposedRow: Record<string, unknown> = { field: colName };
+      const transposedRow: Record<string, any> = { field: colName };
       for (let i = 0; i < rows.length; i++) {
         transposedRow[`row_${i + 1}`] = rows[i][colName] ?? null;
       }
@@ -1035,7 +1035,7 @@ export class DataTransformationService {
     };
   }
 
-  private inferColumnType(data: Record<string, unknown>[], columnName: string): string {
+  private inferColumnType(data: Record<string, any>[], columnName: string): string {
     const sample = data.slice(0, 100).map(r => r[columnName]).filter(v => v !== null && v !== undefined && v !== '');
     if (sample.length === 0) return 'string';
 

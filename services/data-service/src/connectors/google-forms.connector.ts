@@ -138,7 +138,7 @@ export class GoogleFormsConnector implements IConnector {
     }
 
     // Fetch all responses with pagination
-    const allRows: Record<string, unknown>[] = [];
+    const allRows: Record<string, any>[] = [];
     let pageToken: string | undefined;
 
     do {
@@ -148,7 +148,7 @@ export class GoogleFormsConnector implements IConnector {
       });
 
       for (const response of responsesData.data.responses ?? []) {
-        const row: Record<string, unknown> = {
+        const row: Record<string, any> = {
           responseId: response.responseId,
           createTime: response.createTime,
           lastSubmittedTime: response.lastSubmittedTime,

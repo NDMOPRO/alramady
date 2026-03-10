@@ -16,7 +16,7 @@ export class SourcesService {
     const limit = Math.min(options.limit || 20, 100);
     const skip = (page - 1) * limit;
 
-    const where: Record<string, unknown> = { tenantId, status: 'active' };
+    const where: Record<string, any> = { tenantId, status: 'active' };
     if (options.format) where.format = options.format;
     if (options.search) {
       where.OR = [
@@ -56,7 +56,7 @@ export class SourcesService {
     return { ...dataset, sizeBytes: Number(dataset.sizeBytes), rowCount: Number(dataset.rowCount) };
   }
 
-  async getDatasetRows(datasetId: string, tenantId: string, options: { page?: number; limit?: number; sortBy?: string; sortDir?: 'asc' | 'desc'; filters?: Record<string, unknown> }) {
+  async getDatasetRows(datasetId: string, tenantId: string, options: { page?: number; limit?: number; sortBy?: string; sortDir?: 'asc' | 'desc'; filters?: Record<string, any> }) {
     const dataset = await prisma.dataset.findFirst({ where: { id: datasetId, tenantId } });
     if (!dataset) throw new Error('Dataset not found');
 
@@ -74,7 +74,7 @@ export class SourcesService {
     let filteredRows = rows;
     if (options.filters && Object.keys(options.filters).length > 0) {
       filteredRows = rows.filter(row => {
-        const data = row.data as Record<string, unknown>;
+        const data = row.data as Record<string, any>;
         return Object.entries(options.filters!).every(([key, value]) => {
           if (typeof value === 'string') return String(data[key] ?? '').toLowerCase().includes(value.toLowerCase());
           return data[key] === value;
@@ -85,7 +85,7 @@ export class SourcesService {
     const total = await prisma.dataRow.count({ where: { datasetId } });
 
     return {
-      data: filteredRows.map(r => ({ rowIndex: r.rowIndex, ...(r.data as Record<string, unknown>) })),
+      data: filteredRows.map(r => ({ rowIndex: r.rowIndex, ...(r.data as Record<string, any>) })),
       pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     };
   }
@@ -110,7 +110,7 @@ export class SourcesService {
     if (!dataset) throw new Error('Dataset not found');
 
     const allRows = await prisma.dataRow.findMany({ where: { datasetId }, orderBy: { rowIndex: 'asc' } });
-    const data = allRows.map(r => r.data as Record<string, unknown>);
+    const data = allRows.map(r => r.data as Record<string, any>);
     const fields = dataset.columns.map(c => c.name);
 
     const parser = new Json2CsvParser({ fields, delimiter: options.delimiter || ',' });
@@ -141,7 +141,7 @@ export class SourcesService {
     headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
 
     for (const row of allRows) {
-      ws.addRow(row.data as Record<string, unknown>);
+      ws.addRow(row.data as Record<string, any>);
     }
 
     ws.autoFilter = { from: { row: 1, column: 1 }, to: { row: allRows.length + 1, column: dataset.columns.length } };
@@ -180,7 +180,7 @@ export class SourcesService {
       });
 
       return {
-        hits: result.hits.hits.map((hit: Record<string, unknown>) => ({ id: hit._id, score: hit._score, ...(hit._source as Record<string, unknown>) })),
+        hits: result.hits.hits.map((hit: Record<string, any>) => ({ id: hit._id, score: hit._score, ...(hit._source as Record<string, any>) })),
         total: typeof result.hits.total === 'number' ? result.hits.total : result.hits.total?.value || 0,
       };
     } catch (e) {
@@ -194,9 +194,9 @@ export class SourcesService {
     if (!dataset) throw new Error('Dataset not found');
 
     const allRows = await prisma.dataRow.findMany({ where: { datasetId }, orderBy: { rowIndex: 'asc' } });
-    const data = allRows.map(r => r.data as Record<string, unknown>);
+    const data = allRows.map(r => r.data as Record<string, any>);
 
-    const columnStats: Record<string, Record<string, unknown>> = {};
+    const columnStats: Record<string, Record<string, any>> = {};
     for (const col of dataset.columns) {
       const values = data.map(r => r[col.name]).filter(v => v !== null && v !== undefined);
       columnStats[col.name] = {

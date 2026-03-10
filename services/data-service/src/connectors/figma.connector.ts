@@ -88,8 +88,8 @@ export class FigmaConnector implements IConnector {
   ): Promise<ConnectorImportResult> {
     const fileData = await this.importFile(token, fileKey);
 
-    const data: Record<string, unknown>[] = [];
-    this.flattenNodes(fileData.document as Record<string, unknown>, data);
+    const data: Record<string, any>[] = [];
+    this.flattenNodes(fileData.document as Record<string, any>, data);
 
     return {
       data,
@@ -111,21 +111,21 @@ export class FigmaConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Figma projects list failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return (data.projects ?? []) as Array<{ id: number; name: string }>;
   }
 
   async importFile(
     token: ConnectorToken,
     fileKey: string
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, any>> {
     const res = await fetch(`${this.baseUrl}/files/${fileKey}`, {
       headers: { 'X-FIGMA-TOKEN': token.accessToken },
     });
 
     if (!res.ok) throw new Error(`Figma file fetch failed: ${res.status}`);
 
-    return (await res.json()) as Record<string, unknown>;
+    return (await res.json()) as Record<string, any>;
   }
 
   async exportImages(
@@ -142,13 +142,13 @@ export class FigmaConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Figma image export failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return (data.images ?? {}) as Record<string, string>;
   }
 
   private flattenNodes(
-    node: Record<string, unknown>,
-    result: Record<string, unknown>[],
+    node: Record<string, any>,
+    result: Record<string, any>[],
     depth: number = 0
   ): void {
     if (depth > 10) return; // Prevent infinite recursion
@@ -166,7 +166,7 @@ export class FigmaConnector implements IConnector {
       characters: node.characters ?? '',
     });
 
-    const children = node.children as Array<Record<string, unknown>> | undefined;
+    const children = node.children as Array<Record<string, any>> | undefined;
     if (children) {
       for (const child of children) {
         this.flattenNodes(child, result, depth + 1);

@@ -8,7 +8,7 @@ import crypto from 'crypto';
 interface NlQueryResult {
   generatedSql: string;
   columns: string[];
-  rows: Record<string, unknown>[];
+  rows: Record<string, any>[];
   rowCount: number;
   executionTimeMs: number;
   confidence: number;
@@ -143,7 +143,7 @@ ${schema.columns.map(c => `- ${c.name} (${c.dataType || 'text'}): ${c.sampleValu
 
   async explainResults(
     queryDescription: string,
-    results: Record<string, unknown>[],
+    results: Record<string, any>[],
     tenantId: string
   ): Promise<ExplainResult> {
     logger.info('Explaining query results', { queryDescription, resultCount: results.length, tenantId });
@@ -208,7 +208,7 @@ ${JSON.stringify(sampleResults, null, 2)}`;
       select: { data: true },
     });
 
-    const rowData = sampleRows.map(r => r.data as Record<string, unknown>);
+    const rowData = sampleRows.map(r => r.data as Record<string, any>);
 
     const columnSchemas = dataset.columns.map(col => {
       const values = rowData.map(r => r[col.name]);

@@ -37,7 +37,7 @@ describe('KeyDetectionService', () => {
   function setupDataset(
     datasetId: string,
     columns: Array<{ name: string; dataType: string }>,
-    rows: Array<Record<string, unknown>>
+    rows: Array<Record<string, any>>
   ): void {
     mockDatasetFindFirst.mockImplementation((args: unknown) => {
       const typed = args as { where: { id: string } };
@@ -68,7 +68,7 @@ describe('KeyDetectionService', () => {
       id: string;
       name: string;
       columns: Array<{ name: string; dataType: string }>;
-      rows: Array<Record<string, unknown>>;
+      rows: Array<Record<string, any>>;
     }>
   ): void {
     mockDatasetFindFirst.mockImplementation((args: unknown) => {

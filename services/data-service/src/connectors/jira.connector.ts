@@ -25,7 +25,7 @@ interface JiraProject {
 interface JiraIssue {
   id: string;
   key: string;
-  fields: Record<string, unknown>;
+  fields: Record<string, any>;
 }
 
 export class JiraConnector implements IConnector {
@@ -137,7 +137,7 @@ export class JiraConnector implements IConnector {
     }
 
     const projects = await res.json();
-    return (projects as Array<Record<string, unknown>>).map((p) => ({
+    return (projects as Array<Record<string, any>>).map((p) => ({
       id: String(p.id),
       key: String(p.key),
       name: String(p.name),
@@ -176,7 +176,7 @@ export class JiraConnector implements IConnector {
         throw new Error(`Jira issue search failed: ${res.status}`);
       }
 
-      const data = await res.json() as Record<string, unknown>;
+      const data = await res.json() as Record<string, any>;
       const issues = (data.issues ?? []) as JiraIssue[];
       allIssues.push(...issues);
 
@@ -195,7 +195,7 @@ export class JiraConnector implements IConnector {
     boardId: string
   ): Promise<ConnectorImportResult> {
     const { host, auth } = this.parseToken(token);
-    const allSprints: Record<string, unknown>[] = [];
+    const allSprints: Record<string, any>[] = [];
     let startAt = 0;
     let isLast = false;
 
@@ -209,8 +209,8 @@ export class JiraConnector implements IConnector {
         throw new Error(`Jira sprint fetch failed: ${res.status}`);
       }
 
-      const data = await res.json() as Record<string, unknown>;
-      const sprints = (data.values ?? []) as Array<Record<string, unknown>>;
+      const data = await res.json() as Record<string, any>;
+      const sprints = (data.values ?? []) as Array<Record<string, any>>;
 
       for (const sprint of sprints) {
         allSprints.push({

@@ -63,7 +63,7 @@ export class SemanticLayerService {
     });
     if (!model) throw new Error('Semantic model not found');
 
-    const settings = model.settings as Record<string, unknown> | null;
+    const settings = model.settings as Record<string, any> | null;
     if (settings?.type !== 'SEMANTIC_MODEL') throw new Error('Not a semantic model');
 
     return model;
@@ -76,7 +76,7 @@ export class SemanticLayerService {
     });
 
     return all.filter((kb) => {
-      const settings = kb.settings as Record<string, unknown> | null;
+      const settings = kb.settings as Record<string, any> | null;
       return settings?.type === 'SEMANTIC_MODEL';
     });
   }
@@ -87,7 +87,7 @@ export class SemanticLayerService {
     modelId: string,
   ): Promise<{ sql: string; modelId: string; originalQuery: string }> {
     const model = await this.getModel(modelId, tenantId);
-    const settings = (model as { settings: Record<string, unknown> }).settings;
+    const settings = (model as { settings: Record<string, any> }).settings;
 
     const response = await this.openai.chat.completions.create({
       model: 'gpt-4o',

@@ -28,7 +28,7 @@ export class DataExportService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     if (rows.length === 0) {
       throw new Error(`Dataset ${datasetId} has no rows to export`);
@@ -81,7 +81,7 @@ export class DataExportService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     if (rows.length === 0) {
       throw new Error(`Dataset ${datasetId} has no rows to export`);
@@ -182,7 +182,7 @@ export class DataExportService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     if (rows.length === 0) {
       throw new Error(`Dataset ${datasetId} has no rows to export`);
@@ -243,7 +243,7 @@ export class DataExportService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     if (rows.length === 0) {
       throw new Error(`Dataset ${datasetId} has no rows to export`);
@@ -376,7 +376,7 @@ export class DataExportService {
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
     });
-    const rows = dataRows.map(r => r.data as Record<string, unknown>);
+    const rows = dataRows.map(r => r.data as Record<string, any>);
 
     if (rows.length === 0) {
       throw new Error(`Dataset ${datasetId} has no rows to export`);

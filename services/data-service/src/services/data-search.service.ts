@@ -27,7 +27,7 @@ export class DataSearchService {
 
     logger.info('Full text search', { query, filters, page, limit });
 
-    const mustClauses: Record<string, unknown>[] = [
+    const mustClauses: Record<string, any>[] = [
       {
         multi_match: {
           query,
@@ -40,7 +40,7 @@ export class DataSearchService {
       },
     ];
 
-    const filterClauses: Record<string, unknown>[] = [];
+    const filterClauses: Record<string, any>[] = [];
     if (filters?.format) {
       filterClauses.push({ term: { format: filters.format.toLowerCase() } });
     }
@@ -48,7 +48,7 @@ export class DataSearchService {
       filterClauses.push({ term: { status: filters.status.toLowerCase() } });
     }
 
-    const esQuery: Record<string, unknown> = {
+    const esQuery: Record<string, any> = {
       index: DATASET_INDEX,
       body: {
         from,
@@ -76,10 +76,10 @@ export class DataSearchService {
     const esResponse = await elastic.search(esQuery);
     const hits = esResponse.hits?.hits || [];
     const totalHits = typeof esResponse.hits?.total === 'object'
-      ? (esResponse.hits.total as Record<string, unknown>).value
+      ? (esResponse.hits.total as Record<string, any>).value
       : esResponse.hits?.total || 0;
 
-    interface ESHit { _id: string; _score: number | null; _source?: Record<string, unknown>; highlight?: Record<string, string[]> }
+    interface ESHit { _id: string; _score: number | null; _source?: Record<string, any>; highlight?: Record<string, string[]> }
     const results = (hits as ESHit[]).map((hit) => ({
       id: hit._id as string,
       name: hit._source?.name || '',
@@ -101,7 +101,7 @@ export class DataSearchService {
   async filterSearch(
     datasetId: string,
     conditions: Array<{ column: string; operator: string; value: unknown }>
-  ): Promise<{ rows: Array<Record<string, unknown>>; matchCount: number; totalRows: number }> {
+  ): Promise<{ rows: Array<Record<string, any>>; matchCount: number; totalRows: number }> {
     logger.info('Filter search within dataset', { datasetId, conditionCount: conditions.length });
 
     const allRows = await prisma.dataRow.findMany({
@@ -110,10 +110,10 @@ export class DataSearchService {
     });
 
     const totalRows = allRows.length;
-    const matchedRows: Array<Record<string, unknown>> = [];
+    const matchedRows: Array<Record<string, any>> = [];
 
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       let matches = true;
 
       for (const condition of conditions) {
@@ -197,10 +197,10 @@ export class DataSearchService {
   async aggregationSearch(
     datasetId: string,
     aggs: Array<{ field: string; type: 'terms' | 'avg' | 'sum' | 'min' | 'max' | 'date_histogram' }>
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, any>> {
     logger.info('Aggregation search', { datasetId, aggCount: aggs.length });
 
-    const aggsBody: Record<string, unknown> = {};
+    const aggsBody: Record<string, any> = {};
 
     for (const agg of aggs) {
       const aggName = `${agg.type}_${agg.field}`;
@@ -255,10 +255,10 @@ export class DataSearchService {
 
     const aggregations = esResponse.aggregations || {};
 
-    const formattedResults: Record<string, unknown> = {};
+    const formattedResults: Record<string, any> = {};
     for (const agg of aggs) {
       const aggName = `${agg.type}_${agg.field}`;
-      const raw = aggregations[aggName] as Record<string, unknown>;
+      const raw = aggregations[aggName] as Record<string, any>;
 
       if (agg.type === 'terms' || agg.type === 'date_histogram') {
         interface AggBucket { key: string; key_as_string?: string; doc_count: number }
@@ -306,9 +306,9 @@ export class DataSearchService {
       },
     });
 
-    interface SuggestOption { text?: string; _source?: Record<string, unknown>; _score?: number; _id?: string }
-    const suggestResp = esResponse.suggest as Record<string, unknown> | undefined;
-    const datasetSuggest = (suggestResp?.dataset_suggest as Array<Record<string, unknown>> | undefined);
+    interface SuggestOption { text?: string; _source?: Record<string, any>; _score?: number; _id?: string }
+    const suggestResp = esResponse.suggest as Record<string, any> | undefined;
+    const datasetSuggest = (suggestResp?.dataset_suggest as Array<Record<string, any>> | undefined);
     const suggestions = ((datasetSuggest?.[0]?.options || []) as SuggestOption[]);
 
     const results = suggestions.map((option) => ({
@@ -340,11 +340,11 @@ export class DataSearchService {
     });
 
     const dataPreviewStrings = sampleRows.map(r => {
-      const data = r.data as Record<string, unknown>;
+      const data = r.data as Record<string, any>;
       return Object.values(data).map(String).join(' ');
     });
 
-    const documentBody: Record<string, unknown> = {
+    const documentBody: Record<string, any> = {
       name: dataset.name,
       description: dataset.description || '',
       format: dataset.format || '',

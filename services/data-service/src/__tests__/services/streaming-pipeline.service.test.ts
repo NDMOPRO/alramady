@@ -142,7 +142,7 @@ describe('StreamingPipelineService', () => {
         { name: '', age: undefined, city: '' },
       ];
 
-      const result = await validateStage.transform(batch as Record<string, unknown>[]);
+      const result = await validateStage.transform(batch as Record<string, any>[]);
 
       // Only rows that have at least one non-null, non-empty value survive
       expect(result.length).toBe(2);
@@ -158,7 +158,7 @@ describe('StreamingPipelineService', () => {
         { 'Full Name': '  Alice  ', 'Age Group': 30 },
       ];
 
-      const result = await normalizeStage.transform(batch as Record<string, unknown>[]);
+      const result = await normalizeStage.transform(batch as Record<string, any>[]);
 
       expect(result[0]).toHaveProperty('full_name', 'Alice');
       expect(result[0]).toHaveProperty('age_group', 30);
@@ -169,7 +169,7 @@ describe('StreamingPipelineService', () => {
       const storeStage = stages[2];
 
       const batch = [{ name: 'Alice' }];
-      const result = await storeStage.transform(batch as Record<string, unknown>[]);
+      const result = await storeStage.transform(batch as Record<string, any>[]);
 
       expect(result).toEqual(batch);
       expect(mockAuditLogCreate).toHaveBeenCalled();

@@ -170,7 +170,7 @@ export class DataVersioningService {
       throw new Error(`Version ${versionId} has no snapshot data`);
     }
 
-    let snapshot: Record<string, unknown>;
+    let snapshot: Record<string, any>;
     try {
       snapshot = JSON.parse(version.snapshotPath);
     } catch {
@@ -257,7 +257,7 @@ export class DataVersioningService {
     if (!v1) throw new Error(`Version ${versionId1} not found`);
     if (!v2) throw new Error(`Version ${versionId2} not found`);
 
-    let snap1: Record<string, unknown>, snap2: Record<string, unknown>;
+    let snap1: Record<string, any>, snap2: Record<string, any>;
     try {
       snap1 = JSON.parse(v1.snapshotPath || '{}');
       snap2 = JSON.parse(v2.snapshotPath || '{}');

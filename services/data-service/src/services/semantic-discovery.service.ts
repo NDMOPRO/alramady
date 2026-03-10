@@ -41,7 +41,7 @@ interface KnowledgeGraphNode {
   datasetId: string;
   label: string;
   type: 'entity' | 'attribute' | 'measure';
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
 }
 
 interface KnowledgeGraphEdge {
@@ -90,7 +90,7 @@ export class SemanticDiscoveryService {
       });
 
       const sampleData: DataRow[] = rows.map((r) => {
-        const data = r.data as Record<string, unknown>;
+        const data = r.data as Record<string, any>;
         const result: DataRow = {};
         for (const [key, value] of Object.entries(data)) {
           result[key] = value === null || value === undefined ? null : typeof value === 'number' ? value : String(value);
@@ -158,7 +158,7 @@ export class SemanticDiscoveryService {
     });
 
     const sampleData: DataRow[] = rows.map((r) => {
-      const data = r.data as Record<string, unknown>;
+      const data = r.data as Record<string, any>;
       const result: DataRow = {};
       for (const [key, value] of Object.entries(data)) {
         result[key] = value === null || value === undefined ? null : typeof value === 'number' ? value : String(value);

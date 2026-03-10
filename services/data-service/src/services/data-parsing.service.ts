@@ -89,7 +89,7 @@ export default class DataParsingService {
     let totalCells = 0;
 
     for (const col of columns) {
-      const values = allRows.map((r) => (r.data as Record<string, unknown>)[col.name]);
+      const values = allRows.map((r) => (r.data as Record<string, any>)[col.name]);
       const nonNull = values.filter((v) => v !== null && v !== undefined && v !== '');
       const nullCount = values.length - nonNull.length;
       const uniqueSet = new Set(nonNull.map(String));
@@ -218,7 +218,7 @@ export default class DataParsingService {
 
   async streamLargeFile(
     filepath: string,
-    callback: (chunk: Record<string, unknown>[]) => Promise<void>,
+    callback: (chunk: Record<string, any>[]) => Promise<void>,
     options?: { delimiter?: string; batchSize?: number; encoding?: BufferEncoding }
   ): Promise<{ totalRows: number; totalBatches: number; elapsed: number }> {
     const delimiter = options?.delimiter || ',';
@@ -228,7 +228,7 @@ export default class DataParsingService {
 
     let totalRows = 0;
     let totalBatches = 0;
-    let batch: Record<string, unknown>[] = [];
+    let batch: Record<string, any>[] = [];
 
     const readStream = createReadStream(filepath, { encoding, highWaterMark: 64 * 1024 });
 
@@ -245,7 +245,7 @@ export default class DataParsingService {
     const batchTransform = new Transform({
       objectMode: true,
       async transform(
-        record: Record<string, unknown>,
+        record: Record<string, any>,
         _encoding: BufferEncoding,
         done: TransformCallback
       ) {
@@ -299,7 +299,7 @@ export default class DataParsingService {
   async chunkProcess(
     datasetId: string,
     chunkSize: number,
-    processor: (rows: Record<string, unknown>[]) => Promise<Record<string, unknown>[]>
+    processor: (rows: Record<string, any>[]) => Promise<Record<string, any>[]>
   ): Promise<{
     datasetId: string;
     totalProcessed: number;
@@ -327,7 +327,7 @@ export default class DataParsingService {
 
       if (rows.length === 0) break;
 
-      const rowData = rows.map((r) => r.data as Record<string, unknown>);
+      const rowData = rows.map((r) => r.data as Record<string, any>);
       const processedData = await processor(rowData);
 
       for (let i = 0; i < rows.length; i++) {
@@ -364,7 +364,7 @@ export default class DataParsingService {
     };
   }
 
-  inferSchema(data: Record<string, unknown>[]): SchemaField[] {
+  inferSchema(data: Record<string, any>[]): SchemaField[] {
     if (data.length === 0) {
       throw new Error('Cannot infer schema from empty data');
     }
@@ -475,7 +475,7 @@ export default class DataParsingService {
   }
 
   validateSchema(
-    data: Record<string, unknown>[],
+    data: Record<string, any>[],
     schema: {
       fields: Array<{
         name: string;

@@ -275,7 +275,7 @@ describe('ReportEasyModeService', () => {
       const result = await service.generate('r1');
 
       expect(result.format).toBe('pdf');
-      expect(result.contentType).toBe('application/pdf');
+      expect((result as any).contentType).toBe('application/pdf');
       expect(result.reportId).toBe('r1');
       expect(result.status).toBe('completed');
     });
@@ -284,21 +284,21 @@ describe('ReportEasyModeService', () => {
       const result = await service.generate('r1', 'html');
 
       expect(result.format).toBe('html');
-      expect(result.contentType).toBe('text/html');
+      expect((result as any).contentType).toBe('text/html');
     });
 
     it('should generate Word when requested', async () => {
       const result = await service.generate('r1', 'docx');
 
       expect(result.format).toBe('docx');
-      expect(result.contentType).toBe('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+      expect((result as any).contentType).toBe('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     });
 
     it('should generate Excel when requested', async () => {
       const result = await service.generate('r1', 'xlsx');
 
       expect(result.format).toBe('xlsx');
-      expect(result.contentType).toBe('application/vnd.ms-excel');
+      expect((result as any).contentType).toBe('application/vnd.ms-excel');
     });
 
     it('should update report status to COMPLETED', async () => {

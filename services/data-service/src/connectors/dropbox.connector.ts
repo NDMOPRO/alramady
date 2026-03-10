@@ -94,7 +94,7 @@ export class DropboxConnector implements IConnector {
   async downloadFile(token: ConnectorToken, path: string): Promise<Buffer> {
     const dbx = this.createClient(token);
     const response = await dbx.filesDownload({ path });
-    const fileBlob = (response.result as unknown as Record<string, unknown>).fileBinary as Buffer;
+    const fileBlob = (response.result as unknown as Record<string, any>).fileBinary as Buffer;
     return Buffer.from(fileBlob);
   }
 

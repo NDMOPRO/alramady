@@ -3,7 +3,7 @@ declare module 'node-cron' {
     stop(): void;
     start(): void;
   }
-  export function schedule(expression: string, func: () => void, options?: Record<string, unknown>): ScheduledTask;
+  export function schedule(expression: string, func: () => void, options?: Record<string, any>): ScheduledTask;
   export function validate(expression: string): boolean;
 }
 
@@ -19,15 +19,20 @@ declare module 'chartjs-node-canvas' {
 declare module 'chart.js' {
   export interface ChartConfiguration {
     type: string;
-    data: Record<string, unknown>;
-    options?: Record<string, unknown>;
+    data: Record<string, any>;
+    options?: Record<string, any>;
   }
   export type ChartType = string;
+}
+
+declare module 'cheerio' {
+  export function load(html: string): any;
+  export function html(): string;
 }
 
 declare module '@json2csv/plainjs' {
   export class Parser {
     constructor(opts?: { fields?: string[]; delimiter?: string });
-    parse(data: Record<string, unknown>[]): string;
+    parse(data: Record<string, any>[]): string;
   }
 }

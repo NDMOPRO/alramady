@@ -90,7 +90,7 @@ export class SalesforceConnector implements IConnector {
       throw new Error(`Salesforce token exchange failed: ${error}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: data.refresh_token as string,
@@ -117,7 +117,7 @@ export class SalesforceConnector implements IConnector {
       throw new Error(`Salesforce token refresh failed: ${res.status}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
     return {
       accessToken: data.access_token as string,
       refreshToken: refreshToken, // Salesforce reuses refresh token
@@ -144,7 +144,7 @@ export class SalesforceConnector implements IConnector {
       token,
       '/services/data/v59.0/sobjects/'
     );
-    const data = await res.json() as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
 
     const objects: SalesforceObject[] = ((data.sobjects ?? []) as SalesforceObject[]).filter(
       (obj: SalesforceObject) => obj.queryable
@@ -187,7 +187,7 @@ export class SalesforceConnector implements IConnector {
       token,
       `/services/data/v59.0/sobjects/${objectName}/describe/`
     );
-    const descData = await descRes.json() as Record<string, unknown>;
+    const descData = await descRes.json() as Record<string, any>;
     const allFields: SalesforceField[] = (descData.fields ?? []) as SalesforceField[];
 
     // Use specified fields or default to common fields
@@ -208,7 +208,7 @@ export class SalesforceConnector implements IConnector {
     const records = await this.queryRecords(token, soql);
 
     const data = records.map((record) => {
-      const row: Record<string, unknown> = {};
+      const row: Record<string, any> = {};
       for (const field of fields) {
         row[field] = record[field] ?? null;
       }
@@ -228,8 +228,8 @@ export class SalesforceConnector implements IConnector {
   async queryRecords(
     token: ConnectorToken,
     soql: string
-  ): Promise<Record<string, unknown>[]> {
-    const allRecords: Record<string, unknown>[] = [];
+  ): Promise<Record<string, any>[]> {
+    const allRecords: Record<string, any>[] = [];
     let nextUrl: string | null = `/services/data/v59.0/query/?q=${encodeURIComponent(soql)}`;
 
     while (nextUrl) {
@@ -239,8 +239,8 @@ export class SalesforceConnector implements IConnector {
         throw new Error(`Salesforce query failed: ${errorBody}`);
       }
 
-      const data = await res.json() as Record<string, unknown>;
-      const records = ((data.records ?? []) as Record<string, unknown>[]).map((r: Record<string, unknown>) => {
+      const data = await res.json() as Record<string, any>;
+      const records = ((data.records ?? []) as Record<string, any>[]).map((r: Record<string, any>) => {
         const { attributes, ...fields } = r;
         return fields;
       });
@@ -268,14 +268,14 @@ export class SalesforceConnector implements IConnector {
       token,
       `/services/data/v59.0/sobjects/${objectName}/describe/`
     );
-    const descData = await descRes.json() as Record<string, unknown>;
+    const descData = await descRes.json() as Record<string, any>;
 
     // Get approximate record count
     const countRes = await this.sfRequest(
       token,
       `/services/data/v59.0/query/?q=${encodeURIComponent(`SELECT COUNT() FROM ${objectName}`)}`
     );
-    const countData = await countRes.json() as Record<string, unknown>;
+    const countData = await countRes.json() as Record<string, any>;
 
     return {
       name: descData.name as string,
@@ -319,9 +319,9 @@ export class SalesforceConnector implements IConnector {
       throw new Error(`Salesforce report execution failed: ${res.status}`);
     }
 
-    const reportData = await res.json() as Record<string, unknown>;
-    const reportMetadata = reportData.reportMetadata as Record<string, unknown> | undefined;
-    const reportExtendedMetadata = reportData.reportExtendedMetadata as Record<string, unknown> | undefined;
+    const reportData = await res.json() as Record<string, any>;
+    const reportMetadata = reportData.reportMetadata as Record<string, any> | undefined;
+    const reportExtendedMetadata = reportData.reportExtendedMetadata as Record<string, any> | undefined;
     const columns =
       ((reportMetadata?.detailColumns ?? []) as string[]).map(
         (col: string) => {
@@ -330,12 +330,12 @@ export class SalesforceConnector implements IConnector {
         }
       ) ?? [];
 
-    const rows: Record<string, unknown>[] = [];
-    const factMap = (reportData.factMap ?? {}) as Record<string, Record<string, unknown>>;
+    const rows: Record<string, any>[] = [];
+    const factMap = (reportData.factMap ?? {}) as Record<string, Record<string, any>>;
     for (const key of Object.keys(factMap)) {
       const section = factMap[key];
-      for (const row of (section.rows ?? []) as Array<Record<string, unknown>>) {
-        const record: Record<string, unknown> = {};
+      for (const row of (section.rows ?? []) as Array<Record<string, any>>) {
+        const record: Record<string, any> = {};
         (row.dataCells as Array<{ label: string; value: unknown }>).forEach((cell: { label: string; value: unknown }, idx: number) => {
           record[columns[idx] ?? `col_${idx}`] = cell.value ?? cell.label;
         });

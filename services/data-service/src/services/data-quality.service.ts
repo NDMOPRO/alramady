@@ -68,7 +68,7 @@ interface LineageNode {
   id: string;
   type: 'source' | 'transform' | 'target';
   name: string;
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
   timestamp: Date;
 }
 
@@ -76,7 +76,7 @@ interface LineageEdge {
   sourceId: string;
   targetId: string;
   transformationType: string;
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
 }
 
 interface DataLineage {
@@ -91,7 +91,7 @@ interface QualityRule {
   name: string;
   column: string;
   ruleType: 'not_null' | 'unique' | 'range' | 'pattern' | 'reference' | 'custom';
-  parameters: Record<string, unknown>;
+  parameters: Record<string, any>;
   severity: 'critical' | 'high' | 'medium' | 'low';
 }
 
@@ -184,7 +184,7 @@ export default class DataQualityService {
     sampleClause: string,
     options: ProfilingOptions,
   ): Promise<ColumnProfile> {
-    const basicStats: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const basicStats: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT
         COUNT(*) as total_count,
         COUNT(*) - COUNT("${columnName}") as null_count,
@@ -210,7 +210,7 @@ export default class DataQualityService {
     );
 
     if (isNumeric) {
-      const numericStats: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+      const numericStats: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
         SELECT
           AVG("${columnName}"::numeric) as mean_val,
           STDDEV("${columnName}"::numeric) as stddev_val,
@@ -239,7 +239,7 @@ export default class DataQualityService {
 
     let topValues: { value: string; count: number; percentage: number }[] = [];
     if (options.includeTopValues) {
-      const topResults: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+      const topResults: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
         SELECT "${columnName}"::text as val, COUNT(*) as cnt
         FROM "${tableName}" ${sampleClause}
         WHERE "${columnName}" IS NOT NULL
@@ -300,7 +300,7 @@ export default class DataQualityService {
     sampleClause: string,
     bucketCount: number,
   ): Promise<{ bucket: string; count: number }[]> {
-    const rangeResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const rangeResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT
         MIN("${columnName}"::numeric) as min_val,
         MAX("${columnName}"::numeric) as max_val
@@ -333,7 +333,7 @@ export default class DataQualityService {
       }
     }
 
-    const distResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const distResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT
         CASE ${caseClauses.join(' ')} END as bucket,
         COUNT(*) as cnt
@@ -356,7 +356,7 @@ export default class DataQualityService {
     columnName: string,
     sampleClause: string,
   ): Promise<{ pattern: string; count: number }[]> {
-    const queryRows: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const queryRows: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT "${columnName}"::text as val
       FROM "${tableName}" ${sampleClause}
       WHERE "${columnName}" IS NOT NULL
@@ -609,7 +609,7 @@ export default class DataQualityService {
             if (minVal >= minBound && maxVal <= maxBound) {
               passedChecks++;
             } else {
-              const violationResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+              const violationResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
                 SELECT COUNT(*) as cnt
                 FROM "${dataset.tableName}"
                 WHERE "${rule.column}"::numeric < ${minBound}
@@ -630,7 +630,7 @@ export default class DataQualityService {
         }
         case 'pattern': {
           const patternRegex = rule.parameters.regex as string;
-          const patternResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+          const patternResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
             SELECT COUNT(*) as cnt
             FROM "${dataset.tableName}"
             WHERE "${rule.column}" IS NOT NULL
@@ -720,7 +720,7 @@ export default class DataQualityService {
 
     const lastUpdated = dataset.updatedAt;
     const ageHours = (Date.now() - lastUpdated.getTime()) / 3600000;
-    const metadata = dataset.metadata as Record<string, unknown> | null;
+    const metadata = dataset.metadata as Record<string, any> | null;
     const expectedFrequencyHours = (metadata?.refreshFrequencyHours as number) || 24;
 
     let score = 100;
@@ -821,7 +821,7 @@ export default class DataQualityService {
       throw new Error(`Dataset not found: ${datasetId}`);
     }
 
-    const rawData: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const rawData: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT ROW_NUMBER() OVER () as row_idx, "${columnName}"::numeric as val
       FROM "${dataset.tableName}"
       WHERE "${columnName}" IS NOT NULL
@@ -1026,7 +1026,7 @@ export default class DataQualityService {
       id: n.id,
       type: n.type as LineageNode['type'],
       name: n.name,
-      metadata: n.metadata as Record<string, unknown>,
+      metadata: n.metadata as Record<string, any>,
       timestamp: n.timestamp,
     }));
 
@@ -1034,7 +1034,7 @@ export default class DataQualityService {
       sourceId: e.sourceId,
       targetId: e.targetId,
       transformationType: e.transformationType || '',
-      metadata: e.metadata as Record<string, unknown>,
+      metadata: e.metadata as Record<string, any>,
     }));
 
     const nodeIds = new Set(lineageNodes.map(n => n.id));

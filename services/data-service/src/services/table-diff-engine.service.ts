@@ -167,8 +167,8 @@ export class TableDiffEngineService {
   private computeDiff(
     cols1: Array<{ name: string; dataType: string | null }>,
     cols2: Array<{ name: string; dataType: string | null }>,
-    rows1: Record<string, unknown>[],
-    rows2: Record<string, unknown>[]
+    rows1: Record<string, any>[],
+    rows2: Record<string, any>[]
   ): DiffResult {
     const startTime = Date.now();
 
@@ -321,8 +321,8 @@ export class TableDiffEngineService {
   }
 
   private diffRows(
-    rows1: Record<string, unknown>[],
-    rows2: Record<string, unknown>[]
+    rows1: Record<string, any>[],
+    rows2: Record<string, any>[]
   ): RowDiff {
     const hash1 = new Map<string, number>();
     const hash2 = new Map<string, number>();
@@ -372,8 +372,8 @@ export class TableDiffEngineService {
   }
 
   private diffValues(
-    rows1: Record<string, unknown>[],
-    rows2: Record<string, unknown>[],
+    rows1: Record<string, any>[],
+    rows2: Record<string, any>[],
     cols1: Array<{ name: string; dataType: string | null }>,
     cols2: Array<{ name: string; dataType: string | null }>
   ): ValueChange[] {
@@ -409,7 +409,7 @@ export class TableDiffEngineService {
     return String(a) === String(b);
   }
 
-  private hashRow(row: Record<string, unknown>): string {
+  private hashRow(row: Record<string, any>): string {
     const keys = Object.keys(row).sort();
     const parts: string[] = [];
     for (const k of keys) {
@@ -418,7 +418,7 @@ export class TableDiffEngineService {
     return parts.join('|');
   }
 
-  private computeColumnStats(rows: Record<string, unknown>[], column: string): ColumnStats {
+  private computeColumnStats(rows: Record<string, any>[], column: string): ColumnStats {
     const values = rows.map(r => r[column]);
     const nonNull = values.filter(v => v !== null && v !== undefined && v !== '');
     const unique = new Set(nonNull.map(String));
@@ -507,7 +507,7 @@ export class TableDiffEngineService {
 
   // ─── File parsing ──────────────────────────────────────────────
 
-  private parseFileToRows(buffer: Buffer, format: string): Record<string, unknown>[] {
+  private parseFileToRows(buffer: Buffer, format: string): Record<string, any>[] {
     const lowerFormat = format.toLowerCase();
 
     if (lowerFormat === 'csv' || lowerFormat === 'tsv') {
@@ -525,17 +525,17 @@ export class TableDiffEngineService {
     throw new Error(`Unsupported file format: ${format}`);
   }
 
-  private parseCSV(buffer: Buffer, delimiter: string): Record<string, unknown>[] {
+  private parseCSV(buffer: Buffer, delimiter: string): Record<string, any>[] {
     const text = buffer.toString('utf-8');
     const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
     if (lines.length === 0) return [];
 
     const headers = this.parseCSVLine(lines[0], delimiter);
-    const rows: Record<string, unknown>[] = [];
+    const rows: Record<string, any>[] = [];
 
     for (let i = 1; i < lines.length; i++) {
       const values = this.parseCSVLine(lines[i], delimiter);
-      const row: Record<string, unknown> = {};
+      const row: Record<string, any> = {};
       for (let j = 0; j < headers.length; j++) {
         const val = values[j] ?? null;
         row[headers[j]] = val === '' ? null : this.autoConvert(val);
@@ -578,30 +578,30 @@ export class TableDiffEngineService {
     return result;
   }
 
-  private parseExcel(buffer: Buffer): Record<string, unknown>[] {
+  private parseExcel(buffer: Buffer): Record<string, any>[] {
     const workbook = XLSX.read(buffer, { type: 'buffer' });
     const firstSheet = workbook.SheetNames[0];
     if (!firstSheet) return [];
 
     const sheet = workbook.Sheets[firstSheet];
-    const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: null }) as Record<string, unknown>[];
+    const jsonData = XLSX.utils.sheet_to_json(sheet, { defval: null }) as Record<string, any>[];
     return jsonData;
   }
 
-  private parseJSON(buffer: Buffer): Record<string, unknown>[] {
+  private parseJSON(buffer: Buffer): Record<string, any>[] {
     const text = buffer.toString('utf-8').trim();
 
     // Try JSON array
     if (text.startsWith('[')) {
       const parsed = JSON.parse(text) as unknown[];
-      return parsed.filter((item): item is Record<string, unknown> =>
+      return parsed.filter((item): item is Record<string, any> =>
         typeof item === 'object' && item !== null && !Array.isArray(item)
       );
     }
 
     // Try JSONL
     const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-    return lines.map(line => JSON.parse(line) as Record<string, unknown>);
+    return lines.map(line => JSON.parse(line) as Record<string, any>);
   }
 
   private autoConvert(value: string | null): unknown {
@@ -729,7 +729,7 @@ export class TableDiffEngineService {
     tenantId: string
   ): Promise<{
     columns: Array<{ name: string; dataType: string | null }>;
-    rows: Record<string, unknown>[];
+    rows: Record<string, any>[];
   }> {
     const dataset = await this.prisma.dataset.findFirst({
       where: { id: datasetId, tenantId },
@@ -746,7 +746,7 @@ export class TableDiffEngineService {
 
     return {
       columns: dataset.columns.map(c => ({ name: c.name, dataType: c.dataType })),
-      rows: dataRows.map(r => r.data as Record<string, unknown>),
+      rows: dataRows.map(r => r.data as Record<string, any>),
     };
   }
 

@@ -172,7 +172,7 @@ export default class ChartRendererService {
     const canvas = this.getCanvas(width, height, theme.background);
 
     const config = this.buildConfiguration(request, theme);
-    let buffer = await canvas.renderToBuffer(config as unknown as Record<string, any>);
+    let buffer = await canvas.renderToBuffer(config as any);
 
     if (request.branding) {
       buffer = await this.applyBranding(buffer, width, height, request.branding);
@@ -297,7 +297,7 @@ export default class ChartRendererService {
             rtl: theme.rtl,
           },
         },
-        scales: this.buildScales(request.chartType, theme, datasets) as unknown as ChartConfiguration['options'],
+        scales: this.buildScales(request.chartType, theme, datasets) as any,
         layout: { padding: { top: 15, right: 20, bottom: 15, left: 20 } },
       },
     };

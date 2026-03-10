@@ -15,7 +15,7 @@ interface ScheduledJobConfig {
   retryPolicy: RetryPolicy;
   enabled: boolean;
   createdBy: string;
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
 }
 
 interface ImportConfig {
@@ -76,7 +76,7 @@ interface JobQueueMetrics {
 }
 
 interface DataBatch {
-  records: Record<string, unknown>[];
+  records: Record<string, any>[];
   batchIndex: number;
   totalBatches: number;
   sourceOffset: number;
@@ -171,7 +171,7 @@ export default class DataSchedulerService extends EventEmitter {
         retryPolicy: jobRecord.retryPolicy as unknown as RetryPolicy,
         enabled: true,
         createdBy: jobRecord.createdBy || '',
-        metadata: (jobRecord.metadata as Record<string, unknown>) || {},
+        metadata: (jobRecord.metadata as Record<string, any>) || {},
       };
       await this.scheduleJob(config);
     }
@@ -369,7 +369,7 @@ export default class DataSchedulerService extends EventEmitter {
     });
 
     const config = importConfig as ImportConfig;
-    let totalRecords: Record<string, unknown>[] = [];
+    let totalRecords: Record<string, any>[] = [];
 
     try {
       totalRecords = await this.fetchSourceData(config);
@@ -458,13 +458,13 @@ export default class DataSchedulerService extends EventEmitter {
     return finalEntry;
   }
 
-  private async fetchSourceData(config: ImportConfig): Promise<Record<string, unknown>[]> {
-    const records: Record<string, unknown>[] = [];
+  private async fetchSourceData(config: ImportConfig): Promise<Record<string, any>[]> {
+    const records: Record<string, any>[] = [];
 
     if (config.sourceType === 'database' && config.query) {
-      const rawResults: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(config.query);
+      const rawResults: Record<string, any>[] = await this.prisma.$queryRawUnsafe(config.query);
       for (const row of rawResults) {
-        const transformedRow: Record<string, unknown> = {};
+        const transformedRow: Record<string, any> = {};
         for (const rule of config.transformations) {
           const sourceValue = row[rule.sourceField];
           transformedRow[rule.targetField] = this.applyTransform(sourceValue, rule);
@@ -481,10 +481,10 @@ export default class DataSchedulerService extends EventEmitter {
         throw new Error(`API fetch failed: ${response.status} ${response.statusText}`);
       }
       const data = await response.json() as unknown;
-      const dataObj = data as Record<string, unknown>;
-      const items = Array.isArray(data) ? data as Record<string, unknown>[] : (dataObj.items || dataObj.results || dataObj.data || []) as Record<string, unknown>[];
+      const dataObj = data as Record<string, any>;
+      const items = Array.isArray(data) ? data as Record<string, any>[] : (dataObj.items || dataObj.results || dataObj.data || []) as Record<string, any>[];
       for (const item of items) {
-        const transformedRow: Record<string, unknown> = {};
+        const transformedRow: Record<string, any> = {};
         for (const rule of config.transformations) {
           const sourceValue = this.getNestedValue(item, rule.sourceField);
           transformedRow[rule.targetField] = this.applyTransform(sourceValue, rule);
@@ -501,11 +501,11 @@ export default class DataSchedulerService extends EventEmitter {
       const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
       for (let i = 1; i < lines.length; i++) {
         const values = this.parseCSVLine(lines[i]);
-        const row: Record<string, unknown> = {};
+        const row: Record<string, any> = {};
         for (let j = 0; j < headers.length && j < values.length; j++) {
           row[headers[j]] = values[j];
         }
-        const transformedRow: Record<string, unknown> = {};
+        const transformedRow: Record<string, any> = {};
         for (const rule of config.transformations) {
           const sourceValue = row[rule.sourceField];
           transformedRow[rule.targetField] = this.applyTransform(sourceValue, rule);
@@ -596,7 +596,7 @@ export default class DataSchedulerService extends EventEmitter {
     }
   }
 
-  private getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+  private getNestedValue(obj: Record<string, any>, path: string): unknown {
     const parts = path.split('.');
     let current: unknown = obj;
     for (const part of parts) {
@@ -604,7 +604,7 @@ export default class DataSchedulerService extends EventEmitter {
         return undefined;
       }
       if (typeof current === 'object' && current !== null) {
-        current = (current as Record<string, unknown>)[part];
+        current = (current as Record<string, any>)[part];
       } else {
         return undefined;
       }
@@ -612,7 +612,7 @@ export default class DataSchedulerService extends EventEmitter {
     return current;
   }
 
-  private createBatches(records: Record<string, unknown>[], batchSize: number): DataBatch[] {
+  private createBatches(records: Record<string, any>[], batchSize: number): DataBatch[] {
     const batches: DataBatch[] = [];
     const totalBatches = Math.ceil(records.length / batchSize);
 
@@ -653,7 +653,7 @@ export default class DataSchedulerService extends EventEmitter {
             `SELECT COUNT(*) as cnt FROM "${config.targetTable}" WHERE "${config.upsertKey}" = $1`,
             keyValue,
           );
-          const exists = (existing as Record<string, unknown>[])[0]?.cnt > 0;
+          const exists = (existing as Record<string, any>[])[0]?.cnt > 0;
 
           if (exists) {
             if (config.conflictStrategy === 'skip') {

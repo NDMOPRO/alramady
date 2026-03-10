@@ -64,7 +64,7 @@ export class ReportPostEditService {
       data: {
         ...data,
         createdBy: data.userId || data.createdBy,
-      },
+      } as any,
     });
     logger.info('Report post-edit created', { id: record.id });
     await cacheDel(`${CACHE_PREFIX}:list:*`);

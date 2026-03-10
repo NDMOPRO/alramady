@@ -77,8 +77,8 @@ export class MakeConnector implements IConnector {
 
   async sendToScenario(
     webhookUrl: string,
-    data: Record<string, unknown>
-  ): Promise<Record<string, unknown>> {
+    data: Record<string, any>
+  ): Promise<Record<string, any>> {
     const res = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -95,11 +95,11 @@ export class MakeConnector implements IConnector {
 
     const responseData = await res.json().catch(() => ({}));
     logger.info('Data sent to Make.com scenario successfully');
-    return responseData as Record<string, unknown>;
+    return responseData as Record<string, any>;
   }
 
   receiveFromScenario(
-    payload: Record<string, unknown>
+    payload: Record<string, any>
   ): ConnectorImportResult {
     const columns = Object.keys(payload);
     return {

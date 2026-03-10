@@ -108,13 +108,13 @@ export class TypeformConnector implements IConnector {
       throw new Error(`Typeform forms list failed: ${res.status}`);
     }
 
-    const data = await res.json() as Record<string, unknown>;
-    return ((data.items ?? []) as Array<Record<string, unknown>>).map((form) => ({
+    const data = await res.json() as Record<string, any>;
+    return ((data.items ?? []) as Array<Record<string, any>>).map((form) => ({
       id: String(form.id),
       title: String(form.title ?? ''),
       lastUpdatedAt: String(form.last_updated_at ?? ''),
       createdAt: String(form.created_at ?? ''),
-      fields: ((form.fields ?? []) as Array<Record<string, unknown>>).map((f) => ({
+      fields: ((form.fields ?? []) as Array<Record<string, any>>).map((f) => ({
         id: String(f.id),
         title: String(f.title ?? ''),
         type: String(f.type ?? ''),
@@ -135,14 +135,14 @@ export class TypeformConnector implements IConnector {
       throw new Error(`Typeform form fetch failed: ${formRes.status}`);
     }
 
-    const formData = await formRes.json() as Record<string, unknown>;
+    const formData = await formRes.json() as Record<string, any>;
     const fieldMap = new Map<string, string>();
-    for (const field of ((formData.fields ?? []) as Array<Record<string, unknown>>)) {
+    for (const field of ((formData.fields ?? []) as Array<Record<string, any>>)) {
       fieldMap.set(String(field.id), String(field.title ?? field.id));
     }
 
     // Fetch responses with pagination
-    const allRows: Record<string, unknown>[] = [];
+    const allRows: Record<string, any>[] = [];
     let beforeToken: string | undefined;
 
     do {
@@ -160,17 +160,17 @@ export class TypeformConnector implements IConnector {
         throw new Error(`Typeform responses fetch failed: ${res.status}`);
       }
 
-      const data = await res.json() as Record<string, unknown>;
-      const items = (data.items ?? []) as Array<Record<string, unknown>>;
+      const data = await res.json() as Record<string, any>;
+      const items = (data.items ?? []) as Array<Record<string, any>>;
 
       for (const response of items) {
-        const row: Record<string, unknown> = {
+        const row: Record<string, any> = {
           responseId: response.response_id ?? response.token,
           submittedAt: response.submitted_at,
           landedAt: response.landed_at,
         };
 
-        for (const answer of (response.answers ?? []) as Array<Record<string, unknown>>) {
+        for (const answer of (response.answers ?? []) as Array<Record<string, any>>) {
           const fieldId = (answer.field as Record<string, string>)?.id ?? '';
           const fieldTitle = fieldMap.get(fieldId) ?? fieldId;
           row[fieldTitle] = this.extractAnswerValue(answer);
@@ -190,12 +190,12 @@ export class TypeformConnector implements IConnector {
       columns,
       rowCount: allRows.length,
       sourceId: formId,
-      sourceName: String((formData as Record<string, unknown>).title ?? formId),
+      sourceName: String((formData as Record<string, any>).title ?? formId),
       sourceType: 'typeform',
     };
   }
 
-  private extractAnswerValue(answer: Record<string, unknown>): unknown {
+  private extractAnswerValue(answer: Record<string, any>): unknown {
     const type = String(answer.type ?? '');
     switch (type) {
       case 'text':
@@ -213,11 +213,11 @@ export class TypeformConnector implements IConnector {
       case 'choice':
         return (answer.choice as Record<string, string>)?.label ?? '';
       case 'choices': {
-        const choices = answer.choices as Record<string, unknown>;
+        const choices = answer.choices as Record<string, any>;
         return ((choices?.labels ?? []) as string[]).join(', ');
       }
       case 'payment':
-        return (answer.payment as Record<string, unknown>)?.amount ?? 0;
+        return (answer.payment as Record<string, any>)?.amount ?? 0;
       default:
         return JSON.stringify(answer[type] ?? '');
     }

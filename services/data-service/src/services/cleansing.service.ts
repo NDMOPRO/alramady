@@ -15,7 +15,7 @@ export class CleansingService {
     const duplicateIds: string[] = [];
 
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       const key = columns.map(c => String(data[c] ?? '')).join('|');
 
       if (threshold >= 1.0) {
@@ -67,7 +67,7 @@ export class CleansingService {
       orderBy: { rowIndex: 'asc' },
     });
 
-    const values = allRows.map(r => (r.data as Record<string, unknown>)[column]).filter(v => v !== null && v !== undefined && v !== '');
+    const values = allRows.map(r => (r.data as Record<string, any>)[column]).filter(v => v !== null && v !== undefined && v !== '');
     let fillValue: string | number | null = null;
     let dropped = 0;
 
@@ -85,7 +85,7 @@ export class CleansingService {
     }
 
     for (let i = 0; i < allRows.length; i++) {
-      const data = allRows[i].data as Record<string, unknown>;
+      const data = allRows[i].data as Record<string, any>;
       if (data[column] === null || data[column] === undefined || data[column] === '') {
         if (strategy === 'drop') {
           await prisma.dataRow.delete({ where: { id: allRows[i].id } });
@@ -93,21 +93,21 @@ export class CleansingService {
           continue;
         }
         if (strategy === 'forward') {
-          fillValue = i > 0 ? (allRows[i - 1].data as Record<string, unknown>)[column] : null;
+          fillValue = i > 0 ? (allRows[i - 1].data as Record<string, any>)[column] : null;
         } else if (strategy === 'backward') {
           for (let j = i + 1; j < allRows.length; j++) {
-            const nextVal = (allRows[j].data as Record<string, unknown>)[column];
+            const nextVal = (allRows[j].data as Record<string, any>)[column];
             if (nextVal !== null && nextVal !== undefined && nextVal !== '') { fillValue = nextVal; break; }
           }
         } else if (strategy === 'interpolate') {
           let prevVal: number | null = null;
           let nextVal: number | null = null;
           for (let j = i - 1; j >= 0; j--) {
-            const v = Number((allRows[j].data as Record<string, unknown>)[column]);
+            const v = Number((allRows[j].data as Record<string, any>)[column]);
             if (!isNaN(v)) { prevVal = v; break; }
           }
           for (let j = i + 1; j < allRows.length; j++) {
-            const v = Number((allRows[j].data as Record<string, unknown>)[column]);
+            const v = Number((allRows[j].data as Record<string, any>)[column]);
             if (!isNaN(v)) { nextVal = v; break; }
           }
           fillValue = prevVal !== null && nextVal !== null ? (prevVal + nextVal) / 2 : prevVal ?? nextVal ?? 0;
@@ -133,12 +133,12 @@ export class CleansingService {
       }
     }
 
-    return { strategy, column, rowsAffected: strategy === 'drop' ? dropped : allRows.filter(r => (r.data as Record<string, unknown>)[column] === null || (r.data as Record<string, unknown>)[column] === undefined || (r.data as Record<string, unknown>)[column] === '').length, fillValue: strategy !== 'drop' ? fillValue : undefined };
+    return { strategy, column, rowsAffected: strategy === 'drop' ? dropped : allRows.filter(r => (r.data as Record<string, any>)[column] === null || (r.data as Record<string, any>)[column] === undefined || (r.data as Record<string, any>)[column] === '').length, fillValue: strategy !== 'drop' ? fillValue : undefined };
   }
 
   async normalizeValues(datasetId: string, column: string, method: 'minmax' | 'zscore' | 'log' | 'robust') {
     const allRows = await prisma.dataRow.findMany({ where: { datasetId }, orderBy: { rowIndex: 'asc' } });
-    const values = allRows.map(r => Number((r.data as Record<string, unknown>)[column])).filter(n => !isNaN(n));
+    const values = allRows.map(r => Number((r.data as Record<string, any>)[column])).filter(n => !isNaN(n));
 
     if (values.length === 0) throw new Error(`No numeric values found in column ${column}`);
 
@@ -166,7 +166,7 @@ export class CleansingService {
 
     let updated = 0;
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       const val = Number(data[column]);
       if (!isNaN(val)) {
         data[`${column}_normalized`] = Math.round(normalize(val) * 10000) / 10000;
@@ -180,7 +180,7 @@ export class CleansingService {
 
   async detectOutliers(datasetId: string, column: string, method: 'iqr' | 'zscore' | 'modified_zscore' = 'iqr') {
     const allRows = await prisma.dataRow.findMany({ where: { datasetId }, orderBy: { rowIndex: 'asc' } });
-    const values = allRows.map(r => ({ id: r.id, rowIndex: r.rowIndex, value: Number((r.data as Record<string, unknown>)[column]) })).filter(v => !isNaN(v.value));
+    const values = allRows.map(r => ({ id: r.id, rowIndex: r.rowIndex, value: Number((r.data as Record<string, any>)[column]) })).filter(v => !isNaN(v.value));
 
     const nums = values.map(v => v.value);
     const sorted = [...nums].sort((a, b) => a - b);
@@ -235,7 +235,7 @@ export class CleansingService {
     const issues: { rowIndex: number; column: string; expectedType: string; actualValue: unknown }[] = [];
 
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       for (const col of columns) {
         const val = data[col.name];
         if (val === null || val === undefined) continue;
@@ -268,7 +268,7 @@ export class CleansingService {
     let trimmed = 0;
 
     for (const row of allRows) {
-      const data = row.data as Record<string, unknown>;
+      const data = row.data as Record<string, any>;
       let changed = false;
       for (const col of stringCols) {
         if (typeof data[col.name] === 'string') {

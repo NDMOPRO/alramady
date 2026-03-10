@@ -281,7 +281,7 @@ router.post('/import/url', validate(importUrlSchema), asyncHandler(async (req: R
   const buffer = Buffer.from(await response.arrayBuffer());
   const filename = url.split('/').pop() || 'import';
   const detectedFormat = format || filename.split('.').pop() || 'csv';
-  let result: Record<string, unknown>;
+  let result: Record<string, any>;
   switch (detectedFormat) {
     case 'csv': result = await importService.importCSV(buffer, filename, tenantId, userId); break;
     case 'json': result = await importService.importJSON(buffer, filename, tenantId, userId); break;
@@ -298,12 +298,12 @@ router.post('/import/batch', upload.array('files', 20), asyncHandler(async (req:
   const { tenantId, userId } = getTenantAndUser(req);
   const files = req.files as Express.Multer.File[];
   if (!files || files.length === 0) { res.status(400).json({ success: false, error: 'At least one file is required' }); return; }
-  const results: Record<string, unknown>[] = [];
+  const results: Record<string, any>[] = [];
   const errors: { filename: string; error: string }[] = [];
   for (const file of files) {
     try {
       const ext = file.originalname.split('.').pop()?.toLowerCase();
-      let result: Record<string, unknown>;
+      let result: Record<string, any>;
       switch (ext) {
         case 'csv': case 'tsv': result = await importService.importCSV(file.buffer, file.originalname, tenantId, userId); break;
         case 'xlsx': case 'xls': result = await importService.importExcel(file.buffer, file.originalname, tenantId, userId); break;
@@ -366,12 +366,12 @@ router.post('/import/folder', upload.array('files', 100), asyncHandler(async (re
   const { tenantId, userId } = getTenantAndUser(req);
   const files = req.files as Express.Multer.File[];
   if (!files || files.length === 0) { res.status(400).json({ success: false, error: 'At least one file is required' }); return; }
-  const results: Record<string, unknown>[] = [];
+  const results: Record<string, any>[] = [];
   const errors: { filename: string; error: string }[] = [];
   for (const file of files) {
     try {
       const ext = file.originalname.split('.').pop()?.toLowerCase();
-      let result: Record<string, unknown>;
+      let result: Record<string, any>;
       switch (ext) {
         case 'csv': case 'tsv': result = await importService.importCSV(file.buffer, file.originalname, tenantId, userId); break;
         case 'xlsx': case 'xls': result = await importService.importExcel(file.buffer, file.originalname, tenantId, userId); break;
@@ -595,7 +595,7 @@ router.get('/export/sql/:id', validate(datasetIdParams, 'params'), asyncHandler(
   const dataset = await sourcesService.getDataset(req.params.id!, tenantId);
   const rows = await sourcesService.getDatasetRows(req.params.id!, tenantId, { page: 1, limit: 50000 });
   const tableName = (dataset.name || 'data_export').replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();
-  const dataRows = (rows as { rows?: Record<string, unknown>[] }).rows || rows;
+  const dataRows = (rows as { rows?: Record<string, any>[] }).rows || rows;
   const allRows = Array.isArray(dataRows) ? dataRows : [];
   const columns = allRows.length > 0 ? Object.keys(allRows[0]).filter(k => k !== 'rowIndex') : [];
   let sql = `CREATE TABLE IF NOT EXISTS "${tableName}" (\n`;

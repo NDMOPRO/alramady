@@ -6,7 +6,7 @@ import crypto from 'crypto';
 
 interface SqlQueryResult {
   columns: string[];
-  rows: Record<string, unknown>[];
+  rows: Record<string, any>[];
   rowCount: number;
   executionTimeMs: number;
   sql: string;
@@ -822,28 +822,28 @@ class QueryExecutor {
     throw new Error(`Dataset '${nameOrId}' not found for tenant`);
   }
 
-  private async loadDatasetRows(datasetId: string): Promise<Record<string, unknown>[]> {
+  private async loadDatasetRows(datasetId: string): Promise<Record<string, any>[]> {
     const rows = await this.prisma.dataRow.findMany({
       where: { datasetId },
       orderBy: { rowIndex: 'asc' },
       select: { data: true },
     });
-    return rows.map(r => r.data as Record<string, unknown>);
+    return rows.map(r => r.data as Record<string, any>);
   }
 
   private performJoin(
-    leftRows: Record<string, unknown>[],
-    rightRows: Record<string, unknown>[],
+    leftRows: Record<string, any>[],
+    rightRows: Record<string, any>[],
     join: JoinClause,
     leftAlias: string,
     rightAlias: string
-  ): Record<string, unknown>[] {
-    const result: Record<string, unknown>[] = [];
+  ): Record<string, any>[] {
+    const result: Record<string, any>[] = [];
     const leftCol = this.resolveJoinColumn(join.onLeft, leftAlias);
     const rightCol = this.resolveJoinColumn(join.onRight, rightAlias);
 
     // Build right index for performance
-    const rightIndex = new Map<string, Record<string, unknown>[]>();
+    const rightIndex = new Map<string, Record<string, any>[]>();
     for (const rRow of rightRows) {
       const key = String(rRow[rightCol] ?? '').toLowerCase();
       const existing = rightIndex.get(key);
@@ -854,14 +854,14 @@ class QueryExecutor {
       }
     }
 
-    const rightNullRow: Record<string, unknown> = {};
+    const rightNullRow: Record<string, any> = {};
     if (rightRows.length > 0) {
       for (const key of Object.keys(rightRows[0])) {
         rightNullRow[key] = null;
       }
     }
 
-    const leftNullRow: Record<string, unknown> = {};
+    const leftNullRow: Record<string, any> = {};
     if (leftRows.length > 0) {
       for (const key of Object.keys(leftRows[0])) {
         leftNullRow[key] = null;
@@ -912,8 +912,8 @@ class QueryExecutor {
     return parts.length > 1 ? parts[parts.length - 1] : qualifiedName;
   }
 
-  private prefixKeys(row: Record<string, unknown>, prefix: string): Record<string, unknown> {
-    const result: Record<string, unknown> = {};
+  private prefixKeys(row: Record<string, any>, prefix: string): Record<string, any> {
+    const result: Record<string, any> = {};
     for (const [key, value] of Object.entries(row)) {
       result[`${prefix}.${key}`] = value;
     }
@@ -921,9 +921,9 @@ class QueryExecutor {
   }
 
   private applyWhere(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     conditions: WhereCondition[]
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     return rows.filter(row => {
       let result = this.evaluateCondition(row, conditions[0]);
 
@@ -941,7 +941,7 @@ class QueryExecutor {
     });
   }
 
-  private evaluateCondition(row: Record<string, unknown>, cond: WhereCondition): boolean {
+  private evaluateCondition(row: Record<string, any>, cond: WhereCondition): boolean {
     const colName = cond.column.includes('.') ? cond.column.split('.').pop()! : cond.column;
     const cellValue = row[colName];
     let result = false;
@@ -1020,12 +1020,12 @@ class QueryExecutor {
   }
 
   private applyGroupBy(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     groupBy: GroupByClause | null,
     selectColumns: SelectColumn[]
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     const groupKeys = groupBy?.columns || [];
-    const groups = new Map<string, Record<string, unknown>[]>();
+    const groups = new Map<string, Record<string, any>[]>();
 
     if (groupKeys.length === 0) {
       groups.set('__all__', rows);
@@ -1041,10 +1041,10 @@ class QueryExecutor {
       }
     }
 
-    const result: Record<string, unknown>[] = [];
+    const result: Record<string, any>[] = [];
 
     for (const [, groupRows] of groups) {
-      const outputRow: Record<string, unknown> = {};
+      const outputRow: Record<string, any> = {};
 
       // Copy group-by columns
       if (groupRows.length > 0) {
@@ -1073,7 +1073,7 @@ class QueryExecutor {
     return result;
   }
 
-  private computeAggregate(rows: Record<string, unknown>[], func: string, column: string | null): unknown {
+  private computeAggregate(rows: Record<string, any>[], func: string, column: string | null): unknown {
     switch (func) {
       case 'COUNT': {
         if (column === null || column === '*') return rows.length;
@@ -1133,9 +1133,9 @@ class QueryExecutor {
   }
 
   private applyHaving(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     having: HavingCondition[]
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     return rows.filter(row => {
       return having.every(h => {
         const outputKey = h.expression;
@@ -1155,11 +1155,11 @@ class QueryExecutor {
   }
 
   private projectColumns(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     columns: SelectColumn[]
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     return rows.map(row => {
-      const projected: Record<string, unknown> = {};
+      const projected: Record<string, any> = {};
       for (const col of columns) {
         const outputName = col.alias || col.expression;
         const sourceName = col.columnName || col.expression;
@@ -1169,9 +1169,9 @@ class QueryExecutor {
     });
   }
 
-  private applyDistinct(rows: Record<string, unknown>[]): Record<string, unknown>[] {
+  private applyDistinct(rows: Record<string, any>[]): Record<string, any>[] {
     const seen = new Set<string>();
-    const result: Record<string, unknown>[] = [];
+    const result: Record<string, any>[] = [];
     for (const row of rows) {
       const key = JSON.stringify(row);
       if (!seen.has(key)) {
@@ -1183,9 +1183,9 @@ class QueryExecutor {
   }
 
   private applyOrderBy(
-    rows: Record<string, unknown>[],
+    rows: Record<string, any>[],
     orderBy: OrderByClause[]
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     return [...rows].sort((a, b) => {
       for (const ob of orderBy) {
         const cmp = this.compareValues(a[ob.column], b[ob.column]);
@@ -1400,7 +1400,7 @@ export class SqlQueryEngineService {
     });
 
     return queries.map(q => {
-      const data = typeof q.value === 'string' ? JSON.parse(q.value) as Record<string, unknown> : {};
+      const data = typeof q.value === 'string' ? JSON.parse(q.value) as Record<string, any> : {};
       return {
         id: q.id,
         name: String(data.name || ''),

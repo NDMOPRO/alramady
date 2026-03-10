@@ -311,7 +311,7 @@ export class TableDiffService {
     tenantId: string
   ): Promise<{
     columns: Array<{ name: string; dataType: string | null }>;
-    rows: Record<string, unknown>[];
+    rows: Record<string, any>[];
   }> {
     const dataset = await this.prisma.dataset.findFirst({
       where: { id: datasetId, tenantId },
@@ -330,15 +330,15 @@ export class TableDiffService {
 
     return {
       columns: dataset.columns.map(c => ({ name: c.name, dataType: c.dataType })),
-      rows: dataRows.map(r => r.data as Record<string, unknown>),
+      rows: dataRows.map(r => r.data as Record<string, any>),
     };
   }
 
   // ─── Private: Diff algorithms ────────────────────────────────────
 
   private keyBasedDiff(
-    leftRows: Record<string, unknown>[],
-    rightRows: Record<string, unknown>[],
+    leftRows: Record<string, any>[],
+    rightRows: Record<string, any>[],
     keyColumns: string[],
     commonColumns: string[]
   ): {
@@ -352,14 +352,14 @@ export class TableDiffService {
     const changes: DiffResult['changes'] = [];
 
     // Build index of left rows by key
-    const leftIndex = new Map<string, { row: Record<string, unknown>; index: number }>();
+    const leftIndex = new Map<string, { row: Record<string, any>; index: number }>();
     for (let i = 0; i < leftRows.length; i++) {
       const key = this.buildRowKey(leftRows[i], keyColumns);
       leftIndex.set(key, { row: leftRows[i], index: i });
     }
 
     // Build index of right rows by key
-    const rightIndex = new Map<string, { row: Record<string, unknown>; index: number }>();
+    const rightIndex = new Map<string, { row: Record<string, any>; index: number }>();
     for (let i = 0; i < rightRows.length; i++) {
       const key = this.buildRowKey(rightRows[i], keyColumns);
       rightIndex.set(key, { row: rightRows[i], index: i });
@@ -435,8 +435,8 @@ export class TableDiffService {
   }
 
   private indexBasedDiff(
-    leftRows: Record<string, unknown>[],
-    rightRows: Record<string, unknown>[],
+    leftRows: Record<string, any>[],
+    rightRows: Record<string, any>[],
     commonColumns: string[]
   ): {
     addedRows: number;
@@ -514,11 +514,11 @@ export class TableDiffService {
 
   // ─── Private: Utility ────────────────────────────────────────────
 
-  private buildRowKey(row: Record<string, unknown>, keyColumns: string[]): string {
+  private buildRowKey(row: Record<string, any>, keyColumns: string[]): string {
     return keyColumns.map(col => String(row[col] ?? '__NULL__')).join('|||');
   }
 
-  private hashRow(row: Record<string, unknown>, columns: string[]): string {
+  private hashRow(row: Record<string, any>, columns: string[]): string {
     const parts: string[] = [];
     for (const col of columns) {
       parts.push(`${col}:${String(row[col] ?? '')}`);

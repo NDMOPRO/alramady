@@ -94,22 +94,22 @@ export class MiroConnector implements IConnector {
 
   async listBoards(
     token: ConnectorToken
-  ): Promise<Array<Record<string, unknown>>> {
+  ): Promise<Array<Record<string, any>>> {
     const res = await fetch(`${this.baseUrl}/boards?limit=50`, {
       headers: { Authorization: `Bearer ${token.accessToken}` },
     });
 
     if (!res.ok) throw new Error(`Miro boards list failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
-    return (data.data ?? []) as Array<Record<string, unknown>>;
+    const data = await res.json() as Record<string, any>;
+    return (data.data ?? []) as Array<Record<string, any>>;
   }
 
   async importBoard(
     token: ConnectorToken,
     boardId: string
   ): Promise<ConnectorImportResult> {
-    const allItems: Record<string, unknown>[] = [];
+    const allItems: Record<string, any>[] = [];
     let cursor: string | undefined;
 
     do {
@@ -123,8 +123,8 @@ export class MiroConnector implements IConnector {
 
       if (!res.ok) throw new Error(`Miro board items fetch failed: ${res.status}`);
 
-      const data = await res.json() as Record<string, unknown>;
-      const items = (data.data ?? []) as Array<Record<string, unknown>>;
+      const data = await res.json() as Record<string, any>;
+      const items = (data.data ?? []) as Array<Record<string, any>>;
 
       for (const item of items) {
         const position = item.position as Record<string, number> | undefined;
@@ -156,8 +156,8 @@ export class MiroConnector implements IConnector {
     };
   }
 
-  private extractItemContent(item: Record<string, unknown>): string {
-    const data = item.data as Record<string, unknown> | undefined;
+  private extractItemContent(item: Record<string, any>): string {
+    const data = item.data as Record<string, any> | undefined;
     if (!data) return '';
 
     if (typeof data.content === 'string') {

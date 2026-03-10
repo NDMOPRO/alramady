@@ -513,8 +513,8 @@ export class TemplateEngineService {
             .fill();
 
           doc.fillColor('#ffffff').fontSize(10);
-          columns.forEach((col: unknown, i: number) => {
-            const label = typeof col === 'string' ? col : (col as Record<string, unknown>).label || (col as Record<string, unknown>).field || '';
+          columns.forEach((col: any, i: number) => {
+            const label = typeof col === 'string' ? col : String(col.label || col.field || '');
             doc.text(label, margins.left + i * colWidth + 4, tableY + 6, {
               width: colWidth - 8,
               align: 'left',
@@ -631,7 +631,7 @@ export class TemplateEngineService {
                 const base64Data = imgSrc.split(',')[1];
                 const imgBuffer = Buffer.from(base64Data, 'base64');
                 const imgWidth = Math.min(section.content?.width || 400, pageWidth);
-                doc.image(imgBuffer, { width: imgWidth, align: 'center' as string });
+                (doc as any).image(imgBuffer, { width: imgWidth, align: 'center' });
               } else {
                 doc.fontSize(10).fillColor('#888')
                   .text(`[Image: ${imgSrc}]`, { align: 'center' });
@@ -887,8 +887,8 @@ export class TemplateEngineService {
             );
           }
 
-          const headerCells = columns.map((col: unknown) => {
-            const label = typeof col === 'string' ? col : (col as Record<string, unknown>).label || (col as Record<string, unknown>).field || '';
+          const headerCells = columns.map((col: any) => {
+            const label = typeof col === 'string' ? col : String(col.label || col.field || '');
             return new TableCell({
               children: [
                 new Paragraph({

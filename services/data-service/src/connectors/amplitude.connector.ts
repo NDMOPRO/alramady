@@ -110,12 +110,12 @@ export class AmplitudeConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Amplitude events fetch failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
-    const innerData = (data.data ?? {}) as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
+    const innerData = (data.data ?? {}) as Record<string, any>;
     const series = (innerData.series ?? []) as Array<number[]>;
     const xValues = (innerData.xValues ?? []) as string[];
 
-    const rows: Record<string, unknown>[] = xValues.map((date: string, i: number) => ({
+    const rows: Record<string, any>[] = xValues.map((date: string, i: number) => ({
       date,
       activeUsers: series[0]?.[i] ?? 0,
     }));
@@ -145,12 +145,12 @@ export class AmplitudeConnector implements IConnector {
 
     if (!res.ok) throw new Error(`Amplitude sessions fetch failed: ${res.status}`);
 
-    const data = await res.json() as Record<string, unknown>;
-    const innerData = (data.data ?? {}) as Record<string, unknown>;
+    const data = await res.json() as Record<string, any>;
+    const innerData = (data.data ?? {}) as Record<string, any>;
     const series = (innerData.series ?? []) as Array<number[]>;
     const xValues = (innerData.xValues ?? []) as string[];
 
-    const rows: Record<string, unknown>[] = xValues.map((date: string, i: number) => ({
+    const rows: Record<string, any>[] = xValues.map((date: string, i: number) => ({
       date,
       avgSessionLength: series[0]?.[i] ?? 0,
     }));

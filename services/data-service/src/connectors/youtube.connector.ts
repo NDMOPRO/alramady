@@ -93,7 +93,7 @@ export class YouTubeConnector implements IConnector {
     const metadata = await this.fetchVideoMetadata(token, videoId);
     const transcript = await this.extractTranscript(videoId);
 
-    const data: Record<string, unknown>[] = [{
+    const data: Record<string, any>[] = [{
       videoId: metadata.videoId,
       title: metadata.title,
       description: metadata.description,
@@ -164,11 +164,11 @@ export class YouTubeConnector implements IConnector {
           logger.warn('No transcript available for video', { videoId });
           return '';
         }
-        const fallbackData = await fallbackRes.json() as Record<string, unknown>;
+        const fallbackData = await fallbackRes.json() as Record<string, any>;
         return this.parseTranscriptJson(fallbackData);
       }
 
-      const data = await res.json() as Record<string, unknown>;
+      const data = await res.json() as Record<string, any>;
       return this.parseTranscriptJson(data);
     } catch (error) {
       logger.warn('Failed to extract transcript', { videoId, error });
@@ -176,8 +176,8 @@ export class YouTubeConnector implements IConnector {
     }
   }
 
-  private parseTranscriptJson(data: Record<string, unknown>): string {
-    const events = (data.events as Array<Record<string, unknown>>) ?? [];
+  private parseTranscriptJson(data: Record<string, any>): string {
+    const events = (data.events as Array<Record<string, any>>) ?? [];
     const segments: string[] = [];
 
     for (const event of events) {

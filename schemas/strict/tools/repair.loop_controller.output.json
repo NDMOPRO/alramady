@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/repair.loop_controller.output.json",
+  "title": "repair.loop_controller — Output",
+  "description": "Repair loop result with iteration history. Section 12 / B15.",
+  "type": "object",
+  "required": ["pass", "iterations_run", "final_pixel_diff", "cdr_design", "warnings"],
+  "properties": {
+    "pass": { "type": "boolean" },
+    "iterations_run": { "type": "integer", "minimum": 0 },
+    "final_pixel_diff": { "type": "number", "minimum": 0 },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "final_artifact": { "$ref": "../common.json#/$defs/ArtifactRef" },
+    "final_render": { "$ref": "../common.json#/$defs/RenderRef" },
+    "iteration_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["iteration", "strategy", "pixel_diff_before", "pixel_diff_after"],
+        "properties": {
+          "iteration": { "type": "integer", "minimum": 1 },
+          "strategy": { "type": "string" },
+          "pixel_diff_before": { "type": "number", "minimum": 0 },
+          "pixel_diff_after": { "type": "number", "minimum": 0 },
+          "adjustments_applied": { "type": "integer", "minimum": 0 },
+          "regressed": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

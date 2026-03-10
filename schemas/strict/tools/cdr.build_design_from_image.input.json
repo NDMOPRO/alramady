@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/cdr.build_design_from_image.input.json",
+  "title": "cdr.build_design_from_image — Input",
+  "description": "Builds a CDR design from image segments. Section 6 / B4.",
+  "type": "object",
+  "required": ["context", "segments", "source"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "segments": { "$ref": "../common.json#/$defs/ImageSegRef" },
+    "source": { "$ref": "../common.json#/$defs/AssetRef" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "reconstruct_text": { "type": "boolean", "default": true },
+        "vectorize_logos": { "type": "boolean", "default": true },
+        "background_mode": { "type": "string", "enum": ["keep_raster", "reconstruct"], "default": "keep_raster" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

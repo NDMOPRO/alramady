@@ -32,11 +32,11 @@ function colLabel(index: number): string {
 }
 
 export default function ExcelEditorPage() {
-  const params = useParams();
+  const params = useParams<{ id?: string }>();
   const router = useRouter();
   const toast = useToast();
   const queryClient = useQueryClient();
-  const workbookId = params.id as string;
+  const workbookId = typeof params?.id === "string" ? params.id : "";
 
   const [activeSheetId, setActiveSheetId] = useState<string>("");
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);

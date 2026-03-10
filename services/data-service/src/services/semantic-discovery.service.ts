@@ -9,7 +9,7 @@ import { logger } from '../utils/logger';
 import { KeyDetectionService } from './key-detection.service';
 
 const prisma = new PrismaClient();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder-key' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 
 interface SemanticRelationship {
   sourceDatasetId: string;

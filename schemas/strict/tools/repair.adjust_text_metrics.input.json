@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/repair.adjust_text_metrics.input.json",
+  "title": "repair.adjust_text_metrics — Input",
+  "description": "Adjusts text metrics (kerning, line-height, baseline) to fix typography diffs. Section 12 / B14.",
+  "type": "object",
+  "required": ["context", "cdr_design", "attributions"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "attributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "metric"],
+        "properties": {
+          "element_id": { "type": "string", "maxLength": 128 },
+          "metric": { "type": "string", "enum": ["kerning", "line_height", "baseline", "letter_spacing", "word_spacing", "font_size"] },
+          "current_value": { "type": "number" },
+          "target_value": { "type": "number" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "max_adjustment_percent": { "type": "number", "minimum": 0, "maximum": 50, "default": 5 },
+        "preserve_line_breaks": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

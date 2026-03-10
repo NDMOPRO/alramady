@@ -187,7 +187,7 @@ export class ModelBuilderService {
   private openai: OpenAI;
 
   constructor(private prisma: PrismaClient) {
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
   }
 
   // ── Create Model Configuration ──────────────────────────────────

@@ -45,10 +45,10 @@ interface LatestReportExecution {
 }
 
 export default function DatasetDetailPage() {
-  const params = useParams();
+  const params = useParams<{ id?: string }>();
   const router = useRouter();
   const toast = useToast();
-  const datasetId = params.id as string;
+  const datasetId = typeof params?.id === "string" ? params.id : "";
   const [page, setPage] = useState(1);
   const [activeTab, setActiveTab] = useState<"data" | "stats">("data");
   const [runningAction, setRunningAction] = useState<"analysis" | "report" | "presentation" | "recipe" | null>(null);

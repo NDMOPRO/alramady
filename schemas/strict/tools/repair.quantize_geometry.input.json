@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/repair.quantize_geometry.input.json",
+  "title": "repair.quantize_geometry — Input",
+  "description": "Quantizes geometry values to eliminate sub-pixel rounding diffs. Section 12 / B13.",
+  "type": "object",
+  "required": ["context", "cdr_design", "attributions"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "attributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "field"],
+        "properties": {
+          "element_id": { "type": "string", "maxLength": 128 },
+          "field": { "type": "string", "enum": ["x", "y", "w", "h", "rotation", "scale"] },
+          "current_value": { "type": "number" },
+          "quantized_value": { "type": "number" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "grid_size": { "type": "number", "minimum": 0.01, "maximum": 10, "default": 0.5 },
+        "snap_to_pixel": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

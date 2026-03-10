@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/verify.pixel_diff.output.json",
+  "title": "verify.pixel_diff — Output",
+  "description": "Pixel diff verification result. Section 5 / B9.",
+  "type": "object",
+  "required": ["diff", "warnings"],
+  "properties": {
+    "diff": { "$ref": "../common.json#/$defs/DiffRef" },
+    "total_pixels": { "type": "integer", "minimum": 0 },
+    "different_pixels": { "type": "integer", "minimum": 0 },
+    "max_channel_delta": { "type": "integer", "minimum": 0, "maximum": 255 },
+    "mean_channel_delta": { "type": "number", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

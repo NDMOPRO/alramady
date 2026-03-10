@@ -379,7 +379,7 @@ export class TaskDecompositionService {
   private openai: OpenAI;
 
   constructor() {
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
     logger.info('TaskDecompositionService initialized');
   }
 

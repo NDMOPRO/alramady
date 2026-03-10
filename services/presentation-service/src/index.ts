@@ -10,6 +10,8 @@ import { PrismaClient } from '@prisma/client';
 import Redis from 'ioredis';
 import winston from 'winston';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
+import { authMiddleware } from './middleware/auth.js';
+import { tenantMiddleware } from './middleware/tenant.js';
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
@@ -86,7 +88,7 @@ app.use(helmet());
 app.use(cors({
   origin: process.env.CORS_ORIGIN || '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID', 'x-tenant-id', 'x-user-id'],
   credentials: true,
 }));
 app.use(compression());
@@ -163,28 +165,28 @@ import aiGenerationRoutes from './routes/ai-generation.routes.js';
 import animationTransitionRoutes from './routes/animation-transition.routes.js';
 import integrationImportRoutes from './routes/integration-import.routes.js';
 
-app.use('/api/v1/presentation', presentationRoutes);
-app.use('/api/v1/presentation/ai-media', aiMediaRoutes);
-app.use('/api/v1/presentation/website-builder', websiteBuilderRoutes);
-app.use('/api/v1/presentation/replicate', visualReplicationRoutes);
-app.use('/api/v1/presentation/advanced-edit', advancedEditRoutes);
-app.use('/api/v1/presentation/ai-content', aiContentRoutes);
-app.use('/api/v1/presentation/animation', animationRoutes);
-app.use('/api/v1/presentation/collaboration', collaborationRoutes);
-app.use('/api/v1/presentation/export-share', exportShareRoutes);
-app.use('/api/v1/presentation/integration', integrationRoutes);
-app.use('/api/v1/presentation/multi-source', multiSourceRoutes);
-app.use('/api/v1/presentation/smart-design', smartDesignRoutes);
-app.use('/api/v1/presentation/templates-themes', templatesThemesRoutes);
-app.use('/api/v1/presentation/collab', collaborationLiveRoutes);
-app.use('/api/v1/presentation/interactive', interactiveRoutes);
-app.use('/api/v1/presentation/infographic', infographicRoutes);
-app.use('/api/v1/presentation/editing', editingRoutes);
-app.use('/api/v1/presentation/export-publish', exportPublishRoutes);
-app.use('/api/v1/presentation/generate', generateRoutes);
-app.use('/api/v1/presentation/ai', aiGenerationRoutes);
-app.use('/api/v1/presentation/animations', animationTransitionRoutes);
-app.use('/api/v1/presentation/integrations', integrationImportRoutes);
+app.use('/api/v1/presentation', authMiddleware, tenantMiddleware, presentationRoutes);
+app.use('/api/v1/presentation/ai-media', authMiddleware, tenantMiddleware, aiMediaRoutes);
+app.use('/api/v1/presentation/website-builder', authMiddleware, tenantMiddleware, websiteBuilderRoutes);
+app.use('/api/v1/presentation/replicate', authMiddleware, tenantMiddleware, visualReplicationRoutes);
+app.use('/api/v1/presentation/advanced-edit', authMiddleware, tenantMiddleware, advancedEditRoutes);
+app.use('/api/v1/presentation/ai-content', authMiddleware, tenantMiddleware, aiContentRoutes);
+app.use('/api/v1/presentation/animation', authMiddleware, tenantMiddleware, animationRoutes);
+app.use('/api/v1/presentation/collaboration', authMiddleware, tenantMiddleware, collaborationRoutes);
+app.use('/api/v1/presentation/export-share', authMiddleware, tenantMiddleware, exportShareRoutes);
+app.use('/api/v1/presentation/integration', authMiddleware, tenantMiddleware, integrationRoutes);
+app.use('/api/v1/presentation/multi-source', authMiddleware, tenantMiddleware, multiSourceRoutes);
+app.use('/api/v1/presentation/smart-design', authMiddleware, tenantMiddleware, smartDesignRoutes);
+app.use('/api/v1/presentation/templates-themes', authMiddleware, tenantMiddleware, templatesThemesRoutes);
+app.use('/api/v1/presentation/collab', authMiddleware, tenantMiddleware, collaborationLiveRoutes);
+app.use('/api/v1/presentation/interactive', authMiddleware, tenantMiddleware, interactiveRoutes);
+app.use('/api/v1/presentation/infographic', authMiddleware, tenantMiddleware, infographicRoutes);
+app.use('/api/v1/presentation/editing', authMiddleware, tenantMiddleware, editingRoutes);
+app.use('/api/v1/presentation/export-publish', authMiddleware, tenantMiddleware, exportPublishRoutes);
+app.use('/api/v1/presentation/generate', authMiddleware, tenantMiddleware, generateRoutes);
+app.use('/api/v1/presentation/ai', authMiddleware, tenantMiddleware, aiGenerationRoutes);
+app.use('/api/v1/presentation/animations', authMiddleware, tenantMiddleware, animationTransitionRoutes);
+app.use('/api/v1/presentation/integrations', authMiddleware, tenantMiddleware, integrationImportRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

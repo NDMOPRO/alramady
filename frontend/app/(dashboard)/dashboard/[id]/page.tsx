@@ -211,9 +211,9 @@ function WidgetChart({ widget }: { widget: Widget }) {
 }
 
 export default function DashboardViewPage() {
-  const params = useParams();
+  const params = useParams<{ id?: string }>();
   const router = useRouter();
-  const dashboardId = params.id as string;
+  const dashboardId = typeof params?.id === "string" ? params.id : "";
 
   const { data: dashboard, isLoading, isError, error } = useQuery({
     queryKey: ["dashboard", dashboardId],

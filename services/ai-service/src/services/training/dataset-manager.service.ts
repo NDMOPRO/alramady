@@ -218,7 +218,7 @@ export class DatasetManagerService {
   private openai: OpenAI;
 
   constructor(private prisma: PrismaClient) {
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
   }
 
   // ── CRUD Operations ──────────────────────────────────────────────

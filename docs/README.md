@@ -20,6 +20,14 @@ This documentation package provides complete system understanding for the Rasid 
 | [testing.md](testing.md) | Testing strategy, frameworks, visual regression |
 | [performance.md](performance.md) | Scaling, caching, monitoring, optimization |
 
+
+### Product Engine Specs
+
+| File | Description |
+|------|-------------|
+| [05_specs/excel-engine/EXCEL_ENGINE_SPEC_ULTRA_SCALE_AR.md](05_specs/excel-engine/EXCEL_ENGINE_SPEC_ULTRA_SCALE_AR.md) | Ultra-scale Arabic execution spec for Excel Engine canvas, T-IR, SVM, AI analyst, and anti-cheating constraints |
+| [../schemas/excel/common.defs.schema.json](../schemas/excel/common.defs.schema.json) | Minimum shared JSON Schema definitions for Excel tools/contracts (Draft 2020-12) |
+
 ### Architecture Diagrams (Mermaid)
 
 | Diagram | File | Type |

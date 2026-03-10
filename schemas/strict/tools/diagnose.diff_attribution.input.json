@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/diagnose.diff_attribution.input.json",
+  "title": "diagnose.diff_attribution — Input",
+  "description": "Attributes pixel differences to root causes. Section 12 / B12.",
+  "type": "object",
+  "required": ["context", "diff", "render_a", "render_b"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "diff": { "$ref": "../common.json#/$defs/DiffRef" },
+    "render_a": { "$ref": "../common.json#/$defs/RenderRef" },
+    "render_b": { "$ref": "../common.json#/$defs/RenderRef" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "max_attributions": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 },
+        "include_geometry": { "type": "boolean", "default": true },
+        "include_typography": { "type": "boolean", "default": true },
+        "include_color": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

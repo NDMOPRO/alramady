@@ -23,7 +23,7 @@ interface FileUploaderProps {
   accept?: Accept;
   maxFiles?: number;
   maxSize?: number;
-  onUpload?: (files: File[]) => Promise<void>;
+  onUpload?: (files: File[]) => void | Promise<void>;
   label?: string;
   labelAr?: string;
   description?: string;

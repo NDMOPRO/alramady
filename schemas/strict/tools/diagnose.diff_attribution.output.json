@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/diagnose.diff_attribution.output.json",
+  "title": "diagnose.diff_attribution — Output",
+  "description": "Diff attribution result with root causes. Section 12 / B12.",
+  "type": "object",
+  "required": ["attributions", "summary", "warnings"],
+  "properties": {
+    "attributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["attribution_id", "category", "element_id", "pixel_impact", "description"],
+        "properties": {
+          "attribution_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "category": { "type": "string", "enum": ["geometry", "typography", "color", "rasterization", "font_substitution", "anti_aliasing", "unknown"] },
+          "element_id": { "type": "string", "maxLength": 128 },
+          "pixel_impact": { "type": "integer", "minimum": 0 },
+          "description": { "type": "string", "maxLength": 2000 },
+          "suggested_repair": { "type": "string", "enum": ["quantize_geometry", "adjust_text_metrics", "re_embed_font", "none"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total_attributions", "total_pixel_impact", "top_category"],
+      "properties": {
+        "total_attributions": { "type": "integer", "minimum": 0 },
+        "total_pixel_impact": { "type": "integer", "minimum": 0 },
+        "top_category": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

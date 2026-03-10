@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/verify.structural_equivalence.input.json",
+  "title": "verify.structural_equivalence — Input",
+  "description": "Verifies structural equivalence of an editable artifact against its CDR. Section 6.5 / B10.",
+  "type": "object",
+  "required": ["context", "cdr_design", "artifact"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "artifact": { "$ref": "../common.json#/$defs/ArtifactRef" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "check_text_editability": { "type": "boolean", "default": true },
+        "check_layer_structure": { "type": "boolean", "default": true },
+        "check_font_embedding": { "type": "boolean", "default": true },
+        "check_image_integrity": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

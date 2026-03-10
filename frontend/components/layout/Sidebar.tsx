@@ -50,7 +50,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ mobileSidebarOpen, onMobileClose }: SidebarProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const sidebarOpen = useUIStore((s) => s.sidebarOpen);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const locale = useUIStore((s) => s.locale);

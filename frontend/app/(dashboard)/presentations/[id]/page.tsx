@@ -38,10 +38,10 @@ function saveBlob(blob: Blob, filename: string) {
 }
 
 export default function PresentationEditorPage() {
-  const params = useParams();
+  const params = useParams<{ id?: string }>();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const presentationId = params.id as string;
+  const presentationId = typeof params?.id === "string" ? params.id : "";
   const [activeSlideIndex, setActiveSlideIndex] = React.useState(0);
   const [editLayout, setEditLayout] = React.useState<SlideLayout>('content');
   const [editTitle, setEditTitle] = React.useState('');

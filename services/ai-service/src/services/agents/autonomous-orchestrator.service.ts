@@ -12,7 +12,7 @@ import { ResearchAgent } from './research.agent.js';
 import { KnowledgeGraphAgent } from './knowledge-graph.agent.js';
 import { AdminCopilotAgent } from './admin-copilot.agent.js';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 const prisma = new PrismaClient();
 
 export enum AutonomousAgentType {

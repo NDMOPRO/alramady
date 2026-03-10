@@ -7,7 +7,7 @@ import OpenAI from 'openai';
 import { PrismaClient } from '@prisma/client';
 import { createHash } from 'crypto';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' ?? '' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 
 interface TrainingExample {
   messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>;

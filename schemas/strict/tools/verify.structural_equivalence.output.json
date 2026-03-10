@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/verify.structural_equivalence.output.json",
+  "title": "verify.structural_equivalence — Output",
+  "description": "Structural equivalence verification result. Section 6.5 / B10.",
+  "type": "object",
+  "required": ["pass", "checks", "warnings"],
+  "properties": {
+    "pass": { "type": "boolean" },
+    "structural_hash_match": { "type": "boolean" },
+    "checks": {
+      "type": "object",
+      "required": ["text_editable", "layers_intact", "fonts_embedded", "images_intact"],
+      "properties": {
+        "text_editable": { "type": "boolean" },
+        "layers_intact": { "type": "boolean" },
+        "fonts_embedded": { "type": "boolean" },
+        "images_intact": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "element_count_match": { "type": "boolean" },
+    "mismatches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "field", "expected", "actual"],
+        "properties": {
+          "element_id": { "type": "string" },
+          "field": { "type": "string" },
+          "expected": { "type": "string" },
+          "actual": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

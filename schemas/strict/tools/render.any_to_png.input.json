@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/render.any_to_png.input.json",
+  "title": "render.any_to_png — Input",
+  "description": "Renders any supported format to deterministic PNG. Section 4 / B8.",
+  "type": "object",
+  "required": ["context", "source", "render_profile"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "source": { "$ref": "../common.json#/$defs/AssetRef" },
+    "render_profile": { "$ref": "../common.json#/$defs/RenderProfile" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "determinism": { "$ref": "../common.json#/$defs/DeterminismCheck" },
+        "background_color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$", "default": "#FFFFFF" },
+        "transparent_background": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

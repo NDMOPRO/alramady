@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/render.any_to_png.output.json",
+  "title": "render.any_to_png — Output",
+  "description": "Deterministic PNG render result. Section 4 / B8.",
+  "type": "object",
+  "required": ["render", "warnings"],
+  "properties": {
+    "render": { "$ref": "../common.json#/$defs/RenderRef" },
+    "page_renders": {
+      "type": "array",
+      "items": { "$ref": "../common.json#/$defs/RenderRef" }
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

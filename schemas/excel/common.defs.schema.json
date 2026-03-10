@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://excel.local/schemas/common.json",
+  "$defs": {
+    "ISODateTime": { "type": "string", "format": "date-time" },
+    "Mode": { "type": "string", "enum": ["SMART", "PRO"] },
+    "ArabicMode": { "type": "string", "enum": ["BASIC", "PROFESSIONAL", "ELITE"] },
+    "ActionContext": {
+      "type": "object",
+      "required": ["workspace_id", "user_id", "mode", "arabic_mode", "locale"],
+      "properties": {
+        "workspace_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "user_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "mode": { "$ref": "#/$defs/Mode" },
+        "arabic_mode": { "$ref": "#/$defs/ArabicMode" },
+        "locale": { "type": "string", "minLength": 2, "maxLength": 16 }
+      },
+      "additionalProperties": true
+    },
+    "AssetRef": {
+      "type": "object",
+      "required": ["asset_id", "uri", "mime", "sha256", "size_bytes"],
+      "properties": {
+        "asset_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "uri": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "mime": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "size_bytes": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "DatasetRef": {
+      "type": "object",
+      "required": ["dataset_id", "row_count_est", "column_count"],
+      "properties": {
+        "dataset_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "row_count_est": { "type": "integer", "minimum": 0 },
+        "column_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "TableRef": {
+      "type": "object",
+      "required": ["table_id", "dataset_id", "name"],
+      "properties": {
+        "table_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "dataset_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 256 }
+      },
+      "additionalProperties": false
+    },
+    "ColumnRef": {
+      "type": "object",
+      "required": ["column_id", "table_id", "name", "dtype"],
+      "properties": {
+        "column_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "table_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "dtype": {
+          "type": "string",
+          "enum": ["string", "int", "float", "bool", "date", "datetime", "currency", "percent", "json", "unknown"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "RecipeRef": {
+      "type": "object",
+      "required": ["recipe_id", "kind", "version"],
+      "properties": {
+        "recipe_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "kind": { "type": "string", "enum": ["TIR", "COMPARE", "CLEAN", "FORMAT"] },
+        "version": { "type": "string", "minLength": 1, "maxLength": 32 }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "required": ["artifact_id", "kind", "uri"],
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "kind": { "type": "string", "enum": ["xlsx", "csv", "parquet", "pdf", "pptx", "dashboard", "json"] },
+        "uri": { "type": "string", "minLength": 1, "maxLength": 2048 }
+      },
+      "additionalProperties": false
+    },
+    "Warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message", "severity"],
+        "properties": {
+          "code": { "type": "string", "minLength": 2, "maxLength": 64 },
+          "message": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "severity": { "type": "string", "enum": ["info", "warning", "error"] }
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    }
+  }
+}

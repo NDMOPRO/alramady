@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/cdr.build_design_from_image.output.json",
+  "title": "cdr.build_design_from_image — Output",
+  "description": "CDR design built from image segments. Section 6 / B4.",
+  "type": "object",
+  "required": ["cdr_design", "font_plan", "warnings"],
+  "properties": {
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "layer_count": { "type": "integer", "minimum": 1 },
+    "element_count": { "type": "integer", "minimum": 0 },
+    "reconstructed_text_blocks": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

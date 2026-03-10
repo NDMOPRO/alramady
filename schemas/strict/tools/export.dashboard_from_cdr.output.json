@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/export.dashboard_from_cdr.output.json",
+  "title": "export.dashboard_from_cdr — Output",
+  "description": "Dashboard export result. Section 10 / B7.",
+  "type": "object",
+  "required": ["artifact", "warnings"],
+  "properties": {
+    "artifact": { "$ref": "../common.json#/$defs/ArtifactRef" },
+    "widget_count": { "type": "integer", "minimum": 0 },
+    "chart_count": { "type": "integer", "minimum": 0 },
+    "table_count": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

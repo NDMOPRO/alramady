@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/export.xlsx_from_table_cdr.input.json",
+  "title": "export.xlsx_from_table_cdr — Input",
+  "description": "Exports an XLSX file from a CDR data (table). Section 10 / B7.",
+  "type": "object",
+  "required": ["context", "cdr_data"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_data": { "$ref": "../common.json#/$defs/CdrDataRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "preserve_formatting": { "type": "boolean", "default": true },
+        "preserve_formulas": { "type": "boolean", "default": true },
+        "rtl_sheet": { "type": "boolean", "default": true },
+        "auto_column_width": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

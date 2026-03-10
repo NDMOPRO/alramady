@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/common.json",
+  "title": "STRICT 1:1 Common Definitions",
+  "$defs": {
+    "ISODateTime": { "type": "string", "format": "date-time" },
+    "ArabicMode": { "type": "string", "enum": ["BASIC", "PROFESSIONAL", "ELITE"] },
+    "Mode": { "type": "string", "enum": ["AUTO", "GUIDED"] },
+    "FontPolicy": { "type": "string", "enum": ["PROVIDED", "ALLOW_UPLOAD", "FALLBACK_ALLOWED"] },
+    "Severity": { "type": "string", "enum": ["info", "warning", "error"] },
+    "Warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message", "severity"],
+        "properties": {
+          "code": { "type": "string", "minLength": 2, "maxLength": 64 },
+          "message": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "severity": { "$ref": "#/$defs/Severity" }
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "ActionContext": {
+      "type": "object",
+      "required": ["workspace_id", "user_id", "locale", "strict_visual", "arabic_mode", "mode", "font_policy"],
+      "properties": {
+        "workspace_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "user_id": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "locale": { "type": "string", "minLength": 2, "maxLength": 16 },
+        "strict_visual": { "type": "boolean" },
+        "arabic_mode": { "$ref": "#/$defs/ArabicMode" },
+        "mode": { "$ref": "#/$defs/Mode" },
+        "font_policy": { "$ref": "#/$defs/FontPolicy" }
+      },
+      "additionalProperties": true
+    },
+    "AssetRef": {
+      "type": "object",
+      "required": ["asset_id", "uri", "mime", "sha256", "size_bytes"],
+      "properties": {
+        "asset_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "uri": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "mime": { "type": "string", "minLength": 3, "maxLength": 128 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "page_count": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "PdfDomRef": {
+      "type": "object",
+      "required": ["pdf_dom_id"],
+      "properties": { "pdf_dom_id": { "type": "string", "minLength": 8, "maxLength": 128 } },
+      "additionalProperties": false
+    },
+    "ImageSegRef": {
+      "type": "object",
+      "required": ["seg_id", "regions"],
+      "properties": {
+        "seg_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["region_id", "kind", "bbox"],
+            "properties": {
+              "region_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "kind": { "type": "string", "enum": ["background", "text", "logo", "table", "chart", "figure", "photo", "ui_control", "unknown"] },
+              "bbox": {
+                "type": "object",
+                "required": ["x", "y", "w", "h"],
+                "properties": {
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "w": { "type": "number", "minimum": 0 },
+                  "h": { "type": "number", "minimum": 0 }
+                },
+                "additionalProperties": false
+              },
+              "mask_uri": { "type": "string", "maxLength": 2048 },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CdrDesignRef": {
+      "type": "object",
+      "required": ["cdr_design_id", "page_count"],
+      "properties": {
+        "cdr_design_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "page_count": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "CdrDataRef": {
+      "type": "object",
+      "required": ["cdr_data_id", "table_count"],
+      "properties": {
+        "cdr_data_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "table_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "FontPlan": {
+      "type": "object",
+      "required": ["fonts"],
+      "properties": {
+        "fonts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["family", "status"],
+            "properties": {
+              "family": { "type": "string", "minLength": 1, "maxLength": 256 },
+              "status": { "type": "string", "enum": ["available", "embedded", "synthesized", "missing"] },
+              "font_program_uri": { "type": "string", "maxLength": 2048 },
+              "embed_all_glyphs": { "type": "boolean", "default": true }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "required": ["artifact_id", "kind", "uri"],
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "kind": { "type": "string", "enum": ["pptx", "docx", "xlsx", "dashboard", "pdf", "png", "json"] },
+        "uri": { "type": "string", "minLength": 1, "maxLength": 2048 }
+      },
+      "additionalProperties": false
+    },
+    "RenderProfile": {
+      "type": "object",
+      "required": ["dpi", "colorspace"],
+      "properties": {
+        "dpi": { "type": "integer", "minimum": 72, "maximum": 1200 },
+        "colorspace": { "type": "string", "enum": ["sRGB"] },
+        "page_range": {
+          "type": "object",
+          "properties": {
+            "from": { "type": "integer", "minimum": 1 },
+            "to": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "HashBundle": {
+      "type": "object",
+      "required": ["layout_hash", "structural_hash", "typography_hash", "pixel_hash"],
+      "properties": {
+        "layout_hash": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "structural_hash": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "typography_hash": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "pixel_hash": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "perceptual_hash": { "type": "string", "minLength": 16, "maxLength": 256 }
+      },
+      "additionalProperties": false
+    },
+    "RenderRef": {
+      "type": "object",
+      "required": ["render_id", "uri", "dpi", "colorspace", "engine_fingerprint", "fingerprint"],
+      "properties": {
+        "render_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "uri": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "dpi": { "type": "integer", "minimum": 72, "maximum": 1200 },
+        "colorspace": { "type": "string", "enum": ["sRGB"] },
+        "engine_fingerprint": { "type": "string", "minLength": 6, "maxLength": 256 },
+        "fingerprint": { "$ref": "#/$defs/HashBundle" }
+      },
+      "additionalProperties": false
+    },
+    "DiffRef": {
+      "type": "object",
+      "required": ["diff_id", "pixel_diff", "pass"],
+      "properties": {
+        "diff_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+        "pixel_diff": { "type": "number", "minimum": 0 },
+        "pass": { "type": "boolean" },
+        "heatmap_uri": { "type": "string", "maxLength": 2048 }
+      },
+      "additionalProperties": false
+    },
+    "DeterminismCheck": {
+      "type": "object",
+      "required": ["anti_aliasing_policy", "gpu_cpu_parity", "float_norm_policy", "random_seed_locked"],
+      "properties": {
+        "anti_aliasing_policy": { "type": "string", "enum": ["locked"] },
+        "gpu_cpu_parity": { "type": "string", "enum": ["validated", "forced_single_path"] },
+        "float_norm_policy": { "type": "string", "enum": ["locked"] },
+        "random_seed_locked": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

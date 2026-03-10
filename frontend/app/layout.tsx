@@ -43,7 +43,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const theme = useUIStore((s) => s.theme);
   const setLocale = useUIStore((s) => s.setLocale);

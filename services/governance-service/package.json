@@ -7,7 +7,8 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "test": "jest --config jest.config.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",
+    "@types/supertest": "^6.0.3",
     "@types/bcrypt": "^6.0.0",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
@@ -46,6 +48,7 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.0",
     "prisma": "^5.20.0",
+    "supertest": "^7.1.4",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.0"

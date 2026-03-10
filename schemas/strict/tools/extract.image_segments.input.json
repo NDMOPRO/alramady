@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/extract.image_segments.input.json",
+  "title": "extract.image_segments — Input",
+  "description": "Segments an image into typed regions. Section 8.1 / B2.",
+  "type": "object",
+  "required": ["context", "source"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "source": { "$ref": "../common.json#/$defs/AssetRef" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "min_region_area": { "type": "number", "minimum": 0, "default": 100 },
+        "detect_tables": { "type": "boolean", "default": true },
+        "detect_charts": { "type": "boolean", "default": true },
+        "detect_text": { "type": "boolean", "default": true },
+        "ocr_engine": { "type": "string", "enum": ["tesseract", "vision_api"], "default": "vision_api" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

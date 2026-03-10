@@ -12,7 +12,7 @@ const config: Config = {
     }],
   },
   moduleNameMapper: {
-    '^(\.{1,2}/.*)\.js$': '$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   forceExit: true,
   passWithNoTests: true,

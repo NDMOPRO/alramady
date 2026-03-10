@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 const prisma = new PrismaClient();
 
 interface ProactiveAlert {

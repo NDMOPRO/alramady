@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/extract.pdf_dom.output.json",
+  "title": "extract.pdf_dom — Output",
+  "description": "Structured PDF DOM extraction result. Section 9 / B1.",
+  "type": "object",
+  "required": ["pdf_dom", "font_plan", "warnings"],
+  "properties": {
+    "pdf_dom": { "$ref": "../common.json#/$defs/PdfDomRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "page_count": { "type": "integer", "minimum": 1 },
+    "image_count": { "type": "integer", "minimum": 0 },
+    "text_block_count": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

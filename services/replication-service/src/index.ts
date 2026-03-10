@@ -86,7 +86,7 @@ app.use(helmet());
 app.use(cors({
   origin: process.env.CORS_ORIGIN || '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID', 'x-tenant-id', 'x-user-id'],
   credentials: true,
 }));
 app.use(compression());
@@ -153,6 +153,7 @@ import imageMatchingRoutes from './routes/image-matching.js';
 import matchPhasesRoutes from './routes/match-phases.js';
 import matchScopeRoutes from './routes/match-scope.js';
 import printLockRoutes from './routes/print-lock.js';
+import strictEngineRoutes from './strict/routes.js';
 
 app.use('/api/v1/replication', replicationRoutes);
 app.use('/api/v1/replication', pixelValidationRoutes);
@@ -167,6 +168,7 @@ app.use('/api/v1/replication/image-matching', imageMatchingRoutes);
 app.use('/api/v1/replication/match-phases', matchPhasesRoutes);
 app.use('/api/v1/replication/match-scope', matchScopeRoutes);
 app.use('/api/v1/replication/print-lock', printLockRoutes);
+app.use('/api/v1/strict', strictEngineRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
@@ -228,6 +230,8 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
-bootstrap();
+if (process.env.NODE_ENV !== 'test') {
+  bootstrap();
+}
 
-export { app, prisma, redis, logger };
+export { app, prisma, redis, logger, bootstrap, shutdown };

@@ -3,22 +3,32 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDropzone, type Accept, type FileRejection } from "react-dropzone";
+import { RasedCanvasProvider } from "@/state/RasedCanvasProvider";
+import { useRasedCanvas } from "@/state/useRasedCanvas";
 import {
   ArrowLeft,
   BarChart3,
   Bot,
   CheckCircle2,
   ChevronLeft,
+  Command,
   Download,
   FileImage,
   FileSpreadsheet,
   Globe2,
   Loader2,
+  MoonStar,
+  PanelRightClose,
+  PanelRightOpen,
+  Pin,
+  PinOff,
   Presentation,
   RefreshCcw,
   ScanSearch,
   Sparkles,
+  SunMedium,
   UploadCloud,
+  X,
 } from "lucide-react";
 import { getDatasets, getDatasetById, importDataset, type Dataset, type DatasetDetail } from "@/lib/api/data";
 import { addReportSection, buildReport, createReport, exportReport, getReports } from "@/lib/api/reporting";
@@ -38,6 +48,7 @@ type OutputAction = { kind: "route" | "download"; label: string; href: string; d
 type ResultState = { id: string; actionId: HomeActionId; status: "success" | "error"; title: string; body: string; chips: string[]; previewText?: string; previewImage?: string; outputs?: OutputAction[]; executedAt: string };
 type ActivityItem = { id: string; label: string; note: string; status: "success" | "error"; executedAt: string; source: "guided" | "assistant" };
 type AssistantNotice = { title: string; body: string; chips: string[]; tone: "neutral" | "success" | "error" };
+type CommandPaletteItem = { id: string; label: string; description: string; kind: "action" | "route" | "assistant"; actionId?: HomeActionId; href?: string; prompt?: string };
 
 const ACCEPTED_FILES: Accept = {
   "text/csv": [".csv"],
@@ -235,8 +246,9 @@ function shouldAutoRunMatchedAction(query: string, matched: HomeCapabilityAction
   return isExplicitExecutionPrompt(normalizedQuery);
 }
 
-export default function HomePage() {
+function HomePageContent() {
   const router = useRouter();
+  const { state: canvasState, send } = useRasedCanvas();
   const downloadUrlsRef = useRef<string[]>([]);
   const assistantInputRef = useRef<HTMLInputElement>(null);
   const [stats, setStats] = useState<Stats>({ datasets: null, reports: null, presentations: null, dashboards: null });
@@ -252,6 +264,7 @@ export default function HomePage() {
   const [assistantBusy, setAssistantBusy] = useState(false);
   const [assistantNotice, setAssistantNotice] = useState<AssistantNotice>(defaultNotice);
   const [assistantSessionId, setAssistantSessionId] = useState<string | null>(null);
+  const [commandQuery, setCommandQuery] = useState("");
 
   const clearDownloads = useCallback(() => {
     downloadUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
@@ -278,6 +291,9 @@ export default function HomePage() {
   useEffect(() => { void loadHomeData(); }, [loadHomeData]);
   useEffect(() => () => clearDownloads(), [clearDownloads]);
   useEffect(() => {
+    send({ type: "SIDEBAR/OPEN" });
+  }, [send]);
+  useEffect(() => {
     if (typeof window === "undefined") return undefined;
 
     const openAssistant = () => {
@@ -288,6 +304,51 @@ export default function HomePage() {
     window.addEventListener("rasid:open-assistant", openAssistant as EventListener);
     return () => window.removeEventListener("rasid:open-assistant", openAssistant as EventListener);
   }, []);
+  useEffect(() => {
+    send({ type: "COMPOSER/SET_TEXT", text: assistantInput });
+  }, [assistantInput, send]);
+  useEffect(() => {
+    if (bundle?.actions?.length) {
+      send({
+        type: "ACTIONS/SHOW",
+        actions: bundle.actions.map((action) => ({
+          id: action.id,
+          label: action.title,
+          description: action.description,
+        })),
+      });
+      send({ type: "SIDEBAR/OPEN" });
+      send({ type: "SIDEBAR/SET_TAB", tab: "context" });
+      return;
+    }
+
+    send({ type: "ACTIONS/DISMISS" });
+  }, [bundle, send]);
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const isCommandPalette = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k";
+      if (isCommandPalette) {
+        event.preventDefault();
+        send({ type: "MODAL/OPEN", modalId: "command-palette" });
+        return;
+      }
+
+      if (event.key === "Escape") {
+        if (canvasState.modalId) {
+          send({ type: "MODAL/CLOSE" });
+          return;
+        }
+        if (canvasState.focusJobId) {
+          send({ type: "FOCUS/CLOSE" });
+        }
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [canvasState.focusJobId, canvasState.modalId, send]);
 
   const primaryActions = useMemo(() => (bundle ? bundle.actions.slice(0, 3) : []), [bundle]);
   const secondaryActions = useMemo(() => (bundle ? bundle.actions.slice(3) : []), [bundle]);
@@ -297,12 +358,57 @@ export default function HomePage() {
       .filter((value, index, array) => value && array.indexOf(value) === index)
       .slice(0, 4);
   }, [bundle]);
+  const sidebarMode = !canvasState.sidebarOpen ? "hidden" : canvasState.sidebarPinned ? "full" : "peek";
+  const activeJob = canvasState.activeJobId ? canvasState.jobs[canvasState.activeJobId] ?? null : null;
+  const resultEvidence = activeJob && activeJob.result?.title === result?.title ? activeJob.evidence : null;
+  const focusOpen = canvasState.focusJobId === result?.id && Boolean(result);
+  const commandItems = useMemo<CommandPaletteItem[]>(() => {
+    const items: CommandPaletteItem[] = [
+      ...(bundle?.actions.map((action) => ({
+        id: `action-${action.id}`,
+        label: action.title,
+        description: action.description,
+        kind: "action" as const,
+        actionId: action.id,
+      })) ?? []),
+      ...SECONDARY_LINKS.map((link) => ({
+        id: `route-${link.href}`,
+        label: link.label,
+        description: `فتح ${link.label} داخل راصد`,
+        kind: "route" as const,
+        href: link.href,
+      })),
+      ...assistantSuggestions.map((prompt, index) => ({
+        id: `assistant-${index}`,
+        label: prompt,
+        description: "إرسال هذا السؤال مباشرة إلى مساعد راصد",
+        kind: "assistant" as const,
+        prompt,
+      })),
+    ];
+
+    const normalizedQuery = normalizeArabicText(commandQuery);
+    if (!normalizedQuery) return items.slice(0, 12);
+    return items
+      .filter((item) => normalizeArabicText(`${item.label} ${item.description}`).includes(normalizedQuery))
+      .slice(0, 12);
+  }, [assistantSuggestions, bundle, commandQuery]);
 
   const createDownloadAction = useCallback((blob: Blob, label: string, downloadName: string): OutputAction => {
     const href = URL.createObjectURL(blob);
     downloadUrlsRef.current.push(href);
     return { kind: "download", label, href, downloadName };
   }, []);
+  const createExecutionJob = useCallback((actionId: HomeActionId) => {
+    const jobId = createId("job");
+    send({ type: "JOB/CREATE", jobId, label: actionChipLabel(actionId) });
+    send({ type: "JOB/STAGE", jobId, stage: "planning" });
+    send({ type: "JOB/PROGRESS", jobId, progress: 12 });
+    return jobId;
+  }, [send]);
+  const toggleSidebar = useCallback(() => {
+    send({ type: canvasState.sidebarOpen ? "SIDEBAR/CLOSE" : "SIDEBAR/OPEN" });
+  }, [canvasState.sidebarOpen, send]);
 
   const resetSession = useCallback(() => {
     clearDownloads();
@@ -321,7 +427,10 @@ export default function HomePage() {
       chips: ["ملف واحد", "صورتان", "تنفيذ حقيقي"],
       tone: "neutral",
     });
-  }, [clearDownloads]);
+    send({ type: "ACTIONS/DISMISS" });
+    send({ type: "FOCUS/CLOSE" });
+    send({ type: "SIDEBAR/CLOSE" });
+  }, [clearDownloads, send]);
 
   const ensureDatasetImported = useCallback(async (file: File): Promise<DatasetState> => {
     const currentKey = fileKey(file);
@@ -340,22 +449,60 @@ export default function HomePage() {
     return primary.text();
   }, [bundle]);
 
-  const finalizeExecution = useCallback((next: Omit<ResultState, "id" | "executedAt">, source: "guided" | "assistant") => {
+  const finalizeExecution = useCallback((next: Omit<ResultState, "id" | "executedAt">, source: "guided" | "assistant", jobId?: string) => {
     const finalResult: ResultState = { ...next, id: createId("result"), executedAt: new Date().toISOString() };
     setResult(finalResult);
     setActivity((current) => [
       { id: createId("activity"), label: actionChipLabel(finalResult.actionId), note: finalResult.title, status: finalResult.status, executedAt: finalResult.executedAt, source },
       ...current,
     ].slice(0, 4));
+
+    if (jobId) {
+      if (finalResult.status === "success") {
+        send({ type: "JOB/STAGE", jobId, stage: "verifying" });
+        send({ type: "JOB/PROGRESS", jobId, progress: 88 });
+        if (finalResult.previewImage) {
+          send({ type: "JOB/PREVIEW_READY", jobId, previewUrl: finalResult.previewImage });
+        }
+        send({
+          type: "JOB/RESULT_READY",
+          jobId,
+          result: {
+            title: finalResult.title,
+            body: finalResult.body,
+            chips: finalResult.chips,
+            previewText: finalResult.previewText,
+            previewImage: finalResult.previewImage,
+            outputs: finalResult.outputs?.map((output) => ({ kind: output.kind, label: output.label, href: output.href })),
+          },
+        });
+        send({
+          type: "JOB/EVIDENCE_READY",
+          jobId,
+          evidence: {
+            sources: bundle?.files.map((item) => ({ label: item.file.name })) ?? [{ label: "جلسة راصد" }],
+          },
+        });
+        send({ type: "JOB/STAGE", jobId, stage: "completed" });
+        send({ type: "JOB/PROGRESS", jobId, progress: 100 });
+      } else {
+        send({ type: "JOB/STAGE", jobId, stage: "failed" });
+        send({ type: "JOB/FAIL", jobId, error: finalResult.body });
+      }
+    }
+
     return finalResult;
-  }, []);
+  }, [bundle, send]);
 
   const executeAction = useCallback(async (actionId: HomeActionId, source: "guided" | "assistant" = "guided") => {
     if (!bundle?.files[0]?.file) throw new Error("ابدأ بإضافة ملف أولًا.");
 
     const primaryFile = bundle.files[0].file;
+    const jobId = createExecutionJob(actionId);
     clearDownloads();
     setExecutingAction(actionId);
+    send({ type: "JOB/STAGE", jobId, stage: "running" });
+    send({ type: "JOB/PROGRESS", jobId, progress: 34 });
 
     try {
       switch (actionId) {
@@ -368,7 +515,7 @@ export default function HomePage() {
             body: `تم رفع ${primaryFile.name} إلى خدمة البيانات وإنشاء مجموعة قابلة للاستخدام داخل راصد.`,
             chips: [`المعرّف ${imported.importResult.datasetId}`, `${imported.importResult.rowCount} صف`, `${imported.importResult.columnCount} عمود`],
             outputs: [{ kind: "route", label: "فتح مجموعة البيانات", href: `/data/${imported.importResult.datasetId}` }],
-          }, source);
+          }, source, jobId);
         }
         case "analyze-dataset": {
           const imported = await ensureDatasetImported(primaryFile);
@@ -381,7 +528,7 @@ export default function HomePage() {
             chips: [`${analysis.dataProfile.rowCount} صف`, `${analysis.dataProfile.columnCount} عمود`, `${analysis.kpiRecommendations.length} مؤشر`],
             previewText: analysis.chartRecommendations.slice(0, 3).map((chart, index) => `${index + 1}. ${chart.titleAr} - ${chart.reason}`).join("\n") || imported.detail.columns.slice(0, 4).map((column) => column.name).join("، "),
             outputs: [{ kind: "route", label: "فتح التحليل", href: "/analysis" }],
-          }, source);
+          }, source, jobId);
         }
         case "build-report": {
           const imported = await ensureDatasetImported(primaryFile);
@@ -411,7 +558,7 @@ export default function HomePage() {
             body: "بنى راصد تقريرًا جديدًا من الملف وأصدر نسخة PDF قابلة للتنزيل.",
             chips: [`التقرير ${report.id}`, `البناء ${build.buildId}`, `${build.sectionCount} قسم`],
             outputs: [createDownloadAction(pdf, "تنزيل PDF", `${baseName(primaryFile.name)}-report.pdf`), { kind: "route", label: "فتح التقارير", href: "/reports" }],
-          }, source);
+          }, source, jobId);
         }
         case "generate-data-presentation": {
           const imported = await ensureDatasetImported(primaryFile);
@@ -424,7 +571,7 @@ export default function HomePage() {
             body: "عالجت خدمة العروض مجموعة البيانات وأنشأت ملف PowerPoint فعليًا.",
             chips: [`العرض ${presentation.id}`, `${presentation.slideCount} شريحة`],
             outputs: [createDownloadAction(pptx, "تنزيل PowerPoint", `${baseName(primaryFile.name)}-presentation.pptx`), { kind: "route", label: "فتح العرض", href: `/presentations/${presentation.id}` }],
-          }, source);
+          }, source, jobId);
         }
         case "generate-file-presentation": {
           const presentation = await generatePresentationFromFile(primaryFile, { slideCount: 6, style: "executive", language: "ar", detailLevel: "standard" });
@@ -437,7 +584,7 @@ export default function HomePage() {
             body: "أُرسل الملف إلى خدمة العروض، وتم توليد عرض فعلي قابل للفتح والتنزيل.",
             chips: [`العرض ${presentation.id}`, `${presentation.slideCount} شريحة`],
             outputs: [createDownloadAction(pptx, "تنزيل PowerPoint", `${baseName(primaryFile.name)}-slides.pptx`), { kind: "route", label: "فتح العرض", href: `/presentations/${presentation.id}` }],
-          }, source);
+          }, source, jobId);
         }
         case "generate-ai-presentation": {
           const content = await readPrimaryFileAsText();
@@ -451,7 +598,7 @@ export default function HomePage() {
             body: "حوّل راصد النص المستخرج إلى عرض تنفيذي حقيقي داخل خدمة العروض.",
             chips: [`العرض ${presentation.id}`, `${presentation.slideCount} شريحة`],
             outputs: [createDownloadAction(pptx, "تنزيل PowerPoint", `${baseName(primaryFile.name)}-ai.pptx`), { kind: "route", label: "فتح العرض", href: `/presentations/${presentation.id}` }],
-          }, source);
+          }, source, jobId);
         }
         case "extract-exact": {
           const extraction = await extractMultimodal(primaryFile, { mode: "exact", languageHint: "auto" });
@@ -466,7 +613,7 @@ export default function HomePage() {
               extraction.exactExtraction?.sourceEngine ?? "engine",
             ],
             previewText: extraction.exactExtraction?.text || "لم يعد المسار نصًا قابلاً للعرض.",
-          }, source);
+          }, source, jobId);
         }
         case "extract-steps": {
           const extraction = await extractMultimodal(primaryFile, { mode: "both", languageHint: "auto" });
@@ -484,18 +631,18 @@ export default function HomePage() {
             previewText: steps.length > 0
               ? steps.map((step) => `${step.index}. ${step.title}\n${step.description}\n${step.evidence.join(" | ")}`).join("\n\n")
               : extraction.exactExtraction?.text || "لم ينجح المسار في استخراج خطوات منظمة من هذا الملف.",
-          }, source);
+          }, source, jobId);
         }
         case "translate-arabic": {
           const content = await readPrimaryFileAsText();
           const detected = await detectTextLanguage(content);
           const translated = await translatePlainText({ text: content, sourceLang: detected.language || "en", targetLang: "ar" });
-          return finalizeExecution({ actionId, status: "success", title: "اكتمل التعريب", body: "أعادت خدمة التوطين النص العربي مباشرة من داخل الصفحة الرئيسية.", chips: [`من ${translated.sourceLang}`, `إلى ${translated.targetLang}`], previewText: translated.translatedText }, source);
+          return finalizeExecution({ actionId, status: "success", title: "اكتمل التعريب", body: "أعادت خدمة التوطين النص العربي مباشرة من داخل الصفحة الرئيسية.", chips: [`من ${translated.sourceLang}`, `إلى ${translated.targetLang}`], previewText: translated.translatedText }, source, jobId);
         }
         case "apply-rtl": {
           const content = await readPrimaryFileAsText();
           const rtlContent = await applyRtlContent(content);
-          return finalizeExecution({ actionId, status: "success", title: "تم تجهيز المحتوى عربيًا", body: "شغّل راصد معالجة RTL على النص الحالي وأعاد صياغته للعرض العربي.", chips: ["RTL", "خدمة التوطين"], previewText: rtlContent }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم تجهيز المحتوى عربيًا", body: "شغّل راصد معالجة RTL على النص الحالي وأعاد صياغته للعرض العربي.", chips: ["RTL", "خدمة التوطين"], previewText: rtlContent }, source, jobId);
         }
         case "convert-markdown-html": {
           const content = await readPrimaryFileAsText();
@@ -508,48 +655,48 @@ export default function HomePage() {
             chips: [`${html.characterCount} حرف`],
             previewText: html.html,
             outputs: [createDownloadAction(new Blob([html.html], { type: "text/html;charset=utf-8" }), "تنزيل HTML", `${baseName(primaryFile.name)}.html`)],
-          }, source);
+          }, source, jobId);
         }
         case "convert-pdf-word": {
           const blob = await convertPdfToWord(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "تم التحويل إلى وورد", body: "أنتجت خدمة التحويل ملف DOCX جاهزًا للتنزيل.", chips: ["PDF", "DOCX"], outputs: [createDownloadAction(blob, "تنزيل ملف وورد", `${baseName(primaryFile.name)}.docx`)] }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم التحويل إلى وورد", body: "أنتجت خدمة التحويل ملف DOCX جاهزًا للتنزيل.", chips: ["PDF", "DOCX"], outputs: [createDownloadAction(blob, "تنزيل ملف وورد", `${baseName(primaryFile.name)}.docx`)] }, source, jobId);
         }
         case "convert-word-pdf": {
           const blob = await convertWordToPdf(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "تم التحويل إلى PDF", body: "أنتجت خدمة التحويل ملف PDF فعليًا من المستند الحالي.", chips: ["DOCX", "PDF"], outputs: [createDownloadAction(blob, "تنزيل PDF", `${baseName(primaryFile.name)}.pdf`)] }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم التحويل إلى PDF", body: "أنتجت خدمة التحويل ملف PDF فعليًا من المستند الحالي.", chips: ["DOCX", "PDF"], outputs: [createDownloadAction(blob, "تنزيل PDF", `${baseName(primaryFile.name)}.pdf`)] }, source, jobId);
         }
         case "convert-excel-pdf": {
           const blob = await convertExcelToPdf(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "تم تحويل الجدول إلى PDF", body: "حوّلت خدمة التحويل ملف الجدول إلى PDF قابل للتنزيل.", chips: ["Excel", "PDF"], outputs: [createDownloadAction(blob, "تنزيل PDF", `${baseName(primaryFile.name)}.pdf`)] }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم تحويل الجدول إلى PDF", body: "حوّلت خدمة التحويل ملف الجدول إلى PDF قابل للتنزيل.", chips: ["Excel", "PDF"], outputs: [createDownloadAction(blob, "تنزيل PDF", `${baseName(primaryFile.name)}.pdf`)] }, source, jobId);
         }
         case "convert-csv-excel": {
           const blob = await convertCsvToExcel(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "تم تحويل CSV إلى إكسل", body: "تم إنشاء ملف XLSX فعلي من بيانات CSV الحالية.", chips: ["CSV", "XLSX"], outputs: [createDownloadAction(blob, "تنزيل ملف إكسل", `${baseName(primaryFile.name)}.xlsx`)] }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم تحويل CSV إلى إكسل", body: "تم إنشاء ملف XLSX فعلي من بيانات CSV الحالية.", chips: ["CSV", "XLSX"], outputs: [createDownloadAction(blob, "تنزيل ملف إكسل", `${baseName(primaryFile.name)}.xlsx`)] }, source, jobId);
         }
         case "convert-excel-csv": {
           const blob = await convertExcelToCsv(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "تم تحويل إكسل إلى CSV", body: "أنتجت خدمة التحويل ملف CSV فعليًا من الجدول الحالي.", chips: ["Excel", "CSV"], outputs: [createDownloadAction(blob, "تنزيل CSV", `${baseName(primaryFile.name)}.csv`)] }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم تحويل إكسل إلى CSV", body: "أنتجت خدمة التحويل ملف CSV فعليًا من الجدول الحالي.", chips: ["Excel", "CSV"], outputs: [createDownloadAction(blob, "تنزيل CSV", `${baseName(primaryFile.name)}.csv`)] }, source, jobId);
         }
         case "analyze-visual": {
           const analysis = await analyzeVisualImage(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "اكتمل التحليل البصري", body: "فحص راصد الصورة بصريًا وأعاد عناصرها الأساسية عبر خدمة المطابقة.", chips: [`${analysis.elements.length} عنصر`, `نوع المصدر ${String(analysis.metadata?.sourceType ?? "screenshot")}`], previewText: JSON.stringify(analysis.analysis, null, 2) }, source);
+          return finalizeExecution({ actionId, status: "success", title: "اكتمل التحليل البصري", body: "فحص راصد الصورة بصريًا وأعاد عناصرها الأساسية عبر خدمة المطابقة.", chips: [`${analysis.elements.length} عنصر`, `نوع المصدر ${String(analysis.metadata?.sourceType ?? "screenshot")}`], previewText: JSON.stringify(analysis.analysis, null, 2) }, source, jobId);
         }
         case "reconstruct-dashboard": {
           const dashboard = await reconstructDashboardFromImage(primaryFile);
-          return finalizeExecution({ actionId, status: "success", title: "تم إنشاء لوحة مؤشرات من الصورة", body: "حوّلت خدمة المطابقة البصرية الصورة إلى لوحة مؤشرات حقيقية داخل النظام.", chips: [`المعرّف ${dashboard.dashboardId}`], outputs: [{ kind: "route", label: "فتح التحليل", href: "/analysis" }] }, source);
+          return finalizeExecution({ actionId, status: "success", title: "تم إنشاء لوحة مؤشرات من الصورة", body: "حوّلت خدمة المطابقة البصرية الصورة إلى لوحة مؤشرات حقيقية داخل النظام.", chips: [`المعرّف ${dashboard.dashboardId}`], outputs: [{ kind: "route", label: "فتح التحليل", href: "/analysis" }] }, source, jobId);
         }
         case "compare-visuals": {
           if (bundle.files.length < 2) throw new Error("المطابقة الصارمة تحتاج صورتين.");
           const compare = await compareVisualReplication(bundle.files[0].file, bundle.files[1].file);
-          return finalizeExecution({ actionId, status: "success", title: compare.passed ? "المطابقة الصارمة اجتازت الفحص" : "المطابقة الصارمة كشفت فروقات", body: "تمت المقارنة البصرية الحقيقية بين الصورتين مع حساب الفروقات البنيوية والبكسلية.", chips: [`SSIM ${compare.ssim.toFixed(3)}`, `${compare.mismatchedPixels} بكسل مختلف`, compare.passed ? "مطابقة ناجحة" : "فروقات مرئية"], previewImage: compare.diffImage }, source);
+          return finalizeExecution({ actionId, status: "success", title: compare.passed ? "المطابقة الصارمة اجتازت الفحص" : "المطابقة الصارمة كشفت فروقات", body: "تمت المقارنة البصرية الحقيقية بين الصورتين مع حساب الفروقات البنيوية والبكسلية.", chips: [`SSIM ${compare.ssim.toFixed(3)}`, `${compare.mismatchedPixels} بكسل مختلف`, compare.passed ? "مطابقة ناجحة" : "فروقات مرئية"], previewImage: compare.diffImage }, source, jobId);
         }
       }
     } catch (error) {
-      return finalizeExecution({ actionId, status: "error", title: "فشل التنفيذ", body: getErrorMessage(error), chips: [actionChipLabel(actionId)] }, source);
+      return finalizeExecution({ actionId, status: "error", title: "فشل التنفيذ", body: getErrorMessage(error), chips: [actionChipLabel(actionId)] }, source, jobId);
     } finally {
       setExecutingAction(null);
     }
-  }, [bundle, clearDownloads, createDownloadAction, ensureDatasetImported, finalizeExecution, loadHomeData, readPrimaryFileAsText]);
+  }, [bundle, clearDownloads, createDownloadAction, createExecutionJob, ensureDatasetImported, finalizeExecution, loadHomeData, readPrimaryFileAsText, send]);
 
   const handleAcceptedFiles = useCallback((files: File[]) => {
     clearDownloads();
@@ -566,7 +713,10 @@ export default function HomePage() {
         ? { title: "هذا المسار غير متاح من الصفحة الرئيسية", body: nextBundle.summary, chips: ["ابدأ من ملف مدعوم"], tone: "error" }
         : { title: nextBundle.title, body: nextBundle.orchestrationNote, chips: nextBundle.brainSteps, tone: "success" }
     );
-  }, [clearDownloads]);
+    send({ type: "DROP/FILES", files });
+    send({ type: "SIDEBAR/OPEN" });
+    send({ type: "SIDEBAR/SET_TAB", tab: files.length > 1 ? "library" : "context" });
+  }, [clearDownloads, send]);
 
   const handleRejectedFiles = useCallback((rejections: FileRejection[]) => {
     setFileRejections(rejections);
@@ -576,7 +726,8 @@ export default function HomePage() {
       chips: rejections.flatMap((rejection) => rejection.errors.map((error) => error.message)).slice(0, 3),
       tone: "error",
     });
-  }, []);
+    send({ type: "DROP/LEAVE" });
+  }, [send]);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     accept: ACCEPTED_FILES,
@@ -586,16 +737,21 @@ export default function HomePage() {
     onDropAccepted: handleAcceptedFiles,
     onDropRejected: handleRejectedFiles,
   });
+  useEffect(() => {
+    send({ type: isDragActive ? "DROP/ENTER" : "DROP/LEAVE" });
+  }, [isDragActive, send]);
 
   const runActionFromUI = useCallback(async (actionId: HomeActionId) => {
+    send({ type: "ACTIONS/SELECT", actionId });
     const next = await executeAction(actionId, "guided");
     setAssistantNotice({ title: next.title, body: next.body, chips: next.chips, tone: next.status === "success" ? "success" : "error" });
-  }, [executeAction]);
+  }, [executeAction, send]);
 
   const handleAssistantPrompt = useCallback(async (rawPrompt: string) => {
     const query = rawPrompt.trim();
     if (!query) return;
     setAssistantBusy(true);
+    send({ type: "CONVERSATION/ADD_USER", text: query });
 
     try {
       const normalizedQuery = normalizeArabicText(query);
@@ -603,6 +759,7 @@ export default function HomePage() {
       if (matched && shouldAutoRunMatchedAction(normalizedQuery, matched)) {
         const next = await executeAction(matched.id, "assistant");
         setAssistantNotice({ title: next.title, body: next.body, chips: next.chips, tone: next.status === "success" ? "success" : "error" });
+        send({ type: "CONVERSATION/ADD_ASSISTANT", text: `${next.title}\n${next.body}` });
         return;
       }
 
@@ -646,19 +803,36 @@ export default function HomePage() {
         tone: "neutral",
       });
       setAssistantSessionId(response.sessionId);
+      send({ type: "CONVERSATION/ADD_ASSISTANT", text: response.reply });
     } finally {
       setAssistantBusy(false);
       setAssistantInput("");
     }
-  }, [assistantSessionId, bundle, executeAction, result]);
+  }, [assistantSessionId, bundle, executeAction, result, send]);
+  const runCommandPaletteItem = useCallback(async (item: CommandPaletteItem) => {
+    send({ type: "MODAL/CLOSE" });
+    setCommandQuery("");
+
+    if (item.kind === "action" && item.actionId) {
+      await runActionFromUI(item.actionId);
+      return;
+    }
+    if (item.kind === "route" && item.href) {
+      router.push(item.href);
+      return;
+    }
+    if (item.kind === "assistant" && item.prompt) {
+      await handleAssistantPrompt(item.prompt);
+    }
+  }, [handleAssistantPrompt, router, runActionFromUI, send]);
 
   const supportedSummary = bundle
     ? bundle.files.map((item) => `${item.file.name} · ${item.sizeLabel}`).join("  •  ")
     : "CSV، XLSX، PDF، DOCX، TXT، MD، HTML، JSON، وصورة واحدة أو صورتان.";
 
   return (
-    <div dir="rtl" className="rased-surface-page pb-8">
-      <section className="rased-motion-rise rounded-[32px] border border-slate-200/70 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_35%),linear-gradient(135deg,_#08111f_0%,_#10243c_52%,_#0f172a_100%)] px-6 py-6 text-white shadow-[0_32px_80px_-48px_rgba(15,23,42,0.9)] lg:px-8">
+    <div dir="rtl" className={`rased-surface-page pb-8 ${canvasState.reduceMotion ? "[&_*]:!transition-none [&_*]:!animate-none" : ""}`}>
+      <section data-rased-id="header.bar" className="rased-motion-rise rounded-[32px] border border-slate-200/70 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_35%),linear-gradient(135deg,_#08111f_0%,_#10243c_52%,_#0f172a_100%)] px-6 py-6 text-white shadow-[0_32px_80px_-48px_rgba(15,23,42,0.9)] lg:px-8">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-bold text-cyan-100 backdrop-blur">
@@ -673,7 +847,23 @@ export default function HomePage() {
               أسقط ملفًا واحدًا، أو صورتين للمقارنة الصارمة. سيكشف راصد النوع أولًا ثم يعرض لك أفضل الخطوات فقط.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <button data-rased-id="sidebar.toggle" type="button" onClick={toggleSidebar} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:bg-white/15">
+              {canvasState.sidebarOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
+              <span>{sidebarMode === "hidden" ? "إظهار الشريط" : sidebarMode === "full" ? "طي الشريط" : "الشريط الجانبي"}</span>
+            </button>
+            <button type="button" onClick={() => send({ type: "MODAL/OPEN", modalId: "command-palette" })} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:bg-white/15">
+              <Command className="h-4 w-4" />
+              <span>الأوامر</span>
+            </button>
+            <button type="button" onClick={() => send({ type: "THEME/TOGGLE" })} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:bg-white/15">
+              {canvasState.theme === "dark" ? <SunMedium className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
+              <span>{canvasState.theme === "dark" ? "فاتح" : "داكن"}</span>
+            </button>
+            <button type="button" onClick={() => send({ type: "THEME/SET_REDUCE_MOTION", enabled: !canvasState.reduceMotion })} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100 transition hover:bg-white/15">
+              <Sparkles className="h-4 w-4" />
+              <span>{canvasState.reduceMotion ? "الحركة موقوفة" : "الحركة مفعلة"}</span>
+            </button>
             <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100">البيانات {stats.datasets ?? "—"}</span>
             <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100">التقارير {stats.reports ?? "—"}</span>
             <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-semibold text-slate-100">العروض {stats.presentations ?? "—"}</span>
@@ -682,7 +872,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_360px]">
+      <div className={`grid gap-6 ${sidebarMode === "hidden" ? "xl:grid-cols-1" : sidebarMode === "full" ? "xl:grid-cols-[minmax(0,1.45fr)_400px]" : "xl:grid-cols-[minmax(0,1.6fr)_320px]"}`}>
         <div className="space-y-6">
           <section className="rased-panel rased-motion-stagger-1 overflow-hidden !p-0">
             <div className="border-b border-slate-200 px-5 py-4">
@@ -818,7 +1008,7 @@ export default function HomePage() {
                 <h2 className="mt-1 text-lg font-black text-slate-900">الجلسة الحالية</h2>
                 <p className="mt-1 text-sm text-slate-500">ما الذي اخترته، ما الذي نُفّذ، وما الخطوة التالية إذا أردت الاستمرار.</p>
               </div>
-              {executingAction && <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-bold text-cyan-700"><Loader2 className="h-4 w-4 animate-spin" /><span>جارٍ تنفيذ {actionChipLabel(executingAction)}</span></div>}
+              {executingAction && <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-bold text-cyan-700"><Loader2 className="h-4 w-4 animate-spin" /><span>جارٍ تنفيذ {actionChipLabel(executingAction)}{activeJob ? ` · ${activeJob.progress}%` : ""}</span></div>}
             </div>
 
             <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
@@ -843,15 +1033,23 @@ export default function HomePage() {
                   <>
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${result.status === "success" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{result.status === "success" ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}<span>{result.status === "success" ? "مخرج حقيقي جاهز" : "تعذر التنفيذ"}</span></div>
+                        <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${result.status === "success" ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>{result.status === "success" ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}<span>{result.status === "success" ? (resultEvidence ? "نتيجة موثقة" : "نتيجة تحت التحقق") : "تعذر التنفيذ"}</span></div>
                         <h3 className="mt-4 text-base font-black text-slate-900">{result.title}</h3>
                         <p className="mt-2 text-sm leading-7 text-slate-600">{result.body}</p>
                       </div>
                       <span className="text-xs font-bold text-slate-400">{formatTime(result.executedAt)}</span>
                     </div>
                     {result.chips.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{result.chips.map((chip) => <span key={chip} className="rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-bold text-slate-600">{chip}</span>)}</div>}
+                    {activeJob && <div className="mt-4 rounded-[20px] border border-cyan-100 bg-cyan-50/80 px-4 py-3 text-xs font-bold text-cyan-800">مرحلة التنفيذ الحالية: {activeJob.stage} · {activeJob.progress}%</div>}
                     {result.previewText && <pre className="mt-4 overflow-x-auto rounded-[20px] bg-slate-950 px-4 py-3 text-xs leading-7 text-slate-100">{result.previewText}</pre>}
                     {result.previewImage && <div className="mt-4 overflow-hidden rounded-[20px] border border-slate-200 bg-white"><img src={result.previewImage} alt="مخرج بصري من راصد" className="max-h-[360px] w-full object-contain" /></div>}
+                    {resultEvidence && <div className="mt-4 rounded-[20px] border border-emerald-200 bg-emerald-50 px-4 py-3"><p className="text-xs font-black text-emerald-800">بطاقة الإثبات</p><div className="mt-2 flex flex-wrap gap-2">{resultEvidence.sources.map((source) => <span key={source.label} className="rounded-full border border-emerald-200 bg-white px-3 py-1 text-[11px] font-bold text-emerald-700">{source.label}</span>)}</div></div>}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <button type="button" onClick={() => send({ type: "FOCUS/OPEN", jobId: result.id })} className="inline-flex items-center gap-2 rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-cyan-300 hover:text-cyan-700">
+                        <Sparkles className="h-4 w-4" />
+                        <span>فتح داخل Canvas</span>
+                      </button>
+                    </div>
                     {result.outputs && result.outputs.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{result.outputs.map((output) => output.kind === "route" ? <button key={`${result.id}-${output.label}`} type="button" onClick={() => router.push(output.href)} className={`inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-bold transition ${outputClass(output.kind)}`}><ArrowLeft className="h-4 w-4" /><span>{output.label}</span></button> : <a key={`${result.id}-${output.label}`} href={output.href} download={output.downloadName} className={`inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-bold transition ${outputClass(output.kind)}`}><Download className="h-4 w-4" /><span>{output.label}</span></a>)}</div>}
                   </>
                 ) : (
@@ -862,7 +1060,8 @@ export default function HomePage() {
           </section>
         </div>
 
-        <aside className="space-y-6">
+        {sidebarMode !== "hidden" && (
+        <aside className={`space-y-6 ${sidebarMode === "full" ? "" : "xl:max-w-[320px]"}`}>
           <section className="rased-panel rased-motion-stagger-1">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -870,10 +1069,13 @@ export default function HomePage() {
                 <h2 className="mt-3 text-base font-black text-slate-900">موجّه الجلسة الحالية</h2>
                 <p className="mt-1 text-sm leading-6 text-slate-500">يقرأ الملف الحالي ويشرح الخطوة التالية أو ينفذها مباشرة من هنا.</p>
               </div>
-              <ScanSearch className="h-5 w-5 text-slate-300" />
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => send({ type: "SIDEBAR/TOGGLE_PIN" })} className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-cyan-200 hover:text-cyan-700">{canvasState.sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}</button>
+                <button type="button" onClick={toggleSidebar} className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-cyan-200 hover:text-cyan-700"><X className="h-4 w-4" /></button>
+              </div>
             </div>
 
-            <div className={`mt-4 rounded-[22px] border px-4 py-4 ${toneClass(assistantNotice.tone)}`}>
+            <div data-rased-id="chat.stream" className={`mt-4 rounded-[22px] border px-4 py-4 ${toneClass(assistantNotice.tone)}`}>
               <p className="text-sm font-black">{assistantNotice.title}</p>
               <p className="mt-2 text-sm leading-7">{assistantNotice.body}</p>
               {assistantNotice.chips.length > 0 && <div className="mt-3 flex flex-wrap gap-2">{assistantNotice.chips.map((chip) => <span key={chip} className="rounded-full border border-current/15 bg-white/60 px-2.5 py-1 text-[11px] font-bold">{chip}</span>)}</div>}
@@ -885,6 +1087,7 @@ export default function HomePage() {
 
             <form onSubmit={(event) => { event.preventDefault(); void handleAssistantPrompt(assistantInput); }} className="mt-4 flex gap-2">
               <input
+                data-rased-id="composer.input"
                 ref={assistantInputRef}
                 value={assistantInput}
                 onChange={(event) => setAssistantInput(event.target.value)}
@@ -893,6 +1096,7 @@ export default function HomePage() {
                 className="rased-field flex-1"
               />
               <button
+                data-rased-id="composer.send"
                 type="submit"
                 disabled={assistantBusy}
                 aria-label="إرسال السؤال إلى راصد"
@@ -921,7 +1125,64 @@ export default function HomePage() {
             </div>
           </section>
         </aside>
+        )}
       </div>
+      {focusOpen && result ? (
+        <div data-rased-id="focus.stage" className="fixed inset-0 z-40 bg-slate-950/55 px-4 py-4 backdrop-blur-sm">
+          <div className="mx-auto grid h-full max-w-7xl gap-4 xl:grid-cols-[minmax(0,1.25fr)_320px]">
+            <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-2xl">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold tracking-[0.18em] text-slate-400">Focus Stage</p>
+                  <h2 className="mt-2 text-xl font-black text-slate-900">{result.title}</h2>
+                </div>
+                <button type="button" onClick={() => send({ type: "FOCUS/CLOSE" })} className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-cyan-200 hover:text-cyan-700"><X className="h-5 w-5" /></button>
+              </div>
+              <p className="mt-3 text-sm leading-7 text-slate-600">{result.body}</p>
+              {result.previewImage && <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-200 bg-slate-50"><img src={result.previewImage} alt="معاينة داخل Focus Stage" className="max-h-[520px] w-full object-contain" /></div>}
+              {result.previewText && <pre className="mt-5 max-h-[420px] overflow-auto rounded-[24px] bg-slate-950 px-4 py-4 text-xs leading-7 text-slate-100">{result.previewText}</pre>}
+              {result.outputs && result.outputs.length > 0 && <div className="mt-5 flex flex-wrap gap-2">{result.outputs.map((output) => output.kind === "route" ? <button key={`focus-${output.label}`} type="button" onClick={() => router.push(output.href)} className={`inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-bold transition ${outputClass(output.kind)}`}><ArrowLeft className="h-4 w-4" /><span>{output.label}</span></button> : <a key={`focus-${output.label}`} href={output.href} download={output.downloadName} className={`inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-bold transition ${outputClass(output.kind)}`}><Download className="h-4 w-4" /><span>{output.label}</span></a>)}</div>}
+            </section>
+            <aside className="rounded-[30px] border border-white/10 bg-slate-950/90 p-5 text-white shadow-2xl">
+              <div data-rased-id="chat.stream" className="rounded-[24px] border border-white/10 bg-white/5 px-4 py-4">
+                <p className="text-sm font-black">{assistantNotice.title}</p>
+                <p className="mt-2 text-sm leading-7 text-slate-200">{assistantNotice.body}</p>
+                <div className="mt-3 flex flex-wrap gap-2">{assistantNotice.chips.map((chip) => <span key={chip} className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-bold text-slate-100">{chip}</span>)}</div>
+              </div>
+              <div className="mt-4 space-y-2">
+                {activity.slice(0, 3).map((item) => <div key={`focus-activity-${item.id}`} className="rounded-[22px] border border-white/10 bg-white/5 px-4 py-3"><p className="text-sm font-bold">{item.label}</p><p className="mt-1 text-xs text-slate-300">{item.note}</p></div>)}
+              </div>
+            </aside>
+          </div>
+        </div>
+      ) : (
+        <div data-rased-id="focus.stage" className="hidden" aria-hidden="true" />
+      )}
+      {canvasState.modalId === "command-palette" && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/40 px-4 py-16 backdrop-blur-sm">
+          <div className="w-full max-w-3xl rounded-[30px] border border-slate-200 bg-white p-5 shadow-2xl">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold tracking-[0.18em] text-slate-400">Command Palette</p>
+                <h2 className="mt-1 text-lg font-black text-slate-900">ابحث عن أمر أو نتيجة أو مسار</h2>
+              </div>
+              <button type="button" onClick={() => send({ type: "MODAL/CLOSE" })} className="rounded-full border border-slate-200 p-2 text-slate-500 transition hover:border-cyan-200 hover:text-cyan-700"><X className="h-5 w-5" /></button>
+            </div>
+            <input value={commandQuery} onChange={(event) => setCommandQuery(event.target.value)} autoFocus placeholder="ابحث باسم الإجراء أو المسار" className="rased-field mt-4 w-full" />
+            <div className="mt-4 space-y-2">
+              {commandItems.length > 0 ? commandItems.map((item) => <button key={item.id} type="button" onClick={() => void runCommandPaletteItem(item)} className="flex w-full items-start justify-between rounded-[22px] border border-slate-200 bg-slate-50 px-4 py-3 text-right transition hover:border-cyan-200 hover:bg-cyan-50"><div><p className="text-sm font-black text-slate-900">{item.label}</p><p className="mt-1 text-xs text-slate-500">{item.description}</p></div><ChevronLeft className="mt-1 h-4 w-4 text-slate-300" /></button>) : <div className="rounded-[22px] border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">لا توجد نتائج مطابقة لهذا البحث.</div>}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <RasedCanvasProvider>
+      <HomePageContent />
+    </RasedCanvasProvider>
   );
 }

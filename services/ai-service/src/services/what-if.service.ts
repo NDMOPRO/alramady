@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { PrismaClient } from '@prisma/client';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 const prisma = new PrismaClient();
 
 interface ScenarioVariable {

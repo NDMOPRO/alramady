@@ -27,7 +27,7 @@ interface HeaderProps {
 }
 
 export default function Header({ onToggleMobileSidebar }: HeaderProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const theme = useUIStore((s) => s.theme);
   const setTheme = useUIStore((s) => s.setTheme);
   const setAppearanceMode = useAppearanceStore((s) => s.setMode);

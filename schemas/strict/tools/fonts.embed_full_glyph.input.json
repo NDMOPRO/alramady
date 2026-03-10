@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/fonts.embed_full_glyph.input.json",
+  "title": "fonts.embed_full_glyph — Input",
+  "description": "Embeds full glyph sets for all fonts in a CDR design. Section 6.5.1 / B6.",
+  "type": "object",
+  "required": ["context", "cdr_design", "font_plan"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "subset_only": { "type": "boolean", "default": false },
+        "synthesize_missing": { "type": "boolean", "default": true },
+        "force_re_embed": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

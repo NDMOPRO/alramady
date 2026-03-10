@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/extract.image_segments.output.json",
+  "title": "extract.image_segments — Output",
+  "description": "Image segmentation result with typed regions. Section 8.1 / B2.",
+  "type": "object",
+  "required": ["segments", "warnings"],
+  "properties": {
+    "segments": { "$ref": "../common.json#/$defs/ImageSegRef" },
+    "source_dimensions": {
+      "type": "object",
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

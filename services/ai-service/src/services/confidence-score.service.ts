@@ -28,7 +28,7 @@ const logger = winston.createLogger({
 
 // ─── Clients ─────────────────────────────────────────────────────────
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' ?? '' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
 
 // ─── Service ─────────────────────────────────────────────────────────

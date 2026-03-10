@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/render.validate_determinism.input.json",
+  "title": "render.validate_determinism — Input",
+  "description": "Validates render determinism by running N renders and comparing. Section 4 / B11.",
+  "type": "object",
+  "required": ["context", "source", "render_profile"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "source": { "$ref": "../common.json#/$defs/AssetRef" },
+    "render_profile": { "$ref": "../common.json#/$defs/RenderProfile" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "iteration_count": { "type": "integer", "minimum": 2, "maximum": 10, "default": 3 },
+        "determinism": { "$ref": "../common.json#/$defs/DeterminismCheck" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

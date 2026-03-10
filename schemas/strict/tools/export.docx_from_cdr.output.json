@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/export.docx_from_cdr.output.json",
+  "title": "export.docx_from_cdr — Output",
+  "description": "DOCX export result. Section 10 / B7.",
+  "type": "object",
+  "required": ["artifact", "warnings"],
+  "properties": {
+    "artifact": { "$ref": "../common.json#/$defs/ArtifactRef" },
+    "page_count": { "type": "integer", "minimum": 1 },
+    "embedded_font_count": { "type": "integer", "minimum": 0 },
+    "embedded_image_count": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

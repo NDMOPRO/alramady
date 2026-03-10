@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/verify.pixel_diff.input.json",
+  "title": "verify.pixel_diff — Input",
+  "description": "Computes pixel-level diff between two renders. PixelDiff==0 required. Section 5 / B9.",
+  "type": "object",
+  "required": ["context", "render_a", "render_b"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "render_a": { "$ref": "../common.json#/$defs/RenderRef" },
+    "render_b": { "$ref": "../common.json#/$defs/RenderRef" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "tolerance_pixels": { "type": "integer", "minimum": 0, "default": 0 },
+        "generate_heatmap": { "type": "boolean", "default": true },
+        "comparison_colorspace": { "type": "string", "enum": ["sRGB", "Lab"], "default": "sRGB" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

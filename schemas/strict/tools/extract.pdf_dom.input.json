@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/extract.pdf_dom.input.json",
+  "title": "extract.pdf_dom — Input",
+  "description": "Extracts a structured PDF DOM from a PDF asset. Section 9 / B1.",
+  "type": "object",
+  "required": ["context", "source"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "source": { "$ref": "../common.json#/$defs/AssetRef" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "extract_images": { "type": "boolean", "default": true },
+        "extract_fonts": { "type": "boolean", "default": true },
+        "extract_annotations": { "type": "boolean", "default": false },
+        "page_range": {
+          "type": "object",
+          "properties": {
+            "from": { "type": "integer", "minimum": 1 },
+            "to": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

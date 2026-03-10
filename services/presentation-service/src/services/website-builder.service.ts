@@ -5,7 +5,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { createLogger, format, transports } from 'winston';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 const prisma = new PrismaClient();
 
 const logger = createLogger({

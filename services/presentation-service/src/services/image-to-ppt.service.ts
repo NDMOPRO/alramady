@@ -85,7 +85,7 @@ const logger = winston.createLogger({
 });
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '',
+  apiKey: process.env.OPENAI_API_KEY || '',
 });
 
 export async function analyzeSlideImage(image: Buffer): Promise<SlideAnalysis> {

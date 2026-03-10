@@ -84,11 +84,11 @@ export const useSourceLibraryStore = create<SourceLibraryState>((set) => ({
 
   addFiles: (files, origin = "upload") => {
     const now = new Date().toISOString();
-    const nextItems: SourceLibraryItem[] = files.map((file) => ({
+    const nextItems: SourceLibraryItem[] = files.map((file, index) => ({
       id:
         typeof crypto !== "undefined" && "randomUUID" in crypto
           ? crypto.randomUUID()
-          : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          : `${Date.now()}-${index}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}-${file.size}`,
       name: file.name,
       size: file.size,
       mimeType: file.type || "application/octet-stream",

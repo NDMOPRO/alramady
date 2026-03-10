@@ -1,3 +1,4 @@
+import { PNG } from 'pngjs';
 import { logger } from '../../utils/logger.js';
 
 interface ChartSpec {
@@ -262,9 +263,35 @@ export class GPUAcceleratedRenderer {
   }
 
   private createPlaceholderPNG(width: number, height: number, chartType: string): Buffer {
-    // Minimal valid PNG with text metadata indicating the chart type
-    const label = `[${chartType} ${width}x${height}]`;
-    logger.warn('GPUAcceleratedRenderer using placeholder buffer', { chartType, width, height });
-    return Buffer.from(label, 'utf-8');
+    const safeWidth = Math.max(1, Math.min(Math.round(width), 4096));
+    const safeHeight = Math.max(1, Math.min(Math.round(height), 4096));
+    const png = new PNG({ width: safeWidth, height: safeHeight });
+    const hasher = Array.from(chartType).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    const accent = {
+      r: 40 + (hasher % 120),
+      g: 90 + (hasher % 80),
+      b: 140 + (hasher % 60),
+    };
+
+    for (let y = 0; y < safeHeight; y += 1) {
+      for (let x = 0; x < safeWidth; x += 1) {
+        const idx = (safeWidth * y + x) << 2;
+        const isBand = (x + y) % 24 < 12;
+        png.data[idx] = isBand ? accent.r : 248;
+        png.data[idx + 1] = isBand ? accent.g : 248;
+        png.data[idx + 2] = isBand ? accent.b : 248;
+        png.data[idx + 3] = 255;
+      }
+    }
+
+    logger.warn('GPUAcceleratedRenderer using fallback PNG buffer', {
+      chartType,
+      requestedWidth: width,
+      requestedHeight: height,
+      safeWidth,
+      safeHeight,
+    });
+
+    return PNG.sync.write(png);
   }
 }

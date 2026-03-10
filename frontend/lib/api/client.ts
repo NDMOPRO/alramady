@@ -4,6 +4,7 @@ import axios, {
   type InternalAxiosRequestConfig,
   type AxiosResponse,
 } from "axios";
+import { isE2EAuthBypassed } from "@/lib/auth/e2e";
 
 const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -104,6 +105,10 @@ export function createApiClient(basePath: string): AxiosInstance {
 
       // 401 Unauthorized: attempt token refresh
       if (error.response?.status === 401 && !originalRequest._retry) {
+        if (isE2EAuthBypassed()) {
+          return Promise.reject(error);
+        }
+
         if (isRefreshing) {
           // Queue this request until the token is refreshed
           return new Promise((resolve, reject) => {
@@ -196,6 +201,7 @@ export const aiApi = createApiClient("/api/v1/ai");
 export const libraryApi = createApiClient("/api/v1/library");
 export const templateApi = createApiClient("/api/v1/template");
 export const conversionApi = createApiClient("/api/v1/conversion");
+export const strictApi = createApiClient("/api/v1/strict");
 export const bridgeApi = createApiClient("/api/bridge");
 export const trainingApi = createApiClient("/api/training");
 export const intelligenceApi = createApiClient("/api/intelligence");

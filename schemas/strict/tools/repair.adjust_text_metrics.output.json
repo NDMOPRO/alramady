@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/repair.adjust_text_metrics.output.json",
+  "title": "repair.adjust_text_metrics — Output",
+  "description": "Text metrics adjustment repair result. Section 12 / B14.",
+  "type": "object",
+  "required": ["cdr_design", "adjustments_applied", "warnings"],
+  "properties": {
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "adjustments_applied": { "type": "integer", "minimum": 0 },
+    "elements_modified": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "metric", "old_value", "new_value"],
+        "properties": {
+          "element_id": { "type": "string" },
+          "metric": { "type": "string" },
+          "old_value": { "type": "number" },
+          "new_value": { "type": "number" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

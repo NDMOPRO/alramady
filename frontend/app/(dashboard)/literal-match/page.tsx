@@ -77,6 +77,18 @@ import {
 } from 'lucide-react';
 import FileUploader from '@/components/ui/FileUploader';
 import {
+  strictHealth,
+  strictConvertFile,
+  strictListTools,
+  strictValidateEvidence,
+  strictRunTool,
+  buildDefaultContext,
+  type StrictConvertResponse,
+  type StrictHealthResponse,
+  type ToolDefinition,
+  type ExportKind as StrictExportKind,
+} from '@/lib/api/strict-engine';
+import {
   analyzeImage,
   extractColors,
   extractText,
@@ -379,6 +391,39 @@ export default function LiteralMatchPage() {
     hardFailure: true,
   });
 
+  // ── STRICT 1:1 Engine State ──
+  const [strictResult, setStrictResult] = useState<StrictConvertResponse | null>(null);
+  const [strictTargetFormat, setStrictTargetFormat] = useState<StrictExportKind>('pptx');
+
+  // ── STRICT 1:1 Engine Queries ──
+  const strictHealthQuery = useQuery({
+    queryKey: ['strict-health'],
+    queryFn: () => strictHealth(),
+    refetchInterval: 30000,
+  });
+
+  const strictToolsQuery = useQuery({
+    queryKey: ['strict-tools'],
+    queryFn: () => strictListTools(),
+  });
+
+  const strictConvertMutation = useMutation({
+    mutationFn: (file: File) => strictConvertFile(file, strictTargetFormat),
+    onSuccess: (data) => {
+      setStrictResult(data);
+    },
+  });
+
+  const handleStrictUpload = useCallback(
+    (files: File[]) => {
+      if (files[0]) {
+        setStrictResult(null);
+        strictConvertMutation.mutate(files[0]);
+      }
+    },
+    [strictConvertMutation]
+  );
+
   // ── API Queries ──
   const historyQuery = useQuery({
     queryKey: ['literal-match-history'],
@@ -493,6 +538,7 @@ export default function LiteralMatchPage() {
     { id: 'fidelity', labelAr: 'تسجيل الدقة', labelEn: 'Fidelity', icon: <Award className="h-4 w-4" /> },
     { id: 'preprocessing', labelAr: 'المعالجة المسبقة', labelEn: 'Preprocessing', icon: <ImageIcon className="h-4 w-4" /> },
     { id: 'pdf', labelAr: 'دعم PDF', labelEn: 'PDF Support', icon: <FileDown className="h-4 w-4" /> },
+    { id: 'strict-1to1', labelAr: 'محرك STRICT 1:1', labelEn: 'STRICT 1:1 Engine', icon: <Crosshair className="h-4 w-4" /> },
   ];
 
   // ─────────────────────────────────────────────────────────────
@@ -2290,6 +2336,328 @@ export default function LiteralMatchPage() {
             )}
           </div>
         </Section>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════
+          SECTION 19: STRICT 1:1 PixelPerfect Engine
+          ══════════════════════════════════════════════════════════════════ */}
+      {activeTab === 'strict-1to1' && (
+        <>
+          {/* Engine Health */}
+          <Section
+            id="strict-health"
+            titleAr="حالة محرك STRICT 1:1"
+            titleEn="STRICT 1:1 Engine Health"
+            icon={<Crosshair className="h-5 w-5 text-indigo-600" />}
+            defaultOpen
+          >
+            {strictHealthQuery.isLoading ? (
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                جارِ الاتصال بالمحرك...
+              </div>
+            ) : strictHealthQuery.isError ? (
+              <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
+                <XCircle className="mb-1 inline h-4 w-4" /> المحرك غير متصل
+              </div>
+            ) : strictHealthQuery.data ? (
+              <div>
+                <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <InfoCard
+                    labelAr="الحالة"
+                    labelEn="Status"
+                    value={strictHealthQuery.data.status === 'healthy' ? '✓ يعمل' : '✗ متوقف'}
+                    icon={<ShieldCheck className="h-4 w-4" />}
+                  />
+                  <InfoCard
+                    labelAr="المحرك"
+                    labelEn="Engine"
+                    value={strictHealthQuery.data.engine}
+                    icon={<Cpu className="h-4 w-4" />}
+                  />
+                  <InfoCard
+                    labelAr="الإصدار"
+                    labelEn="Version"
+                    value={strictHealthQuery.data.version}
+                    icon={<Binary className="h-4 w-4" />}
+                  />
+                  <InfoCard
+                    labelAr="الأدوات المسجلة"
+                    labelEn="Registered Tools"
+                    value={strictHealthQuery.data.registered_tools}
+                    icon={<Settings2 className="h-4 w-4" />}
+                  />
+                </div>
+
+                {/* Tool Registry */}
+                {strictToolsQuery.data && (
+                  <div>
+                    <p className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      سجل الأدوات ({strictToolsQuery.data.tools.length}) <span className="text-xs text-gray-400">Tool Registry</span>
+                    </p>
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                      {strictToolsQuery.data.tools.map((tool: ToolDefinition) => (
+                        <div
+                          key={tool.tool_id}
+                          className="rounded-lg border border-gray-100 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                        >
+                          <p className="text-xs font-bold text-indigo-700 dark:text-indigo-400">{tool.tool_id}</p>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                              {tool.determinism_level}
+                            </span>
+                            <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                              {tool.fidelity_target}
+                            </span>
+                            {tool.editable_guarantee && (
+                              <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                                قابل للتحرير
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-1 text-[10px] text-gray-400">v{tool.version}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : null}
+          </Section>
+
+          {/* STRICT Conversion */}
+          <Section
+            id="strict-convert"
+            titleAr="تحويل STRICT 1:1 — PixelDiff==0"
+            titleEn="STRICT 1:1 Conversion — Zero Pixel Difference"
+            icon={<Target className="h-5 w-5 text-indigo-600" />}
+            defaultOpen
+          >
+            <div className="mb-4 rounded-lg bg-amber-50 p-4 dark:bg-amber-900/10">
+              <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
+                وضع الدقة المطلقة — PixelDiff == 0
+              </p>
+              <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                كل بكسل مطابق تماماً. لا عتبة. لا تقريب. النص قابل للتحرير. الجداول مهيكلة. الرسوم مربوطة بالبيانات.
+              </p>
+            </div>
+
+            {/* Target Format Selection */}
+            <div className="mb-4">
+              <p className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                صيغة الهدف <span className="text-xs text-gray-400">Target Format</span>
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {([
+                  { value: 'pptx' as StrictExportKind, ar: 'عرض تقديمي', en: 'PPTX' },
+                  { value: 'docx' as StrictExportKind, ar: 'مستند', en: 'DOCX' },
+                  { value: 'xlsx' as StrictExportKind, ar: 'جدول', en: 'XLSX' },
+                  { value: 'dashboard' as StrictExportKind, ar: 'لوحة تحكم', en: 'Dashboard' },
+                ]).map((fmt) => (
+                  <ToggleButton
+                    key={fmt.value}
+                    active={strictTargetFormat === fmt.value}
+                    onClick={() => setStrictTargetFormat(fmt.value)}
+                    labelAr={fmt.ar}
+                    labelEn={fmt.en}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* File Upload */}
+            <div className="mb-4">
+              <FileUploader
+                onUpload={handleStrictUpload}
+                maxFiles={1}
+                accept={{
+                  'application/pdf': ['.pdf'],
+                  'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.tiff'],
+                }}
+                labelAr="رفع ملف للتحويل STRICT"
+                descriptionAr="ارفع PDF أو صورة — سيتم تحويلها بدقة 1:1 مطلقة مع PixelDiff==0"
+              />
+            </div>
+
+            {/* Processing State */}
+            {strictConvertMutation.isPending && (
+              <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+                  <div>
+                    <p className="text-sm font-bold text-blue-700 dark:text-blue-300">جارِ التحويل STRICT 1:1...</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400">
+                      استخراج → بناء CDR → تضمين الخطوط → تصدير → عرض المصدر → عرض الهدف → تحقق → إصلاح → Evidence Pack
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-blue-200 dark:bg-blue-800">
+                  <div className="h-full animate-pulse rounded-full bg-blue-500" style={{ width: '60%' }} />
+                </div>
+              </div>
+            )}
+
+            {/* Error */}
+            {strictConvertMutation.isError && (
+              <div className="rounded-lg bg-red-50 p-4 dark:bg-red-900/20">
+                <div className="flex items-center gap-2">
+                  <XCircle className="h-5 w-5 text-red-500" />
+                  <p className="text-sm font-bold text-red-700 dark:text-red-300">فشل التحويل</p>
+                </div>
+                <p className="mt-1 text-xs text-red-600 dark:text-red-400">
+                  {strictConvertMutation.error instanceof Error ? strictConvertMutation.error.message : 'خطأ غير معروف'}
+                </p>
+              </div>
+            )}
+
+            {/* Results */}
+            {strictResult && (
+              <div className={`rounded-lg border p-4 ${
+                strictResult.success
+                  ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
+                  : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
+              }`}>
+                <div className="mb-3 flex items-center gap-2">
+                  {strictResult.success ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <XCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <p className={`text-sm font-bold ${
+                    strictResult.success
+                      ? 'text-green-700 dark:text-green-300'
+                      : 'text-red-700 dark:text-red-300'
+                  }`}>
+                    {strictResult.success ? 'تحويل ناجح — PixelDiff == 0 ✓' : `فشل: ${strictResult.error}`}
+                  </p>
+                </div>
+
+                {/* Artifact Info */}
+                {strictResult.artifact && (
+                  <div className="mb-3 grid grid-cols-3 gap-3">
+                    <InfoCard labelAr="صيغة الناتج" labelEn="Output Format" value={strictResult.artifact.kind.toUpperCase()} icon={<FileDown className="h-4 w-4" />} />
+                    <InfoCard labelAr="معرف الناتج" labelEn="Artifact ID" value={strictResult.artifact.artifact_id.slice(0, 8) + '...'} icon={<Hash className="h-4 w-4" />} />
+                    <InfoCard labelAr="المسار" labelEn="URI" value={strictResult.artifact.uri.split('/').pop() ?? ''} icon={<FileText className="h-4 w-4" />} />
+                  </div>
+                )}
+
+                {/* Evidence Pack Summary */}
+                {strictResult.evidence_pack && (
+                  <div>
+                    <p className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      حزمة الأدلة <span className="text-xs text-gray-400">Evidence Pack</span>
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                      <InfoCard
+                        labelAr="عمليات عرض المصدر"
+                        labelEn="Source Renders"
+                        value={strictResult.evidence_pack.source_renders.length}
+                        icon={<Eye className="h-3.5 w-3.5" />}
+                      />
+                      <InfoCard
+                        labelAr="عمليات عرض الهدف"
+                        labelEn="Target Renders"
+                        value={strictResult.evidence_pack.target_renders.length}
+                        icon={<Eye className="h-3.5 w-3.5" />}
+                      />
+                      <InfoCard
+                        labelAr="تقارير PixelDiff"
+                        labelEn="Pixel Diff Reports"
+                        value={strictResult.evidence_pack.pixel_diff_reports.length}
+                        icon={<GitCompare className="h-3.5 w-3.5" />}
+                      />
+                      <InfoCard
+                        labelAr="الحتمية"
+                        labelEn="Determinism"
+                        value={strictResult.evidence_pack.determinism_report.same_input_rerun_equals ? '✓ مطابق' : '✗ مختلف'}
+                        icon={<Fingerprint className="h-3.5 w-3.5" />}
+                      />
+                    </div>
+
+                    {/* Diff Details */}
+                    {strictResult.evidence_pack.pixel_diff_reports.length > 0 && (
+                      <div className="mt-3">
+                        <p className="mb-2 text-xs font-semibold text-gray-600 dark:text-gray-400">تفاصيل المقارنة البكسلية</p>
+                        <div className="space-y-1">
+                          {strictResult.evidence_pack.pixel_diff_reports.map((diff, i) => (
+                            <div
+                              key={diff.diff_id}
+                              className={`flex items-center justify-between rounded px-3 py-1.5 text-xs ${
+                                diff.pass
+                                  ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                                  : 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400'
+                              }`}
+                            >
+                              <span>صفحة {i + 1}</span>
+                              <span className="font-mono">PixelDiff: {diff.pixel_diff}</span>
+                              <span>{diff.pass ? '✓ PASS' : '✗ FAIL'}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Warnings */}
+                {strictResult.warnings.length > 0 && (
+                  <div className="mt-3">
+                    <p className="mb-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                      تحذيرات ({strictResult.warnings.length})
+                    </p>
+                    <div className="space-y-1">
+                      {strictResult.warnings.map((w, i) => (
+                        <div key={i} className="flex items-start gap-1.5 rounded bg-amber-50 px-2 py-1 text-xs text-amber-700 dark:bg-amber-900/10 dark:text-amber-400">
+                          <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
+                          <span>[{w.code}] {w.message}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </Section>
+
+          {/* Pipeline Spec */}
+          <Section
+            id="strict-pipeline"
+            titleAr="مراحل خط الأنابيب الإلزامي (13 مرحلة)"
+            titleEn="Mandatory Pipeline (13 Steps)"
+            icon={<ListOrdered className="h-5 w-5 text-indigo-600" />}
+          >
+            <div className="space-y-2">
+              {[
+                { step: 1, ar: 'الاستيعاب', en: 'Ingest (hash + classify + policy bind)' },
+                { step: 2, ar: 'الاستخراج', en: 'Extract (PDF DOM / Image segments)' },
+                { step: 3, ar: 'بناء مصفوفة التخطيط', en: 'Build Layout Graph + Constraint Matrix' },
+                { step: 4, ar: 'بناء CDR (7 طبقات)', en: 'Build CDR (7 layers) + Hashes' },
+                { step: 5, ar: 'تصدير الهدف', en: 'Export Target (PPTX/DOCX/XLSX/Dashboard)' },
+                { step: 6, ar: 'عرض المصدر في المزرعة', en: 'Render Source inside Farm' },
+                { step: 7, ar: 'عرض الهدف في المزرعة', en: 'Render Target inside Farm' },
+                { step: 8, ar: 'بوابات التحقق', en: 'Verify Gates (Determinism → Structural → Pixel)' },
+                { step: 9, ar: 'تشخيص الأسباب الجذرية', en: 'Diagnose Root Causes (if Fail)' },
+                { step: 10, ar: 'إصلاح مستهدف', en: 'Apply Targeted Repair (CDR only)' },
+                { step: 11, ar: 'إعادة التصدير والتحقق', en: 'Re-export → Re-render → Re-verify (loop)' },
+                { step: 12, ar: 'نجاح: حزمة أدلة + تسليم', en: 'PASS: Evidence Pack → Deliver' },
+                { step: 13, ar: 'فشل = خلل في التنفيذ', en: 'NOT PASS: BUG (unacceptable)' },
+              ].map((s) => (
+                <div
+                  key={s.step}
+                  className="flex items-center gap-3 rounded-lg border border-gray-100 px-4 py-2.5 dark:border-gray-700"
+                >
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                    {s.step}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{s.ar}</p>
+                    <p className="text-[10px] text-gray-400">{s.en}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+        </>
       )}
     </div>
   );

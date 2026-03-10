@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { governanceApi } from "@/lib/api/client";
+import { ensureE2EAuthStorage, isE2EAuthBypassed } from "@/lib/auth/e2e";
 
 export interface User {
   id: string;
@@ -31,6 +32,17 @@ function getInitialState() {
   if (typeof window === "undefined") {
     return { user: null, token: null, refreshToken: null, isAuthenticated: false };
   }
+
+  const e2eSnapshot = ensureE2EAuthStorage();
+  if (e2eSnapshot) {
+    return {
+      user: e2eSnapshot.user,
+      token: e2eSnapshot.token,
+      refreshToken: e2eSnapshot.refreshToken,
+      isAuthenticated: true,
+    };
+  }
+
   try {
     const token = localStorage.getItem("rasid_token");
     const refreshTokenVal = localStorage.getItem("rasid_refresh_token");
@@ -59,6 +71,17 @@ export const useAuthStore = create<AuthState>((set, get) => {
 
   initialize: () => {
     if (typeof window === "undefined") return;
+
+    const e2eSnapshot = ensureE2EAuthStorage();
+    if (e2eSnapshot) {
+      set({
+        token: e2eSnapshot.token,
+        refreshToken: e2eSnapshot.refreshToken,
+        user: e2eSnapshot.user,
+        isAuthenticated: true,
+      });
+      return;
+    }
 
     const token = localStorage.getItem("rasid_token");
     const refreshTokenVal = localStorage.getItem("rasid_refresh_token");
@@ -137,6 +160,19 @@ export const useAuthStore = create<AuthState>((set, get) => {
   },
 
   refreshSession: async () => {
+    if (isE2EAuthBypassed()) {
+      const e2eSnapshot = ensureE2EAuthStorage();
+      if (e2eSnapshot) {
+        set({
+          token: e2eSnapshot.token,
+          refreshToken: e2eSnapshot.refreshToken,
+          user: e2eSnapshot.user,
+          isAuthenticated: true,
+        });
+      }
+      return;
+    }
+
     const currentRefreshToken = get().refreshToken;
     if (!currentRefreshToken) {
       get().logout();

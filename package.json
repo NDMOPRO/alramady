@@ -1,7 +1,8 @@
 {
   "devDependencies": {
     "prisma": "^5.22.0",
-    "puppeteer": "^24.38.0"
+    "puppeteer": "^24.38.0",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0"

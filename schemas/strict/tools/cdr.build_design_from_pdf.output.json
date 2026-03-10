@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/cdr.build_design_from_pdf.output.json",
+  "title": "cdr.build_design_from_pdf — Output",
+  "description": "CDR design built from PDF DOM. Section 6 / B3.",
+  "type": "object",
+  "required": ["cdr_design", "font_plan", "warnings"],
+  "properties": {
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "layer_count": { "type": "integer", "minimum": 1 },
+    "element_count": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

@@ -25,9 +25,9 @@ const elementTypeLabels: Record<string, string> = {
 };
 
 export default function InfographicViewerPage() {
-  const params = useParams();
+  const params = useParams<{ id?: string }>();
   const router = useRouter();
-  const infographicId = params.id as string;
+  const infographicId = typeof params?.id === "string" ? params.id : "";
   const [isExporting, setIsExporting] = useState(false);
 
   const { data: infographic, isLoading, isError, error, refetch } = useQuery({

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/render.validate_determinism.output.json",
+  "title": "render.validate_determinism — Output",
+  "description": "Determinism validation result. Section 4 / B11.",
+  "type": "object",
+  "required": ["pass", "iteration_count", "renders", "warnings"],
+  "properties": {
+    "pass": { "type": "boolean" },
+    "iteration_count": { "type": "integer", "minimum": 2 },
+    "renders": {
+      "type": "array",
+      "items": { "$ref": "../common.json#/$defs/RenderRef" },
+      "minItems": 2
+    },
+    "all_hashes_identical": { "type": "boolean" },
+    "determinism_check": { "$ref": "../common.json#/$defs/DeterminismCheck" },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

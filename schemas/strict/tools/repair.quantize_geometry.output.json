@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/repair.quantize_geometry.output.json",
+  "title": "repair.quantize_geometry — Output",
+  "description": "Geometry quantization repair result. Section 12 / B13.",
+  "type": "object",
+  "required": ["cdr_design", "adjustments_applied", "warnings"],
+  "properties": {
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "adjustments_applied": { "type": "integer", "minimum": 0 },
+    "elements_modified": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["element_id", "field", "old_value", "new_value"],
+        "properties": {
+          "element_id": { "type": "string" },
+          "field": { "type": "string" },
+          "old_value": { "type": "number" },
+          "new_value": { "type": "number" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

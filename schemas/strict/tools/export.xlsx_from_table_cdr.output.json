@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/export.xlsx_from_table_cdr.output.json",
+  "title": "export.xlsx_from_table_cdr — Output",
+  "description": "XLSX export result. Section 10 / B7.",
+  "type": "object",
+  "required": ["artifact", "warnings"],
+  "properties": {
+    "artifact": { "$ref": "../common.json#/$defs/ArtifactRef" },
+    "sheet_count": { "type": "integer", "minimum": 1 },
+    "row_count": { "type": "integer", "minimum": 0 },
+    "column_count": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

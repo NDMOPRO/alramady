@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/export.pptx_from_cdr.input.json",
+  "title": "export.pptx_from_cdr — Input",
+  "description": "Exports a PPTX file from a CDR design. Section 10 / B7.",
+  "type": "object",
+  "required": ["context", "cdr_design", "font_plan"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "embed_fonts": { "type": "boolean", "default": true },
+        "embed_images": { "type": "boolean", "default": true },
+        "slide_size": {
+          "type": "object",
+          "properties": {
+            "width_emu": { "type": "integer", "minimum": 1 },
+            "height_emu": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

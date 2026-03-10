@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/cdr.build_design_from_pdf.input.json",
+  "title": "cdr.build_design_from_pdf — Input",
+  "description": "Builds a CDR design from PDF DOM. Section 6 / B3.",
+  "type": "object",
+  "required": ["context", "pdf_dom", "font_plan"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "pdf_dom": { "$ref": "../common.json#/$defs/PdfDomRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "preserve_layers": { "type": "boolean", "default": true },
+        "vectorize_text": { "type": "boolean", "default": false },
+        "flatten_transparency": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/export.docx_from_cdr.input.json",
+  "title": "export.docx_from_cdr — Input",
+  "description": "Exports a DOCX file from a CDR design. Section 10 / B7.",
+  "type": "object",
+  "required": ["context", "cdr_design", "font_plan"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "embed_fonts": { "type": "boolean", "default": true },
+        "embed_images": { "type": "boolean", "default": true },
+        "page_size": { "type": "string", "enum": ["A4", "LETTER", "LEGAL"], "default": "A4" },
+        "rtl_document": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

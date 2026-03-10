@@ -75,7 +75,7 @@ export class AIVoiceoverService {
   ];
 
   constructor(private prisma: PrismaClient) {
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
     this.s3 = new S3Client({
       endpoint: process.env.S3_ENDPOINT || process.env.MINIO_ENDPOINT || 'http://localhost:9000',
       region: process.env.S3_REGION || 'us-east-1',

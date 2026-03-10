@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/repair.loop_controller.input.json",
+  "title": "repair.loop_controller — Input",
+  "description": "Controls the repair loop: iterates diagnose-repair-verify until PixelDiff==0. Section 12 / B15.",
+  "type": "object",
+  "required": ["context", "cdr_design", "source_render", "artifact"],
+  "properties": {
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "source_render": { "$ref": "../common.json#/$defs/RenderRef" },
+    "artifact": { "$ref": "../common.json#/$defs/ArtifactRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "render_profile": { "$ref": "../common.json#/$defs/RenderProfile" },
+    "options": {
+      "type": "object",
+      "properties": {
+        "max_iterations": { "type": "integer", "minimum": 1, "maximum": 20, "default": 5 },
+        "target_pixel_diff": { "type": "integer", "minimum": 0, "default": 0 },
+        "repair_strategies": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["quantize_geometry", "adjust_text_metrics", "re_embed_font"] },
+          "default": ["quantize_geometry", "adjust_text_metrics", "re_embed_font"]
+        },
+        "abort_on_regression": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

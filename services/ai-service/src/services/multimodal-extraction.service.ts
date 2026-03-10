@@ -93,7 +93,7 @@ export class MultimodalExtractionService {
 
   constructor() {
     this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '',
+      apiKey: process.env.OPENAI_API_KEY || '',
     });
   }
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strict.local/schemas/tools/fonts.embed_full_glyph.output.json",
+  "title": "fonts.embed_full_glyph — Output",
+  "description": "Font embedding result with updated font plan. Section 6.5.1 / B6.",
+  "type": "object",
+  "required": ["cdr_design", "font_plan", "warnings"],
+  "properties": {
+    "cdr_design": { "$ref": "../common.json#/$defs/CdrDesignRef" },
+    "font_plan": { "$ref": "../common.json#/$defs/FontPlan" },
+    "embedded_count": { "type": "integer", "minimum": 0 },
+    "synthesized_count": { "type": "integer", "minimum": 0 },
+    "missing_count": { "type": "integer", "minimum": 0 },
+    "warnings": { "$ref": "../common.json#/$defs/Warnings" }
+  },
+  "additionalProperties": false
+}

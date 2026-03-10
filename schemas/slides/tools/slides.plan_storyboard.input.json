@@ -1,0 +1,18 @@
+{
+  "$id": "https://slides.local/schemas/slides.plan_storyboard.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.plan_storyboard" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["outline"],
+      "properties": { "outline": { "type": "object" } },
+      "additionalProperties": false
+    },
+    "params": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

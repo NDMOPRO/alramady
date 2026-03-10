@@ -3,7 +3,6 @@
  * Verifies that exported artifact preserves editability and structure from CDR.
  */
 
-import { randomUUID } from 'crypto';
 import type {
   ArtifactRef,
   CdrDesignRef,
@@ -201,20 +200,9 @@ export function createStructuralEquivalenceHandler(store: CdrStore) {
     >
   ): Promise<ToolResponse<{
     pass: boolean;
-    structural_hashes: HashBundle;
-    report: {
-      editable_text_ratio: number;
-      structured_table_ratio: number;
-      rasterized_elements: number;
-      missing_elements: string[];
-      notes: string;
-    };
+    hashes: HashBundle;
   }>> {
     const result = verifyStructuralEquivalence(store, request.inputs.cdr_design, request.inputs.artifact);
-    const textTotal = countElements(store, request.inputs.cdr_design, 'text');
-    const tableTotal = countElements(store, request.inputs.cdr_design, 'table');
-    const editableTextRatio = textTotal === 0 ? 1 : (result.text_editable ? 1 : 0);
-    const structuredTableRatio = tableTotal === 0 ? 1 : (result.tables_structured ? 1 : 0);
 
     return {
       request_id: request.request_id,
@@ -222,42 +210,8 @@ export function createStructuralEquivalenceHandler(store: CdrStore) {
       status: result.pass ? 'ok' : 'failed',
       refs: {
         pass: result.pass,
-        structural_hashes: result.hashes,
-        report: {
-          editable_text_ratio: editableTextRatio,
-          structured_table_ratio: structuredTableRatio,
-          rasterized_elements: 0,
-          missing_elements: result.violations.map(v => v.element_id).filter(Boolean),
-          notes: result.violations.map(v => `${v.kind}:${v.issue}`).join('; '),
-        },
+        hashes: result.hashes,
       },
     };
   };
-}
-
-function countElements(store: CdrStore, cdrDesignRef: CdrDesignRef, kind: string): number {
-  const design = store.getDesign(cdrDesignRef);
-  if (!design) {
-    return 0;
-  }
-
-  let count = 0;
-  const walk = (elements: Array<{ kind: string; children?: unknown[] }>) => {
-    for (const element of elements) {
-      if (element.kind === kind) {
-        count += 1;
-      }
-      if (Array.isArray(element.children)) {
-        walk(element.children as Array<{ kind: string; children?: unknown[] }>);
-      }
-    }
-  };
-
-  for (const page of design.pages) {
-    for (const layer of page.layers) {
-      walk(layer.elements);
-    }
-  }
-
-  return count;
 }

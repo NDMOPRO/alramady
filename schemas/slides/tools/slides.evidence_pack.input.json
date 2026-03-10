@@ -1,0 +1,22 @@
+{
+  "$id": "https://slides.local/schemas/slides.evidence_pack.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.evidence_pack" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["deck", "pptx", "qa_report"],
+      "properties": {
+        "deck": { "$ref": "../common.json#/$defs/DeckRef" },
+        "pptx": { "$ref": "../common.json#/$defs/ArtifactRef" },
+        "qa_report": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "params": { "type": "object", "additionalProperties": false }
+  },
+  "additionalProperties": false
+}

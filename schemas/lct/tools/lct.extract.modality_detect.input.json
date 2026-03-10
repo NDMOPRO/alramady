@@ -1,0 +1,39 @@
+{
+  "$id": "https://lct.local/schemas/lct.extract.modality_detect.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.extract.modality_detect"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "asset"
+      ],
+      "properties": {
+        "asset": {
+          "$ref": "common.json#/$defs/AssetRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

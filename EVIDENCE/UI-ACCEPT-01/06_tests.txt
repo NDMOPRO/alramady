@@ -1,0 +1,37 @@
+
+> @rasid/frontend@1.0.0 test
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/DATA_AI/rasid/frontend[39m
+
+ [32m✓[39m state/__tests__/rasedCanvas.machine.unit.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+Error: useRasedCanvas must be used inside <RasedCanvasProvider>. Wrap your page or layout with <RasedCanvasProvider>.
+    at useRasedCanvas (C:/DATA_AI/rasid/frontend/state/useRasedCanvas.ts:16:11)
+    at TestConsumer (C:/DATA_AI/rasid/frontend/state/__tests__/RasedCanvasProvider.component.test.tsx:9:34)
+    at renderWithHooks (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\generated\idl\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+Error: useRasedCanvas must be used inside <RasedCanvasProvider>. Wrap your page or layout with <RasedCanvasProvider>.
+    at useRasedCanvas (C:/DATA_AI/rasid/frontend/state/useRasedCanvas.ts:16:11)
+    at TestConsumer (C:/DATA_AI/rasid/frontend/state/__tests__/RasedCanvasProvider.component.test.tsx:9:34)
+    at renderWithHooks (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\DATA_AI\rasid\frontend\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\generated\idl\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+    at HTMLUnknownElementImpl._dispatch (C:\DATA_AI\rasid\frontend\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:243:9)
+ [32m✓[39m state/__tests__/RasedCanvasProvider.component.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 552[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 18:22:46
+[2m   Duration [22m 9.16s[2m (transform 204ms, setup 2.08s, import 1.59s, tests 565ms, environment 8.34s)[22m
+

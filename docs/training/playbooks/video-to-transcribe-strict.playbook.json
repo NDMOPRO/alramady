@@ -1,0 +1,19 @@
+{
+  "playbook_id": "playbook_video_to_transcribe_strict",
+  "version": "1.0.0",
+  "trigger": {
+    "intent_patterns": ["فرغ الفيديو", "video to transcript", "srt 100"]
+  },
+  "defaults": {
+    "target": "srt",
+    "claim": "TRANSCRIBE_STRICT_100",
+    "fidelity_mode": "literal_1to1"
+  },
+  "steps": [
+    "lct.orch.any_to_any"
+  ],
+  "validations": [
+    "TRANSCRIBE_STRICT_100",
+    "EVIDENCE_REQUIRED"
+  ]
+}

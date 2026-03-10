@@ -1,0 +1,89 @@
+{
+  "$id": "https://rased.local/schemas/rased.connector.call.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.connector.call"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "connector_id",
+        "request"
+      ],
+      "properties": {
+        "connector_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "request": {
+          "type": "object",
+          "required": [
+            "method",
+            "url"
+          ],
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "headers": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "body": {}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "allowlisted_hosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

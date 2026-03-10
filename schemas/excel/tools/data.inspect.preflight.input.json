@@ -1,0 +1,39 @@
+{
+  "$id": "https://excel.local/schemas/data.inspect.preflight.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "data.inspect.preflight"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dataset"
+      ],
+      "properties": {
+        "dataset": {
+          "$ref": "common.json#/$defs/DatasetRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

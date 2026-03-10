@@ -1,0 +1,42 @@
+{
+  "$id": "https://excel.local/schemas/recipe.apply.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "recipe.apply"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "table",
+        "recipe"
+      ],
+      "properties": {
+        "table": {
+          "$ref": "common.json#/$defs/TableRef"
+        },
+        "recipe": {
+          "$ref": "common.json#/$defs/RecipeRef"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

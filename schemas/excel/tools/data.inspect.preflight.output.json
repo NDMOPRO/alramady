@@ -1,0 +1,49 @@
+{
+  "$id": "https://excel.local/schemas/data.inspect.preflight.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "data.inspect.preflight"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "content_map",
+        "quality_summary",
+        "join_suggestions"
+      ],
+      "properties": {
+        "content_map": {
+          "type": "object"
+        },
+        "quality_summary": {
+          "type": "object"
+        },
+        "join_suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

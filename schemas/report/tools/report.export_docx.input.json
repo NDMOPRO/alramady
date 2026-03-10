@@ -1,0 +1,44 @@
+{
+  "$id": "https://report.local/schemas/report.export_docx.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.export_docx"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "doc"
+      ],
+      "properties": {
+        "doc": {
+          "$ref": "common.json#/$defs/DocRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "embed_fonts": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,62 @@
+{
+  "$id": "https://report.local/schemas/report.classify_and_govern.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.classify_and_govern"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "doc"
+      ],
+      "properties": {
+        "doc": {
+          "$ref": "common.json#/$defs/DocRef"
+        },
+        "permissions": {
+          "type": "object"
+        },
+        "share_policy": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "classification"
+      ],
+      "properties": {
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        },
+        "approvals_enabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

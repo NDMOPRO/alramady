@@ -1,0 +1,60 @@
+{
+  "$id": "https://report.local/schemas/report.evidence_pack.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.evidence_pack"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "doc"
+      ],
+      "properties": {
+        "doc": {
+          "$ref": "common.json#/$defs/DocRef"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/ArtifactRef"
+          }
+        },
+        "qa_report": {
+          "type": "object"
+        },
+        "parity_report": {
+          "type": "object"
+        },
+        "template_compliance": {
+          "type": "object"
+        },
+        "literal_diff": {
+          "type": "object"
+        },
+        "content_trace": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "https://report.local/schemas/report.plan_outline.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.plan_outline"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "outline"
+      ],
+      "properties": {
+        "outline": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

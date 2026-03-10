@@ -9,16 +9,17 @@
  */
 
 import { randomUUID } from 'crypto';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 import type {
   CdrDesignRef,
   CdrDataRef,
   FontPlan,
   ArtifactRef,
-  ArtifactKind,
-  Warning,
 } from '../cdr/types';
 import type { ToolRequest, ToolResponse } from '../tools/registry';
 import { CdrStore } from '../cdr/store';
+import { getStrictArtifactsDir } from '../runtime/paths';
 
 // ─── Export Context ──────────────────────────────────────────────────
 interface ExportContext {
@@ -32,6 +33,21 @@ export function setExportContext(ctx: ExportContext): void {
   exportContext = ctx;
 }
 
+interface ArtifactManifest {
+  artifact_id: string;
+  kind: ArtifactRef['kind'];
+  cdr_design_id?: string;
+  cdr_data_id?: string;
+  font_families?: string[];
+}
+
+async function writeArtifactManifest(manifest: ArtifactManifest): Promise<string> {
+  const outputDir = exportContext?.outputDir ?? getStrictArtifactsDir();
+  const filePath = join(outputDir, `${manifest.artifact_id}.${manifest.kind}.json`);
+  await writeFile(filePath, JSON.stringify(manifest, null, 2), 'utf8');
+  return filePath;
+}
+
 // ─── PPTX Exporter (Section 10.1) ───────────────────────────────────
 export async function handleExportPptx(
   request: ToolRequest<
@@ -41,7 +57,12 @@ export async function handleExportPptx(
 ): Promise<ToolResponse<{ artifact: ArtifactRef }>> {
   const { cdr_design, font_plan } = request.inputs;
   const artifactId = randomUUID();
-  const uri = `/artifacts/${artifactId}.pptx`;
+  const uri = await writeArtifactManifest({
+    artifact_id: artifactId,
+    kind: 'pptx',
+    cdr_design_id: cdr_design.cdr_design_id,
+    font_families: font_plan.fonts.map(font => font.family),
+  });
 
   // In production: use PptxGenJS or python-pptx via subprocess
   // Build PPTX with:
@@ -72,7 +93,12 @@ export async function handleExportDocx(
 ): Promise<ToolResponse<{ artifact: ArtifactRef }>> {
   const { cdr_design, font_plan } = request.inputs;
   const artifactId = randomUUID();
-  const uri = `/artifacts/${artifactId}.docx`;
+  const uri = await writeArtifactManifest({
+    artifact_id: artifactId,
+    kind: 'docx',
+    cdr_design_id: cdr_design.cdr_design_id,
+    font_families: font_plan.fonts.map(font => font.family),
+  });
 
   // In production: use docx library (npm docx)
   // Build DOCX with:
@@ -101,7 +127,12 @@ export async function handleExportXlsx(
 ): Promise<ToolResponse<{ artifact: ArtifactRef }>> {
   const { cdr_data, style_source } = request.inputs;
   const artifactId = randomUUID();
-  const uri = `/artifacts/${artifactId}.xlsx`;
+  const uri = await writeArtifactManifest({
+    artifact_id: artifactId,
+    kind: 'xlsx',
+    cdr_design_id: style_source.cdr_design_id,
+    cdr_data_id: cdr_data.cdr_data_id,
+  });
 
   // In production: use exceljs
   // Build XLSX with:
@@ -129,7 +160,12 @@ export async function handleExportDashboard(
 ): Promise<ToolResponse<{ artifact: ArtifactRef }>> {
   const { cdr_design, cdr_data } = request.inputs;
   const artifactId = randomUUID();
-  const uri = `/artifacts/${artifactId}.dashboard.json`;
+  const uri = await writeArtifactManifest({
+    artifact_id: artifactId,
+    kind: 'dashboard',
+    cdr_design_id: cdr_design.cdr_design_id,
+    cdr_data_id: cdr_data.cdr_data_id,
+  });
 
   // In production: build live dashboard definition
   // Must include:

@@ -1,0 +1,54 @@
+{
+  "$id": "https://lct.local/schemas/lct.localize.termaware_translate.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.localize.termaware_translate"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "doc_ir",
+        "target_language"
+      ],
+      "properties": {
+        "doc_ir": {
+          "type": "object"
+        },
+        "term_pack": {
+          "type": "object"
+        },
+        "style_guide": {
+          "type": "object"
+        },
+        "target_language": {
+          "type": "string",
+          "enum": [
+            "ar",
+            "en",
+            "mixed"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

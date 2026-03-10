@@ -150,6 +150,7 @@ import fullEditorRoutes from './routes/full-editor.routes.js';
 import performanceRoutes from './routes/performance.routes.js';
 import postEditRoutes from './routes/post-edit.routes.js';
 import templateLibraryRoutes from './routes/template-library.routes.js';
+import toolsRoutes from './routes/tools.routes.js';
 
 app.use('/api/v1/dashboard', dashboardRoutes);
 app.use('/api/v1/dashboard', autoDashboardRoutes);
@@ -161,6 +162,7 @@ app.use('/api/v1/dashboard/editor', fullEditorRoutes);
 app.use('/api/v1/dashboard/performance', performanceRoutes);
 app.use('/api/v1/dashboard/post-edit', postEditRoutes);
 app.use('/api/v1/dashboard/templates', templateLibraryRoutes);
+app.use('/api/v1/tools', toolsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -1,0 +1,7 @@
+{
+  "scenario_id": "pdf_to_pptx_strict",
+  "engine": "lct",
+  "claims": ["CONVERT_STRICT_1TO1_100"],
+  "targets": ["pptx"],
+  "gates": ["pixel_diff_zero", "editable_core", "evidence_required"]
+}

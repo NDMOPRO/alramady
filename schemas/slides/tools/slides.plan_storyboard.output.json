@@ -1,0 +1,40 @@
+{
+  "$id": "https://slides.local/schemas/slides.plan_storyboard.output.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "status", "refs"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.plan_storyboard" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "refs": {
+      "type": "object",
+      "required": ["storyboard"],
+      "properties": {
+        "storyboard": {
+          "type": "object",
+          "required": ["slides"],
+          "properties": {
+            "slides": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["slide_index", "layout_kind", "content_spec"],
+                "properties": {
+                  "slide_index": { "type": "integer", "minimum": 1 },
+                  "layout_kind": { "type": "string" },
+                  "content_spec": { "type": "object" },
+                  "blocks": { "type": "array", "items": { "type": "string" } }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

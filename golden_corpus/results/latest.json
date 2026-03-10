@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-03-10T14:39:31.468Z",
+  "scenarios": [
+    {
+      "scenario": "pdf_to_pptx_strict",
+      "artifact_ids": [
+        "00414d9a-75ce-4f5e-a5d6-d83bd362434a"
+      ],
+      "evidence_id": "c8ef2a23-4364-46f3-a9a5-848536cd806e"
+    },
+    {
+      "scenario": "image_table_to_xlsx_strict",
+      "artifact_ids": [
+        "artifact_08189f5e826845c79f4612e9dbf951dd"
+      ],
+      "evidence_id": "evidence_bfd56529661e4d588492724eb0671712",
+      "execution_mode": "lct_local_strict",
+      "strict_failure": "Pipeline error: export.xlsx_from_table_cdr request contract violation: inputs.cdr_data: Required"
+    },
+    {
+      "scenario": "dataset_to_dashboard",
+      "artifact_ids": [
+        "link_5f1cdd6390e84d659575e2fa655ac6f6"
+      ],
+      "evidence_id": "evidence_52dc219e388f40c1944a28c76eb841b3"
+    },
+    {
+      "scenario": "video_to_transcribe_strict",
+      "artifact_ids": [
+        "artifact_bfa2a806cc474b59a9e375fec7b3934a",
+        "artifact_1338334e4b944c6a8aa92c0f8a6b01e8"
+      ],
+      "evidence_id": "evidence_7e86f197f8994c93945667984bdcf73c"
+    }
+  ]
+}

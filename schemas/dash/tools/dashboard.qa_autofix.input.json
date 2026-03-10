@@ -1,0 +1,46 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.qa_autofix.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.qa_autofix"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dashboard",
+        "issues"
+      ],
+      "properties": {
+        "dashboard": {
+          "$ref": "common.json#/$defs/DashboardRef"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

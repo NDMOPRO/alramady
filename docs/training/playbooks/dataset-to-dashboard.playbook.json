@@ -1,0 +1,23 @@
+{
+  "playbook_id": "playbook_dataset_to_dashboard",
+  "version": "1.0.0",
+  "trigger": {
+    "intent_patterns": ["أنشئ dashboard", "dataset to dashboard", "لوحة مؤشرات"]
+  },
+  "defaults": {
+    "target": "dashboard",
+    "claim": "NONE",
+    "fidelity_mode": "smart"
+  },
+  "steps": [
+    "dashboard.build",
+    "dashboard.bind_data",
+    "dashboard.render_preview",
+    "dashboard.evidence_pack"
+  ],
+  "validations": [
+    "QA_VALIDATE",
+    "PARITY_VERIFY",
+    "EVIDENCE_REQUIRED"
+  ]
+}

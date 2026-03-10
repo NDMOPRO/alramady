@@ -1,0 +1,43 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.parity_verify.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.parity_verify"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dashboard",
+        "artifact"
+      ],
+      "properties": {
+        "dashboard": {
+          "$ref": "common.json#/$defs/DashboardRef"
+        },
+        "artifact": {
+          "$ref": "common.json#/$defs/ArtifactRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

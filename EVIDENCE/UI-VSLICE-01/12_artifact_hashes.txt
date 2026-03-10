@@ -1,0 +1,85 @@
+# Changed file hashes
+.env.example | f282e935b655c5a8dede67aa81b8fdae192e62010a052953e5bb8d1b23a18760
+frontend/app/(dashboard)/home/page.tsx | 12894cf52534078c797a479592a8b8aca2d9057810619cbb3cf831fcfda405f1
+frontend/app/globals.css | c4b6fd9ebbeb501a895eb14cedd07e1da18593972d7e708285d747232279f42a
+frontend/e2e/canvas-fsm.spec.ts | e4b29f3bd01b53e2ae4bf1b419c97b01bca724c59eb3400f7abe4c5d72e9e6c3
+frontend/lib/api/ai.ts | 240f1be640e236922fc2454f97d93f305a9b74af9e86054a4aea3bdf55d81816
+frontend/next.config.js | ae613ed68f7c6e7aceb8fc5e4f99697a30370ea6b1984761e91c9ef8e50e41af
+frontend/state/RasedCanvasProvider.tsx | 80a67e21aded19baa685a67a1dffdddac739f8874496eab28930ec04928e5ea2
+frontend/state/__tests__/RasedCanvasProvider.component.test.tsx | fa0450788762de1c6089b2787cb1c70ce0065069078ea30dba95a494c262666f
+frontend/state/__tests__/rasedCanvas.machine.test.ts | bdfda7958510fbf3684313020e57352c7113a524a663c3a22e4688fc7b872637
+frontend/state/__tests__/rasedCanvas.machine.unit.test.ts | a479805f770ecf3ddb62923321493993e838af4ef0fe2d4655806d6b672c5dc0
+frontend/state/rasedCanvas.actions.ts | e214d8f84043609c41d469fa7d911ef605d7150fc19569b04e9c81e8c3a18ad5
+frontend/state/rasedCanvas.machine.ts | 31bdf90b9bc2fa571a8cada704a06a87249ded0a631e3574bf08cece05f530e9
+frontend/state/rasedCanvas.types.ts | 9ca7657000700838fee0bbff530066d0b90ede6c3c3c922a48858e6c04a42067
+package.json | c95244340d586b031cbbbb3ebfefb51dfeaba878d08756a76087d83b11094063
+services/ai-service/jest.config.ts | b26b591063f729d04dc2a884dc6a626f1d1032a64070ffbea79e72bc55c39caf
+services/ai-service/package.json | 8d121337ffbd35095dba4b1ffbd887ea621eae3ccad22ddcd94add6348f86696
+services/ai-service/src/index.ts | 64365c4460d17198e4662d038fdb7876ab9b33abe9a45831b4d85b1300c013ea
+services/conversion-service/jest.config.ts | 7c0833722b61346a2720cad5210258e26817d01908d70bc6deeeb1e50897223c
+services/conversion-service/package.json | 4eead500fcf8e6e7ad3f1c2a4cdaf683a163388d7dca3e4d964d563c76598e5d
+services/conversion-service/src/index.ts | f2ca953a1fa99a24a2d857d75d7e153d06ba5ada3caae238f223f7836b026b24
+services/dashboard-service/jest.config.ts | b0f073903e29f43de304f56f78f7f297bd35d12f4405a6d22a83fc7e97e80e2a
+services/dashboard-service/src/index.ts | ed25b16cfd34afb38e0f5cf57b56b99663d80db3b89c6cda5b8e73dffedb4411
+services/excel-service/src/index.ts | 044cfc1567ca8dc9a864367114cd006657941c6e8d904e87aee31fa098aee388
+services/governance-service/src/index.ts | df2edba868b6733382a2c1095d38ed501762be850df7ca5990e9ec56729c4601
+services/presentation-service/jest.config.ts | d5d5d4aa1f72873f3d092517343b6fd22a3c015531fcdb8f2ac99f97aec70b3e
+services/presentation-service/src/index.ts | 0f00815af46a84df474657fce92078e059f626b1e1e752d3de63d9484f376ae7
+services/replication-service/jest.config.ts | 1f0ad52e8239113fe2996faa4c016d68c72fc1c1cc79f970e0cba0a31f8fdc7f
+services/replication-service/src/__tests__/strict-pipeline.test.ts | 0b9fc4488b499a60e5ece0f4e70f30b3fd73fb51287ce311efceaa5c693c4150
+services/replication-service/src/index.ts | bcc54e4d2c59908853efb53162d0ffeee05f8b47259dc95e07d0b56aa78e87d8
+services/replication-service/src/strict/cdr/builder.ts | bcebc624bf03a93383113b9e92f5c24829c57a27bf5efc3c2565d5748bddb86c
+services/replication-service/src/strict/cdr/store.ts | b3f3a63f0fd09accf7dd65697077c401443388696ae0d64ed9d8866e4e1a3db0
+services/replication-service/src/strict/cdr/types.ts | 6c86959de31164a16b489f932ff90d1788666f2d0881a2f22ce592be524e9bd9
+services/replication-service/src/strict/evidence/evidence-pack.ts | bf045fdaf53f98ba8f5c61660a6809aa890f5593422f735f823fa4a9cde4b015
+services/replication-service/src/strict/export/exporters.ts | cf6b8eb58e6437d97bfe155797d0e68bdc6b94bcaf27a6ce7368d0fd8c12d300
+services/replication-service/src/strict/index.ts | 99459ffdf56debb21676e8e56b5862da19b306667e747c52d494cb507b046bce
+services/replication-service/src/strict/pipeline/strict-pipeline.ts | f3cf93bede59b86c5c0b78a1165fde2e16c06ba259d33967e9e80d6e2dcb201c
+services/replication-service/src/strict/render/farm-renderer.ts | 9eb44c0079aabb8f659af040c7221a247e28dfa7cc54d1cc7c3d59ca60c4e13c
+services/replication-service/src/strict/tools/registry.ts | 29a5a2416409a8a6c26fa796db6db6a956219ca16abc77675a8803a657eb2671
+services/replication-service/src/strict/verify/determinism.ts | be233b7916ddcec7389d82f4ad717f2677880b298c21ec249cb9a51d723bf217
+services/replication-service/src/strict/verify/pixel-diff.ts | 4025bf359135ae89fdf6eedd1ab536f17f870371bf6d5dbc5c9be0007ad992a8
+services/replication-service/src/strict/verify/structural-equivalence.ts | 82ce834b6c95552d5cb363169451292c56800f842790b2222d91e032295b5390
+services/reporting-service/src/index.ts | 2ea8e1a7100e97b1a11349813264d6da47d645f1a58edceaae1103994c6b4377
+warning: in the working copy of '.env.example', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/app/(dashboard)/home/page.tsx', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/app/globals.css', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/e2e/canvas-fsm.spec.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/lib/api/ai.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/next.config.js', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/RasedCanvasProvider.tsx', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/__tests__/RasedCanvasProvider.component.test.tsx', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/__tests__/rasedCanvas.machine.test.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/__tests__/rasedCanvas.machine.unit.test.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/rasedCanvas.actions.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/rasedCanvas.machine.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'frontend/state/rasedCanvas.types.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/ai-service/jest.config.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/ai-service/package.json', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/ai-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/conversion-service/jest.config.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/conversion-service/package.json', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/conversion-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/dashboard-service/jest.config.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/dashboard-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/excel-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/governance-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/presentation-service/jest.config.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/presentation-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/jest.config.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/__tests__/strict-pipeline.test.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/cdr/builder.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/cdr/store.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/cdr/types.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/evidence/evidence-pack.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/export/exporters.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/pipeline/strict-pipeline.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/render/farm-renderer.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/tools/registry.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/verify/determinism.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/verify/pixel-diff.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/replication-service/src/strict/verify/structural-equivalence.ts', LF will be replaced by CRLF the next time Git touches it | MISSING
+warning: in the working copy of 'services/reporting-service/src/index.ts', LF will be replaced by CRLF the next time Git touches it | MISSING

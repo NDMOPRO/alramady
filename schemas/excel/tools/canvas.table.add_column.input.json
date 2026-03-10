@@ -1,0 +1,62 @@
+{
+  "$id": "https://excel.local/schemas/canvas.table.add_column.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "canvas.table.add_column"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "target_table",
+        "source_column"
+      ],
+      "properties": {
+        "target_table": {
+          "$ref": "common.json#/$defs/TableRef"
+        },
+        "source_column": {
+          "$ref": "common.json#/$defs/ColumnRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "align_mode"
+      ],
+      "properties": {
+        "align_mode": {
+          "type": "string",
+          "enum": [
+            "append_rows_by_similarity",
+            "join_by_key",
+            "add_as_side_column"
+          ]
+        },
+        "join_key_columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

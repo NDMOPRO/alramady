@@ -1,0 +1,224 @@
+
+> @rasid/frontend@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.15
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+./app/(auth)/login/page.tsx
+57:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(auth)/register/page.tsx
+85:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/analysis/page.tsx
+274:6  Warning: React Hook useEffect has a missing dependency: 'loadSurface'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+323:5  Warning: React Hook useMemo has a missing dependency: 'loadSurface'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/dashboard/simulation/legacy.tsx
+281:74  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+353:21  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+396:21  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./app/(dashboard)/dashboard/templates/legacy.tsx
+161:9  Warning: The 'templates' logical expression could make the dependencies of useMemo Hook (at line 211) change on every render. To fix this, wrap the initialization of 'templates' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+409:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/data/page.tsx
+218:5  Warning: React Hook useMemo has unnecessary dependencies: 'connectorConnections.length', 'connectorTypes.length', 'datasets.length', and 'datasetsTotal'. Either exclude them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/data/[id]/page.tsx
+83:9  Warning: The 'rows' logical expression could make the dependencies of useMemo Hook (at line 111) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+83:9  Warning: The 'rows' logical expression could make the dependencies of useMemo Hook (at line 140) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/home/page.tsx
+426:9  Warning: The 'resultEvidence' conditional could make the dependencies of useEffect Hook (at line 579) change on every render. To fix this, wrap the initialization of 'resultEvidence' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+1258:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1605:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/infographics/page.tsx
+96:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+141:11  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+152:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+155:21  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./app/(dashboard)/infographics/[id]/page.tsx
+111:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+114:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./app/(dashboard)/library/page.tsx
+831:5  Warning: React Hook useMemo has unnecessary dependencies: 'normalAssets.length', 'reusableActionAssets.length', and 'themeAssets.length'. Either exclude them or remove the dependency array.  react-hooks/exhaustive-deps
+1000:48  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/literal-match/page.tsx
+1526:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+1530:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/presentations/page.tsx
+193:5  Warning: React Hook React.useMemo has an unnecessary dependency: 'totalSlides'. Either exclude it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/presentations/[id]/page.tsx
+81:6  Warning: React Hook React.useEffect has a missing dependency: 'activeSlide'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/replicate/legacy.tsx
+258:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+461:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+467:23  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+478:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+490:25  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+696:17  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+875:21  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+884:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/replicate/page.tsx
+207:6  Warning: React Hook useEffect has a missing dependency: 'fetchRecentSessions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/replication/image-matching/page.tsx
+93:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+100:17  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./app/(dashboard)/replication/page.tsx
+177:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./app/(dashboard)/reports/page.tsx
+175:5  Warning: React Hook useMemo has missing dependencies: 'handleBuildSelectedReport', 'handleCreateAndBuildReport', 'handleExport', 'handleSchedule', and 'refreshSurface'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+248:6  Warning: React Hook useEffect has a missing dependency: 'refreshSurface'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/(dashboard)/templates/page.tsx
+176:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/assistant/EmbeddedRasidAssistant.tsx
+209:6  Warning: React Hook React.useEffect has a missing dependency: 'actions'. Either include it or remove the dependency array. If 'setMessages' needs the current value of 'actions', you can also switch to useReducer instead of useState and read 'actions' in the reducer.  react-hooks/exhaustive-deps
+
+./components/layout/Header.tsx
+209:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/layout/Sidebar.tsx
+90:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+102:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/workspaces/RasedCanvasCards.tsx
+183:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+390:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/workspaces/RasidCommandCenter.tsx
+861:29  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/_app_legacy/dashboard/simulation/page.tsx
+281:74  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+353:21  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+396:21  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/_app_legacy/dashboard/templates/page.tsx
+161:9  Warning: The 'templates' logical expression could make the dependencies of useMemo Hook (at line 211) change on every render. To fix this, wrap the initialization of 'templates' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+409:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/_app_legacy/infographic/page.tsx
+49:13  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/_app_legacy/infographic/professional/page.tsx
+171:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/_app_legacy/layout.tsx
+31:7  Warning: Do not use `<head>` element. Use `<Head />` from `next/head` instead. See: https://nextjs.org/docs/messages/no-head-element  @next/next/no-head-element
+
+./src/_app_legacy/presentations/ai-generate/page.tsx
+317:19  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/_app_legacy/replication/image-matching/page.tsx
+93:15  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+100:17  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/_app_legacy/reporting/advanced-mode/page.tsx
+229:25  Warning: Image elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/57) ...
+   Generating static pages (14/57) 
+   Generating static pages (28/57) 
+   Generating static pages (42/57) 
+ ✓ Generating static pages (57/57)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                         Size     First Load JS
+┌ ○ /                                               568 B            88 kB
+├ ○ /_not-found                                     880 B          88.3 kB
+├ ○ /admin                                          176 B          87.6 kB
+├ ○ /admin/audit                                    176 B          87.6 kB
+├ ○ /admin/settings                                 176 B          87.6 kB
+├ ○ /admin/users                                    176 B          87.6 kB
+├ ○ /ai                                             6.76 kB        94.2 kB
+├ ○ /ai/knowledge-base                              10.3 kB         145 kB
+├ ○ /ai/training                                    14 kB           132 kB
+├ ○ /analysis                                       11 kB           126 kB
+├ ƒ /api/v1/ai/generate/chat                        0 B                0 B
+├ ƒ /api/v1/ai/rased/tools/[toolId]                 0 B                0 B
+├ ƒ /api/v1/ai/rased/ui-state                       0 B                0 B
+├ ƒ /api/v1/dashboard/appearance                    0 B                0 B
+├ ƒ /api/v1/governance/users/[id]                   0 B                0 B
+├ ƒ /api/v1/replication/visual-replication/analyze  0 B                0 B
+├ ƒ /api/v1/replication/visual-replication/compare  0 B                0 B
+├ ○ /automation                                     7.75 kB         125 kB
+├ ○ /convert                                        6.54 kB         150 kB
+├ ○ /dashboard                                      13.5 kB         122 kB
+├ ƒ /dashboard/[id]                                 116 kB          240 kB
+├ ○ /dashboard/advanced-mode                        8.38 kB         119 kB
+├ ○ /dashboard/drag-elements                        13.7 kB         117 kB
+├ ○ /dashboard/easy-mode                            10.9 kB         114 kB
+├ ○ /dashboard/editor                               10.8 kB         121 kB
+├ ○ /dashboard/performance                          11.6 kB         115 kB
+├ ○ /dashboard/post-edit                            12.2 kB         115 kB
+├ ○ /dashboard/simulation                           9.71 kB         116 kB
+├ ○ /dashboard/templates                            8.44 kB         115 kB
+├ ○ /data                                           9.6 kB          141 kB
+├ ƒ /data/[id]                                      24.7 kB         155 kB
+├ ○ /data/import                                    176 B          87.6 kB
+├ ○ /excel                                          9.63 kB         144 kB
+├ ƒ /excel/[id]                                     9.56 kB         134 kB
+├ ○ /excel/matching                                 5.38 kB         109 kB
+├ ○ /forgot-password                                6.08 kB         147 kB
+├ ○ /home                                           49.2 kB         180 kB
+├ ○ /infographics                                   5.72 kB         133 kB
+├ ƒ /infographics/[id]                              4.36 kB         122 kB
+├ ○ /library                                        13.5 kB         151 kB
+├ ○ /literal-match                                  27.3 kB         165 kB
+├ ○ /localization                                   10.8 kB         133 kB
+├ ○ /login                                          6.21 kB         137 kB
+├ ○ /observer                                       10.8 kB        98.2 kB
+├ ○ /presentations                                  8.28 kB         132 kB
+├ ƒ /presentations/[id]                             8.97 kB         127 kB
+├ ○ /register                                       8.51 kB         150 kB
+├ ○ /replicate                                      8.63 kB          96 kB
+├ ○ /replication                                    7.13 kB        94.5 kB
+├ ○ /replication/core-principle                     2.82 kB        90.2 kB
+├ ○ /replication/dual-verify                        3.13 kB        90.5 kB
+├ ○ /replication/image-matching                     3.01 kB        90.4 kB
+├ ○ /replication/match-phases                       2.83 kB        90.2 kB
+├ ○ /replication/match-scope                        3.02 kB        90.4 kB
+├ ○ /replication/print-lock                         3.04 kB        90.4 kB
+├ ○ /reports                                        8.85 kB         125 kB
+├ ƒ /reports/[id]                                   176 B          87.6 kB
+├ ○ /reports/advanced-mode                          176 B          87.6 kB
+├ ƒ /reports/advanced-mode/[id]                     176 B          87.6 kB
+├ ○ /reports/compare                                176 B          87.6 kB
+├ ○ /reports/easy-mode                              176 B          87.6 kB
+├ ƒ /reports/easy-mode/[id]                         176 B          87.6 kB
+├ ○ /reports/templates                              176 B          87.6 kB
+├ ○ /settings                                       17.7 kB         137 kB
+└ ○ /templates                                      7.71 kB         125 kB
++ First Load JS shared by all                       87.4 kB
+  ├ chunks/2117-dc84799196c6ffb7.js                 31.8 kB
+  ├ chunks/fd9d1056-0eab9eb00b6c63d3.js             53.6 kB
+  └ other shared chunks (total)                     2.01 kB
+
+
+ƒ Middleware                                        26.7 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,0 +1,12 @@
+
+> @rasid/frontend@1.0.0 test:e2e
+> playwright test
+
+
+Running 3 tests using 3 workers
+
+  ok 1 [chromium] › e2e\canvas-fsm.spec.ts:32:7 › OptionsLimitGate › limits visible option surfaces and hides technical UI copy (1.9s)
+  ok 2 [chromium] › e2e\canvas-fsm.spec.ts:121:7 › IntegrationProofGate › proves the vertical slice from action to result and evidence (5.2s)
+  ok 3 [chromium] › e2e\canvas-fsm.spec.ts:52:7 › ClickAllGate › clicks every primary visible control without console errors (7.1s)
+
+  3 passed (20.5s)

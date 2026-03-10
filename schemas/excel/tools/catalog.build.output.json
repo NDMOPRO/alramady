@@ -1,0 +1,41 @@
+{
+  "$id": "https://excel.local/schemas/catalog.build.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "catalog.build"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "columns"
+      ],
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/ColumnRef"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

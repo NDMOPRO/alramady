@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slides.local/schemas/common.json",
+  "$defs": {
+    "ActionContext": {
+      "type": "object",
+      "required": ["workspace_id", "user_id", "locale", "mode", "arabic_mode", "brand_kit_id"],
+      "properties": {
+        "workspace_id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "locale": { "type": "string" },
+        "mode": { "type": "string", "enum": ["AUTO", "CONTROLLED"] },
+        "arabic_mode": { "type": "string", "enum": ["BASIC", "PROFESSIONAL", "ELITE"] },
+        "brand_kit_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "AssetRef": {
+      "type": "object",
+      "required": ["asset_id", "uri", "mime", "sha256"],
+      "properties": {
+        "asset_id": { "type": "string" },
+        "uri": { "type": "string" },
+        "mime": { "type": "string" },
+        "sha256": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "DeckRef": {
+      "type": "object",
+      "required": ["deck_id", "slide_count"],
+      "properties": {
+        "deck_id": { "type": "string" },
+        "slide_count": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "required": ["artifact_id", "kind", "uri"],
+      "properties": {
+        "artifact_id": { "type": "string" },
+        "kind": { "type": "string", "enum": ["pptx", "png", "json", "pdf", "html", "google_slides"] },
+        "uri": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

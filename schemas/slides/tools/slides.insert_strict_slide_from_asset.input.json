@@ -1,0 +1,30 @@
+{
+  "$id": "https://slides.local/schemas/slides.insert_strict_slide_from_asset.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.insert_strict_slide_from_asset" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["deck", "asset", "target_index"],
+      "properties": {
+        "deck": { "$ref": "../common.json#/$defs/DeckRef" },
+        "asset": { "$ref": "../common.json#/$defs/AssetRef" },
+        "target_index": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": ["strict_mode"],
+      "properties": {
+        "strict_mode": { "type": "string", "const": "STRICT_1TO1_100" },
+        "page_number": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,45 @@
+{
+  "$id": "https://report.local/schemas/report.classify_and_govern.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.classify_and_govern"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "doc",
+        "governance"
+      ],
+      "properties": {
+        "doc": {
+          "$ref": "common.json#/$defs/DocRef"
+        },
+        "governance": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

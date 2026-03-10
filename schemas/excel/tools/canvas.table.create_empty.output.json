@@ -1,0 +1,38 @@
+{
+  "$id": "https://excel.local/schemas/canvas.table.create_empty.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "canvas.table.create_empty"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "table"
+      ],
+      "properties": {
+        "table": {
+          "$ref": "common.json#/$defs/TableRef"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

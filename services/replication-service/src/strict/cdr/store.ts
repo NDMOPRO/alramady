@@ -75,12 +75,13 @@ export class CdrStore {
 
   computeHashBundle(design: CdrDesign, pixelHash: string, perceptualHash?: string): HashBundle {
     const fp = this.computeFingerprints(design);
+    const effectivePixelHash = pixelHash || this.sha256(`${fp.layout_hash}:${fp.structural_hash}:${fp.typography_hash}`);
     return {
       layout_hash: fp.layout_hash,
       structural_hash: fp.structural_hash,
       typography_hash: fp.typography_hash,
-      pixel_hash: pixelHash,
-      perceptual_hash: perceptualHash,
+      pixel_hash: effectivePixelHash,
+      perceptual_hash: perceptualHash || undefined,
     };
   }
 

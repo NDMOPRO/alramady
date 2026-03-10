@@ -1,0 +1,7 @@
+{
+  "scenario_id": "image_table_to_xlsx_strict",
+  "engine": "lct",
+  "claims": ["CONVERT_STRICT_1TO1_100"],
+  "targets": ["xlsx"],
+  "gates": ["pixel_diff_zero", "structured_cells", "evidence_required"]
+}

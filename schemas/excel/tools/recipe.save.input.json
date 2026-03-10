@@ -1,0 +1,61 @@
+{
+  "$id": "https://excel.local/schemas/recipe.save.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "recipe.save"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "recipe",
+        "kind"
+      ],
+      "properties": {
+        "table": {
+          "$ref": "common.json#/$defs/TableRef"
+        },
+        "recipe": {
+          "type": "object"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "TIR",
+            "COMPARE",
+            "CLEAN",
+            "FORMAT"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

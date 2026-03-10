@@ -1,0 +1,52 @@
+{
+  "$id": "https://rased.local/schemas/rased.policy.check.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.policy.check"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "allow",
+        "deny",
+        "reason"
+      ],
+      "properties": {
+        "allow": {
+          "type": "boolean"
+        },
+        "deny": {
+          "type": "boolean"
+        },
+        "required_token": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

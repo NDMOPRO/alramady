@@ -5,14 +5,16 @@ const config: Config = {
   roots: ['<rootDir>/src'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   transform: {
-    '^.+\.ts$': ['ts-jest', {
+    '^.+\\.ts$': ['ts-jest', {
       useESM: false,
       tsconfig: 'tsconfig.json',
-      diagnostics: false,
+      diagnostics: {
+        ignoreCodes: [151002],
+      },
     }],
   },
   moduleNameMapper: {
-    '^(\.{1,2}/.*)\.js$': '$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   forceExit: true,
   passWithNoTests: true,

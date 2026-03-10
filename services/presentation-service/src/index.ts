@@ -164,6 +164,7 @@ import generateRoutes from './routes/generate.routes.js';
 import aiGenerationRoutes from './routes/ai-generation.routes.js';
 import animationTransitionRoutes from './routes/animation-transition.routes.js';
 import integrationImportRoutes from './routes/integration-import.routes.js';
+import toolsRoutes from './routes/tools.routes.js';
 
 app.use('/api/v1/presentation', authMiddleware, tenantMiddleware, presentationRoutes);
 app.use('/api/v1/presentation/ai-media', authMiddleware, tenantMiddleware, aiMediaRoutes);
@@ -187,6 +188,7 @@ app.use('/api/v1/presentation/generate', authMiddleware, tenantMiddleware, gener
 app.use('/api/v1/presentation/ai', authMiddleware, tenantMiddleware, aiGenerationRoutes);
 app.use('/api/v1/presentation/animations', authMiddleware, tenantMiddleware, animationTransitionRoutes);
 app.use('/api/v1/presentation/integrations', authMiddleware, tenantMiddleware, integrationImportRoutes);
+app.use('/api/v1/tools', toolsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

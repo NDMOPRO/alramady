@@ -1,0 +1,45 @@
+{
+  "$id": "https://report.local/schemas/report.generate_content_smart.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.generate_content_smart"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "doc",
+        "content_trace"
+      ],
+      "properties": {
+        "doc": {
+          "$ref": "common.json#/$defs/DocRef"
+        },
+        "content_trace": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

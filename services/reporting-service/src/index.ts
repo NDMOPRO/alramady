@@ -150,6 +150,7 @@ import externalSimulationRoutes from './routes/external-simulation.routes.js';
 import compareScheduleRoutes from './routes/compare-schedule.routes.js';
 import distributionRoutes from './routes/distribution.routes.js';
 import interactiveRoutes from './routes/interactive.routes.js';
+import toolsRoutes from './routes/tools.routes.js';
 
 app.use('/api/v1/reporting', reportingRoutes);
 app.use('/api/v1/reporting/easy-mode', easyModeRoutes);
@@ -160,6 +161,7 @@ app.use('/api/v1/reporting/external-simulation', externalSimulationRoutes);
 app.use('/api/v1/reporting/compare', compareScheduleRoutes);
 app.use('/api/v1/reporting/distribution', distributionRoutes);
 app.use('/api/v1/reporting/interactive', interactiveRoutes);
+app.use('/api/v1/tools', toolsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

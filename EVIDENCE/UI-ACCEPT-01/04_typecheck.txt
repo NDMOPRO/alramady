@@ -1,0 +1,4 @@
+
+> @rasid/frontend@1.0.0 type-check
+> tsc --noEmit -p tsconfig.check.json
+

@@ -1,170 +1,136 @@
-import { test, expect, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { E2E_AUTH_TOKEN, E2E_AUTH_USER } from "@/lib/auth/e2e";
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+const PNG_PIXEL =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a5WQAAAAASUVORK5CYII=";
 
-async function waitForHomePage(page: Page) {
+function pngFile(name: string) {
+  return {
+    name,
+    mimeType: "image/png",
+    buffer: Buffer.from(PNG_PIXEL, "base64"),
+  };
+}
+
+async function waitForHome(page: Page) {
   await page.addInitScript(({ token, user }) => {
     window.localStorage.setItem("rasid_token", token);
     window.localStorage.setItem("rasid_refresh_token", "e2e-refresh-token");
     window.localStorage.setItem("rasid_user", JSON.stringify(user));
   }, { token: E2E_AUTH_TOKEN, user: E2E_AUTH_USER });
+
   await page.goto("/home");
-  // Wait for the page to fully load by checking for the header bar
   await page.waitForSelector('[data-rased-id="header.bar"]', { timeout: 15_000 });
 }
 
-async function getDataRasedId(page: Page, id: string) {
-  return page.locator(`[data-rased-id="${id}"]`);
+async function uploadStrictPair(page: Page) {
+  await page.locator('input[type="file"]').setInputFiles([pngFile("strict-a.png"), pngFile("strict-b.png")]);
+  await expect(page.locator('[data-rased-id^="card.file."]').first()).toBeVisible();
 }
 
-// ─── Scenario A: Drop PDF → choose action → job lifecycle ────────────────────
+test.describe("OptionsLimitGate", () => {
+  test("limits visible option surfaces and hides technical UI copy", async ({ page }) => {
+    await waitForHome(page);
+    await uploadStrictPair(page);
 
-test.describe("Scenario A: Drop PDF → strict → Plan/Run/Preview/Result/Evidence", () => {
-  test("data-rased-id elements exist on home page", async ({ page }) => {
-    await waitForHomePage(page);
+    await expect(page.locator('[data-rased-id^="card.actions."]').first()).toBeVisible({ timeout: 300 });
 
-    // All 6 required data-rased-id markers should be present
-    await expect(page.locator('[data-rased-id="header.bar"]')).toBeVisible();
-    await expect(page.locator('[data-rased-id="sidebar.toggle"]')).toBeVisible();
-    await expect(page.locator('[data-rased-id="composer.input"]')).toBeVisible();
-    await expect(page.locator('[data-rased-id="composer.send"]')).toBeVisible();
-    await expect(page.locator('[data-rased-id="chat.stream"]')).toBeVisible();
-    // focus.stage is hidden placeholder
-    await expect(page.locator('[data-rased-id="focus.stage"]')).toBeAttached();
-  });
+    const surfaces = page.locator("[data-rased-options-surface]:visible");
+    const surfaceCount = await surfaces.count();
 
-  test("composer input accepts text", async ({ page }) => {
-    await waitForHomePage(page);
-
-    const input = page.locator('[data-rased-id="composer.input"]');
-    await input.fill("اختبار السؤال");
-    await expect(input).toHaveValue("اختبار السؤال");
-  });
-
-  test("drop zone exists and page handles file interaction", async ({ page }) => {
-    await waitForHomePage(page);
-
-    // The home page has a dropzone area — verify it exists
-    const dropzone = page.locator('[data-rased-id="header.bar"]');
-    await expect(dropzone).toBeVisible();
-  });
-});
-
-// ─── Scenario B: Focus Stage closes before NAV/GO ────────────────────────────
-
-test.describe("Scenario B: Focus Stage + NAV/GO interaction", () => {
-  test("focus.stage placeholder exists on the page", async ({ page }) => {
-    await waitForHomePage(page);
-
-    // The focus stage is a hidden div — should be in DOM
-    const focusStage = page.locator('[data-rased-id="focus.stage"]');
-    await expect(focusStage).toBeAttached();
-    await expect(focusStage).toBeHidden();
-  });
-
-  test("page remains accessible after interacting with sidebar area", async ({ page }) => {
-    await waitForHomePage(page);
-
-    const sidebar = page.locator('[data-rased-id="sidebar.toggle"]');
-    await expect(sidebar).toBeVisible();
-
-    // Verify the page structure is intact after checking sidebar
-    await expect(page.locator('[data-rased-id="header.bar"]')).toBeVisible();
-  });
-});
-
-// ─── Scenario C: Modal blocks FOCUS/OPEN ─────────────────────────────────────
-
-test.describe("Scenario C: Modal blocks FOCUS/OPEN", () => {
-  test("RasedCanvasProvider is mounted (FSM active)", async ({ page }) => {
-    await waitForHomePage(page);
-
-    // Verify the provider is active by checking that the page renders
-    // with all the data-rased-id markers (proves the provider wraps the content)
-    const markers = [
-      "header.bar",
-      "sidebar.toggle",
-      "composer.input",
-      "composer.send",
-      "chat.stream",
-      "focus.stage",
-    ];
-
-    for (const marker of markers) {
-      await expect(page.locator(`[data-rased-id="${marker}"]`)).toBeAttached();
+    for (let index = 0; index < surfaceCount; index += 1) {
+      const count = await surfaces.nth(index).locator('[data-rased-option="true"]:visible').count();
+      expect(count, `options surface ${index} exceeded the 7-option rule`).toBeLessThanOrEqual(7);
     }
+
+    const visibleText = await page.locator("body").innerText();
+    expect(visibleText).not.toMatch(/pipeline|graph|nodes?|plancard|runcard|previewcard|resultcard|evidencecard|filecard|contextactionscard|focus stage|command palette|current flow/i);
   });
+});
 
-  test("modal blocking is enforced via FSM (verified in unit tests)", async ({ page }) => {
-    await waitForHomePage(page);
-
-    // The modal blocking invariant is enforced at the FSM level.
-    // This E2E test verifies the FSM provider is mounted and functional.
-    // The blocking logic is thoroughly tested in unit + component tests.
-    // Here we verify the page loads correctly with the provider.
-    const phase = await page.evaluate(() => {
-      // Access the React fiber to check if provider is mounted
-      const el = document.querySelector('[data-rased-id="header.bar"]');
-      return el !== null;
+test.describe("ClickAllGate", () => {
+  test("clicks every primary visible control without console errors", async ({ page }) => {
+    const consoleErrors: string[] = [];
+    const pageErrors: string[] = [];
+    const notFoundUrls: string[] = [];
+    page.on("filechooser", async (chooser) => {
+      await chooser.setFiles([pngFile("strict-a.png"), pngFile("strict-b.png")]);
     });
-    expect(phase).toBe(true);
+
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        consoleErrors.push(message.text());
+      }
+    });
+    page.on("pageerror", (error) => {
+      pageErrors.push(error.message);
+    });
+    page.on("response", (response) => {
+      if (response.status() === 404) {
+        notFoundUrls.push(response.url());
+      }
+    });
+
+    await waitForHome(page);
+    await uploadStrictPair(page);
+
+    await page.locator('[data-rased-id="upload.primary"]').click({ force: true });
+    await page.locator('[data-rased-id="composer.upload"]').click({ force: true });
+    await page.locator('[data-rased-id="theme.toggle"]').click();
+    await page.locator('[data-rased-id="motion.toggle"]').click();
+    await page.locator('[data-rased-id="motion.toggle"]').click();
+    await page.locator('[data-rased-id="composer.input"]').fill("ما حالة الجلسة؟");
+    await page.locator('[data-rased-id="composer.send"]').click();
+    await page.locator('[data-rased-id="sidebar.tab.library"]').click();
+    await page.locator('[data-rased-id="sidebar.tab.history"]').click();
+    await page.locator('[data-rased-id="sidebar.tab.permissions"]').click();
+    await page.locator('[data-rased-id="permissions.to-exports"]').click();
+    await page.locator('[data-rased-id="sidebar.tab.context"]').click();
+    await page.locator('[data-rased-id="sidebar.search"]').click();
+    await expect(page.locator('[data-rased-id="command.palette"]')).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator('[data-rased-id="command.palette"]')).toBeHidden();
+
+    await page.locator('[data-rased-id="action.compare-visuals"]').click();
+    await expect(page.locator('[data-rased-id^="card.result."]').first()).toBeVisible();
+    await expect(page.locator('[data-rased-id^="card.evidence."]').first()).toBeVisible();
+
+    await page.locator('[data-rased-id="result.open_focus"]').click();
+    await expect(page.locator('[data-rased-id="focus.stage"]')).toBeVisible();
+    await page.locator('[data-rased-id="focus.preview"]').click();
+    await page.locator('[data-rased-id="focus.export"]').click();
+    await page.locator('[data-rased-id="focus.share"]').click();
+    await page.locator('[data-rased-id="focus.close"]').click();
+    await expect(page.locator('[data-rased-id="focus.stage"]')).toBeHidden();
+
+    await page.locator('[data-rased-id="command.palette.open"]').click();
+    await expect(page.locator('[data-rased-id="command.palette"]')).toBeVisible();
+    await page.locator('[data-rased-id="command.palette.input"]').fill("مطابقة");
+    await page.locator('[data-rased-options-surface="command-results"] [data-rased-option="true"]').first().click();
+    await expect(page.locator('[data-rased-id^="card.evidence."]').first()).toBeVisible();
+
+    await page.locator('[data-rased-id="session.reset"]').click();
+
+    expect(notFoundUrls).toEqual([]);
+    expect(consoleErrors).toEqual([]);
+    expect(pageErrors).toEqual([]);
   });
 });
 
-// ─── Scenario D: Reduce motion toggle ────────────────────────────────────────
+test.describe("IntegrationProofGate", () => {
+  test("proves the vertical slice from action to result and evidence", async ({ page }) => {
+    await waitForHome(page);
+    await uploadStrictPair(page);
 
-test.describe("Scenario D: Reduce motion toggle", () => {
-  test("page loads with motion classes intact", async ({ page }) => {
-    await waitForHomePage(page);
+    await page.locator('[data-rased-id="action.compare-visuals"]').click();
 
-    // The header section has rased-motion-rise class
-    const header = page.locator('[data-rased-id="header.bar"]');
-    await expect(header).toHaveClass(/rased-motion-rise/);
-  });
+    await expect(page.locator('[data-rased-id^="card.plan."]').first()).toBeVisible();
+    await expect(page.locator('[data-rased-id^="card.run."]').first()).toBeVisible();
+    await expect(page.locator('[data-rased-id^="card.preview."]').first()).toBeVisible();
+    await expect(page.locator('[data-rased-id^="card.result."]').first()).toBeVisible();
+    await expect(page.locator('[data-rased-id^="card.evidence."]').first()).toBeVisible();
 
-  test("RTL layout is applied", async ({ page }) => {
-    await waitForHomePage(page);
-
-    // The page uses dir="rtl" — verify it's applied
-    const container = page.locator("div[dir='rtl']").first();
-    await expect(container).toBeVisible();
-  });
-});
-
-// ─── Canvas Provider Integration ─────────────────────────────────────────────
-
-test.describe("Canvas Provider Integration", () => {
-  test("all 6 data-rased-id markers present on /home", async ({ page }) => {
-    await waitForHomePage(page);
-
-    const expected = [
-      "header.bar",
-      "sidebar.toggle",
-      "composer.input",
-      "composer.send",
-      "chat.stream",
-      "focus.stage",
-    ];
-
-    for (const id of expected) {
-      const el = page.locator(`[data-rased-id="${id}"]`);
-      await expect(el).toBeAttached();
-    }
-  });
-
-  test("composer send button is interactive", async ({ page }) => {
-    await waitForHomePage(page);
-
-    const sendBtn = page.locator('[data-rased-id="composer.send"]');
-    await expect(sendBtn).toBeVisible();
-    await expect(sendBtn).toBeEnabled();
-  });
-
-  test("chat stream area is visible", async ({ page }) => {
-    await waitForHomePage(page);
-
-    const chatStream = page.locator('[data-rased-id="chat.stream"]');
-    await expect(chatStream).toBeVisible();
+    await expect(page.locator('[data-rased-id^="card.result."]').first()).toContainText("مكتمل");
+    await expect(page.locator("body")).not.toContainText("Completed");
   });
 });

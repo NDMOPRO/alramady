@@ -1,0 +1,455 @@
+{
+  "generated_at": "2026-03-10T11:34:36.883Z",
+  "engines": [
+    {
+      "engine_name": "RASED AI Engine",
+      "service": "ai-service",
+      "counts": {
+        "files": 106,
+        "functions": 1999,
+        "apis": 160
+      },
+      "features": [
+        {
+          "name": "تحليل النية",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleIntentParse(",
+          "line": 220
+        },
+        {
+          "name": "بناء مخطط الأفعال",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handlePlanActionGraph(",
+          "line": 222
+        },
+        {
+          "name": "تنفيذ مخطط الأفعال",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleExecuteActionGraph(",
+          "line": 224
+        },
+        {
+          "name": "مراقبة الواجهة",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleObserveUiState(",
+          "line": 226
+        },
+        {
+          "name": "جولات الإرشاد",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleUiTourStart(",
+          "line": 230
+        },
+        {
+          "name": "مركز التدريب",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleTrainingPackIngest(",
+          "line": 236
+        },
+        {
+          "name": "البحث المعرفي",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleKnowledgeSearch(",
+          "line": 242
+        },
+        {
+          "name": "التفضيلات",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handlePreferenceSet(",
+          "line": 246
+        },
+        {
+          "name": "القيود Guardrails",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-guardrails.service.ts",
+          "method": "evaluate(",
+          "line": 85
+        },
+        {
+          "name": "سجل الأفعال",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-action-registry.service.ts",
+          "method": "RasedActionRegistryService",
+          "line": 227
+        },
+        {
+          "name": "سجل الأحداث",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-event-schema-registry.service.ts",
+          "method": "RasedEventSchemaRegistryService",
+          "line": 79
+        },
+        {
+          "name": "الأدلة",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+          "method": "handleEvidencePack(",
+          "line": 254
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+        "C:/DATA_AI/rasid/services/ai-service/src/services/rased-tool-contracts.ts",
+        "C:/DATA_AI/rasid/services/ai-service/src/services/rased-action-registry.service.ts",
+        "C:/DATA_AI/rasid/services/ai-service/src/services/rased-event-schema-registry.service.ts",
+        "C:/DATA_AI/rasid/services/ai-service/src/services/rased-guardrails.service.ts",
+        "C:/DATA_AI/rasid/services/ai-service/src/routes/rased.routes.ts"
+      ]
+    },
+    {
+      "engine_name": "Strict Replication Engine",
+      "service": "replication-service",
+      "counts": {
+        "files": 129,
+        "functions": 2576,
+        "apis": 101
+      },
+      "features": [
+        {
+          "name": "خط الأنابيب الصارم",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/replication-service/src/strict/pipeline/strict-pipeline.ts",
+          "method": "export class StrictPipeline",
+          "line": 116
+        },
+        {
+          "name": "مزرعة الرندر",
+          "status": "partial",
+          "file": "C:/DATA_AI/rasid/services/replication-service/src/strict/render/farm-renderer.ts",
+          "method": "class FarmRenderer",
+          "line": null
+        },
+        {
+          "name": "PixelDiff صفري",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/replication-service/src/strict/verify/pixel-diff.ts",
+          "method": "pixel",
+          "line": 23
+        },
+        {
+          "name": "التحقق البنيوي",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/replication-service/src/strict/verify/structural-equivalence.ts",
+          "method": "structural",
+          "line": 32
+        },
+        {
+          "name": "Evidence Pack",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/replication-service/src/strict/evidence/evidence-pack.ts",
+          "method": "EvidencePackBuilder",
+          "line": 15
+        },
+        {
+          "name": "سجل الأدوات الصارم",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/replication-service/src/strict/tools/registry.ts",
+          "method": "executeTool",
+          "line": 72
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/replication-service/src/strict/pipeline/strict-pipeline.ts",
+        "C:/DATA_AI/rasid/services/replication-service/src/strict/render/farm-renderer.ts",
+        "C:/DATA_AI/rasid/services/replication-service/src/strict/verify/pixel-diff.ts",
+        "C:/DATA_AI/rasid/services/replication-service/src/strict/verify/structural-equivalence.ts",
+        "C:/DATA_AI/rasid/services/replication-service/src/strict/evidence/evidence-pack.ts",
+        "C:/DATA_AI/rasid/services/replication-service/src/strict/tools/registry.ts"
+      ]
+    },
+    {
+      "engine_name": "Slides Engine",
+      "service": "presentation-service",
+      "counts": {
+        "files": 88,
+        "functions": 1615,
+        "apis": 355
+      },
+      "features": [
+        {
+          "name": "Intent Parse للعروض",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/presentation-service/src/services/gamma-engine.service.ts",
+          "method": "IntentManifest",
+          "line": 62
+        },
+        {
+          "name": "Outline",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/presentation-service/src/services/gamma-engine.service.ts",
+          "method": "Outline",
+          "line": 84
+        },
+        {
+          "name": "Storyboard",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/presentation-service/src/services/gamma-engine.service.ts",
+          "method": "StoryboardSlide",
+          "line": 113
+        },
+        {
+          "name": "Template/Theme",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/presentation-service/src/services/gamma-engine.service.ts",
+          "method": "ThemeTokens",
+          "line": 102
+        },
+        {
+          "name": "Infinite Control",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/presentation-service/src/services/slides-infinite-control.service.ts",
+          "method": "buildControlManifest",
+          "line": 165
+        },
+        {
+          "name": "Tool Contracts",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/presentation-service/src/services/slides-tool-contracts.ts",
+          "method": "SLIDES_TOOL_DEFINITIONS",
+          "line": 568
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/presentation-service/src/services/gamma-engine.service.ts",
+        "C:/DATA_AI/rasid/services/presentation-service/src/services/slides-tool-contracts.ts",
+        "C:/DATA_AI/rasid/services/presentation-service/src/services/slides-infinite-control.service.ts"
+      ]
+    },
+    {
+      "engine_name": "Excel Engine",
+      "service": "excel-service",
+      "counts": {
+        "files": 101,
+        "functions": 1813,
+        "apis": 116
+      },
+      "features": [
+        {
+          "name": "Blank Table Canvas",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/excel-service/src/services/excel-ultra-engine.service.ts",
+          "method": "TableRef",
+          "line": 41
+        },
+        {
+          "name": "Batch Ingest",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/excel-service/src/services/excel-ultra-engine.service.ts",
+          "method": "data.ingest.batch",
+          "line": 1858
+        },
+        {
+          "name": "T-IR",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/excel-service/src/services/excel-ultra-engine.service.ts",
+          "method": "expr.tir.apply",
+          "line": 1865
+        },
+        {
+          "name": "SVM Recalc",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/excel-service/src/services/excel-ultra-engine.service.ts",
+          "method": "excel.svm.recalc",
+          "line": 1866
+        },
+        {
+          "name": "Diff Engine",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/excel-service/src/services/excel-ultra-engine.service.ts",
+          "method": "compare.dataset_diff",
+          "line": 1867
+        },
+        {
+          "name": "Excel Tool Contracts",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/excel-service/src/services/excel-tool-contracts.ts",
+          "method": "EXCEL_TOOL_DEFINITIONS",
+          "line": 323
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/excel-service/src/services/excel-ultra-engine.service.ts",
+        "C:/DATA_AI/rasid/services/excel-service/src/services/excel-tool-contracts.ts"
+      ]
+    },
+    {
+      "engine_name": "Dashboard Engine",
+      "service": "dashboard-service",
+      "counts": {
+        "files": 72,
+        "functions": 795,
+        "apis": 137
+      },
+      "features": [
+        {
+          "name": "Intent Parse للوحات",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+          "method": "DashboardActionContext",
+          "line": 45
+        },
+        {
+          "name": "Widget Catalog",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+          "method": "WidgetKind",
+          "line": 18
+        },
+        {
+          "name": "D-IR Plan",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+          "method": "dashboard_ir",
+          "line": 891
+        },
+        {
+          "name": "Data Binding",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+          "method": "dashboard.bind_data",
+          "line": 1474
+        },
+        {
+          "name": "Publish/Share",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+          "method": "dashboard.publish",
+          "line": 1392
+        },
+        {
+          "name": "Dashboard Tool Contracts",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-tool-contracts.ts",
+          "method": "DASHBOARD_TOOL_DEFINITIONS",
+          "line": 259
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+        "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-tool-contracts.ts"
+      ]
+    },
+    {
+      "engine_name": "Report Engine",
+      "service": "reporting-service",
+      "counts": {
+        "files": 68,
+        "functions": 936,
+        "apis": 105
+      },
+      "features": [
+        {
+          "name": "Intent Parse للتقارير",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+          "method": "report.intent_parse",
+          "line": 2113
+        },
+        {
+          "name": "DOC-IR",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+          "method": "DocRef",
+          "line": 88
+        },
+        {
+          "name": "Literal Hash",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+          "method": "literal",
+          "line": 37
+        },
+        {
+          "name": "Content Trace",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+          "method": "content_trace",
+          "line": 197
+        },
+        {
+          "name": "Governance",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+          "method": "classification",
+          "line": 679
+        },
+        {
+          "name": "Report Tool Contracts",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-tool-contracts.ts",
+          "method": "REPORT_TOOL_DEFINITIONS",
+          "line": 341
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+        "C:/DATA_AI/rasid/services/reporting-service/src/services/report-tool-contracts.ts"
+      ]
+    },
+    {
+      "engine_name": "LCT Engine",
+      "service": "conversion-service",
+      "counts": {
+        "files": 55,
+        "functions": 1052,
+        "apis": 57
+      },
+      "features": [
+        {
+          "name": "Orchestrator Any→Any",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+          "method": "lct.orch.any_to_any",
+          "line": 2063
+        },
+        {
+          "name": "Modality Detect",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+          "method": "Modality",
+          "line": 46
+        },
+        {
+          "name": "ASR Ensemble",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+          "method": "transcript",
+          "line": 104
+        },
+        {
+          "name": "Arabic Typeset",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+          "method": "ArabicMode",
+          "line": 29
+        },
+        {
+          "name": "Verifier/Ops Gate",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+          "method": "exact",
+          "line": 144
+        },
+        {
+          "name": "LCT Tool Contracts",
+          "status": "implemented",
+          "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-tool-contracts.ts",
+          "method": "LCT_TOOL_DEFINITIONS",
+          "line": 387
+        }
+      ],
+      "files": [
+        "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+        "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-tool-contracts.ts"
+      ]
+    }
+  ]
+}

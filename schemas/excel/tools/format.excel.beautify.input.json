@@ -1,0 +1,55 @@
+{
+  "$id": "https://excel.local/schemas/format.excel.beautify.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "format.excel.beautify"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "table"
+      ],
+      "properties": {
+        "table": {
+          "$ref": "common.json#/$defs/TableRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "rtl"
+      ],
+      "properties": {
+        "rtl": {
+          "type": "boolean"
+        },
+        "style_level": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "premium"
+          ],
+          "default": "premium"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

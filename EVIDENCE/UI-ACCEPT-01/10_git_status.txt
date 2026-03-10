@@ -1,0 +1,109 @@
+ M .env.example
+ M frontend/app/(dashboard)/home/page.tsx
+ M frontend/app/globals.css
+ M frontend/e2e/canvas-fsm.spec.ts
+ M frontend/lib/api/ai.ts
+ M frontend/next.config.js
+ M frontend/state/RasedCanvasProvider.tsx
+ M frontend/state/__tests__/RasedCanvasProvider.component.test.tsx
+ M frontend/state/__tests__/rasedCanvas.machine.test.ts
+ M frontend/state/__tests__/rasedCanvas.machine.unit.test.ts
+ M frontend/state/rasedCanvas.actions.ts
+ M frontend/state/rasedCanvas.machine.ts
+ M frontend/state/rasedCanvas.types.ts
+ M package.json
+ M services/ai-service/jest.config.ts
+ M services/ai-service/package.json
+ M services/ai-service/src/index.ts
+ M services/conversion-service/jest.config.ts
+ M services/conversion-service/package.json
+ M services/conversion-service/src/index.ts
+ M services/dashboard-service/jest.config.ts
+ M services/dashboard-service/src/index.ts
+ M services/excel-service/src/index.ts
+ M services/governance-service/src/index.ts
+ M services/presentation-service/jest.config.ts
+ M services/presentation-service/src/index.ts
+ M services/replication-service/jest.config.ts
+ M services/replication-service/src/__tests__/strict-pipeline.test.ts
+ M services/replication-service/src/index.ts
+ M services/replication-service/src/strict/cdr/builder.ts
+ M services/replication-service/src/strict/cdr/store.ts
+ M services/replication-service/src/strict/cdr/types.ts
+ M services/replication-service/src/strict/evidence/evidence-pack.ts
+ M services/replication-service/src/strict/export/exporters.ts
+ M services/replication-service/src/strict/index.ts
+ M services/replication-service/src/strict/pipeline/strict-pipeline.ts
+ M services/replication-service/src/strict/render/farm-renderer.ts
+ M services/replication-service/src/strict/tools/registry.ts
+ M services/replication-service/src/strict/verify/determinism.ts
+ M services/replication-service/src/strict/verify/pixel-diff.ts
+ M services/replication-service/src/strict/verify/structural-equivalence.ts
+ M services/reporting-service/src/index.ts
+?? .github/workflows/platform-gates.yml
+?? .governance-runtime/
+?? .node-version
+?? .npmrc
+?? .nvmrc
+?? EVIDENCE/
+?? docs/03_engineering_docs/platform-audit/
+?? docs/integration/
+?? docs/training/
+?? frontend/app/api/
+?? frontend/components/assistant/RasedGuidedTourOverlay.tsx
+?? frontend/components/workspaces/RasedCanvasCards.tsx
+?? frontend/lib/rased-ui.ts
+?? frontend/middleware.ts
+?? golden_corpus/
+?? schemas/dash/
+?? schemas/excel/tools/
+?? schemas/lct/
+?? schemas/rased/
+?? schemas/report/
+?? schemas/slides/
+?? scripts/check-runtime-integrity.mjs
+?? scripts/ci/
+?? scripts/generate-baseline-report.mjs
+?? scripts/generate-platform-audit.mjs
+?? scripts/golden/
+?? services/ai-service/scripts/
+?? services/ai-service/src/__tests__/rased-agent-os.service.test.ts
+?? services/ai-service/src/routes/rased.routes.ts
+?? services/ai-service/src/services/rased-action-registry.service.ts
+?? services/ai-service/src/services/rased-agent-os.service.ts
+?? services/ai-service/src/services/rased-event-schema-registry.service.ts
+?? services/ai-service/src/services/rased-guardrails.service.ts
+?? services/ai-service/src/services/rased-tool-contracts.ts
+?? services/conversion-service/scripts/
+?? services/conversion-service/src/__tests__/services/
+?? services/conversion-service/src/routes/tools.routes.ts
+?? services/conversion-service/src/services/lct-tool-contracts.ts
+?? services/conversion-service/src/services/lct-ultra-engine.service.ts
+?? services/dashboard-service/scripts/
+?? services/dashboard-service/src/__tests__/services/dashboard-ultra-engine.service.test.ts
+?? services/dashboard-service/src/routes/tools.routes.ts
+?? services/dashboard-service/src/services/dashboard-tool-contracts.ts
+?? services/dashboard-service/src/services/dashboard-ultra-engine.service.ts
+?? services/excel-service/scripts/
+?? services/excel-service/src/__tests__/services/excel-ultra-engine.service.test.ts
+?? services/excel-service/src/routes/tools.routes.ts
+?? services/excel-service/src/services/excel-tool-contracts.ts
+?? services/excel-service/src/services/excel-ultra-engine.service.ts
+?? services/governance-service/src/__tests__/runtime.routes.test.ts
+?? services/governance-service/src/routes/runtime.routes.ts
+?? services/governance-service/src/services/runtime-evidence.service.ts
+?? services/governance-service/src/services/runtime-registry.service.ts
+?? services/presentation-service/src/__tests__/services/
+?? services/presentation-service/src/routes/tools.routes.ts
+?? services/presentation-service/src/services/gamma-engine.service.ts
+?? services/presentation-service/src/services/slides-infinite-control.service.ts
+?? services/presentation-service/src/services/slides-tool-contracts.ts
+?? services/replication-service/src/__tests__/strict-contracts.test.ts
+?? services/replication-service/src/routes/tools.routes.ts
+?? services/replication-service/src/strict/runtime/
+?? services/replication-service/src/strict/tools/contracts.ts
+?? services/reporting-service/scripts/
+?? services/reporting-service/src/__tests__/services/report-ultra-engine.service.test.ts
+?? services/reporting-service/src/routes/tools.routes.ts
+?? services/reporting-service/src/services/report-tool-contracts.ts
+?? services/reporting-service/src/services/report-ultra-engine.service.ts

@@ -1,0 +1,17 @@
+{
+  "$id": "https://slides.local/schemas/slides.evidence_pack.output.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "status", "refs"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.evidence_pack" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "refs": {
+      "type": "object",
+      "required": ["evidence_id"],
+      "properties": { "evidence_id": { "type": "string" } },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

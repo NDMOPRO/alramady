@@ -1,0 +1,21 @@
+{
+  "$id": "https://slides.local/schemas/slides.intent_parse.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.intent_parse" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["prompt"],
+      "properties": {
+        "prompt": { "type": "string", "minLength": 1 },
+        "assets": { "type": "array", "items": { "$ref": "../common.json#/$defs/AssetRef" } }
+      },
+      "additionalProperties": false
+    },
+    "params": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": false
+}

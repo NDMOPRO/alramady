@@ -1,0 +1,57 @@
+{
+  "$id": "https://excel.local/schemas/data.ingest.batch.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "tool_id": {
+      "const": "data.ingest.batch"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "assets"
+      ],
+      "properties": {
+        "assets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common.json#/$defs/AssetRef"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "read_all_sheets"
+      ],
+      "properties": {
+        "read_all_sheets": {
+          "type": "boolean",
+          "const": true
+        },
+        "allow_folder_upload": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

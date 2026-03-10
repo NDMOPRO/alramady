@@ -1,0 +1,63 @@
+{
+  "$id": "https://lct.local/schemas/verifier.ops.dispatch.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "verifier.ops.dispatch"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "operation",
+        "unresolved_spans"
+      ],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": [
+            "convert",
+            "localize",
+            "transcribe"
+          ]
+        },
+        "unresolved_spans": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/AssetRef"
+          }
+        },
+        "candidate_text": {
+          "type": "string"
+        },
+        "context_payload": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

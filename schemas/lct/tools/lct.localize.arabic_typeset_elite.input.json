@@ -1,0 +1,42 @@
+{
+  "$id": "https://lct.local/schemas/lct.localize.arabic_typeset_elite.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.localize.arabic_typeset_elite"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "translated_runs"
+      ],
+      "properties": {
+        "translated_runs": {
+          "type": "object"
+        },
+        "layout_constraints": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

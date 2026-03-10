@@ -1,0 +1,43 @@
+{
+  "$id": "https://lct.local/schemas/lct.verify.pixel_gate_zero.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.verify.pixel_gate_zero"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "source_render",
+        "target_render"
+      ],
+      "properties": {
+        "source_render": {
+          "$ref": "common.json#/$defs/ArtifactRef"
+        },
+        "target_render": {
+          "$ref": "common.json#/$defs/ArtifactRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

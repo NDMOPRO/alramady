@@ -1,0 +1,57 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.intent_parse.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.intent_parse"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "prompt"
+      ],
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/AssetRef"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "strict_import": {
+          "type": "boolean",
+          "default": false
+        },
+        "pages_hint": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

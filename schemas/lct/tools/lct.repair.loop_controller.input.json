@@ -1,0 +1,55 @@
+{
+  "$id": "https://lct.local/schemas/lct.repair.loop_controller.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.repair.loop_controller"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "kind",
+        "current_state"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "convert",
+            "localize",
+            "transcribe"
+          ]
+        },
+        "current_state": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "max_iterations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

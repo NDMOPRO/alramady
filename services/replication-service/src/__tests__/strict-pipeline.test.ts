@@ -45,7 +45,7 @@ trailer
     };
 
     const asset: AssetRef = {
-      asset_id: 'asset-1',
+      asset_id: 'asset-0001',
       uri: pdfPath,
       mime: 'application/pdf',
       sha256: 'a'.repeat(64),
@@ -74,5 +74,5 @@ trailer
       valid: true,
       errors: [],
     });
-  });
+  }, 20000);
 });

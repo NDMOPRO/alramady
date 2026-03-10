@@ -31,3 +31,16 @@ tmp_*.txt
 
 .DS_Store
 Thumbs.db
+
+# Build artifacts
+*.tsbuildinfo
+
+# Binary/media files (screenshots, images)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.pptx
+
+# Verification run outputs
+verification_run/

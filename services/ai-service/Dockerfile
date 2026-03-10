@@ -7,7 +7,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 COPY tsconfig.json ./
 COPY src ./src
-RUN mkdir -p packages/shared/services
+COPY packages ./packages
 EXPOSE 8009
 CMD ["npx", "tsx", "watch", "src/index.ts"]
 

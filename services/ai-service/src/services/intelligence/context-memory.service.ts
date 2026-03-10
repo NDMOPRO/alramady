@@ -106,7 +106,7 @@ export class ContextMemoryService {
 
   constructor(prisma?: PrismaClient) {
     this.prisma = prisma || new PrismaClient();
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
     this.shortTermStore = new Map();
     this.workingMemoryStore = new Map();
     this.cleanupTimer = setInterval(() => this.runCleanup(), CLEANUP_INTERVAL_MS);

@@ -89,7 +89,7 @@ export class ProactiveIntelligenceService {
 
   constructor(prisma?: PrismaClient, contextMemory?: ContextMemoryService) {
     this.prisma = prisma || new PrismaClient();
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
     this.contextMemory = contextMemory || new ContextMemoryService(this.prisma);
     this.behaviorCache = new Map();
     this.monitoringInterval = null;

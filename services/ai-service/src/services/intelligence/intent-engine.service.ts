@@ -169,7 +169,7 @@ export class IntentEngineService {
   private openai: OpenAI;
 
   constructor() {
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
     logger.info('IntentEngineService initialized');
   }
 

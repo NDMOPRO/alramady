@@ -122,7 +122,7 @@ export class DeploymentManagerService {
   private healthCheckTimers: Map<string, NodeJS.Timeout> = new Map();
 
   constructor(private prisma: PrismaClient) {
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
   }
 
   // ── Deploy Model ────────────────────────────────────────────────

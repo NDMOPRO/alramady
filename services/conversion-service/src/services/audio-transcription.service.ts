@@ -13,7 +13,7 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? '' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' ?? '' });
 
 interface TranscriptionResult {
   text: string;

@@ -7,7 +7,7 @@ import {
   AutonomousAgentType,
 } from './agents/autonomous-orchestrator.service.js';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
 const prisma = new PrismaClient();
 
 const CreateAgentConfigSchema = z.object({

@@ -14,7 +14,7 @@ import * as sourceProcessor from '../services/source-processor.service.js';
 
 const router = Router();
 const prisma = new PrismaClient();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
 
 const upload = multer({
   storage: multer.memoryStorage(),

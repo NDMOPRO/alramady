@@ -23,7 +23,7 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
 
 // ─── Source Type Registry ────────────────────────────────────
 export type SourceType =

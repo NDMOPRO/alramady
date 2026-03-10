@@ -92,7 +92,7 @@ export class SocialMediaPublisherService {
 
   constructor(private prisma: PrismaClient) {
     this.db = prisma as any;
-    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
   }
 
   private async getOAuthConfig(platform: SocialPlatform, tenantId: string): Promise<Record<string, string>> {

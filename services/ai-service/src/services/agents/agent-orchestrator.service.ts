@@ -7,7 +7,7 @@ import { ReportWriterAgent, ReportWriterTask } from './report-writer.agent';
 import { PresentationAgent, PresentationTask } from './presentation.agent';
 import { MonitoringAgent, MonitoringTask } from './monitoring.agent';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
 const prisma = new PrismaClient();
 
 export interface AgentResult {

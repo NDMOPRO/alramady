@@ -77,7 +77,7 @@ interface FreeQueryResult {
 
 // ─── OpenAI Client ────────────────────────────────────────────────────
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
 
 // ─── Language Detection ───────────────────────────────────────────────

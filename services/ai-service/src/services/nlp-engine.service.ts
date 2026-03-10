@@ -45,7 +45,7 @@ const logger = winston.createLogger({
 });
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder',
 });
 
 const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o';

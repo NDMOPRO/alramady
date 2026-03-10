@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' });
 
 interface SystemHealthResult {
   status: 'healthy' | 'degraded' | 'critical';

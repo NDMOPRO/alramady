@@ -14,7 +14,7 @@ import { AIAvatarService } from '../services/ai-avatar.service.js';
 
 const router = Router();
 const prisma = new PrismaClient();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || 'sk-placeholder' || '' });
 const voiceoverService = new AIVoiceoverService(prisma);
 const videoService = new AIVideoGeneratorService();
 const avatarService = new AIAvatarService();

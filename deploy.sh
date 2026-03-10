@@ -60,7 +60,14 @@ start_infrastructure() {
 # ─── Run Database Migrations ───
 run_migrations() {
     log "Running database migrations..."
-    docker compose run --rm data-service npx prisma migrate deploy
+
+    if [ -d "services/data-service/prisma/migrations" ] && [ "$(find services/data-service/prisma/migrations -mindepth 1 -maxdepth 1 | wc -l)" -gt 0 ]; then
+        docker compose run --rm data-service npx prisma migrate deploy
+    else
+        warn "No Prisma migrations found for data-service. Applying schema with prisma db push..."
+        docker compose run --rm data-service npx prisma db push --skip-generate
+    fi
+
     log "Migrations complete"
 }
 

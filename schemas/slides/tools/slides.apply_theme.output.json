@@ -1,0 +1,17 @@
+{
+  "$id": "https://slides.local/schemas/slides.apply_theme.output.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "status", "refs"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.apply_theme" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "refs": {
+      "type": "object",
+      "required": ["theme_tokens"],
+      "properties": { "theme_tokens": { "type": "object" } },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

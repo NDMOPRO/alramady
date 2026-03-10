@@ -232,6 +232,38 @@
     animation: rased-fade-rise 360ms ease 90ms both;
   }
 
+  .rased-composer-shell {
+    pointer-events: none;
+  }
+
+  .rased-composer-shell > * {
+    pointer-events: auto;
+  }
+
+  .rased-thread-rail {
+    background:
+      radial-gradient(circle at top, rgba(34, 211, 238, 0.18), transparent 36%),
+      linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.94));
+  }
+
+  .rased-focus-stage-shell {
+    animation: rased-focus-expand 260ms ease both;
+  }
+
+  .rased-run-shimmer {
+    background-size: 220% 100%;
+    animation: rased-run-shimmer 1.8s linear infinite;
+    will-change: background-position;
+  }
+
+  .rased-success-glow {
+    animation: rased-success-glow 1.5s ease-out both;
+  }
+
+  .rased-tour-pulse {
+    animation: rased-tour-pulse 1.2s ease-in-out 2;
+  }
+
   .app-shell-glow {
     background-image: var(--app-shell-glow);
   }
@@ -457,6 +489,48 @@
 
 .rasid-fade-up {
   animation: rasid-fade-up 0.35s ease-out both;
+}
+
+@keyframes rased-run-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -20% 0;
+  }
+}
+
+@keyframes rased-focus-expand {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rased-success-glow {
+  0% {
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+  }
+  35% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.12);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes rased-tour-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(34, 211, 238, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 211, 238, 0.16);
+  }
 }
 
 /* ── Print styles ───────────────────────────────────────────────────────── */

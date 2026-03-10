@@ -1,0 +1,80 @@
+name: platform-gates
+
+on:
+  push:
+    branches:
+      - main
+      - "codex/**"
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            python3 \
+            pkg-config \
+            libcairo2-dev \
+            libpango1.0-dev \
+            libjpeg-dev \
+            libgif-dev \
+            librsvg2-dev
+
+      - name: Install frontend
+        run: npm install
+        working-directory: frontend
+
+      - name: Install governance-service
+        run: npm install
+        working-directory: services/governance-service
+
+      - name: Install ai-service
+        run: npm install
+        working-directory: services/ai-service
+
+      - name: Install replication-service
+        run: npm install
+        working-directory: services/replication-service
+
+      - name: Install root
+        run: npm install
+
+      - name: Runtime integrity
+        run: npm run ci:no-cheat
+
+      - name: Tool contracts
+        run: npm run ci:tool-contracts
+
+      - name: Evidence required
+        run: npm run ci:evidence-required
+
+      - name: Baseline report
+        run: npm run baseline:report
+
+      - name: Frontend gates
+        run: npm run ci:frontend
+
+      - name: Governance runtime gates
+        run: npm run ci:governance-runtime
+
+      - name: AI runtime gates
+        run: npm run ci:ai-runtime
+
+      - name: Strict gates
+        run: npm run ci:strict
+
+      - name: Strict enforcement
+        run: npm run ci:strict-enforce
+
+      - name: Golden corpus
+        run: npm run ci:golden-corpus

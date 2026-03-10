@@ -1,0 +1,49 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.render_preview.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.render_preview"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dashboard"
+      ],
+      "properties": {
+        "dashboard": {
+          "$ref": "common.json#/$defs/DashboardRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "dpi"
+      ],
+      "properties": {
+        "dpi": {
+          "type": "integer",
+          "minimum": 96,
+          "maximum": 600
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

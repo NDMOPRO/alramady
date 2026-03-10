@@ -1,0 +1,14 @@
+frontend/app/(dashboard)/home/page.tsx
+frontend/components/workspaces/RasedCanvasCards.tsx
+frontend/e2e/canvas-fsm.spec.ts
+frontend/next.config.js
+frontend/app/api/v1/_shared/e2e-runtime.ts
+frontend/app/api/v1/ai/generate/chat/route.ts
+frontend/app/api/v1/ai/rased/tools/[toolId]/route.ts
+frontend/app/api/v1/ai/rased/ui-state/route.ts
+frontend/app/api/v1/replication/visual-replication/analyze/route.ts
+frontend/app/api/v1/replication/visual-replication/compare/route.ts
+frontend/app/api/v1/governance/users/[id]/route.ts
+frontend/app/api/v1/dashboard/appearance/route.ts
+scripts/ci/task_gate.mjs
+package.json

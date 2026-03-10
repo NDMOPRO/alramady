@@ -151,6 +151,7 @@ import formulasRoutes from './routes/formulas.routes.js';
 import matchingRoutes from './routes/matching.routes.js';
 import modesRoutes from './routes/modes.routes.js';
 import spreadsheetRoutes from './routes/spreadsheet.routes.js';
+import toolsRoutes from './routes/tools.routes.js';
 
 // Register formula functions
 import './services/formula-functions/index.js';
@@ -166,6 +167,7 @@ app.use('/api/v1/excel/formulas', formulasRoutes);
 app.use('/api/v1/excel/matching', matchingRoutes);
 app.use('/api/v1/excel/modes', modesRoutes);
 app.use('/api/v1/excel/spreadsheet', spreadsheetRoutes);
+app.use('/api/v1/tools', toolsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -1,0 +1,52 @@
+{
+  "$id": "https://excel.local/schemas/ai.excel.auto_analyze.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "ai.excel.auto_analyze"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "analysis_report",
+        "recommended_recipes",
+        "recommended_outputs"
+      ],
+      "properties": {
+        "analysis_report": {
+          "type": "object"
+        },
+        "recommended_recipes": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "recommended_outputs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -159,6 +159,7 @@ import productLevelsRoutes from './routes/product-levels.js';
 import teamworkRoutes from './routes/teamwork.js';
 import versionsRoutes from './routes/versions.js';
 import featureFlagsRoutes from './routes/feature-flags.js';
+import runtimeRoutes from './routes/runtime.routes.js';
 
 app.use('/api/v1/governance', governanceRoutes);
 app.use('/api/v1/governance/messaging', messagingRoutes);
@@ -172,6 +173,8 @@ app.use('/api/v1/governance/product-levels', productLevelsRoutes);
 app.use('/api/v1/governance/teamwork', teamworkRoutes);
 app.use('/api/v1/governance/versions', versionsRoutes);
 app.use('/api/v1/governance/feature-flags', featureFlagsRoutes);
+app.use('/api/v1/governance/runtime', runtimeRoutes);
+app.use('/api/v1', runtimeRoutes);
 
 // User management routes
 app.get('/api/v1/governance/users', authMiddleware, asyncHandler(async (req: Request, res: Response) => {

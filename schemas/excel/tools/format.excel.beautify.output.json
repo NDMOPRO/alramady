@@ -1,0 +1,38 @@
+{
+  "$id": "https://excel.local/schemas/format.excel.beautify.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "format.excel.beautify"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "recipe"
+      ],
+      "properties": {
+        "recipe": {
+          "$ref": "common.json#/$defs/RecipeRef"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

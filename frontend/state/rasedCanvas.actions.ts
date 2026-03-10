@@ -9,10 +9,8 @@
 export { initialCanvasContext } from "./rasedCanvas.types";
 export type {
   RasedCanvasContext,
-  RasedCanvasEvent,
-  ActionItem,
+  RasedEvent,
   JobEntry,
-  JobResult,
   JobEvidence,
   ConversationMessage,
 } from "./rasedCanvas.types";

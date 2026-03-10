@@ -1,0 +1,20 @@
+{
+  "playbook_id": "playbook_pdf_to_pptx_strict",
+  "version": "1.0.0",
+  "trigger": {
+    "intent_patterns": ["حوّل pdf إلى pptx", "pdf to pptx strict", "pptx 1:1"]
+  },
+  "defaults": {
+    "target": "pptx",
+    "claim": "CONVERT_STRICT_1TO1_100",
+    "fidelity_mode": "literal_1to1"
+  },
+  "steps": [
+    "lct.orch.any_to_any"
+  ],
+  "validations": [
+    "STRICT_PIXEL_LOCK_FINAL",
+    "STRUCTURAL_EQ",
+    "EVIDENCE_REQUIRED"
+  ]
+}

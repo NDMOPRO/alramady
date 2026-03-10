@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-03-10T11:34:36.886Z",
+  "links": [
+    {
+      "from": "RASED AI Engine",
+      "to": "Strict Replication Engine",
+      "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+      "line": 1265,
+      "marker": "repair.loop_controller",
+      "status": "linked"
+    },
+    {
+      "from": "RASED AI Engine",
+      "to": "Slides Engine",
+      "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+      "line": 1261,
+      "marker": "slides.build_deck",
+      "status": "linked"
+    },
+    {
+      "from": "RASED AI Engine",
+      "to": "Excel Engine",
+      "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+      "line": 1264,
+      "marker": "export.xlsx",
+      "status": "linked"
+    },
+    {
+      "from": "RASED AI Engine",
+      "to": "Dashboard Engine",
+      "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+      "line": 1263,
+      "marker": "dashboard.build",
+      "status": "linked"
+    },
+    {
+      "from": "RASED AI Engine",
+      "to": "Report Engine",
+      "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+      "line": 1262,
+      "marker": "report.build_doc_ir",
+      "status": "linked"
+    },
+    {
+      "from": "RASED AI Engine",
+      "to": "LCT Engine",
+      "file": "C:/DATA_AI/rasid/services/ai-service/src/services/rased-agent-os.service.ts",
+      "line": 1260,
+      "marker": "lct.orch.any_to_any",
+      "status": "linked"
+    },
+    {
+      "from": "LCT Engine",
+      "to": "Strict Replication Engine",
+      "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+      "line": 1182,
+      "marker": "strict",
+      "status": "linked"
+    },
+    {
+      "from": "LCT Engine",
+      "to": "Slides Engine",
+      "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+      "line": 36,
+      "marker": "pptx",
+      "status": "linked"
+    },
+    {
+      "from": "LCT Engine",
+      "to": "Report Engine",
+      "file": "C:/DATA_AI/rasid/services/conversion-service/src/services/lct-ultra-engine.service.ts",
+      "line": 22,
+      "marker": "docx",
+      "status": "linked"
+    },
+    {
+      "from": "Dashboard Engine",
+      "to": "Excel Engine",
+      "file": "C:/DATA_AI/rasid/services/dashboard-service/src/services/dashboard-ultra-engine.service.ts",
+      "line": 8,
+      "marker": "xlsx",
+      "status": "linked"
+    },
+    {
+      "from": "Report Engine",
+      "to": "Slides Engine",
+      "file": "C:/DATA_AI/rasid/services/reporting-service/src/services/report-ultra-engine.service.ts",
+      "line": 33,
+      "marker": "pptx",
+      "status": "linked"
+    }
+  ]
+}

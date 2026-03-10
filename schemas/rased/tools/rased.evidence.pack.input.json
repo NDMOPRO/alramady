@@ -1,0 +1,58 @@
+{
+  "$id": "https://rased.local/schemas/rased.evidence.pack.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.evidence.pack"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "action_graph": {
+          "type": "object"
+        },
+        "action_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/ArtifactRef"
+          }
+        },
+        "reports": {
+          "type": "object"
+        },
+        "ui_audit": {
+          "type": "object"
+        },
+        "training_refs": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

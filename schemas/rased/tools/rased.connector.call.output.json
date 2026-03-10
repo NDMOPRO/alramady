@@ -1,0 +1,51 @@
+{
+  "$id": "https://rased.local/schemas/rased.connector.call.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.connector.call"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "ok",
+        "status_code",
+        "response_body",
+        "audit_id"
+      ],
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "status_code": {
+          "type": "integer"
+        },
+        "response_body": {},
+        "audit_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

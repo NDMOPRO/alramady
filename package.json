@@ -1,4 +1,30 @@
 {
+  "packageManager": "npm@11.9.0",
+  "engines": {
+    "node": "24.14.0",
+    "npm": "11.9.0"
+  },
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "typecheck": "npm --prefix frontend run type-check",
+    "lint": "npm --prefix frontend run lint",
+    "test": "npm --prefix frontend run test",
+    "test:e2e": "npm --prefix frontend run test:e2e",
+    "audit:platform": "node ./scripts/generate-platform-audit.mjs",
+    "baseline:report": "node ./scripts/generate-baseline-report.mjs",
+    "ci:no-placeholders": "bash ./scripts/ci/no_placeholders.sh",
+    "ci:no-silent-override": "bash ./scripts/ci/no_silent_override.sh",
+    "ci:no-cheat": "npm run ci:no-placeholders && npm run ci:no-silent-override",
+    "ci:tool-contracts": "npx tsx ./scripts/ci/tool_schema_validate.ts",
+    "ci:evidence-required": "npx tsx ./scripts/ci/evidence_required_test.ts",
+    "ci:strict-enforce": "bash ./scripts/ci/strict_enforce_test.sh",
+    "ci:golden-corpus": "npx tsx ./scripts/ci/golden_corpus_runner.ts",
+    "ci:frontend": "npm --prefix frontend run type-check && npm --prefix frontend run test:fsm && npm --prefix frontend run test && npm --prefix frontend run test:e2e && npm --prefix frontend run build",
+    "ci:governance-runtime": "npm --prefix services/governance-service run test -- --runTestsByPath src/__tests__/runtime.routes.test.ts",
+    "ci:ai-runtime": "cd services/ai-service && npm run generate-schemas && npx jest --config jest.config.ts --runTestsByPath src/__tests__/rased-agent-os.service.test.ts",
+    "ci:strict": "npm --prefix services/replication-service run test -- --runTestsByPath src/__tests__/strict-contracts.test.ts src/__tests__/strict-pipeline.test.ts",
+    "ci:platform-gates": "npm run ci:no-cheat && npm run ci:tool-contracts && npm run ci:evidence-required && npm run baseline:report && npm run ci:frontend && npm run ci:governance-runtime && npm run ci:ai-runtime && npm run ci:strict && npm run ci:strict-enforce && npm run ci:golden-corpus"
+  },
   "devDependencies": {
     "prisma": "^5.22.0",
     "puppeteer": "^24.38.0",

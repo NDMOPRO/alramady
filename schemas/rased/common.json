@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rased.local/schemas/common.json",
+  "$defs": {
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "AUTO",
+        "CONTROLLED",
+        "TUTOR",
+        "EXECUTOR"
+      ]
+    },
+    "ArabicMode": {
+      "type": "string",
+      "enum": [
+        "BASIC",
+        "PROFESSIONAL",
+        "ELITE"
+      ]
+    },
+    "ActionContext": {
+      "type": "object",
+      "required": [
+        "workspace_id",
+        "user_id",
+        "mode",
+        "arabic_mode",
+        "locale"
+      ],
+      "properties": {
+        "workspace_id": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 128
+        },
+        "user_id": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 128
+        },
+        "mode": {
+          "$ref": "#/$defs/Mode"
+        },
+        "arabic_mode": {
+          "$ref": "#/$defs/ArabicMode"
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 16
+        }
+      },
+      "additionalProperties": true
+    },
+    "AssetRef": {
+      "type": "object",
+      "required": [
+        "asset_id",
+        "uri",
+        "mime",
+        "sha256"
+      ],
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "uri": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "mime": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "kind",
+        "uri"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "pptx",
+            "docx",
+            "xlsx",
+            "dashboard",
+            "pdf",
+            "html",
+            "png",
+            "json",
+            "srt",
+            "vtt",
+            "link"
+          ]
+        },
+        "uri": {
+          "type": "string",
+          "maxLength": 2048
+        }
+      },
+      "additionalProperties": false
+    },
+    "Warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "severity"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warning",
+              "error"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    }
+  }
+}

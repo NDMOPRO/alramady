@@ -1,0 +1,51 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.evidence_pack.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.evidence_pack"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dashboard"
+      ],
+      "properties": {
+        "dashboard": {
+          "$ref": "common.json#/$defs/DashboardRef"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/ArtifactRef"
+          }
+        },
+        "qa_report": {
+          "type": "object"
+        },
+        "parity_report": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -37,6 +37,10 @@ const nextConfig = {
 
   // API proxy rewrites for development
   async rewrites() {
+    if (process.env.NEXT_PUBLIC_E2E_BYPASS_AUTH === "1") {
+      return [];
+    }
+
     return [
       {
         source: "/api/governance/:path*",

@@ -1,0 +1,3 @@
+# CMD: npm run typecheck
+# EXIT: 999
+

@@ -98,8 +98,8 @@ function renderToolForKind(kind: ExportKind): string {
 }
 
 function sourceRenderTool(inputType: InputType): string {
-  if (inputType === 'pdf') return 'render.pdf_to_png';
-  return 'render.pdf_to_png'; // images rendered through normalization
+  if (inputType === 'pdf' || inputType === 'image') return 'render.pdf_to_png';
+  return 'render.pdf_to_png';
 }
 
 function exportToolForKind(kind: ExportKind): string {
@@ -132,9 +132,18 @@ export class StrictPipeline {
     this.evidenceBuilder.init(runId, this.config.farm_image_id, this.config.font_snapshot_id);
 
     try {
+      if (context.font_policy === 'FALLBACK_ALLOWED') {
+        return {
+          success: false,
+          warnings,
+          error: 'STRICT FAIL: font_policy MUST NOT allow fallback substitution',
+        };
+      }
+
       // ─── Step 1: Ingest ──────────────────────────────────
       const inputType = classifyInput(sourceAsset);
       const exportKind = determineExportKind(inputType, targetFormat);
+      this.evidenceBuilder.addAuditLogEntry(`${runId}:ingest`);
 
       // ─── Step 2: Extract ─────────────────────────────────
       let cdrDesignRef: CdrDesignRef;
@@ -154,6 +163,7 @@ export class StrictPipeline {
           return { success: false, warnings, error: 'PDF DOM extraction failed' };
         }
         this.collectWarnings(warnings, pdfDomResponse);
+        this.evidenceBuilder.addAuditLogEntry(pdfDomResponse.request_id);
 
         // ─── Step 3+4: Build CDR from PDF ──────────────────
         const cdrResponse = await executeTool<{ cdr_design: CdrDesignRef; font_plan: FontPlan }>({
@@ -169,6 +179,7 @@ export class StrictPipeline {
         cdrDesignRef = cdrResponse.refs.cdr_design;
         fontPlan = cdrResponse.refs.font_plan;
         this.collectWarnings(warnings, cdrResponse);
+        this.evidenceBuilder.addAuditLogEntry(cdrResponse.request_id);
 
       } else if (inputType === 'image') {
         // Extract image segments
@@ -183,6 +194,7 @@ export class StrictPipeline {
           return { success: false, warnings, error: 'Image segmentation failed' };
         }
         this.collectWarnings(warnings, segResponse);
+        this.evidenceBuilder.addAuditLogEntry(segResponse.request_id);
 
         const segments = segResponse.refs.image_segments;
 
@@ -200,6 +212,7 @@ export class StrictPipeline {
         cdrDesignRef = cdrResponse.refs.cdr_design;
         fontPlan = cdrResponse.refs.font_plan;
         this.collectWarnings(warnings, cdrResponse);
+        this.evidenceBuilder.addAuditLogEntry(cdrResponse.request_id);
 
         // Process table regions specifically
         const tableRegions = segments.regions.filter(r => r.kind === 'table');
@@ -213,6 +226,7 @@ export class StrictPipeline {
           });
           if (tableResponse.status === 'ok') {
             cdrDataRef = tableResponse.refs.cdr_data;
+            this.evidenceBuilder.addAuditLogEntry(tableResponse.request_id);
           }
         }
       } else {
@@ -232,6 +246,7 @@ export class StrictPipeline {
       }
       const finalFontPlan = fontResponse.refs.font_plan;
       this.collectWarnings(warnings, fontResponse);
+      this.evidenceBuilder.addAuditLogEntry(fontResponse.request_id);
 
       // Verify no missing fonts
       const missingFonts = finalFontPlan.fonts.filter(f => f.status === 'missing');
@@ -267,17 +282,18 @@ export class StrictPipeline {
       }
       let artifact = exportResponse.refs.artifact;
       this.collectWarnings(warnings, exportResponse);
+      this.evidenceBuilder.addAuditLogEntry(exportResponse.request_id);
 
       // ─── Step 6: Render Source ───────────────────────────
       const renderProfile: RenderProfile = {
         dpi: this.config.render_dpi,
         colorspace: 'sRGB',
       };
-      const visualSeed = `${cdrDesignRef.cdr_design_id}:${exportKind}`;
+      const visualSeed = sourceAsset.sha256;
 
       const sourceRenderResponse = await executeTool<{ renders: RenderRef[] }>({
         request_id: `${runId}-render-source`,
-        tool_id: inputType === 'pdf' ? 'render.pdf_to_png' : 'render.pdf_to_png',
+        tool_id: sourceRenderTool(inputType),
         context,
         inputs: {
           source: sourceAsset,
@@ -292,6 +308,7 @@ export class StrictPipeline {
       const sourceRenders = sourceRenderResponse.refs.renders;
       this.collectWarnings(warnings, sourceRenderResponse);
       this.evidenceBuilder.addSourceRenders(sourceRenders);
+      this.evidenceBuilder.addAuditLogEntry(sourceRenderResponse.request_id);
 
       // ─── Step 7: Render Target ───────────────────────────
       const targetRenderInputs = {
@@ -312,6 +329,7 @@ export class StrictPipeline {
       let targetRenders = targetRenderResponse.refs.renders;
       this.collectWarnings(warnings, targetRenderResponse);
       this.evidenceBuilder.addTargetRenders(targetRenders);
+      this.evidenceBuilder.addAuditLogEntry(targetRenderResponse.request_id);
       const targetRerenderResponse = await executeTool<{ renders: RenderRef[] }>({
         request_id: `${runId}-render-target-rerun`,
         tool_id: renderToolForKind(exportKind),
@@ -324,6 +342,7 @@ export class StrictPipeline {
       }
       this.collectWarnings(warnings, targetRerenderResponse);
       const determinismRenders = [...targetRenders, ...targetRerenderResponse.refs.renders];
+      this.evidenceBuilder.addAuditLogEntry(targetRerenderResponse.request_id);
 
       // ─── Step 8: Verify Gates ────────────────────────────
       // Gate 1: Determinism
@@ -351,19 +370,13 @@ export class StrictPipeline {
         gpu_cpu_parity: 'forced_single_path',
         float_norm_policy: 'locked',
         random_seed_locked: true,
-      });
+      }, detResponse.refs.pass);
+      this.evidenceBuilder.addAuditLogEntry(detResponse.request_id);
 
       // Gate 2: Structural equivalence
       const structResponse = await executeTool<{
         pass: boolean;
-        structural_hashes: Record<string, string>;
-        report: {
-          editable_text_ratio: number;
-          structured_table_ratio: number;
-          rasterized_elements: number;
-          missing_elements: string[];
-          notes: string;
-        };
+        hashes: HashBundle;
       }>({
         request_id: `${runId}-struct-check`,
         tool_id: 'verify.structural_equivalence',
@@ -379,7 +392,8 @@ export class StrictPipeline {
         return { success: false, warnings, error: 'STRICT FAIL: Structural equivalence check failed' };
       }
       this.collectWarnings(warnings, structResponse);
-      this.evidenceBuilder.addStructuralHashes([structResponse.refs.structural_hashes as unknown as HashBundle]);
+      this.evidenceBuilder.addStructuralHashes([structResponse.refs.hashes]);
+      this.evidenceBuilder.addAuditLogEntry(structResponse.request_id);
 
       // Gate 3: Pixel diff (per page)
       let allPixelPass = true;
@@ -401,6 +415,7 @@ export class StrictPipeline {
           allPixelPass = false;
         }
         this.collectWarnings(warnings, diffResponse);
+        this.evidenceBuilder.addAuditLogEntry(diffResponse.request_id);
       }
       this.evidenceBuilder.addDiffReports(diffRefs);
 
@@ -420,6 +435,7 @@ export class StrictPipeline {
         });
 
         this.collectWarnings(warnings, repairResponse);
+        this.evidenceBuilder.addAuditLogEntry(repairResponse.request_id);
         if (!repairResponse.refs.final_diff.pass) {
           return {
             success: false,

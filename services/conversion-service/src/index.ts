@@ -149,6 +149,7 @@ import converterRoutes from './routes/converter.routes.js';
 import coreRoutes from './routes/core.routes.js';
 import matrixRoutes from './routes/matrix.routes.js';
 import universalRoutes from './routes/universal.routes.js';
+import toolsRoutes from './routes/tools.routes.js';
 
 app.use('/api/v1/conversion', conversionRoutes);
 app.use('/api/v1/conversion', documentExtractionRoutes);
@@ -158,6 +159,7 @@ app.use('/api/v1/conversion/converter', converterRoutes);
 app.use('/api/v1/conversion/core', coreRoutes);
 app.use('/api/v1/conversion/matrix', matrixRoutes);
 app.use('/api/v1/conversion/universal', universalRoutes);
+app.use('/api/v1/tools', toolsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

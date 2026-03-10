@@ -1,0 +1,17 @@
+{
+  "$id": "https://slides.local/schemas/slides.insert_strict_slide_from_asset.output.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "status", "refs"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.insert_strict_slide_from_asset" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "refs": {
+      "type": "object",
+      "required": ["deck"],
+      "properties": { "deck": { "$ref": "../common.json#/$defs/DeckRef" } },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

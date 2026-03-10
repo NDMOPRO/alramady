@@ -1,0 +1,7 @@
+{
+  "scenario_id": "dataset_to_dashboard",
+  "engine": "dashboard",
+  "claims": [],
+  "targets": ["dashboard", "link"],
+  "gates": ["publish_link", "permissions", "evidence_required"]
+}

@@ -1,0 +1,68 @@
+{
+  "$id": "https://rased.local/schemas/rased.observe_ui_state.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.observe_ui_state"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "ui_state"
+      ],
+      "properties": {
+        "ui_state": {
+          "type": "object",
+          "required": [
+            "selection",
+            "open_panels",
+            "focus_stage",
+            "running_jobs"
+          ],
+          "properties": {
+            "selection": {
+              "type": "object"
+            },
+            "open_panels": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "focus_stage": {
+              "type": "object"
+            },
+            "running_jobs": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,23 @@
+{
+  "$id": "https://slides.local/schemas/slides.qa_validate.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.qa_validate" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["deck"],
+      "properties": { "deck": { "$ref": "../common.json#/$defs/DeckRef" } },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": ["must_pass_all"],
+      "properties": { "must_pass_all": { "type": "boolean", "const": true } },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

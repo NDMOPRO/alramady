@@ -16,6 +16,8 @@ import { CdrStore } from './cdr/store';
 import { setCdrStore } from './cdr/builder';
 import { StrictPipeline, type StrictPipelineConfig, type StrictPipelineResult } from './pipeline/strict-pipeline';
 import type { ActionContext, AssetRef, ExportKind } from './cdr/types';
+import { setExportContext } from './export/exporters';
+import { getStrictArtifactsDir } from './runtime/paths';
 
 // Tool handlers
 import { handleExtractPdfDom } from './extract/pdf-dom';
@@ -45,6 +47,7 @@ export function initStrictEngine(): void {
   // Initialize shared CDR store
   store = new CdrStore();
   setCdrStore(store);
+  setExportContext({ store, outputDir: getStrictArtifactsDir() });
 
   // Initialize tool registry with all definitions
   initializeRegistry();

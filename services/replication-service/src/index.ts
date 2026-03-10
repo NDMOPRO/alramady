@@ -154,6 +154,7 @@ import matchPhasesRoutes from './routes/match-phases.js';
 import matchScopeRoutes from './routes/match-scope.js';
 import printLockRoutes from './routes/print-lock.js';
 import strictEngineRoutes from './strict/routes.js';
+import toolsRoutes from './routes/tools.routes.js';
 
 app.use('/api/v1/replication', replicationRoutes);
 app.use('/api/v1/replication', pixelValidationRoutes);
@@ -169,6 +170,7 @@ app.use('/api/v1/replication/match-phases', matchPhasesRoutes);
 app.use('/api/v1/replication/match-scope', matchScopeRoutes);
 app.use('/api/v1/replication/print-lock', printLockRoutes);
 app.use('/api/v1/strict', strictEngineRoutes);
+app.use('/api/v1/tools', toolsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

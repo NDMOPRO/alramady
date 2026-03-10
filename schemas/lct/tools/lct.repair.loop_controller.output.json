@@ -1,0 +1,45 @@
+{
+  "$id": "https://lct.local/schemas/lct.repair.loop_controller.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.repair.loop_controller"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "state",
+        "resolved"
+      ],
+      "properties": {
+        "state": {
+          "type": "object"
+        },
+        "resolved": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

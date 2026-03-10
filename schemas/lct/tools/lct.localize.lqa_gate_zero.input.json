@@ -1,0 +1,47 @@
+{
+  "$id": "https://lct.local/schemas/lct.localize.lqa_gate_zero.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.localize.lqa_gate_zero"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "terminology_report",
+        "lqa_report",
+        "layout_qa"
+      ],
+      "properties": {
+        "terminology_report": {
+          "type": "object"
+        },
+        "lqa_report": {
+          "type": "object"
+        },
+        "layout_qa": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

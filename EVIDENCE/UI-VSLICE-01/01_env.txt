@@ -1,0 +1,12 @@
+TASK_ID: UI-VSLICE-01
+TASK_TITLE: Canvas option gates and vertical slice proof
+SPEC_BOOK: SELF_CONTAINED
+SPEC_SECTIONS: Canvas options limit, no technical UI, vertical slice, E2E gates
+
+OS: win32 10.0.26200 (x64)
+PWD: C:\DATA_AI\rasid
+PKG_MGR: npm
+NODE: v24.14.0
+SELF_HASH_SHA256: fc6f8566321fe4bad499dfb57e95aed51449fedf6b8ecb5c2e20f58d7e0af246
+GIT_HEAD_EXIT: 0
+GIT_HEAD: a476e9cd05352bdbbb020a935eacf78a062e8bc3

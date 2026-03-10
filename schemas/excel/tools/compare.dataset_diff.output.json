@@ -1,0 +1,38 @@
+{
+  "$id": "https://excel.local/schemas/compare.dataset_diff.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "compare.dataset_diff"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "diff_table"
+      ],
+      "properties": {
+        "diff_table": {
+          "$ref": "common.json#/$defs/TableRef"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

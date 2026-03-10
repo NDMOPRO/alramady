@@ -1,0 +1,45 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.publish.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.publish"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "link_ref",
+        "audit_entry_id"
+      ],
+      "properties": {
+        "link_ref": {
+          "$ref": "common.json#/$defs/ArtifactRef"
+        },
+        "audit_entry_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

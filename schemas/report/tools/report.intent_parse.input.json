@@ -1,0 +1,94 @@
+{
+  "$id": "https://report.local/schemas/report.intent_parse.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.intent_parse"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "prompt"
+      ],
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/AssetRef"
+          }
+        },
+        "datasets": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/DatasetRef"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "fidelity_mode"
+      ],
+      "properties": {
+        "fidelity_mode": {
+          "type": "string",
+          "enum": [
+            "literal_1to1",
+            "smart"
+          ]
+        },
+        "template_id": {
+          "type": "string"
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        },
+        "detail_level": {
+          "type": "string",
+          "enum": [
+            "brief",
+            "standard",
+            "deep",
+            "audit"
+          ]
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "formal",
+            "neutral",
+            "persuasive",
+            "urgent"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

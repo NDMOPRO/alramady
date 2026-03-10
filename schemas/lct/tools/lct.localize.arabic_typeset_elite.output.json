@@ -1,0 +1,52 @@
+{
+  "$id": "https://lct.local/schemas/lct.localize.arabic_typeset_elite.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.localize.arabic_typeset_elite"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "typeset_runs",
+        "layout_fixes_applied",
+        "layout_qa"
+      ],
+      "properties": {
+        "typeset_runs": {
+          "type": "object"
+        },
+        "layout_fixes_applied": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "layout_qa": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

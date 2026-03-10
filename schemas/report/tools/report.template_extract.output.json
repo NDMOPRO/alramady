@@ -1,0 +1,57 @@
+{
+  "$id": "https://report.local/schemas/report.template_extract.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "report.template_extract"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "template_id",
+        "style_tokens",
+        "writing_rules",
+        "numbering_rules",
+        "compliance_rules"
+      ],
+      "properties": {
+        "template_id": {
+          "type": "string"
+        },
+        "style_tokens": {
+          "type": "object"
+        },
+        "writing_rules": {
+          "type": "object"
+        },
+        "numbering_rules": {
+          "type": "object"
+        },
+        "compliance_rules": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

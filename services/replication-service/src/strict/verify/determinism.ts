@@ -11,6 +11,7 @@ export interface DeterminismResult {
   pixel_hashes_match: boolean;
   engine_fingerprints_match: boolean;
   render_config_consistent: boolean;
+  render_config_hashes_match: boolean;
   violations: string[];
 }
 
@@ -25,7 +26,14 @@ export function validateDeterminism(
 
   if (renders.length < 2) {
     violations.push('Determinism validation requires at least 2 renders');
-    return { pass: false, pixel_hashes_match: false, engine_fingerprints_match: false, render_config_consistent: false, violations };
+    return {
+      pass: false,
+      pixel_hashes_match: false,
+      engine_fingerprints_match: false,
+      render_config_consistent: false,
+      render_config_hashes_match: false,
+      violations,
+    };
   }
 
   // Check all renders have same pixel_hash
@@ -50,6 +58,12 @@ export function validateDeterminism(
     violations.push('Render config (DPI/colorspace) inconsistent across renders');
   }
 
+  const firstConfigHash = renders[0].render_config_hash;
+  const renderConfigHashesMatch = renders.every(r => r.render_config_hash === firstConfigHash);
+  if (!renderConfigHashesMatch) {
+    violations.push('render_config_hash mismatch across renders');
+  }
+
   // Validate determinism checks
   if (checks.anti_aliasing_policy !== 'locked') {
     violations.push('Anti-aliasing policy MUST be locked');
@@ -64,13 +78,14 @@ export function validateDeterminism(
     violations.push('GPU/CPU parity MUST be validated or forced_single_path');
   }
 
-  const pass = pixelHashesMatch && engineMatch && configConsistent && violations.length === 0;
+  const pass = pixelHashesMatch && engineMatch && configConsistent && renderConfigHashesMatch && violations.length === 0;
 
   return {
     pass,
     pixel_hashes_match: pixelHashesMatch,
     engine_fingerprints_match: engineMatch,
     render_config_consistent: configConsistent,
+    render_config_hashes_match: renderConfigHashesMatch,
     violations,
   };
 }

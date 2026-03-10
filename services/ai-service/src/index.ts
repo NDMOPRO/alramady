@@ -151,6 +151,7 @@ import bridgeRoutes from './routes/bridge.routes.js';
 import smartObserverRoutes from './routes/smart-observer.routes.js';
 import documentIntelligenceRoutes from './routes/document-intelligence.routes.js';
 import multimodalExtractionRoutes from './routes/multimodal-extraction.routes.js';
+import rasedRoutes from './routes/rased.routes.js';
 
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/ai', layoutIntelligenceRoutes);
@@ -163,6 +164,8 @@ app.use('/api/bridge', bridgeRoutes);
 app.use('/observer', smartObserverRoutes);
 app.use('/api/v1/ai', multimodalExtractionRoutes);
 app.use('/api/v1/ai', documentIntelligenceRoutes);
+app.use('/api/v1/ai', rasedRoutes);
+app.use('/api/v1', rasedRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

@@ -1,0 +1,50 @@
+{
+  "$id": "https://lct.local/schemas/lct.verify.pixel_gate_zero.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.verify.pixel_gate_zero"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "pass",
+        "pixel_diff",
+        "report"
+      ],
+      "properties": {
+        "pass": {
+          "type": "boolean"
+        },
+        "pixel_diff": {
+          "type": "number",
+          "minimum": 0
+        },
+        "report": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

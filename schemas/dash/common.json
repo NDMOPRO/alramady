@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dash.local/schemas/common.json",
+  "$defs": {
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "AUTO",
+        "PRO"
+      ]
+    },
+    "ArabicMode": {
+      "type": "string",
+      "enum": [
+        "BASIC",
+        "PROFESSIONAL",
+        "ELITE"
+      ]
+    },
+    "ActionContext": {
+      "type": "object",
+      "required": [
+        "workspace_id",
+        "user_id",
+        "mode",
+        "arabic_mode",
+        "locale"
+      ],
+      "properties": {
+        "workspace_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "mode": {
+          "$ref": "#/$defs/Mode"
+        },
+        "arabic_mode": {
+          "$ref": "#/$defs/ArabicMode"
+        },
+        "locale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "AssetRef": {
+      "type": "object",
+      "required": [
+        "asset_id",
+        "uri",
+        "mime",
+        "sha256"
+      ],
+      "properties": {
+        "asset_id": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "mime": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DatasetRef": {
+      "type": "object",
+      "required": [
+        "dataset_id"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DashboardRef": {
+      "type": "object",
+      "required": [
+        "dashboard_id",
+        "page_count"
+      ],
+      "properties": {
+        "dashboard_id": {
+          "type": "string"
+        },
+        "page_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "kind",
+        "uri"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "pdf",
+            "pptx",
+            "docx",
+            "xlsx",
+            "html",
+            "png",
+            "json"
+          ]
+        },
+        "uri": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "severity"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warning",
+              "error"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "default": []
+    }
+  }
+}

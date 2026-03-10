@@ -1,0 +1,21 @@
+{
+  "$id": "https://slides.local/schemas/slides.qa_autofix.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.qa_autofix" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["deck", "issues"],
+      "properties": {
+        "deck": { "$ref": "../common.json#/$defs/DeckRef" },
+        "issues": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": false
+    },
+    "params": { "type": "object", "additionalProperties": false }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,45 @@
+{
+  "$id": "https://lct.local/schemas/lct.transcribe.ocr_on_screen.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.transcribe.ocr_on_screen"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "on_screen_text",
+        "subtitles_detection"
+      ],
+      "properties": {
+        "on_screen_text": {
+          "type": "object"
+        },
+        "subtitles_detection": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

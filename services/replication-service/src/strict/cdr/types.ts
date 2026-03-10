@@ -305,6 +305,8 @@ export interface CdrFingerprints {
 export interface CdrDesign {
   version: string;
   immutable_layout_lock_flag: true; // MUST be true
+  conversion_policy_id?: string;
+  dpi_reference?: number;
   pages: CdrPage[];
   assets: CdrAsset[];
   layout_graph: string; // serialized graph
@@ -427,6 +429,7 @@ export interface RenderRef {
   dpi: number;
   colorspace: 'sRGB';
   engine_fingerprint: string;
+  render_config_hash: string;
   fingerprint: HashBundle;
 }
 

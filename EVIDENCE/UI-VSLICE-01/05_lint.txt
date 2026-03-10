@@ -1,0 +1,3 @@
+# CMD: npm run lint
+# EXIT: 999
+

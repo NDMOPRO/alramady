@@ -204,6 +204,8 @@ function buildCdrFromPdfDom(
   const design: CdrDesign = {
     version: '1.0',
     immutable_layout_lock_flag: true,
+    conversion_policy_id: 'strict-emu-v1',
+    dpi_reference: 300,
     pages,
     assets,
     layout_graph: JSON.stringify({ nodes: pages.length, edges: 0 }),
@@ -300,6 +302,8 @@ export async function handleBuildDesignFromImage(
   const design: CdrDesign = {
     version: '1.0',
     immutable_layout_lock_flag: true,
+    conversion_policy_id: 'strict-emu-v1',
+    dpi_reference: 300,
     pages: [{
       page_id: randomUUID(),
       index: 1,
@@ -475,6 +479,8 @@ export async function handleBuildTableFromImage(
   const design: CdrDesign = {
     version: '1.0',
     immutable_layout_lock_flag: true,
+    conversion_policy_id: 'strict-emu-v1',
+    dpi_reference: 300,
     pages: [{
       page_id: randomUUID(),
       index: 1,

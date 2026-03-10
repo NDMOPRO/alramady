@@ -1,0 +1,55 @@
+{
+  "$id": "https://dash.local/schemas/dashboard.export.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "dashboard.export"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "dashboard"
+      ],
+      "properties": {
+        "dashboard": {
+          "$ref": "common.json#/$defs/DashboardRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "export_kind"
+      ],
+      "properties": {
+        "export_kind": {
+          "type": "string",
+          "enum": [
+            "pdf",
+            "pptx",
+            "docx",
+            "xlsx",
+            "html",
+            "png"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

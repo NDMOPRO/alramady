@@ -1,0 +1,29 @@
+{
+  "$id": "https://slides.local/schemas/slides.apply_theme.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.apply_theme" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["theme_id", "brand_kit_id"],
+      "properties": {
+        "theme_id": { "type": "string" },
+        "brand_kit_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "force_fonts": { "type": "boolean", "default": true },
+        "force_palette": { "type": "boolean", "default": true },
+        "logo_rules": { "type": "string", "enum": ["auto", "off"], "default": "auto" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,7 @@
+{
+  "scenario_id": "video_to_transcribe_strict",
+  "engine": "lct",
+  "claims": ["TRANSCRIBE_STRICT_100"],
+  "targets": ["docx", "srt", "json"],
+  "gates": ["exact_transcript", "editable_docx", "evidence_required"]
+}

@@ -1,0 +1,112 @@
+{
+  "$id": "https://lct.local/schemas/lct.orch.any_to_any.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.orch.any_to_any"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "assets",
+        "instruction"
+      ],
+      "properties": {
+        "assets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common.json#/$defs/AssetRef"
+          }
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "required": [
+        "targets",
+        "claims"
+      ],
+      "properties": {
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "pptx",
+              "docx",
+              "xlsx",
+              "dashboard",
+              "pdf",
+              "html",
+              "png",
+              "srt",
+              "vtt",
+              "json"
+            ]
+          }
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "common.json#/$defs/StrictClaim"
+          }
+        },
+        "target_language": {
+          "type": "string",
+          "enum": [
+            "ar",
+            "en",
+            "mixed"
+          ]
+        },
+        "fidelity_mode": {
+          "type": "string",
+          "enum": [
+            "literal_1to1",
+            "smart"
+          ]
+        },
+        "template_id": {
+          "type": "string"
+        },
+        "term_pack_id": {
+          "type": "string"
+        },
+        "style_guide_id": {
+          "type": "string"
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

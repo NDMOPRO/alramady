@@ -1,0 +1,29 @@
+{
+  "$id": "https://slides.local/schemas/slides.build_deck.input.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "context", "inputs", "params"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.build_deck" },
+    "context": { "$ref": "../common.json#/$defs/ActionContext" },
+    "inputs": {
+      "type": "object",
+      "required": ["storyboard", "theme_tokens"],
+      "properties": {
+        "storyboard": { "type": "object" },
+        "theme_tokens": { "type": "object" },
+        "assets": { "type": "array", "items": { "$ref": "../common.json#/$defs/AssetRef" } }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "grid_profile": { "type": "string", "enum": ["premium_16_9", "premium_4_3"], "default": "premium_16_9" },
+        "rtl_policy": { "type": "string", "enum": ["auto", "force_rtl"], "default": "auto" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

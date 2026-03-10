@@ -1,0 +1,27 @@
+# TASK GATE — Evidence Pack (Auto)
+TASK_ID: UI-VSLICE-01
+TASK_TITLE: Canvas option gates and vertical slice proof
+SPEC_BOOK: SELF_CONTAINED
+SPEC_SECTIONS: Canvas options limit, no technical UI, vertical slice, E2E gates
+ROOT: C:\DATA_AI\rasid
+TIME: 2026-03-10T15:20:06.807Z
+=== SUMMARY ===
+TASK_ID: UI-VSLICE-01
+TASK_TITLE: Canvas option gates and vertical slice proof
+PKG_MGR: npm
+
+MARKS:
+- NO_SILENT_OVERRIDE: PASS
+
+FINAL_VERDICT: FAIL
+FAIL_REASONS:
+- Forbidden tokens found: 268 files
+- INSTALL failed (exit=999)
+- BUILD failed (exit=999)
+- TYPECHECK failed (exit=999)
+- LINT failed (exit=999)
+- TESTS failed (exit=999)
+- UI_E2E failed (exit=999)
+
+EVIDENCE_DIR:
+- EVIDENCE\UI-VSLICE-01

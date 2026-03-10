@@ -11,6 +11,7 @@ import {
   type FidelityTarget,
   type Warning,
 } from '../cdr/types';
+import { validateToolContract } from './contracts';
 
 // ─── Tool Definition ─────────────────────────────────────────────────
 export interface ToolDefinition {
@@ -81,6 +82,8 @@ export async function executeTool<TRefs = unknown>(
     throw new Error(`Tool ${request.tool_id} requires strict_visual=true in ActionContext`);
   }
 
+  validateToolContract(request.tool_id, 'request', request);
+
   const handler = toolHandlers.get(request.tool_id);
   if (!handler) {
     throw new Error(`No handler registered for tool: ${request.tool_id}`);
@@ -92,6 +95,8 @@ export async function executeTool<TRefs = unknown>(
   if (response.tool_id !== request.tool_id) {
     throw new Error(`Tool handler returned mismatched tool_id: expected ${request.tool_id}, got ${response.tool_id}`);
   }
+
+  validateToolContract(request.tool_id, 'response', response);
 
   return response as ToolResponse<TRefs>;
 }

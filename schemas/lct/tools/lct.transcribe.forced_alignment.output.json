@@ -1,0 +1,52 @@
+{
+  "$id": "https://lct.local/schemas/lct.transcribe.forced_alignment.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.transcribe.forced_alignment"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "word_timestamps",
+        "alignment_pass",
+        "alignment"
+      ],
+      "properties": {
+        "word_timestamps": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "alignment_pass": {
+          "type": "boolean"
+        },
+        "alignment": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,20 @@
+{
+  "$id": "https://slides.local/schemas/slides.qa_validate.output.json",
+  "type": "object",
+  "required": ["request_id", "tool_id", "status", "refs"],
+  "properties": {
+    "request_id": { "type": "string" },
+    "tool_id": { "const": "slides.qa_validate" },
+    "status": { "type": "string", "enum": ["ok", "failed"] },
+    "refs": {
+      "type": "object",
+      "required": ["pass", "issues"],
+      "properties": {
+        "pass": { "type": "boolean" },
+        "issues": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

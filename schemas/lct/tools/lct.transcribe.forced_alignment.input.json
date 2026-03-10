@@ -1,0 +1,43 @@
+{
+  "$id": "https://lct.local/schemas/lct.transcribe.forced_alignment.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.transcribe.forced_alignment"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "audio_asset",
+        "transcript_draft"
+      ],
+      "properties": {
+        "audio_asset": {
+          "$ref": "common.json#/$defs/AssetRef"
+        },
+        "transcript_draft": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

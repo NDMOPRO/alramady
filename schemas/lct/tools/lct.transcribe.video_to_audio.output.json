@@ -1,0 +1,45 @@
+{
+  "$id": "https://lct.local/schemas/lct.transcribe.video_to_audio.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.transcribe.video_to_audio"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "audio_asset",
+        "track_metadata"
+      ],
+      "properties": {
+        "audio_asset": {
+          "$ref": "common.json#/$defs/AssetRef"
+        },
+        "track_metadata": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

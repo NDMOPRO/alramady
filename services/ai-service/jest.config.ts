@@ -11,6 +11,9 @@ const config: Config = {
       diagnostics: false,
     }],
   },
+  moduleNameMapper: {
+    '^(.+)\\.js$': '$1',
+  },
   forceExit: true,
   passWithNoTests: true,
 };

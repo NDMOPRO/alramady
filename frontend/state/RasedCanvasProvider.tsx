@@ -3,7 +3,7 @@
 import React, { createContext, useEffect, type ReactNode } from "react";
 import { useActor } from "@xstate/react";
 import { rasedCanvasMachine } from "./rasedCanvas.machine";
-import type { RasedCanvasContext, RasedCanvasEvent } from "./rasedCanvas.types";
+import type { RasedCanvasContext, RasedEvent } from "./rasedCanvas.types";
 
 // ─── Context Type ────────────────────────────────────────────────────────────
 
@@ -12,7 +12,7 @@ export interface RasedCanvasContextValue {
   /** Current top-level state value: "booting" | "running" | "crashed" */
   phase: string;
   /** Send an event to the machine */
-  send: (event: RasedCanvasEvent) => void;
+  send: (event: RasedEvent) => void;
 }
 
 export const RasedCanvasCtx = createContext<RasedCanvasContextValue | null>(null);

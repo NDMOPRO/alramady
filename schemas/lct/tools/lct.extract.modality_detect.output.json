@@ -1,0 +1,59 @@
+{
+  "$id": "https://lct.local/schemas/lct.extract.modality_detect.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.extract.modality_detect"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "modality",
+        "has_embedded_captions",
+        "has_tables"
+      ],
+      "properties": {
+        "modality": {
+          "type": "string",
+          "enum": [
+            "pdf",
+            "image",
+            "audio",
+            "video",
+            "docx",
+            "pptx",
+            "xlsx",
+            "text"
+          ]
+        },
+        "has_embedded_captions": {
+          "type": "boolean"
+        },
+        "has_tables": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

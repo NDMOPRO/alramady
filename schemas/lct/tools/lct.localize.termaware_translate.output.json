@@ -1,0 +1,49 @@
+{
+  "$id": "https://lct.local/schemas/lct.localize.termaware_translate.output.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "status",
+    "refs"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "lct.localize.termaware_translate"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "failed"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "required": [
+        "translated_runs",
+        "terminology_report",
+        "lqa_report"
+      ],
+      "properties": {
+        "translated_runs": {
+          "type": "object"
+        },
+        "terminology_report": {
+          "type": "object"
+        },
+        "lqa_report": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "$ref": "common.json#/$defs/Warnings"
+    }
+  },
+  "additionalProperties": false
+}

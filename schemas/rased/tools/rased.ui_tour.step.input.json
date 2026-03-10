@@ -1,0 +1,59 @@
+{
+  "$id": "https://rased.local/schemas/rased.ui_tour.step.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.ui_tour.step"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "tour_session_id",
+        "step_index",
+        "status"
+      ],
+      "properties": {
+        "tour_session_id": {
+          "type": "string",
+          "minLength": 8
+        },
+        "step_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "target_rased_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "viewed",
+            "completed",
+            "auto_applied",
+            "failed"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

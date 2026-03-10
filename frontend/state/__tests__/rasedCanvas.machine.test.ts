@@ -1,187 +1,99 @@
-/**
- * Rased Canvas Machine – Runtime Assertions
- *
- * Run: npx tsx state/__tests__/rasedCanvas.machine.test.ts
- * Validates core FSM invariants without a test framework dependency.
- */
 import { createActor } from "xstate";
 import { rasedCanvasMachine } from "../rasedCanvas.machine";
 
 let passed = 0;
 let failed = 0;
 
-function assert(label: string, condition: boolean): void {
+function assert(label: string, condition: boolean) {
   if (condition) {
     console.log(`  ✓ ${label}`);
-    passed++;
+    passed += 1;
   } else {
     console.error(`  ✗ FAIL: ${label}`);
-    failed++;
+    failed += 1;
   }
 }
 
-function topValue(snap: { value: unknown }): string {
-  const v = snap.value;
-  return typeof v === "string" ? v : "running";
-}
-
-// ── Test 1: booting → running on APP/READY ──────────────────────────────────
-
-console.log("\nTest 1: booting → running on APP/READY");
-{
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-
-  assert("initial state is booting", topValue(actor.getSnapshot()) === "booting");
-
-  actor.send({ type: "APP/READY" });
-  assert("transitions to running", topValue(actor.getSnapshot()) === "running");
-
-  actor.stop();
-}
-
-// ── Test 2: booting → crashed on APP/CRASH ──────────────────────────────────
-
-console.log("\nTest 2: booting → crashed on APP/CRASH");
-{
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-
-  actor.send({ type: "APP/CRASH", error: "test error" });
-  assert("transitions to crashed", topValue(actor.getSnapshot()) === "crashed");
-  assert("stores error in context", actor.getSnapshot().context.bootError === "test error");
-
-  actor.stop();
-}
-
-// ── Test 3: MODAL/OPEN blocks NAV/GO ────────────────────────────────────────
-
-console.log("\nTest 3: MODAL/OPEN blocks NAV/GO");
-{
+function boot() {
   const actor = createActor(rasedCanvasMachine);
   actor.start();
   actor.send({ type: "APP/READY" });
+  return actor;
+}
 
-  actor.send({ type: "MODAL/OPEN", modalId: "confirm-delete" });
-  assert("modal is open in context", actor.getSnapshot().context.modalId === "confirm-delete");
+console.log("\nFSM runtime checks");
 
-  // NAV/GO should be blocked by isModalClosed guard
-  actor.send({ type: "NAV/GO", path: "/data" });
-  assert("NAV/GO is ignored when modal open", topValue(actor.getSnapshot()) === "running");
-
+{
+  const actor = boot();
+  assert("starts in running after APP/READY", actor.getSnapshot().matches("running"));
   actor.stop();
 }
 
-// ── Test 4: MODAL/OPEN blocks FOCUS/OPEN ────────────────────────────────────
-
-console.log("\nTest 4: MODAL/OPEN blocks FOCUS/OPEN");
 {
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-  actor.send({ type: "APP/READY" });
-
-  actor.send({ type: "MODAL/OPEN", modalId: "settings" });
-  assert("modal is open", actor.getSnapshot().context.modalId === "settings");
-
-  actor.send({ type: "FOCUS/OPEN", jobId: "job-1" });
-  assert("FOCUS/OPEN ignored when modal open", actor.getSnapshot().context.focusJobId === null);
-
-  actor.send({ type: "MODAL/CLOSE" });
-  actor.send({ type: "FOCUS/OPEN", jobId: "job-1" });
-  assert("FOCUS/OPEN works after modal close", actor.getSnapshot().context.focusJobId === "job-1");
-
+  const actor = boot();
+  actor.send({ type: "EFFECTS/SET_REDUCE_MOTION", value: true });
+  const effects = actor.getSnapshot().context.uiEffects;
+  assert("reduce motion enabled", effects.reduceMotion === true);
+  assert("particles disabled with reduce motion", effects.particlesEnabled === false);
   actor.stop();
 }
 
-// ── Test 5: One focus stage at a time ───────────────────────────────────────
-
-console.log("\nTest 5: One focus stage at a time");
 {
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-  actor.send({ type: "APP/READY" });
-
-  actor.send({ type: "FOCUS/OPEN", jobId: "job-a" });
-  assert("focus opens job-a", actor.getSnapshot().context.focusJobId === "job-a");
-
-  actor.send({ type: "FOCUS/OPEN", jobId: "job-b" });
-  assert("focus replaces with job-b", actor.getSnapshot().context.focusJobId === "job-b");
-
-  actor.send({ type: "FOCUS/CLOSE" });
-  assert("focus closes", actor.getSnapshot().context.focusJobId === null);
-
+  const actor = boot();
+  actor.send({ type: "MODAL/OPEN", modal: "confirm" });
+  actor.send({ type: "FOCUS/OPEN", artifactId: "artifact-1", kind: "pdf", stageMode: "view" });
+  actor.send({ type: "NAV/GO", view: "reports" });
+  assert("modal blocks focus opening", actor.getSnapshot().context.focus.open === false);
+  assert("modal blocks navigation", actor.getSnapshot().context.nav.activeView === "chat");
   actor.stop();
 }
 
-// ── Test 6: Sidebar open/close/pin ──────────────────────────────────────────
-
-console.log("\nTest 6: Sidebar open/close/pin");
 {
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-  actor.send({ type: "APP/READY" });
+  const actor = boot();
+  actor.send({ type: "JOB/CREATE", jobId: "job-1" });
+  actor.send({ type: "JOB/STAGE", jobId: "job-1", stage: "running" });
+  actor.send({ type: "JOB/RESULT_READY", jobId: "job-1", artifactIds: ["artifact-1"], resultCardId: "card.result.job-1" });
+  actor.send({ type: "JOB/EVIDENCE_READY", jobId: "job-1", evidenceId: "evidence-1", evidenceCardId: "card.evidence.job-1" });
+  const job = actor.getSnapshot().context.jobs.byId["job-1"];
+  assert("job reaches completed after evidence", job.stage === "completed");
+  assert("job carries evidence id", job.evidenceId === "evidence-1");
+  actor.stop();
+}
 
-  assert("sidebar initially hidden", actor.getSnapshot().context.sidebarOpen === false);
-
-  actor.send({ type: "SIDEBAR/CLOSE" });
-  assert("sidebar closes", actor.getSnapshot().context.sidebarOpen === false);
-
-  actor.send({ type: "SIDEBAR/OPEN" });
-  assert("sidebar opens", actor.getSnapshot().context.sidebarOpen === true);
-
+{
+  const actor = boot();
   actor.send({ type: "SIDEBAR/TOGGLE_PIN" });
-  assert("sidebar pinned", actor.getSnapshot().context.sidebarPinned === true);
-
-  actor.send({ type: "SIDEBAR/SET_TAB", tab: "files" });
-  assert("sidebar tab set", actor.getSnapshot().context.sidebarTab === "files");
-
+  actor.send({ type: "SIDEBAR/CLOSE" });
+  assert("pinned sidebar closes to peek", actor.getSnapshot().context.sidebar.mode === "peek");
   actor.stop();
 }
 
-// ── Test 7: Theme toggle and reduceMotion ───────────────────────────────────
-
-console.log("\nTest 7: Theme toggle and reduceMotion");
 {
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-  actor.send({ type: "APP/READY" });
-
-  assert("initial theme is dark", actor.getSnapshot().context.theme === "dark");
-
-  actor.send({ type: "THEME/TOGGLE" });
-  assert("theme toggled to light", actor.getSnapshot().context.theme === "light");
-
-  actor.send({ type: "THEME/SET_REDUCE_MOTION", enabled: true });
-  assert("reduceMotion enabled", actor.getSnapshot().context.reduceMotion === true);
-
+  const actor = boot();
+  actor.send({ type: "FOCUS/OPEN", artifactId: "artifact-1", kind: "pdf", stageMode: "view" });
+  actor.send({ type: "NAV/GO", view: "reports" });
+  assert("navigation closes focus stage", actor.getSnapshot().context.focus.open === false);
+  assert("navigation switches active view", actor.getSnapshot().context.nav.activeView === "reports");
   actor.stop();
 }
 
-// ── Test 8: Job lifecycle ───────────────────────────────────────────────────
-
-console.log("\nTest 8: Job lifecycle");
 {
-  const actor = createActor(rasedCanvasMachine);
-  actor.start();
-  actor.send({ type: "APP/READY" });
-
-  actor.send({ type: "JOB/CREATE", jobId: "j1", label: "Import CSV" });
-  const job1 = actor.getSnapshot().context.jobs["j1"];
-  assert("job created", job1 !== undefined);
-  assert("job status running", job1?.status === "running");
-
-  actor.send({ type: "JOB/PROGRESS", jobId: "j1", progress: 50 });
-  assert("job progress updated", actor.getSnapshot().context.jobs["j1"]?.progress === 50);
-
-  actor.send({ type: "JOB/RESULT_READY", jobId: "j1", result: { title: "Done", body: "ok", chips: [] } });
-  assert("job done", actor.getSnapshot().context.jobs["j1"]?.status === "done");
-
+  const actor = boot();
+  actor.send({ type: "JOB/CREATE", jobId: "job-2" });
+  actor.send({ type: "JOB/RESULT_READY", jobId: "job-2", artifactIds: ["artifact-2"], resultCardId: "card.result.job-2" });
+  const job = actor.getSnapshot().context.jobs.byId["job-2"];
+  assert("job stays non-completed before evidence", job.stage !== "completed");
   actor.stop();
 }
 
-// ── Summary ─────────────────────────────────────────────────────────────────
+{
+  const actor = boot();
+  actor.send({ type: "DROP/ENTER" });
+  assert("drop enter opens sidebar peek", actor.getSnapshot().context.sidebar.mode === "peek");
+  actor.stop();
+}
 
-console.log(`\n${"═".repeat(50)}`);
+console.log(`\n${"═".repeat(40)}`);
 console.log(`Results: ${passed} passed, ${failed} failed`);
 
 if (failed > 0) {

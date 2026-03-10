@@ -1,0 +1,54 @@
+{
+  "$id": "https://rased.local/schemas/rased.ui_tour.end.input.json",
+  "type": "object",
+  "required": [
+    "request_id",
+    "tool_id",
+    "context",
+    "inputs",
+    "params"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "tool_id": {
+      "const": "rased.ui_tour.end"
+    },
+    "context": {
+      "$ref": "common.json#/$defs/ActionContext"
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "tour_session_id",
+        "outcome"
+      ],
+      "properties": {
+        "tour_session_id": {
+          "type": "string",
+          "minLength": 8
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "completed",
+            "cancelled",
+            "failed"
+          ]
+        },
+        "feedback": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "additionalProperties": false
+    },
+    "params": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

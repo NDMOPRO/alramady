@@ -1,0 +1,8463 @@
+{
+  "generated_at": "2026-03-10T11:34:36.909Z",
+  "model_count": 86,
+  "models": [
+    {
+      "name": "Tenant",
+      "start": 502,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 503
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 504
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 505
+        },
+        {
+          "name": "domain",
+          "type": "String?",
+          "line": 506
+        },
+        {
+          "name": "logoUrl",
+          "type": "String?",
+          "line": 507
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 508
+        },
+        {
+          "name": "plan",
+          "type": "String",
+          "line": 509
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 510
+        },
+        {
+          "name": "maxUsers",
+          "type": "Int",
+          "line": 511
+        },
+        {
+          "name": "maxStorage",
+          "type": "BigInt",
+          "line": 512
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 513
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 514
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 515
+        },
+        {
+          "name": "users",
+          "type": "User[]",
+          "line": 517
+        },
+        {
+          "name": "datasets",
+          "type": "Dataset[]",
+          "line": 518
+        },
+        {
+          "name": "dashboards",
+          "type": "Dashboard[]",
+          "line": 519
+        },
+        {
+          "name": "reports",
+          "type": "Report[]",
+          "line": 520
+        },
+        {
+          "name": "templates",
+          "type": "Template[]",
+          "line": 521
+        },
+        {
+          "name": "folders",
+          "type": "Folder[]",
+          "line": 522
+        },
+        {
+          "name": "knowledgeBases",
+          "type": "KnowledgeBase[]",
+          "line": 523
+        },
+        {
+          "name": "prompts",
+          "type": "Prompt[]",
+          "line": 524
+        },
+        {
+          "name": "glossaries",
+          "type": "Glossary[]",
+          "line": 525
+        },
+        {
+          "name": "kpis",
+          "type": "Kpi[]",
+          "line": 526
+        },
+        {
+          "name": "workflowInstances",
+          "type": "WorkflowInstance[]",
+          "line": 527
+        },
+        {
+          "name": "scheduledReports",
+          "type": "ScheduledReport[]",
+          "line": 528
+        },
+        {
+          "name": "libraryAssets",
+          "type": "LibraryAsset[]",
+          "line": 529
+        },
+        {
+          "name": "notifications",
+          "type": "Notification[]",
+          "line": 530
+        },
+        {
+          "name": "auditLogs",
+          "type": "AuditLog[]",
+          "line": 531
+        },
+        {
+          "name": "reportDefinitions",
+          "type": "ReportDefinition[]",
+          "line": 532
+        },
+        {
+          "name": "reportTemplates",
+          "type": "ReportTemplate[]",
+          "line": 533
+        },
+        {
+          "name": "reportSchedules",
+          "type": "ReportSchedule[]",
+          "line": 534
+        },
+        {
+          "name": "reportDataSources",
+          "type": "ReportDataSource[]",
+          "line": 535
+        },
+        {
+          "name": "compareSchedules",
+          "type": "ReportCompareSchedule[]",
+          "line": 536
+        },
+        {
+          "name": "themes",
+          "type": "Theme[]",
+          "line": 537
+        },
+        {
+          "name": "connectorConnections",
+          "type": "ConnectorConnection[]",
+          "line": 538
+        },
+        {
+          "name": "policies",
+          "type": "Policy[]",
+          "line": 539
+        },
+        {
+          "name": "compliancePolicies",
+          "type": "CompliancePolicy[]",
+          "line": 540
+        },
+        {
+          "name": "workflowDefinitions",
+          "type": "WorkflowDefinition[]",
+          "line": 541
+        },
+        {
+          "name": "layoutAnalyses",
+          "type": "LayoutAnalysis[]",
+          "line": 542
+        },
+        {
+          "name": "documentExtractions",
+          "type": "DocumentExtraction[]",
+          "line": 543
+        },
+        {
+          "name": "pixelValidations",
+          "type": "PixelValidation[]",
+          "line": 544
+        },
+        {
+          "name": "fontRecognitions",
+          "type": "FontRecognition[]",
+          "line": 545
+        },
+        {
+          "name": "layoutTranslations",
+          "type": "LayoutTranslation[]",
+          "line": 546
+        },
+        {
+          "name": "qualityValidations",
+          "type": "QualityValidation[]",
+          "line": 547
+        },
+        {
+          "name": "bridgePayloads",
+          "type": "BridgePayload[]",
+          "line": 548
+        },
+        {
+          "name": "dataLineage",
+          "type": "DataLineage[]",
+          "line": 549
+        },
+        {
+          "name": "trainingDatasets",
+          "type": "TrainingDataset[]",
+          "line": 550
+        },
+        {
+          "name": "trainingJobs",
+          "type": "TrainingJob[]",
+          "line": 551
+        },
+        {
+          "name": "modelRegistry",
+          "type": "ModelRegistry[]",
+          "line": 552
+        },
+        {
+          "name": "contextMemoryLong",
+          "type": "ContextMemoryLong[]",
+          "line": 553
+        },
+        {
+          "name": "episodeMemory",
+          "type": "EpisodeMemory[]",
+          "line": 554
+        },
+        {
+          "name": "semanticFacts",
+          "type": "SemanticFact[]",
+          "line": 555
+        }
+      ],
+      "relationships": [
+        {
+          "field": "reportTemplates",
+          "target": "ReportTemplate",
+          "line": 533
+        },
+        {
+          "field": "reportSchedules",
+          "target": "ReportSchedule",
+          "line": 534
+        },
+        {
+          "field": "reportDataSources",
+          "target": "ReportDataSource",
+          "line": 535
+        },
+        {
+          "field": "compareSchedules",
+          "target": "ReportCompareSchedule",
+          "line": 536
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "start": 563,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 564
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 565
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "line": 566
+        },
+        {
+          "name": "passwordHash",
+          "type": "String?",
+          "line": 567
+        },
+        {
+          "name": "firstName",
+          "type": "String",
+          "line": 568
+        },
+        {
+          "name": "lastName",
+          "type": "String",
+          "line": 569
+        },
+        {
+          "name": "displayName",
+          "type": "String?",
+          "line": 570
+        },
+        {
+          "name": "avatarUrl",
+          "type": "String?",
+          "line": 571
+        },
+        {
+          "name": "phone",
+          "type": "String?",
+          "line": 572
+        },
+        {
+          "name": "locale",
+          "type": "Language",
+          "line": 573
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "line": 574
+        },
+        {
+          "name": "status",
+          "type": "UserStatus",
+          "line": 575
+        },
+        {
+          "name": "emailVerifiedAt",
+          "type": "DateTime?",
+          "line": 576
+        },
+        {
+          "name": "lastLoginAt",
+          "type": "DateTime?",
+          "line": 577
+        },
+        {
+          "name": "preferences",
+          "type": "Json?",
+          "line": 578
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 579
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 580
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 581
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 583
+        },
+        {
+          "name": "userRoles",
+          "type": "UserRole[]",
+          "line": 584
+        },
+        {
+          "name": "datasets",
+          "type": "Dataset[]",
+          "line": 585
+        },
+        {
+          "name": "datasetsUpdated",
+          "type": "Dataset[]",
+          "line": 586
+        },
+        {
+          "name": "ingestionJobs",
+          "type": "IngestionJob[]",
+          "line": 587
+        },
+        {
+          "name": "dashboards",
+          "type": "Dashboard[]",
+          "line": 588
+        },
+        {
+          "name": "reports",
+          "type": "Report[]",
+          "line": 589
+        },
+        {
+          "name": "presentations",
+          "type": "Presentation[]",
+          "line": 590
+        },
+        {
+          "name": "infographics",
+          "type": "Infographic[]",
+          "line": 591
+        },
+        {
+          "name": "workbooks",
+          "type": "Workbook[]",
+          "line": 592
+        },
+        {
+          "name": "aiSessions",
+          "type": "AiSession[]",
+          "line": 593
+        },
+        {
+          "name": "auditLogs",
+          "type": "AuditLog[]",
+          "line": 594
+        },
+        {
+          "name": "notifications",
+          "type": "Notification[]",
+          "line": 595
+        },
+        {
+          "name": "workflowStepsAssigned",
+          "type": "WorkflowStep[]",
+          "line": 596
+        },
+        {
+          "name": "workflowStepsCompleted",
+          "type": "WorkflowStep[]",
+          "line": 597
+        },
+        {
+          "name": "scheduledReports",
+          "type": "ScheduledReport[]",
+          "line": 598
+        },
+        {
+          "name": "conversionJobs",
+          "type": "ConversionJob[]",
+          "line": 599
+        },
+        {
+          "name": "localizationJobs",
+          "type": "LocalizationJob[]",
+          "line": 600
+        },
+        {
+          "name": "promptVersions",
+          "type": "PromptVersion[]",
+          "line": 601
+        },
+        {
+          "name": "kpis",
+          "type": "Kpi[]",
+          "line": 602
+        },
+        {
+          "name": "reportDefinitions",
+          "type": "ReportDefinition[]",
+          "line": 603
+        },
+        {
+          "name": "reportTemplatesCreated",
+          "type": "ReportTemplate[]",
+          "line": 604
+        },
+        {
+          "name": "reportSchedulesCreated",
+          "type": "ReportSchedule[]",
+          "line": 605
+        },
+        {
+          "name": "reportPostEdits",
+          "type": "ReportPostEdit[]",
+          "line": 606
+        },
+        {
+          "name": "externalSimulations",
+          "type": "ReportExternalSimulation[]",
+          "line": 607
+        },
+        {
+          "name": "compareSchedules",
+          "type": "ReportCompareSchedule[]",
+          "line": 608
+        },
+        {
+          "name": "interactiveReports",
+          "type": "InteractiveReport[]",
+          "line": 609
+        },
+        {
+          "name": "interactiveVersions",
+          "type": "InteractiveReportVersion[]",
+          "line": 610
+        },
+        {
+          "name": "reportComments",
+          "type": "ReportComment[]",
+          "line": 611
+        },
+        {
+          "name": "reportAnnotations",
+          "type": "ReportAnnotation[]",
+          "line": 612
+        },
+        {
+          "name": "distributionConfigs",
+          "type": "DistributionConfig[]",
+          "line": 613
+        },
+        {
+          "name": "collaborationSessions",
+          "type": "CollaborationSession[]",
+          "line": 614
+        },
+        {
+          "name": "shareLinks",
+          "type": "ShareLink[]",
+          "line": 615
+        },
+        {
+          "name": "connectorConnections",
+          "type": "ConnectorConnection[]",
+          "line": 616
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 583
+        },
+        {
+          "field": "datasets",
+          "target": "Dataset",
+          "line": 585
+        },
+        {
+          "field": "datasetsUpdated",
+          "target": "Dataset",
+          "line": 586
+        },
+        {
+          "field": "dashboards",
+          "target": "Dashboard",
+          "line": 588
+        },
+        {
+          "field": "reports",
+          "target": "Report",
+          "line": 589
+        },
+        {
+          "field": "presentations",
+          "target": "Presentation",
+          "line": 590
+        },
+        {
+          "field": "infographics",
+          "target": "Infographic",
+          "line": 591
+        },
+        {
+          "field": "workbooks",
+          "target": "Workbook",
+          "line": 592
+        },
+        {
+          "field": "workflowStepsAssigned",
+          "target": "WorkflowStep",
+          "line": 596
+        },
+        {
+          "field": "workflowStepsCompleted",
+          "target": "WorkflowStep",
+          "line": 597
+        },
+        {
+          "field": "reportDefinitions",
+          "target": "ReportDefinition",
+          "line": 603
+        },
+        {
+          "field": "reportTemplatesCreated",
+          "target": "ReportTemplate",
+          "line": 604
+        },
+        {
+          "field": "reportSchedulesCreated",
+          "target": "ReportSchedule",
+          "line": 605
+        },
+        {
+          "field": "reportPostEdits",
+          "target": "ReportPostEdit",
+          "line": 606
+        },
+        {
+          "field": "externalSimulations",
+          "target": "ReportExternalSimulation",
+          "line": 607
+        },
+        {
+          "field": "compareSchedules",
+          "target": "ReportCompareSchedule",
+          "line": 608
+        },
+        {
+          "field": "interactiveReports",
+          "target": "InteractiveReport",
+          "line": 609
+        },
+        {
+          "field": "interactiveVersions",
+          "target": "InteractiveReportVersion",
+          "line": 610
+        },
+        {
+          "field": "reportComments",
+          "target": "ReportComment",
+          "line": 611
+        },
+        {
+          "field": "reportAnnotations",
+          "target": "ReportAnnotation",
+          "line": 612
+        },
+        {
+          "field": "distributionConfigs",
+          "target": "DistributionConfig",
+          "line": 613
+        }
+      ]
+    },
+    {
+      "name": "Role",
+      "start": 626,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 627
+        },
+        {
+          "name": "name",
+          "type": "RoleName",
+          "line": 628
+        },
+        {
+          "name": "displayName",
+          "type": "String",
+          "line": 629
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 630
+        },
+        {
+          "name": "isSystem",
+          "type": "Boolean",
+          "line": 631
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 632
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 633
+        },
+        {
+          "name": "userRoles",
+          "type": "UserRole[]",
+          "line": 635
+        },
+        {
+          "name": "permissions",
+          "type": "Permission[]",
+          "line": 636
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "name": "UserRole",
+      "start": 642,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 643
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 644
+        },
+        {
+          "name": "roleId",
+          "type": "String",
+          "line": 645
+        },
+        {
+          "name": "grantedAt",
+          "type": "DateTime",
+          "line": 646
+        },
+        {
+          "name": "expiresAt",
+          "type": "DateTime?",
+          "line": 647
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 648
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 649
+        },
+        {
+          "name": "user",
+          "type": "User",
+          "line": 651
+        },
+        {
+          "name": "role",
+          "type": "Role",
+          "line": 652
+        }
+      ],
+      "relationships": [
+        {
+          "field": "user",
+          "target": "User",
+          "line": 651
+        },
+        {
+          "field": "role",
+          "target": "Role",
+          "line": 652
+        }
+      ]
+    },
+    {
+      "name": "Dataset",
+      "start": 660,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 661
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 662
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 663
+        },
+        {
+          "name": "updatedById",
+          "type": "String?",
+          "line": 664
+        },
+        {
+          "name": "folderId",
+          "type": "String?",
+          "line": 665
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 666
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 667
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 668
+        },
+        {
+          "name": "source",
+          "type": "String?",
+          "line": 669
+        },
+        {
+          "name": "sourceUrl",
+          "type": "String?",
+          "line": 670
+        },
+        {
+          "name": "format",
+          "type": "String?",
+          "line": 671
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 672
+        },
+        {
+          "name": "rowCount",
+          "type": "Int?",
+          "line": 673
+        },
+        {
+          "name": "columnCount",
+          "type": "Int?",
+          "line": 674
+        },
+        {
+          "name": "schema",
+          "type": "Json?",
+          "line": 675
+        },
+        {
+          "name": "sampleData",
+          "type": "Json?",
+          "line": 676
+        },
+        {
+          "name": "status",
+          "type": "DatasetStatus",
+          "line": 677
+        },
+        {
+          "name": "isPublic",
+          "type": "Boolean",
+          "line": 678
+        },
+        {
+          "name": "license",
+          "type": "String?",
+          "line": 679
+        },
+        {
+          "name": "frequency",
+          "type": "String?",
+          "line": 680
+        },
+        {
+          "name": "lastSyncedAt",
+          "type": "DateTime?",
+          "line": 681
+        },
+        {
+          "name": "publishedAt",
+          "type": "DateTime?",
+          "line": 682
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 683
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 684
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 685
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 686
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 688
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 689
+        },
+        {
+          "name": "updatedBy",
+          "type": "User?",
+          "line": 690
+        },
+        {
+          "name": "folder",
+          "type": "Folder?",
+          "line": 691
+        },
+        {
+          "name": "columns",
+          "type": "DatasetColumn[]",
+          "line": 692
+        },
+        {
+          "name": "versions",
+          "type": "DatasetVersion[]",
+          "line": 693
+        },
+        {
+          "name": "metadata",
+          "type": "Metadata[]",
+          "line": 694
+        },
+        {
+          "name": "tags",
+          "type": "Tag[]",
+          "line": 695
+        },
+        {
+          "name": "ingestionJobs",
+          "type": "IngestionJob[]",
+          "line": 696
+        },
+        {
+          "name": "dataQualityChecks",
+          "type": "DataQualityCheck[]",
+          "line": 697
+        },
+        {
+          "name": "dashboardWidgets",
+          "type": "DashboardWidget[]",
+          "line": 698
+        },
+        {
+          "name": "dataRows",
+          "type": "DataRow[]",
+          "line": 699
+        },
+        {
+          "name": "kpis",
+          "type": "Kpi[]",
+          "line": 700
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 688
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 689
+        },
+        {
+          "field": "updatedBy",
+          "target": "User",
+          "line": 690
+        },
+        {
+          "field": "folder",
+          "target": "Folder",
+          "line": 691
+        }
+      ]
+    },
+    {
+      "name": "DatasetColumn",
+      "start": 713,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 714
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 715
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 716
+        },
+        {
+          "name": "displayName",
+          "type": "String?",
+          "line": 717
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 718
+        },
+        {
+          "name": "dataType",
+          "type": "ColumnDataType",
+          "line": 719
+        },
+        {
+          "name": "ordinalPosition",
+          "type": "Int",
+          "line": 720
+        },
+        {
+          "name": "isNullable",
+          "type": "Boolean",
+          "line": 721
+        },
+        {
+          "name": "isPrimaryKey",
+          "type": "Boolean",
+          "line": 722
+        },
+        {
+          "name": "isUnique",
+          "type": "Boolean",
+          "line": 723
+        },
+        {
+          "name": "defaultValue",
+          "type": "String?",
+          "line": 724
+        },
+        {
+          "name": "maxLength",
+          "type": "Int?",
+          "line": 725
+        },
+        {
+          "name": "precision",
+          "type": "Int?",
+          "line": 726
+        },
+        {
+          "name": "scale",
+          "type": "Int?",
+          "line": 727
+        },
+        {
+          "name": "format",
+          "type": "String?",
+          "line": 728
+        },
+        {
+          "name": "constraints",
+          "type": "Json?",
+          "line": 729
+        },
+        {
+          "name": "statistics",
+          "type": "Json?",
+          "line": 730
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 731
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 732
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 734
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 734
+        }
+      ]
+    },
+    {
+      "name": "DatasetVersion",
+      "start": 742,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 743
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 744
+        },
+        {
+          "name": "versionNumber",
+          "type": "Int",
+          "line": 745
+        },
+        {
+          "name": "changeSummary",
+          "type": "String?",
+          "line": 746
+        },
+        {
+          "name": "schema",
+          "type": "Json?",
+          "line": 747
+        },
+        {
+          "name": "rowCount",
+          "type": "Int?",
+          "line": 748
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 749
+        },
+        {
+          "name": "filePath",
+          "type": "String?",
+          "line": 750
+        },
+        {
+          "name": "checksum",
+          "type": "String?",
+          "line": 751
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 752
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 753
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 755
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 755
+        }
+      ]
+    },
+    {
+      "name": "Metadata",
+      "start": 762,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 763
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 764
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "line": 765
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "line": 766
+        },
+        {
+          "name": "valueType",
+          "type": "String",
+          "line": 767
+        },
+        {
+          "name": "language",
+          "type": "Language",
+          "line": 768
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 769
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 770
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 772
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 772
+        }
+      ]
+    },
+    {
+      "name": "Tag",
+      "start": 780,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 781
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 782
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 783
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 784
+        },
+        {
+          "name": "color",
+          "type": "String?",
+          "line": 785
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 786
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 787
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 789
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 789
+        }
+      ]
+    },
+    {
+      "name": "Template",
+      "start": 798,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 799
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 800
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 801
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 802
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 803
+        },
+        {
+          "name": "category",
+          "type": "String?",
+          "line": 804
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "line": 805
+        },
+        {
+          "name": "content",
+          "type": "Json",
+          "line": 806
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "line": 807
+        },
+        {
+          "name": "isSystem",
+          "type": "Boolean",
+          "line": 808
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 809
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 810
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 811
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 812
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 813
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 814
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 816
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 816
+        }
+      ]
+    },
+    {
+      "name": "Version",
+      "start": 827,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 828
+        },
+        {
+          "name": "resourceType",
+          "type": "ResourceType",
+          "line": 829
+        },
+        {
+          "name": "resourceId",
+          "type": "String",
+          "line": 830
+        },
+        {
+          "name": "versionNumber",
+          "type": "Int",
+          "line": 831
+        },
+        {
+          "name": "label",
+          "type": "String?",
+          "line": 832
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 833
+        },
+        {
+          "name": "snapshot",
+          "type": "Json",
+          "line": 834
+        },
+        {
+          "name": "status",
+          "type": "VersionStatus",
+          "line": 835
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 836
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 837
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "name": "Feature",
+      "start": 845,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 846
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "line": 847
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 848
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 849
+        },
+        {
+          "name": "status",
+          "type": "FeatureStatus",
+          "line": 850
+        },
+        {
+          "name": "config",
+          "type": "Json?",
+          "line": 851
+        },
+        {
+          "name": "rolloutPct",
+          "type": "Int",
+          "line": 852
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 853
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 854
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "name": "IngestionJob",
+      "start": 865,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 866
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 867
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 868
+        },
+        {
+          "name": "sourceType",
+          "type": "IngestionSourceType",
+          "line": 869
+        },
+        {
+          "name": "sourceConfig",
+          "type": "Json",
+          "line": 870
+        },
+        {
+          "name": "status",
+          "type": "IngestionJobStatus",
+          "line": 871
+        },
+        {
+          "name": "progress",
+          "type": "Float",
+          "line": 872
+        },
+        {
+          "name": "totalRows",
+          "type": "Int?",
+          "line": 873
+        },
+        {
+          "name": "processedRows",
+          "type": "Int?",
+          "line": 874
+        },
+        {
+          "name": "failedRows",
+          "type": "Int?",
+          "line": 875
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 876
+        },
+        {
+          "name": "errorDetails",
+          "type": "Json?",
+          "line": 877
+        },
+        {
+          "name": "startedAt",
+          "type": "DateTime?",
+          "line": 878
+        },
+        {
+          "name": "completedAt",
+          "type": "DateTime?",
+          "line": 879
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 880
+        },
+        {
+          "name": "retryCount",
+          "type": "Int",
+          "line": 881
+        },
+        {
+          "name": "maxRetries",
+          "type": "Int",
+          "line": 882
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 883
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 884
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 885
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 887
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 888
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 887
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 888
+        }
+      ]
+    },
+    {
+      "name": "DataQualityCheck",
+      "start": 898,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 899
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 900
+        },
+        {
+          "name": "checkType",
+          "type": "DataQualityCheckType",
+          "line": 901
+        },
+        {
+          "name": "columnName",
+          "type": "String?",
+          "line": 902
+        },
+        {
+          "name": "ruleName",
+          "type": "String",
+          "line": 903
+        },
+        {
+          "name": "ruleConfig",
+          "type": "Json",
+          "line": 904
+        },
+        {
+          "name": "status",
+          "type": "DataQualityCheckStatus",
+          "line": 905
+        },
+        {
+          "name": "score",
+          "type": "Float?",
+          "line": 906
+        },
+        {
+          "name": "totalRecords",
+          "type": "Int?",
+          "line": 907
+        },
+        {
+          "name": "passedRecords",
+          "type": "Int?",
+          "line": 908
+        },
+        {
+          "name": "failedRecords",
+          "type": "Int?",
+          "line": 909
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 910
+        },
+        {
+          "name": "details",
+          "type": "Json?",
+          "line": 911
+        },
+        {
+          "name": "executedAt",
+          "type": "DateTime?",
+          "line": 912
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 913
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 914
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 915
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 917
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 917
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "start": 926,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 927
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 928
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 929
+        },
+        {
+          "name": "folderId",
+          "type": "String?",
+          "line": 930
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 931
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 932
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 933
+        },
+        {
+          "name": "visibility",
+          "type": "DashboardVisibility",
+          "line": 934
+        },
+        {
+          "name": "layout",
+          "type": "Json?",
+          "line": 935
+        },
+        {
+          "name": "theme",
+          "type": "Json?",
+          "line": 936
+        },
+        {
+          "name": "filters",
+          "type": "Json?",
+          "line": 937
+        },
+        {
+          "name": "refreshRate",
+          "type": "Int?",
+          "line": 938
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "line": 939
+        },
+        {
+          "name": "isFavorite",
+          "type": "Boolean",
+          "line": 940
+        },
+        {
+          "name": "viewCount",
+          "type": "Int",
+          "line": 941
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 942
+        },
+        {
+          "name": "publishedAt",
+          "type": "DateTime?",
+          "line": 943
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 944
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 945
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 946
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 948
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 949
+        },
+        {
+          "name": "folder",
+          "type": "Folder?",
+          "line": 950
+        },
+        {
+          "name": "widgets",
+          "type": "DashboardWidget[]",
+          "line": 951
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 948
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 949
+        },
+        {
+          "field": "folder",
+          "target": "Folder",
+          "line": 950
+        }
+      ]
+    },
+    {
+      "name": "DashboardWidget",
+      "start": 962,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 963
+        },
+        {
+          "name": "dashboardId",
+          "type": "String",
+          "line": 964
+        },
+        {
+          "name": "datasetId",
+          "type": "String?",
+          "line": 965
+        },
+        {
+          "name": "type",
+          "type": "WidgetType",
+          "line": 966
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "line": 967
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 968
+        },
+        {
+          "name": "config",
+          "type": "Json",
+          "line": 969
+        },
+        {
+          "name": "query",
+          "type": "String?",
+          "line": 970
+        },
+        {
+          "name": "position",
+          "type": "Json",
+          "line": 971
+        },
+        {
+          "name": "size",
+          "type": "Json",
+          "line": 972
+        },
+        {
+          "name": "style",
+          "type": "Json?",
+          "line": 973
+        },
+        {
+          "name": "refreshRate",
+          "type": "Int?",
+          "line": 974
+        },
+        {
+          "name": "cacheSeconds",
+          "type": "Int?",
+          "line": 975
+        },
+        {
+          "name": "sortOrder",
+          "type": "Int",
+          "line": 976
+        },
+        {
+          "name": "isVisible",
+          "type": "Boolean",
+          "line": 977
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 978
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 979
+        },
+        {
+          "name": "dashboard",
+          "type": "Dashboard",
+          "line": 981
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset?",
+          "line": 982
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dashboard",
+          "target": "Dashboard",
+          "line": 981
+        },
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 982
+        }
+      ]
+    },
+    {
+      "name": "Report",
+      "start": 990,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 991
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 992
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 993
+        },
+        {
+          "name": "folderId",
+          "type": "String?",
+          "line": 994
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 995
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 996
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 997
+        },
+        {
+          "name": "status",
+          "type": "ReportStatus",
+          "line": 998
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "line": 999
+        },
+        {
+          "name": "content",
+          "type": "Json?",
+          "line": 1000
+        },
+        {
+          "name": "parameters",
+          "type": "Json?",
+          "line": 1001
+        },
+        {
+          "name": "dataSources",
+          "type": "Json?",
+          "line": 1002
+        },
+        {
+          "name": "layout",
+          "type": "Json?",
+          "line": 1003
+        },
+        {
+          "name": "theme",
+          "type": "Json?",
+          "line": 1004
+        },
+        {
+          "name": "language",
+          "type": "Language",
+          "line": 1005
+        },
+        {
+          "name": "pageSize",
+          "type": "String",
+          "line": 1006
+        },
+        {
+          "name": "orientation",
+          "type": "String",
+          "line": 1007
+        },
+        {
+          "name": "headerConfig",
+          "type": "Json?",
+          "line": 1008
+        },
+        {
+          "name": "footerConfig",
+          "type": "Json?",
+          "line": 1009
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1010
+        },
+        {
+          "name": "publishedAt",
+          "type": "DateTime?",
+          "line": 1011
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1012
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1013
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1014
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1016
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1017
+        },
+        {
+          "name": "folder",
+          "type": "Folder?",
+          "line": 1018
+        },
+        {
+          "name": "outputs",
+          "type": "ReportOutput[]",
+          "line": 1019
+        },
+        {
+          "name": "scheduledReports",
+          "type": "ScheduledReport[]",
+          "line": 1020
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1016
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1017
+        },
+        {
+          "field": "folder",
+          "target": "Folder",
+          "line": 1018
+        }
+      ]
+    },
+    {
+      "name": "ReportOutput",
+      "start": 1032,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1033
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 1034
+        },
+        {
+          "name": "format",
+          "type": "ReportOutputFormat",
+          "line": 1035
+        },
+        {
+          "name": "filePath",
+          "type": "String",
+          "line": 1036
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 1037
+        },
+        {
+          "name": "checksum",
+          "type": "String?",
+          "line": 1038
+        },
+        {
+          "name": "pageCount",
+          "type": "Int?",
+          "line": 1039
+        },
+        {
+          "name": "generatedAt",
+          "type": "DateTime",
+          "line": 1040
+        },
+        {
+          "name": "expiresAt",
+          "type": "DateTime?",
+          "line": 1041
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 1042
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1043
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1044
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1045
+        },
+        {
+          "name": "report",
+          "type": "Report",
+          "line": 1047
+        }
+      ],
+      "relationships": [
+        {
+          "field": "report",
+          "target": "Report",
+          "line": 1047
+        }
+      ]
+    },
+    {
+      "name": "Presentation",
+      "start": 1055,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1056
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1057
+        },
+        {
+          "name": "folderId",
+          "type": "String?",
+          "line": 1058
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1059
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1060
+        },
+        {
+          "name": "status",
+          "type": "PresentationStatus",
+          "line": 1061
+        },
+        {
+          "name": "theme",
+          "type": "Json?",
+          "line": 1062
+        },
+        {
+          "name": "slides",
+          "type": "Json?",
+          "line": 1063
+        },
+        {
+          "name": "slideCount",
+          "type": "Int",
+          "line": 1064
+        },
+        {
+          "name": "language",
+          "type": "Language",
+          "line": 1065
+        },
+        {
+          "name": "aspectRatio",
+          "type": "String",
+          "line": 1066
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "line": 1067
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1068
+        },
+        {
+          "name": "publishedAt",
+          "type": "DateTime?",
+          "line": 1069
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1070
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1071
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1072
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1074
+        },
+        {
+          "name": "folder",
+          "type": "Folder?",
+          "line": 1075
+        },
+        {
+          "name": "slideRecords",
+          "type": "Slide[]",
+          "line": 1076
+        },
+        {
+          "name": "collaborationSessions",
+          "type": "CollaborationSession[]",
+          "line": 1077
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1074
+        },
+        {
+          "field": "folder",
+          "target": "Folder",
+          "line": 1075
+        }
+      ]
+    },
+    {
+      "name": "Infographic",
+      "start": 1086,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1087
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1088
+        },
+        {
+          "name": "folderId",
+          "type": "String?",
+          "line": 1089
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1090
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1091
+        },
+        {
+          "name": "status",
+          "type": "InfographicStatus",
+          "line": 1092
+        },
+        {
+          "name": "canvas",
+          "type": "Json?",
+          "line": 1093
+        },
+        {
+          "name": "elements",
+          "type": "Json?",
+          "line": 1094
+        },
+        {
+          "name": "width",
+          "type": "Int",
+          "line": 1095
+        },
+        {
+          "name": "height",
+          "type": "Int",
+          "line": 1096
+        },
+        {
+          "name": "theme",
+          "type": "Json?",
+          "line": 1097
+        },
+        {
+          "name": "language",
+          "type": "Language",
+          "line": 1098
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "line": 1099
+        },
+        {
+          "name": "exportUrl",
+          "type": "String?",
+          "line": 1100
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1101
+        },
+        {
+          "name": "publishedAt",
+          "type": "DateTime?",
+          "line": 1102
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1103
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1104
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1105
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1107
+        },
+        {
+          "name": "folder",
+          "type": "Folder?",
+          "line": 1108
+        },
+        {
+          "name": "sections",
+          "type": "InfographicSection[]",
+          "line": 1109
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1107
+        },
+        {
+          "field": "folder",
+          "target": "Folder",
+          "line": 1108
+        }
+      ]
+    },
+    {
+      "name": "Workbook",
+      "start": 1118,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1119
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1120
+        },
+        {
+          "name": "folderId",
+          "type": "String?",
+          "line": 1121
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1122
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1123
+        },
+        {
+          "name": "status",
+          "type": "WorkbookStatus",
+          "line": 1124
+        },
+        {
+          "name": "sheets",
+          "type": "Json?",
+          "line": 1125
+        },
+        {
+          "name": "sheetCount",
+          "type": "Int",
+          "line": 1126
+        },
+        {
+          "name": "activeSheet",
+          "type": "Int",
+          "line": 1127
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1128
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1129
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1130
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1131
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1133
+        },
+        {
+          "name": "folder",
+          "type": "Folder?",
+          "line": 1134
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1133
+        },
+        {
+          "field": "folder",
+          "target": "Folder",
+          "line": 1134
+        }
+      ]
+    },
+    {
+      "name": "ReplicationJob",
+      "start": 1143,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1144
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1145
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1146
+        },
+        {
+          "name": "sourceConfig",
+          "type": "Json",
+          "line": 1147
+        },
+        {
+          "name": "targetConfig",
+          "type": "Json",
+          "line": 1148
+        },
+        {
+          "name": "mode",
+          "type": "ReplicationMode",
+          "line": 1149
+        },
+        {
+          "name": "status",
+          "type": "ReplicationJobStatus",
+          "line": 1150
+        },
+        {
+          "name": "schedule",
+          "type": "String?",
+          "line": 1151
+        },
+        {
+          "name": "lastRunAt",
+          "type": "DateTime?",
+          "line": 1152
+        },
+        {
+          "name": "nextRunAt",
+          "type": "DateTime?",
+          "line": 1153
+        },
+        {
+          "name": "totalRecords",
+          "type": "Int?",
+          "line": 1154
+        },
+        {
+          "name": "replicatedRecords",
+          "type": "Int?",
+          "line": 1155
+        },
+        {
+          "name": "failedRecords",
+          "type": "Int?",
+          "line": 1156
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 1157
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 1158
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1159
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1160
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1161
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "name": "LocalizationJob",
+      "start": 1169,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1170
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1171
+        },
+        {
+          "name": "resourceType",
+          "type": "ResourceType",
+          "line": 1172
+        },
+        {
+          "name": "resourceId",
+          "type": "String",
+          "line": 1173
+        },
+        {
+          "name": "sourceLanguage",
+          "type": "Language",
+          "line": 1174
+        },
+        {
+          "name": "targetLanguage",
+          "type": "Language",
+          "line": 1175
+        },
+        {
+          "name": "status",
+          "type": "LocalizationJobStatus",
+          "line": 1176
+        },
+        {
+          "name": "progress",
+          "type": "Float",
+          "line": 1177
+        },
+        {
+          "name": "totalSegments",
+          "type": "Int?",
+          "line": 1178
+        },
+        {
+          "name": "translatedSegments",
+          "type": "Int?",
+          "line": 1179
+        },
+        {
+          "name": "reviewedSegments",
+          "type": "Int?",
+          "line": 1180
+        },
+        {
+          "name": "engine",
+          "type": "String?",
+          "line": 1181
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 1182
+        },
+        {
+          "name": "result",
+          "type": "Json?",
+          "line": 1183
+        },
+        {
+          "name": "startedAt",
+          "type": "DateTime?",
+          "line": 1184
+        },
+        {
+          "name": "completedAt",
+          "type": "DateTime?",
+          "line": 1185
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 1186
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1187
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1188
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1190
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1190
+        }
+      ]
+    },
+    {
+      "name": "AiSession",
+      "start": 1200,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1201
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 1202
+        },
+        {
+          "name": "title",
+          "type": "String?",
+          "line": 1203
+        },
+        {
+          "name": "status",
+          "type": "AiSessionStatus",
+          "line": 1204
+        },
+        {
+          "name": "model",
+          "type": "String",
+          "line": 1205
+        },
+        {
+          "name": "systemPrompt",
+          "type": "String?",
+          "line": 1206
+        },
+        {
+          "name": "context",
+          "type": "Json?",
+          "line": 1207
+        },
+        {
+          "name": "tokenCount",
+          "type": "Int",
+          "line": 1208
+        },
+        {
+          "name": "messageCount",
+          "type": "Int",
+          "line": 1209
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1210
+        },
+        {
+          "name": "expiresAt",
+          "type": "DateTime?",
+          "line": 1211
+        },
+        {
+          "name": "closedAt",
+          "type": "DateTime?",
+          "line": 1212
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1213
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1214
+        },
+        {
+          "name": "user",
+          "type": "User",
+          "line": 1216
+        },
+        {
+          "name": "queries",
+          "type": "AiQuery[]",
+          "line": 1217
+        }
+      ],
+      "relationships": [
+        {
+          "field": "user",
+          "target": "User",
+          "line": 1216
+        }
+      ]
+    },
+    {
+      "name": "AiQuery",
+      "start": 1225,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1226
+        },
+        {
+          "name": "sessionId",
+          "type": "String",
+          "line": 1227
+        },
+        {
+          "name": "query",
+          "type": "String",
+          "line": 1228
+        },
+        {
+          "name": "response",
+          "type": "String?",
+          "line": 1229
+        },
+        {
+          "name": "status",
+          "type": "AiQueryStatus",
+          "line": 1230
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "line": 1231
+        },
+        {
+          "name": "promptTokens",
+          "type": "Int?",
+          "line": 1232
+        },
+        {
+          "name": "completionTokens",
+          "type": "Int?",
+          "line": 1233
+        },
+        {
+          "name": "totalTokens",
+          "type": "Int?",
+          "line": 1234
+        },
+        {
+          "name": "latencyMs",
+          "type": "Int?",
+          "line": 1235
+        },
+        {
+          "name": "context",
+          "type": "Json?",
+          "line": 1236
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1237
+        },
+        {
+          "name": "rating",
+          "type": "Int?",
+          "line": 1238
+        },
+        {
+          "name": "feedback",
+          "type": "String?",
+          "line": 1239
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 1240
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1241
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1242
+        },
+        {
+          "name": "session",
+          "type": "AiSession",
+          "line": 1244
+        }
+      ],
+      "relationships": [
+        {
+          "field": "session",
+          "target": "AiSession",
+          "line": 1244
+        }
+      ]
+    },
+    {
+      "name": "AuditLog",
+      "start": 1252,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1253
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1254
+        },
+        {
+          "name": "userId",
+          "type": "String?",
+          "line": 1255
+        },
+        {
+          "name": "action",
+          "type": "AuditAction",
+          "line": 1256
+        },
+        {
+          "name": "resourceType",
+          "type": "ResourceType",
+          "line": 1257
+        },
+        {
+          "name": "resourceId",
+          "type": "String",
+          "line": 1258
+        },
+        {
+          "name": "resourceName",
+          "type": "String?",
+          "line": 1259
+        },
+        {
+          "name": "oldValue",
+          "type": "Json?",
+          "line": 1260
+        },
+        {
+          "name": "newValue",
+          "type": "Json?",
+          "line": 1261
+        },
+        {
+          "name": "ipAddress",
+          "type": "String?",
+          "line": 1262
+        },
+        {
+          "name": "userAgent",
+          "type": "String?",
+          "line": 1263
+        },
+        {
+          "name": "sessionId",
+          "type": "String?",
+          "line": 1264
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1265
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1266
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1268
+        },
+        {
+          "name": "user",
+          "type": "User?",
+          "line": 1269
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1268
+        },
+        {
+          "field": "user",
+          "target": "User",
+          "line": 1269
+        }
+      ]
+    },
+    {
+      "name": "Permission",
+      "start": 1279,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1280
+        },
+        {
+          "name": "roleId",
+          "type": "String",
+          "line": 1281
+        },
+        {
+          "name": "resourceType",
+          "type": "ResourceType",
+          "line": 1282
+        },
+        {
+          "name": "action",
+          "type": "PermissionAction",
+          "line": 1283
+        },
+        {
+          "name": "conditions",
+          "type": "Json?",
+          "line": 1284
+        },
+        {
+          "name": "isGranted",
+          "type": "Boolean",
+          "line": 1285
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1286
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1287
+        },
+        {
+          "name": "role",
+          "type": "Role",
+          "line": 1289
+        }
+      ],
+      "relationships": [
+        {
+          "field": "role",
+          "target": "Role",
+          "line": 1289
+        }
+      ]
+    },
+    {
+      "name": "LibraryAsset",
+      "start": 1298,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1299
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1300
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1301
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1302
+        },
+        {
+          "name": "type",
+          "type": "LibraryAssetType",
+          "line": 1303
+        },
+        {
+          "name": "filePath",
+          "type": "String",
+          "line": 1304
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 1305
+        },
+        {
+          "name": "mimeType",
+          "type": "String?",
+          "line": 1306
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "line": 1307
+        },
+        {
+          "name": "tags",
+          "type": "Json?",
+          "line": 1308
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1309
+        },
+        {
+          "name": "isPublic",
+          "type": "Boolean",
+          "line": 1310
+        },
+        {
+          "name": "downloadCount",
+          "type": "Int",
+          "line": 1311
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1312
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1313
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1314
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1316
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1316
+        }
+      ]
+    },
+    {
+      "name": "ConversionJob",
+      "start": 1325,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1326
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1327
+        },
+        {
+          "name": "pipelineId",
+          "type": "String?",
+          "line": 1328
+        },
+        {
+          "name": "sourceFormat",
+          "type": "ConversionSourceFormat",
+          "line": 1329
+        },
+        {
+          "name": "targetFormat",
+          "type": "ConversionTargetFormat",
+          "line": 1330
+        },
+        {
+          "name": "status",
+          "type": "ConversionJobStatus",
+          "line": 1331
+        },
+        {
+          "name": "sourceFilePath",
+          "type": "String",
+          "line": 1332
+        },
+        {
+          "name": "outputFilePath",
+          "type": "String?",
+          "line": 1333
+        },
+        {
+          "name": "sourceFileSize",
+          "type": "BigInt?",
+          "line": 1334
+        },
+        {
+          "name": "outputFileSize",
+          "type": "BigInt?",
+          "line": 1335
+        },
+        {
+          "name": "options",
+          "type": "Json?",
+          "line": 1336
+        },
+        {
+          "name": "progress",
+          "type": "Float",
+          "line": 1337
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 1338
+        },
+        {
+          "name": "startedAt",
+          "type": "DateTime?",
+          "line": 1339
+        },
+        {
+          "name": "completedAt",
+          "type": "DateTime?",
+          "line": 1340
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 1341
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1342
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1343
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1345
+        },
+        {
+          "name": "pipeline",
+          "type": "ConversionPipeline?",
+          "line": 1346
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1345
+        },
+        {
+          "field": "pipeline",
+          "target": "ConversionPipeline",
+          "line": 1346
+        }
+      ]
+    },
+    {
+      "name": "Notification",
+      "start": 1361,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1362
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1363
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 1364
+        },
+        {
+          "name": "type",
+          "type": "NotificationType",
+          "line": 1365
+        },
+        {
+          "name": "channel",
+          "type": "NotificationChannel",
+          "line": 1366
+        },
+        {
+          "name": "status",
+          "type": "NotificationStatus",
+          "line": 1367
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "line": 1368
+        },
+        {
+          "name": "message",
+          "type": "String",
+          "line": 1369
+        },
+        {
+          "name": "link",
+          "type": "String?",
+          "line": 1370
+        },
+        {
+          "name": "resourceType",
+          "type": "ResourceType?",
+          "line": 1371
+        },
+        {
+          "name": "resourceId",
+          "type": "String?",
+          "line": 1372
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1373
+        },
+        {
+          "name": "readAt",
+          "type": "DateTime?",
+          "line": 1374
+        },
+        {
+          "name": "sentAt",
+          "type": "DateTime?",
+          "line": 1375
+        },
+        {
+          "name": "expiresAt",
+          "type": "DateTime?",
+          "line": 1376
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1377
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1378
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1380
+        },
+        {
+          "name": "user",
+          "type": "User",
+          "line": 1381
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1380
+        },
+        {
+          "field": "user",
+          "target": "User",
+          "line": 1381
+        }
+      ]
+    },
+    {
+      "name": "WorkflowInstance",
+      "start": 1391,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1392
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1393
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1394
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1395
+        },
+        {
+          "name": "resourceType",
+          "type": "ResourceType",
+          "line": 1396
+        },
+        {
+          "name": "resourceId",
+          "type": "String",
+          "line": 1397
+        },
+        {
+          "name": "status",
+          "type": "WorkflowStatus",
+          "line": 1398
+        },
+        {
+          "name": "currentStepIdx",
+          "type": "Int",
+          "line": 1399
+        },
+        {
+          "name": "config",
+          "type": "Json?",
+          "line": 1400
+        },
+        {
+          "name": "context",
+          "type": "Json?",
+          "line": 1401
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 1402
+        },
+        {
+          "name": "startedAt",
+          "type": "DateTime?",
+          "line": 1403
+        },
+        {
+          "name": "completedAt",
+          "type": "DateTime?",
+          "line": 1404
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 1405
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1406
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1407
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1409
+        },
+        {
+          "name": "steps",
+          "type": "WorkflowStep[]",
+          "line": 1410
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1409
+        }
+      ]
+    },
+    {
+      "name": "WorkflowStep",
+      "start": 1419,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1420
+        },
+        {
+          "name": "workflowId",
+          "type": "String",
+          "line": 1421
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1422
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1423
+        },
+        {
+          "name": "type",
+          "type": "WorkflowStepType",
+          "line": 1424
+        },
+        {
+          "name": "status",
+          "type": "WorkflowStepStatus",
+          "line": 1425
+        },
+        {
+          "name": "stepOrder",
+          "type": "Int",
+          "line": 1426
+        },
+        {
+          "name": "assigneeId",
+          "type": "String?",
+          "line": 1427
+        },
+        {
+          "name": "completedById",
+          "type": "String?",
+          "line": 1428
+        },
+        {
+          "name": "config",
+          "type": "Json?",
+          "line": 1429
+        },
+        {
+          "name": "input",
+          "type": "Json?",
+          "line": 1430
+        },
+        {
+          "name": "output",
+          "type": "Json?",
+          "line": 1431
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 1432
+        },
+        {
+          "name": "comment",
+          "type": "String?",
+          "line": 1433
+        },
+        {
+          "name": "startedAt",
+          "type": "DateTime?",
+          "line": 1434
+        },
+        {
+          "name": "completedAt",
+          "type": "DateTime?",
+          "line": 1435
+        },
+        {
+          "name": "durationMs",
+          "type": "Int?",
+          "line": 1436
+        },
+        {
+          "name": "dueAt",
+          "type": "DateTime?",
+          "line": 1437
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1438
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1439
+        },
+        {
+          "name": "workflow",
+          "type": "WorkflowInstance",
+          "line": 1441
+        },
+        {
+          "name": "assignee",
+          "type": "User?",
+          "line": 1442
+        },
+        {
+          "name": "completedBy",
+          "type": "User?",
+          "line": 1443
+        }
+      ],
+      "relationships": [
+        {
+          "field": "workflow",
+          "target": "WorkflowInstance",
+          "line": 1441
+        },
+        {
+          "field": "assignee",
+          "target": "User",
+          "line": 1442
+        },
+        {
+          "field": "completedBy",
+          "target": "User",
+          "line": 1443
+        }
+      ]
+    },
+    {
+      "name": "KnowledgeBase",
+      "start": 1452,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1453
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1454
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1455
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1456
+        },
+        {
+          "name": "status",
+          "type": "KnowledgeBaseStatus",
+          "line": 1457
+        },
+        {
+          "name": "language",
+          "type": "Language",
+          "line": 1458
+        },
+        {
+          "name": "embeddingModel",
+          "type": "String?",
+          "line": 1459
+        },
+        {
+          "name": "chunkSize",
+          "type": "Int",
+          "line": 1460
+        },
+        {
+          "name": "chunkOverlap",
+          "type": "Int",
+          "line": 1461
+        },
+        {
+          "name": "totalChunks",
+          "type": "Int",
+          "line": 1462
+        },
+        {
+          "name": "totalDocuments",
+          "type": "Int",
+          "line": 1463
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1464
+        },
+        {
+          "name": "lastIndexedAt",
+          "type": "DateTime?",
+          "line": 1465
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1466
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1467
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1468
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1470
+        },
+        {
+          "name": "chunks",
+          "type": "KnowledgeChunk[]",
+          "line": 1471
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1470
+        }
+      ]
+    },
+    {
+      "name": "KnowledgeChunk",
+      "start": 1480,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1481
+        },
+        {
+          "name": "knowledgeBaseId",
+          "type": "String",
+          "line": 1482
+        },
+        {
+          "name": "documentName",
+          "type": "String",
+          "line": 1483
+        },
+        {
+          "name": "documentPath",
+          "type": "String?",
+          "line": 1484
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "line": 1485
+        },
+        {
+          "name": "contentHash",
+          "type": "String",
+          "line": 1486
+        },
+        {
+          "name": "chunkIndex",
+          "type": "Int",
+          "line": 1487
+        },
+        {
+          "name": "tokenCount",
+          "type": "Int?",
+          "line": 1488
+        },
+        {
+          "name": "embedding",
+          "type": "Json?",
+          "line": 1489
+        },
+        {
+          "name": "status",
+          "type": "KnowledgeChunkStatus",
+          "line": 1490
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1491
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1492
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1493
+        },
+        {
+          "name": "knowledgeBase",
+          "type": "KnowledgeBase",
+          "line": 1495
+        }
+      ],
+      "relationships": [
+        {
+          "field": "knowledgeBase",
+          "target": "KnowledgeBase",
+          "line": 1495
+        }
+      ]
+    },
+    {
+      "name": "Prompt",
+      "start": 1504,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1505
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1506
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1507
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 1508
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1509
+        },
+        {
+          "name": "category",
+          "type": "PromptCategory",
+          "line": 1510
+        },
+        {
+          "name": "status",
+          "type": "PromptStatus",
+          "line": 1511
+        },
+        {
+          "name": "isSystem",
+          "type": "Boolean",
+          "line": 1512
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1513
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1514
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1515
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1516
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1518
+        },
+        {
+          "name": "versions",
+          "type": "PromptVersion[]",
+          "line": 1519
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1518
+        }
+      ]
+    },
+    {
+      "name": "PromptVersion",
+      "start": 1529,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1530
+        },
+        {
+          "name": "promptId",
+          "type": "String",
+          "line": 1531
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1532
+        },
+        {
+          "name": "versionNumber",
+          "type": "Int",
+          "line": 1533
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "line": 1534
+        },
+        {
+          "name": "systemMessage",
+          "type": "String?",
+          "line": 1535
+        },
+        {
+          "name": "variables",
+          "type": "Json?",
+          "line": 1536
+        },
+        {
+          "name": "model",
+          "type": "String?",
+          "line": 1537
+        },
+        {
+          "name": "temperature",
+          "type": "Float?",
+          "line": 1538
+        },
+        {
+          "name": "maxTokens",
+          "type": "Int?",
+          "line": 1539
+        },
+        {
+          "name": "status",
+          "type": "PromptStatus",
+          "line": 1540
+        },
+        {
+          "name": "testResults",
+          "type": "Json?",
+          "line": 1541
+        },
+        {
+          "name": "changelog",
+          "type": "String?",
+          "line": 1542
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1543
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1544
+        },
+        {
+          "name": "prompt",
+          "type": "Prompt",
+          "line": 1546
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1547
+        }
+      ],
+      "relationships": [
+        {
+          "field": "prompt",
+          "target": "Prompt",
+          "line": 1546
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1547
+        }
+      ]
+    },
+    {
+      "name": "TranslationMemory",
+      "start": 1556,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1557
+        },
+        {
+          "name": "sourceLanguage",
+          "type": "Language",
+          "line": 1558
+        },
+        {
+          "name": "targetLanguage",
+          "type": "Language",
+          "line": 1559
+        },
+        {
+          "name": "sourceText",
+          "type": "String",
+          "line": 1560
+        },
+        {
+          "name": "targetText",
+          "type": "String",
+          "line": 1561
+        },
+        {
+          "name": "sourceHash",
+          "type": "String",
+          "line": 1562
+        },
+        {
+          "name": "context",
+          "type": "String?",
+          "line": 1563
+        },
+        {
+          "name": "domain",
+          "type": "String?",
+          "line": 1564
+        },
+        {
+          "name": "quality",
+          "type": "Float?",
+          "line": 1565
+        },
+        {
+          "name": "usageCount",
+          "type": "Int",
+          "line": 1566
+        },
+        {
+          "name": "isVerified",
+          "type": "Boolean",
+          "line": 1567
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1568
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1569
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1570
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "name": "Glossary",
+      "start": 1579,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1580
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1581
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1582
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1583
+        },
+        {
+          "name": "language",
+          "type": "Language",
+          "line": 1584
+        },
+        {
+          "name": "domain",
+          "type": "String?",
+          "line": 1585
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 1586
+        },
+        {
+          "name": "termCount",
+          "type": "Int",
+          "line": 1587
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1588
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1589
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1590
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1592
+        },
+        {
+          "name": "terms",
+          "type": "GlossaryTerm[]",
+          "line": 1593
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1592
+        }
+      ]
+    },
+    {
+      "name": "GlossaryTerm",
+      "start": 1603,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1604
+        },
+        {
+          "name": "glossaryId",
+          "type": "String",
+          "line": 1605
+        },
+        {
+          "name": "term",
+          "type": "String",
+          "line": 1606
+        },
+        {
+          "name": "definition",
+          "type": "String?",
+          "line": 1607
+        },
+        {
+          "name": "translations",
+          "type": "Json?",
+          "line": 1608
+        },
+        {
+          "name": "context",
+          "type": "String?",
+          "line": 1609
+        },
+        {
+          "name": "partOfSpeech",
+          "type": "String?",
+          "line": 1610
+        },
+        {
+          "name": "notes",
+          "type": "String?",
+          "line": 1611
+        },
+        {
+          "name": "isApproved",
+          "type": "Boolean",
+          "line": 1612
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1613
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1614
+        },
+        {
+          "name": "glossary",
+          "type": "Glossary",
+          "line": 1616
+        }
+      ],
+      "relationships": [
+        {
+          "field": "glossary",
+          "target": "Glossary",
+          "line": 1616
+        }
+      ]
+    },
+    {
+      "name": "Folder",
+      "start": 1624,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1625
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1626
+        },
+        {
+          "name": "parentId",
+          "type": "String?",
+          "line": 1627
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1628
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 1629
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1630
+        },
+        {
+          "name": "color",
+          "type": "String?",
+          "line": 1631
+        },
+        {
+          "name": "icon",
+          "type": "String?",
+          "line": 1632
+        },
+        {
+          "name": "sortOrder",
+          "type": "Int",
+          "line": 1633
+        },
+        {
+          "name": "path",
+          "type": "String",
+          "line": 1634
+        },
+        {
+          "name": "depth",
+          "type": "Int",
+          "line": 1635
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1636
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1637
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1638
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1640
+        },
+        {
+          "name": "parent",
+          "type": "Folder?",
+          "line": 1641
+        },
+        {
+          "name": "children",
+          "type": "Folder[]",
+          "line": 1642
+        },
+        {
+          "name": "datasets",
+          "type": "Dataset[]",
+          "line": 1643
+        },
+        {
+          "name": "dashboards",
+          "type": "Dashboard[]",
+          "line": 1644
+        },
+        {
+          "name": "reports",
+          "type": "Report[]",
+          "line": 1645
+        },
+        {
+          "name": "presentations",
+          "type": "Presentation[]",
+          "line": 1646
+        },
+        {
+          "name": "infographics",
+          "type": "Infographic[]",
+          "line": 1647
+        },
+        {
+          "name": "workbooks",
+          "type": "Workbook[]",
+          "line": 1648
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1640
+        },
+        {
+          "field": "parent",
+          "target": "Folder",
+          "line": 1641
+        },
+        {
+          "field": "children",
+          "target": "Folder",
+          "line": 1642
+        }
+      ]
+    },
+    {
+      "name": "ScheduledReport",
+      "start": 1658,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1659
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1660
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 1661
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1662
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1663
+        },
+        {
+          "name": "frequency",
+          "type": "ScheduleFrequency",
+          "line": 1664
+        },
+        {
+          "name": "cronExpression",
+          "type": "String?",
+          "line": 1665
+        },
+        {
+          "name": "timezone",
+          "type": "String",
+          "line": 1666
+        },
+        {
+          "name": "outputFormat",
+          "type": "ReportOutputFormat",
+          "line": 1667
+        },
+        {
+          "name": "recipients",
+          "type": "Json?",
+          "line": 1668
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 1669
+        },
+        {
+          "name": "lastRunAt",
+          "type": "DateTime?",
+          "line": 1670
+        },
+        {
+          "name": "nextRunAt",
+          "type": "DateTime?",
+          "line": 1671
+        },
+        {
+          "name": "runCount",
+          "type": "Int",
+          "line": 1672
+        },
+        {
+          "name": "failCount",
+          "type": "Int",
+          "line": 1673
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1674
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1675
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1676
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1678
+        },
+        {
+          "name": "report",
+          "type": "Report",
+          "line": 1679
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1680
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1678
+        },
+        {
+          "field": "report",
+          "target": "Report",
+          "line": 1679
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1680
+        }
+      ]
+    },
+    {
+      "name": "Kpi",
+      "start": 1690,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1691
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1692
+        },
+        {
+          "name": "createdById",
+          "type": "String",
+          "line": 1693
+        },
+        {
+          "name": "datasetId",
+          "type": "String?",
+          "line": 1694
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1695
+        },
+        {
+          "name": "slug",
+          "type": "String",
+          "line": 1696
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1697
+        },
+        {
+          "name": "status",
+          "type": "KpiStatus",
+          "line": 1698
+        },
+        {
+          "name": "unit",
+          "type": "String?",
+          "line": 1699
+        },
+        {
+          "name": "formula",
+          "type": "String?",
+          "line": 1700
+        },
+        {
+          "name": "query",
+          "type": "String?",
+          "line": 1701
+        },
+        {
+          "name": "currentValue",
+          "type": "Float?",
+          "line": 1702
+        },
+        {
+          "name": "previousValue",
+          "type": "Float?",
+          "line": 1703
+        },
+        {
+          "name": "targetValue",
+          "type": "Float?",
+          "line": 1704
+        },
+        {
+          "name": "minValue",
+          "type": "Float?",
+          "line": 1705
+        },
+        {
+          "name": "maxValue",
+          "type": "Float?",
+          "line": 1706
+        },
+        {
+          "name": "trend",
+          "type": "KpiTrend",
+          "line": 1707
+        },
+        {
+          "name": "changePercent",
+          "type": "Float?",
+          "line": 1708
+        },
+        {
+          "name": "frequency",
+          "type": "ScheduleFrequency",
+          "line": 1709
+        },
+        {
+          "name": "lastCalculatedAt",
+          "type": "DateTime?",
+          "line": 1710
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1711
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1712
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1713
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1714
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1716
+        },
+        {
+          "name": "createdBy",
+          "type": "User",
+          "line": 1717
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset?",
+          "line": 1718
+        },
+        {
+          "name": "history",
+          "type": "KpiHistory[]",
+          "line": 1719
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1716
+        },
+        {
+          "field": "createdBy",
+          "target": "User",
+          "line": 1717
+        },
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 1718
+        }
+      ]
+    },
+    {
+      "name": "KpiHistory",
+      "start": 1731,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1732
+        },
+        {
+          "name": "kpiId",
+          "type": "String",
+          "line": 1733
+        },
+        {
+          "name": "value",
+          "type": "Float",
+          "line": 1734
+        },
+        {
+          "name": "target",
+          "type": "Float?",
+          "line": 1735
+        },
+        {
+          "name": "trend",
+          "type": "KpiTrend",
+          "line": 1736
+        },
+        {
+          "name": "change",
+          "type": "Float?",
+          "line": 1737
+        },
+        {
+          "name": "changePct",
+          "type": "Float?",
+          "line": 1738
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1739
+        },
+        {
+          "name": "recordedAt",
+          "type": "DateTime",
+          "line": 1740
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1741
+        },
+        {
+          "name": "kpi",
+          "type": "Kpi",
+          "line": 1743
+        }
+      ],
+      "relationships": [
+        {
+          "field": "kpi",
+          "target": "Kpi",
+          "line": 1743
+        }
+      ]
+    },
+    {
+      "name": "DataRow",
+      "start": 1750,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1751
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 1752
+        },
+        {
+          "name": "rowIndex",
+          "type": "Int",
+          "line": 1753
+        },
+        {
+          "name": "data",
+          "type": "Json",
+          "line": 1754
+        },
+        {
+          "name": "checksum",
+          "type": "String?",
+          "line": 1755
+        },
+        {
+          "name": "isValid",
+          "type": "Boolean",
+          "line": 1756
+        },
+        {
+          "name": "errors",
+          "type": "Json?",
+          "line": 1757
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 1758
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1759
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1760
+        },
+        {
+          "name": "dataset",
+          "type": "Dataset",
+          "line": 1762
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "Dataset",
+          "line": 1762
+        }
+      ]
+    },
+    {
+      "name": "ConversionPipeline",
+      "start": 1771,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1772
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1773
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1774
+        },
+        {
+          "name": "status",
+          "type": "ConversionPipelineStatus",
+          "line": 1775
+        },
+        {
+          "name": "steps",
+          "type": "Json",
+          "line": 1776
+        },
+        {
+          "name": "schedule",
+          "type": "String?",
+          "line": 1777
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 1778
+        },
+        {
+          "name": "lastRunAt",
+          "type": "DateTime?",
+          "line": 1779
+        },
+        {
+          "name": "nextRunAt",
+          "type": "DateTime?",
+          "line": 1780
+        },
+        {
+          "name": "runCount",
+          "type": "Int",
+          "line": 1781
+        },
+        {
+          "name": "failCount",
+          "type": "Int",
+          "line": 1782
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1783
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1784
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1785
+        },
+        {
+          "name": "jobs",
+          "type": "ConversionJob[]",
+          "line": 1787
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "name": "ReportDefinition",
+      "start": 1799,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1800
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1801
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 1802
+        },
+        {
+          "name": "updatedBy",
+          "type": "String?",
+          "line": 1803
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1804
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1805
+        },
+        {
+          "name": "mode",
+          "type": "ReportDefinitionMode",
+          "line": 1806
+        },
+        {
+          "name": "status",
+          "type": "ReportDefinitionStatus",
+          "line": 1807
+        },
+        {
+          "name": "reportType",
+          "type": "String",
+          "line": 1808
+        },
+        {
+          "name": "templateId",
+          "type": "String?",
+          "line": 1809
+        },
+        {
+          "name": "config",
+          "type": "Json",
+          "line": 1810
+        },
+        {
+          "name": "sections",
+          "type": "Json?",
+          "line": 1811
+        },
+        {
+          "name": "dataSources",
+          "type": "Json?",
+          "line": 1812
+        },
+        {
+          "name": "outputFormat",
+          "type": "ReportOutputFormat",
+          "line": 1813
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1814
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1815
+        },
+        {
+          "name": "publishedAt",
+          "type": "DateTime?",
+          "line": 1816
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1817
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1818
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1819
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1821
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 1822
+        },
+        {
+          "name": "template",
+          "type": "ReportTemplate?",
+          "line": 1823
+        },
+        {
+          "name": "buildOutputs",
+          "type": "ReportBuildOutput[]",
+          "line": 1824
+        },
+        {
+          "name": "schedules",
+          "type": "ReportSchedule[]",
+          "line": 1825
+        },
+        {
+          "name": "postEdits",
+          "type": "ReportPostEdit[]",
+          "line": 1826
+        },
+        {
+          "name": "charts",
+          "type": "ReportChart[]",
+          "line": 1827
+        },
+        {
+          "name": "interactiveReports",
+          "type": "InteractiveReport[]",
+          "line": 1828
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1821
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 1822
+        },
+        {
+          "field": "template",
+          "target": "ReportTemplate",
+          "line": 1823
+        }
+      ]
+    },
+    {
+      "name": "ReportBuildOutput",
+      "start": 1840,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1841
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 1842
+        },
+        {
+          "name": "format",
+          "type": "ReportOutputFormat",
+          "line": 1843
+        },
+        {
+          "name": "status",
+          "type": "ReportStatus",
+          "line": 1844
+        },
+        {
+          "name": "renderedSections",
+          "type": "Json?",
+          "line": 1845
+        },
+        {
+          "name": "fetchedData",
+          "type": "Json?",
+          "line": 1846
+        },
+        {
+          "name": "filePath",
+          "type": "String?",
+          "line": 1847
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 1848
+        },
+        {
+          "name": "buildDuration",
+          "type": "Int?",
+          "line": 1849
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1850
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1851
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1852
+        },
+        {
+          "name": "reportDefinition",
+          "type": "ReportDefinition",
+          "line": 1854
+        }
+      ],
+      "relationships": [
+        {
+          "field": "reportDefinition",
+          "target": "ReportDefinition",
+          "line": 1854
+        }
+      ]
+    },
+    {
+      "name": "ReportTemplate",
+      "start": 1862,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1863
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1864
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 1865
+        },
+        {
+          "name": "updatedBy",
+          "type": "String?",
+          "line": 1866
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1867
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 1868
+        },
+        {
+          "name": "category",
+          "type": "String?",
+          "line": 1869
+        },
+        {
+          "name": "subcategory",
+          "type": "String?",
+          "line": 1870
+        },
+        {
+          "name": "html",
+          "type": "String",
+          "line": 1871
+        },
+        {
+          "name": "variables",
+          "type": "Json?",
+          "line": 1872
+        },
+        {
+          "name": "templateConfig",
+          "type": "Json?",
+          "line": 1873
+        },
+        {
+          "name": "layoutData",
+          "type": "Json?",
+          "line": 1874
+        },
+        {
+          "name": "defaultDataBindings",
+          "type": "Json?",
+          "line": 1875
+        },
+        {
+          "name": "supportedOutputFormats",
+          "type": "Json?",
+          "line": 1876
+        },
+        {
+          "name": "thumbnailUrl",
+          "type": "String?",
+          "line": 1877
+        },
+        {
+          "name": "isPremium",
+          "type": "Boolean",
+          "line": 1878
+        },
+        {
+          "name": "isPublic",
+          "type": "Boolean",
+          "line": 1879
+        },
+        {
+          "name": "isSystem",
+          "type": "Boolean",
+          "line": 1880
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 1881
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 1882
+        },
+        {
+          "name": "tags",
+          "type": "Json?",
+          "line": 1883
+        },
+        {
+          "name": "settings",
+          "type": "Json?",
+          "line": 1884
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1885
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1886
+        },
+        {
+          "name": "deletedAt",
+          "type": "DateTime?",
+          "line": 1887
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1889
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 1890
+        },
+        {
+          "name": "reportDefinitions",
+          "type": "ReportDefinition[]",
+          "line": 1891
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1889
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 1890
+        }
+      ]
+    },
+    {
+      "name": "ReportSchedule",
+      "start": 1902,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1903
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 1904
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1905
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 1906
+        },
+        {
+          "name": "cronExpression",
+          "type": "String",
+          "line": 1907
+        },
+        {
+          "name": "recipients",
+          "type": "Json",
+          "line": 1908
+        },
+        {
+          "name": "format",
+          "type": "ReportOutputFormat",
+          "line": 1909
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 1910
+        },
+        {
+          "name": "nextRunAt",
+          "type": "DateTime?",
+          "line": 1911
+        },
+        {
+          "name": "lastRunAt",
+          "type": "DateTime?",
+          "line": 1912
+        },
+        {
+          "name": "runCount",
+          "type": "Int",
+          "line": 1913
+        },
+        {
+          "name": "failureCount",
+          "type": "Int",
+          "line": 1914
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1915
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1916
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1917
+        },
+        {
+          "name": "reportDefinition",
+          "type": "ReportDefinition",
+          "line": 1919
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1920
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 1921
+        },
+        {
+          "name": "history",
+          "type": "ScheduleHistory[]",
+          "line": 1922
+        }
+      ],
+      "relationships": [
+        {
+          "field": "reportDefinition",
+          "target": "ReportDefinition",
+          "line": 1919
+        },
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1920
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 1921
+        }
+      ]
+    },
+    {
+      "name": "ScheduleHistory",
+      "start": 1931,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1932
+        },
+        {
+          "name": "scheduleId",
+          "type": "String",
+          "line": 1933
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 1934
+        },
+        {
+          "name": "duration",
+          "type": "Int?",
+          "line": 1935
+        },
+        {
+          "name": "recipientCount",
+          "type": "Int?",
+          "line": 1936
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 1937
+        },
+        {
+          "name": "error",
+          "type": "String?",
+          "line": 1938
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1939
+        },
+        {
+          "name": "executedAt",
+          "type": "DateTime",
+          "line": 1940
+        },
+        {
+          "name": "schedule",
+          "type": "ReportSchedule",
+          "line": 1942
+        }
+      ],
+      "relationships": [
+        {
+          "field": "schedule",
+          "target": "ReportSchedule",
+          "line": 1942
+        }
+      ]
+    },
+    {
+      "name": "ReportDataSource",
+      "start": 1950,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1951
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 1952
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 1953
+        },
+        {
+          "name": "type",
+          "type": "DataSourceType",
+          "line": 1954
+        },
+        {
+          "name": "connectionConfig",
+          "type": "Json",
+          "line": 1955
+        },
+        {
+          "name": "status",
+          "type": "DataSourceStatus",
+          "line": 1956
+        },
+        {
+          "name": "lastTestedAt",
+          "type": "DateTime?",
+          "line": 1957
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1958
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1959
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1960
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 1962
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 1962
+        }
+      ]
+    },
+    {
+      "name": "ReportChart",
+      "start": 1970,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1971
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 1972
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "line": 1973
+        },
+        {
+          "name": "title",
+          "type": "String?",
+          "line": 1974
+        },
+        {
+          "name": "config",
+          "type": "Json",
+          "line": 1975
+        },
+        {
+          "name": "theme",
+          "type": "String?",
+          "line": 1976
+        },
+        {
+          "name": "width",
+          "type": "Int",
+          "line": 1977
+        },
+        {
+          "name": "height",
+          "type": "Int",
+          "line": 1978
+        },
+        {
+          "name": "imageData",
+          "type": "String?",
+          "line": 1979
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 1980
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 1981
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 1982
+        },
+        {
+          "name": "reportDefinition",
+          "type": "ReportDefinition",
+          "line": 1984
+        }
+      ],
+      "relationships": [
+        {
+          "field": "reportDefinition",
+          "target": "ReportDefinition",
+          "line": 1984
+        }
+      ]
+    },
+    {
+      "name": "ReportPostEdit",
+      "start": 1991,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 1992
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 1993
+        },
+        {
+          "name": "editType",
+          "type": "String",
+          "line": 1994
+        },
+        {
+          "name": "targetSectionId",
+          "type": "String?",
+          "line": 1995
+        },
+        {
+          "name": "changes",
+          "type": "Json",
+          "line": 1996
+        },
+        {
+          "name": "annotation",
+          "type": "String?",
+          "line": 1997
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 1998
+        },
+        {
+          "name": "isPublished",
+          "type": "Boolean",
+          "line": 1999
+        },
+        {
+          "name": "formatOverrides",
+          "type": "Json?",
+          "line": 2000
+        },
+        {
+          "name": "headerFooterConfig",
+          "type": "Json?",
+          "line": 2001
+        },
+        {
+          "name": "watermarkConfig",
+          "type": "Json?",
+          "line": 2002
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2003
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2004
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2005
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2006
+        },
+        {
+          "name": "reportDefinition",
+          "type": "ReportDefinition",
+          "line": 2008
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 2009
+        }
+      ],
+      "relationships": [
+        {
+          "field": "reportDefinition",
+          "target": "ReportDefinition",
+          "line": 2008
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 2009
+        }
+      ]
+    },
+    {
+      "name": "ReportExternalSimulation",
+      "start": 2018,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2019
+        },
+        {
+          "name": "reportId",
+          "type": "String?",
+          "line": 2020
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2021
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 2022
+        },
+        {
+          "name": "simulationType",
+          "type": "String",
+          "line": 2023
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2024
+        },
+        {
+          "name": "inputParameters",
+          "type": "Json?",
+          "line": 2025
+        },
+        {
+          "name": "externalSourceUrl",
+          "type": "String?",
+          "line": 2026
+        },
+        {
+          "name": "scenarioConfig",
+          "type": "Json?",
+          "line": 2027
+        },
+        {
+          "name": "resultData",
+          "type": "Json?",
+          "line": 2028
+        },
+        {
+          "name": "comparisonResult",
+          "type": "Json?",
+          "line": 2029
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2030
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2031
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2032
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2033
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 2035
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 2035
+        }
+      ]
+    },
+    {
+      "name": "ReportCompareSchedule",
+      "start": 2043,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2044
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2045
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2046
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 2047
+        },
+        {
+          "name": "reportIdA",
+          "type": "String",
+          "line": 2048
+        },
+        {
+          "name": "reportIdB",
+          "type": "String",
+          "line": 2049
+        },
+        {
+          "name": "comparisonType",
+          "type": "String",
+          "line": 2050
+        },
+        {
+          "name": "comparisonConfig",
+          "type": "Json?",
+          "line": 2051
+        },
+        {
+          "name": "scheduleConfig",
+          "type": "Json?",
+          "line": 2052
+        },
+        {
+          "name": "notificationConfig",
+          "type": "Json?",
+          "line": 2053
+        },
+        {
+          "name": "thresholds",
+          "type": "Json?",
+          "line": 2054
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 2055
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2056
+        },
+        {
+          "name": "resultData",
+          "type": "Json?",
+          "line": 2057
+        },
+        {
+          "name": "lastExecutedAt",
+          "type": "DateTime?",
+          "line": 2058
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2059
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2060
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2061
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2062
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2064
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 2065
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2064
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 2065
+        }
+      ]
+    },
+    {
+      "name": "InteractiveReport",
+      "start": 2074,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2075
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 2076
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2077
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 2078
+        },
+        {
+          "name": "elements",
+          "type": "Json",
+          "line": 2079
+        },
+        {
+          "name": "parameters",
+          "type": "Json?",
+          "line": 2080
+        },
+        {
+          "name": "linkedReports",
+          "type": "Json?",
+          "line": 2081
+        },
+        {
+          "name": "bookmarks",
+          "type": "Json?",
+          "line": 2082
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 2083
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2084
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2085
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2086
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2087
+        },
+        {
+          "name": "reportDefinition",
+          "type": "ReportDefinition",
+          "line": 2089
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 2090
+        },
+        {
+          "name": "versions",
+          "type": "InteractiveReportVersion[]",
+          "line": 2091
+        },
+        {
+          "name": "comments",
+          "type": "ReportComment[]",
+          "line": 2092
+        },
+        {
+          "name": "annotations",
+          "type": "ReportAnnotation[]",
+          "line": 2093
+        }
+      ],
+      "relationships": [
+        {
+          "field": "reportDefinition",
+          "target": "ReportDefinition",
+          "line": 2089
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 2090
+        }
+      ]
+    },
+    {
+      "name": "InteractiveReportVersion",
+      "start": 2100,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2101
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 2102
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 2103
+        },
+        {
+          "name": "elements",
+          "type": "Json",
+          "line": 2104
+        },
+        {
+          "name": "parameters",
+          "type": "Json?",
+          "line": 2105
+        },
+        {
+          "name": "linkedReports",
+          "type": "Json?",
+          "line": 2106
+        },
+        {
+          "name": "changedBy",
+          "type": "String",
+          "line": 2107
+        },
+        {
+          "name": "changeDescription",
+          "type": "String?",
+          "line": 2108
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2109
+        },
+        {
+          "name": "interactiveReport",
+          "type": "InteractiveReport",
+          "line": 2111
+        },
+        {
+          "name": "changedByUser",
+          "type": "User",
+          "line": 2112
+        }
+      ],
+      "relationships": [
+        {
+          "field": "interactiveReport",
+          "target": "InteractiveReport",
+          "line": 2111
+        },
+        {
+          "field": "changedByUser",
+          "target": "User",
+          "line": 2112
+        }
+      ]
+    },
+    {
+      "name": "ReportComment",
+      "start": 2119,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2120
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 2121
+        },
+        {
+          "name": "sectionId",
+          "type": "String?",
+          "line": 2122
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2123
+        },
+        {
+          "name": "userName",
+          "type": "String",
+          "line": 2124
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "line": 2125
+        },
+        {
+          "name": "parentCommentId",
+          "type": "String?",
+          "line": 2126
+        },
+        {
+          "name": "resolved",
+          "type": "Boolean",
+          "line": 2127
+        },
+        {
+          "name": "resolvedBy",
+          "type": "String?",
+          "line": 2128
+        },
+        {
+          "name": "resolvedAt",
+          "type": "DateTime?",
+          "line": 2129
+        },
+        {
+          "name": "mentions",
+          "type": "Json?",
+          "line": 2130
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2131
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2132
+        },
+        {
+          "name": "interactiveReport",
+          "type": "InteractiveReport",
+          "line": 2134
+        },
+        {
+          "name": "user",
+          "type": "User",
+          "line": 2135
+        },
+        {
+          "name": "parent",
+          "type": "ReportComment?",
+          "line": 2136
+        },
+        {
+          "name": "replies",
+          "type": "ReportComment[]",
+          "line": 2137
+        }
+      ],
+      "relationships": [
+        {
+          "field": "interactiveReport",
+          "target": "InteractiveReport",
+          "line": 2134
+        },
+        {
+          "field": "user",
+          "target": "User",
+          "line": 2135
+        },
+        {
+          "field": "parent",
+          "target": "ReportComment",
+          "line": 2136
+        },
+        {
+          "field": "replies",
+          "target": "ReportComment",
+          "line": 2137
+        }
+      ]
+    },
+    {
+      "name": "ReportAnnotation",
+      "start": 2146,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2147
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 2148
+        },
+        {
+          "name": "sectionId",
+          "type": "String?",
+          "line": 2149
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "line": 2150
+        },
+        {
+          "name": "position",
+          "type": "Json",
+          "line": 2151
+        },
+        {
+          "name": "content",
+          "type": "String?",
+          "line": 2152
+        },
+        {
+          "name": "color",
+          "type": "String?",
+          "line": 2153
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2154
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2155
+        },
+        {
+          "name": "interactiveReport",
+          "type": "InteractiveReport",
+          "line": 2157
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 2158
+        }
+      ],
+      "relationships": [
+        {
+          "field": "interactiveReport",
+          "target": "InteractiveReport",
+          "line": 2157
+        },
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 2158
+        }
+      ]
+    },
+    {
+      "name": "DistributionConfig",
+      "start": 2165,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2166
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 2167
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2168
+        },
+        {
+          "name": "recipients",
+          "type": "Json",
+          "line": 2169
+        },
+        {
+          "name": "schedule",
+          "type": "Json?",
+          "line": 2170
+        },
+        {
+          "name": "format",
+          "type": "ReportOutputFormat",
+          "line": 2171
+        },
+        {
+          "name": "includeWatermark",
+          "type": "Boolean",
+          "line": 2172
+        },
+        {
+          "name": "watermarkText",
+          "type": "String?",
+          "line": 2173
+        },
+        {
+          "name": "emailSubject",
+          "type": "String?",
+          "line": 2174
+        },
+        {
+          "name": "emailBody",
+          "type": "String?",
+          "line": 2175
+        },
+        {
+          "name": "trackReadReceipts",
+          "type": "Boolean",
+          "line": 2176
+        },
+        {
+          "name": "accessPassword",
+          "type": "String?",
+          "line": 2177
+        },
+        {
+          "name": "accessExpiry",
+          "type": "DateTime?",
+          "line": 2178
+        },
+        {
+          "name": "maxViews",
+          "type": "Int?",
+          "line": 2179
+        },
+        {
+          "name": "allowDownload",
+          "type": "Boolean",
+          "line": 2180
+        },
+        {
+          "name": "allowPrint",
+          "type": "Boolean",
+          "line": 2181
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "line": 2182
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2183
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2184
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2185
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2186
+        },
+        {
+          "name": "createdByUser",
+          "type": "User",
+          "line": 2188
+        },
+        {
+          "name": "distributionRecords",
+          "type": "DistributionRecord[]",
+          "line": 2189
+        }
+      ],
+      "relationships": [
+        {
+          "field": "createdByUser",
+          "target": "User",
+          "line": 2188
+        }
+      ]
+    },
+    {
+      "name": "DistributionRecord",
+      "start": 2196,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2197
+        },
+        {
+          "name": "distributionConfigId",
+          "type": "String",
+          "line": 2198
+        },
+        {
+          "name": "reportId",
+          "type": "String",
+          "line": 2199
+        },
+        {
+          "name": "status",
+          "type": "DistributionStatus",
+          "line": 2200
+        },
+        {
+          "name": "recipientCount",
+          "type": "Int",
+          "line": 2201
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 2202
+        },
+        {
+          "name": "fileSize",
+          "type": "BigInt?",
+          "line": 2203
+        },
+        {
+          "name": "readReceipts",
+          "type": "Json?",
+          "line": 2204
+        },
+        {
+          "name": "trackingIds",
+          "type": "Json?",
+          "line": 2205
+        },
+        {
+          "name": "sentAt",
+          "type": "DateTime?",
+          "line": 2206
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2207
+        },
+        {
+          "name": "distributionConfig",
+          "type": "DistributionConfig",
+          "line": 2209
+        },
+        {
+          "name": "readReceiptLogs",
+          "type": "ReadReceiptLog[]",
+          "line": 2210
+        }
+      ],
+      "relationships": [
+        {
+          "field": "distributionConfig",
+          "target": "DistributionConfig",
+          "line": 2209
+        }
+      ]
+    },
+    {
+      "name": "ReadReceiptLog",
+      "start": 2219,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2220
+        },
+        {
+          "name": "distributionRecordId",
+          "type": "String",
+          "line": 2221
+        },
+        {
+          "name": "recipientEmail",
+          "type": "String",
+          "line": 2222
+        },
+        {
+          "name": "ipAddress",
+          "type": "String?",
+          "line": 2223
+        },
+        {
+          "name": "userAgent",
+          "type": "String?",
+          "line": 2224
+        },
+        {
+          "name": "readAt",
+          "type": "DateTime",
+          "line": 2225
+        },
+        {
+          "name": "distributionRecord",
+          "type": "DistributionRecord",
+          "line": 2227
+        }
+      ],
+      "relationships": [
+        {
+          "field": "distributionRecord",
+          "target": "DistributionRecord",
+          "line": 2227
+        }
+      ]
+    },
+    {
+      "name": "Slide",
+      "start": 2238,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2239
+        },
+        {
+          "name": "presentationId",
+          "type": "String",
+          "line": 2240
+        },
+        {
+          "name": "slideIndex",
+          "type": "Int",
+          "line": 2241
+        },
+        {
+          "name": "layout",
+          "type": "String",
+          "line": 2242
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "line": 2243
+        },
+        {
+          "name": "notes",
+          "type": "String?",
+          "line": 2244
+        },
+        {
+          "name": "thumbnail",
+          "type": "String?",
+          "line": 2245
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2246
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2247
+        },
+        {
+          "name": "presentation",
+          "type": "Presentation",
+          "line": 2249
+        }
+      ],
+      "relationships": [
+        {
+          "field": "presentation",
+          "target": "Presentation",
+          "line": 2249
+        }
+      ]
+    },
+    {
+      "name": "Theme",
+      "start": 2256,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2257
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2258
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2259
+        },
+        {
+          "name": "config",
+          "type": "String",
+          "line": 2260
+        },
+        {
+          "name": "isDefault",
+          "type": "Boolean",
+          "line": 2261
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2262
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2263
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2265
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2265
+        }
+      ]
+    },
+    {
+      "name": "InfographicSection",
+      "start": 2271,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2272
+        },
+        {
+          "name": "infographicId",
+          "type": "String",
+          "line": 2273
+        },
+        {
+          "name": "sectionType",
+          "type": "String",
+          "line": 2274
+        },
+        {
+          "name": "sectionIndex",
+          "type": "Int",
+          "line": 2275
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "line": 2276
+        },
+        {
+          "name": "style",
+          "type": "String?",
+          "line": 2277
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2278
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2279
+        },
+        {
+          "name": "infographic",
+          "type": "Infographic",
+          "line": 2281
+        }
+      ],
+      "relationships": [
+        {
+          "field": "infographic",
+          "target": "Infographic",
+          "line": 2281
+        }
+      ]
+    },
+    {
+      "name": "CollaborationSession",
+      "start": 2287,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2288
+        },
+        {
+          "name": "presentationId",
+          "type": "String",
+          "line": 2289
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2290
+        },
+        {
+          "name": "role",
+          "type": "String",
+          "line": 2291
+        },
+        {
+          "name": "isActive",
+          "type": "Boolean",
+          "line": 2292
+        },
+        {
+          "name": "joinedAt",
+          "type": "DateTime",
+          "line": 2293
+        },
+        {
+          "name": "lastActiveAt",
+          "type": "DateTime",
+          "line": 2294
+        },
+        {
+          "name": "presentation",
+          "type": "Presentation",
+          "line": 2296
+        },
+        {
+          "name": "user",
+          "type": "User",
+          "line": 2297
+        }
+      ],
+      "relationships": [
+        {
+          "field": "presentation",
+          "target": "Presentation",
+          "line": 2296
+        },
+        {
+          "field": "user",
+          "target": "User",
+          "line": 2297
+        }
+      ]
+    },
+    {
+      "name": "ShareLink",
+      "start": 2304,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2305
+        },
+        {
+          "name": "resourceType",
+          "type": "String",
+          "line": 2306
+        },
+        {
+          "name": "resourceId",
+          "type": "String",
+          "line": 2307
+        },
+        {
+          "name": "token",
+          "type": "String",
+          "line": 2308
+        },
+        {
+          "name": "permissions",
+          "type": "String",
+          "line": 2309
+        },
+        {
+          "name": "password",
+          "type": "String?",
+          "line": 2310
+        },
+        {
+          "name": "expiresAt",
+          "type": "DateTime?",
+          "line": 2311
+        },
+        {
+          "name": "maxViews",
+          "type": "Int?",
+          "line": 2312
+        },
+        {
+          "name": "viewCount",
+          "type": "Int",
+          "line": 2313
+        },
+        {
+          "name": "createdBy",
+          "type": "String",
+          "line": 2314
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2315
+        },
+        {
+          "name": "creator",
+          "type": "User",
+          "line": 2317
+        }
+      ],
+      "relationships": [
+        {
+          "field": "creator",
+          "target": "User",
+          "line": 2317
+        }
+      ]
+    },
+    {
+      "name": "ConnectorConnection",
+      "start": 2328,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2329
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2330
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2331
+        },
+        {
+          "name": "connectorType",
+          "type": "String",
+          "line": 2332
+        },
+        {
+          "name": "accessToken",
+          "type": "String",
+          "line": 2333
+        },
+        {
+          "name": "refreshToken",
+          "type": "String?",
+          "line": 2334
+        },
+        {
+          "name": "expiresAt",
+          "type": "DateTime",
+          "line": 2335
+        },
+        {
+          "name": "tokenType",
+          "type": "String",
+          "line": 2336
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2337
+        },
+        {
+          "name": "lastUsedAt",
+          "type": "DateTime?",
+          "line": 2338
+        },
+        {
+          "name": "lastRefreshedAt",
+          "type": "DateTime?",
+          "line": 2339
+        },
+        {
+          "name": "revokedAt",
+          "type": "DateTime?",
+          "line": 2340
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2341
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2342
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2343
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2345
+        },
+        {
+          "name": "user",
+          "type": "User",
+          "line": 2346
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2345
+        },
+        {
+          "field": "user",
+          "target": "User",
+          "line": 2346
+        }
+      ]
+    },
+    {
+      "name": "Policy",
+      "start": 2358,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2359
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2360
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2361
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "line": 2362
+        },
+        {
+          "name": "resource",
+          "type": "String",
+          "line": 2363
+        },
+        {
+          "name": "action",
+          "type": "String",
+          "line": 2364
+        },
+        {
+          "name": "conditions",
+          "type": "Json",
+          "line": 2365
+        },
+        {
+          "name": "effect",
+          "type": "String",
+          "line": 2366
+        },
+        {
+          "name": "priority",
+          "type": "Int",
+          "line": 2367
+        },
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "line": 2368
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2369
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2370
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2372
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2372
+        }
+      ]
+    },
+    {
+      "name": "CompliancePolicy",
+      "start": 2379,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2380
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2381
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2382
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "line": 2383
+        },
+        {
+          "name": "framework",
+          "type": "String",
+          "line": 2384
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2385
+        },
+        {
+          "name": "evidence",
+          "type": "String?",
+          "line": 2386
+        },
+        {
+          "name": "assignee",
+          "type": "String?",
+          "line": 2387
+        },
+        {
+          "name": "dueDate",
+          "type": "DateTime?",
+          "line": 2388
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2389
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2390
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2392
+        },
+        {
+          "name": "checks",
+          "type": "ComplianceCheck[]",
+          "line": 2393
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2392
+        }
+      ]
+    },
+    {
+      "name": "ComplianceCheck",
+      "start": 2400,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2401
+        },
+        {
+          "name": "compliancePolicyId",
+          "type": "String",
+          "line": 2402
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2403
+        },
+        {
+          "name": "findings",
+          "type": "Json?",
+          "line": 2404
+        },
+        {
+          "name": "checkedBy",
+          "type": "String?",
+          "line": 2405
+        },
+        {
+          "name": "checkedAt",
+          "type": "DateTime",
+          "line": 2406
+        },
+        {
+          "name": "compliancePolicy",
+          "type": "CompliancePolicy",
+          "line": 2408
+        }
+      ],
+      "relationships": [
+        {
+          "field": "compliancePolicy",
+          "target": "CompliancePolicy",
+          "line": 2408
+        }
+      ]
+    },
+    {
+      "name": "WorkflowDefinition",
+      "start": 2415,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2416
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2417
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2418
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 2419
+        },
+        {
+          "name": "triggerResource",
+          "type": "String",
+          "line": 2420
+        },
+        {
+          "name": "triggerAction",
+          "type": "String",
+          "line": 2421
+        },
+        {
+          "name": "steps",
+          "type": "Json",
+          "line": 2422
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2423
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2424
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2425
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2427
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2427
+        }
+      ]
+    },
+    {
+      "name": "LayoutAnalysis",
+      "start": 2438,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2439
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2440
+        },
+        {
+          "name": "sourceId",
+          "type": "String",
+          "line": 2441
+        },
+        {
+          "name": "sourceType",
+          "type": "String",
+          "line": 2442
+        },
+        {
+          "name": "layoutGraph",
+          "type": "Json",
+          "line": 2443
+        },
+        {
+          "name": "designTokens",
+          "type": "Json",
+          "line": 2444
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2445
+        },
+        {
+          "name": "pageCount",
+          "type": "Int",
+          "line": 2446
+        },
+        {
+          "name": "elementCount",
+          "type": "Int",
+          "line": 2447
+        },
+        {
+          "name": "confidence",
+          "type": "Float",
+          "line": 2448
+        },
+        {
+          "name": "processingTimeMs",
+          "type": "Int",
+          "line": 2449
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2450
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2452
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2452
+        }
+      ]
+    },
+    {
+      "name": "DocumentExtraction",
+      "start": 2460,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2461
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2462
+        },
+        {
+          "name": "fileId",
+          "type": "String",
+          "line": 2463
+        },
+        {
+          "name": "fileType",
+          "type": "String",
+          "line": 2464
+        },
+        {
+          "name": "pages",
+          "type": "Json",
+          "line": 2465
+        },
+        {
+          "name": "tables",
+          "type": "Json?",
+          "line": 2466
+        },
+        {
+          "name": "charts",
+          "type": "Json?",
+          "line": 2467
+        },
+        {
+          "name": "fullText",
+          "type": "String?",
+          "line": 2468
+        },
+        {
+          "name": "languages",
+          "type": "String[]",
+          "line": 2469
+        },
+        {
+          "name": "confidence",
+          "type": "Float",
+          "line": 2470
+        },
+        {
+          "name": "ocrEngine",
+          "type": "String",
+          "line": 2471
+        },
+        {
+          "name": "processingTimeMs",
+          "type": "Int",
+          "line": 2472
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2473
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2475
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2475
+        }
+      ]
+    },
+    {
+      "name": "PixelValidation",
+      "start": 2483,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2484
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2485
+        },
+        {
+          "name": "sourceHash",
+          "type": "String",
+          "line": 2486
+        },
+        {
+          "name": "pixelDiff",
+          "type": "Int",
+          "line": 2487
+        },
+        {
+          "name": "totalPixels",
+          "type": "Int",
+          "line": 2488
+        },
+        {
+          "name": "diffPercentage",
+          "type": "Float",
+          "line": 2489
+        },
+        {
+          "name": "ssim",
+          "type": "Float",
+          "line": 2490
+        },
+        {
+          "name": "lpips",
+          "type": "Float",
+          "line": 2491
+        },
+        {
+          "name": "isPerfect",
+          "type": "Boolean",
+          "line": 2492
+        },
+        {
+          "name": "iterationCount",
+          "type": "Int",
+          "line": 2493
+        },
+        {
+          "name": "convergenceHistory",
+          "type": "Float[]",
+          "line": 2494
+        },
+        {
+          "name": "hotspots",
+          "type": "Json?",
+          "line": 2495
+        },
+        {
+          "name": "diffImagePath",
+          "type": "String?",
+          "line": 2496
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2497
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2499
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2499
+        }
+      ]
+    },
+    {
+      "name": "FontRecognition",
+      "start": 2508,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2509
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2510
+        },
+        {
+          "name": "sourceId",
+          "type": "String",
+          "line": 2511
+        },
+        {
+          "name": "detectedFonts",
+          "type": "Json",
+          "line": 2512
+        },
+        {
+          "name": "typographyHierarchy",
+          "type": "Json",
+          "line": 2513
+        },
+        {
+          "name": "confidence",
+          "type": "Float",
+          "line": 2514
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2515
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2517
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2517
+        }
+      ]
+    },
+    {
+      "name": "LayoutTranslation",
+      "start": 2524,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2525
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2526
+        },
+        {
+          "name": "sourceLanguage",
+          "type": "String",
+          "line": 2527
+        },
+        {
+          "name": "targetLanguage",
+          "type": "String",
+          "line": 2528
+        },
+        {
+          "name": "segmentCount",
+          "type": "Int",
+          "line": 2529
+        },
+        {
+          "name": "adjustmentCount",
+          "type": "Int",
+          "line": 2530
+        },
+        {
+          "name": "fromMemoryCount",
+          "type": "Int",
+          "line": 2531
+        },
+        {
+          "name": "qualityScore",
+          "type": "Float",
+          "line": 2532
+        },
+        {
+          "name": "layoutGraph",
+          "type": "Json",
+          "line": 2533
+        },
+        {
+          "name": "translationPairs",
+          "type": "Json",
+          "line": 2534
+        },
+        {
+          "name": "layoutAdjustments",
+          "type": "Json",
+          "line": 2535
+        },
+        {
+          "name": "processingTimeMs",
+          "type": "Int",
+          "line": 2536
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2537
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2539
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2539
+        }
+      ]
+    },
+    {
+      "name": "QualityValidation",
+      "start": 2546,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2547
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2548
+        },
+        {
+          "name": "sourceId",
+          "type": "String",
+          "line": 2549
+        },
+        {
+          "name": "metrics",
+          "type": "Json",
+          "line": 2550
+        },
+        {
+          "name": "issues",
+          "type": "Json",
+          "line": 2551
+        },
+        {
+          "name": "overallScore",
+          "type": "Float",
+          "line": 2552
+        },
+        {
+          "name": "issueCount",
+          "type": "Int",
+          "line": 2553
+        },
+        {
+          "name": "criticalCount",
+          "type": "Int",
+          "line": 2554
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2555
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2557
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2557
+        }
+      ]
+    },
+    {
+      "name": "BridgePayload",
+      "start": 2569,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2570
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2571
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2572
+        },
+        {
+          "name": "sourceEngine",
+          "type": "String",
+          "line": 2573
+        },
+        {
+          "name": "targetEngine",
+          "type": "String",
+          "line": 2574
+        },
+        {
+          "name": "dataType",
+          "type": "String",
+          "line": 2575
+        },
+        {
+          "name": "data",
+          "type": "Json",
+          "line": 2576
+        },
+        {
+          "name": "correlationId",
+          "type": "String",
+          "line": 2577
+        },
+        {
+          "name": "ttlMs",
+          "type": "Int?",
+          "line": 2578
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2579
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2580
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2582
+        },
+        {
+          "name": "lineage",
+          "type": "DataLineage[]",
+          "line": 2583
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2582
+        }
+      ]
+    },
+    {
+      "name": "DataLineage",
+      "start": 2592,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2593
+        },
+        {
+          "name": "payloadId",
+          "type": "String",
+          "line": 2594
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2595
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2596
+        },
+        {
+          "name": "sourceEngine",
+          "type": "String",
+          "line": 2597
+        },
+        {
+          "name": "targetEngine",
+          "type": "String",
+          "line": 2598
+        },
+        {
+          "name": "dataType",
+          "type": "String",
+          "line": 2599
+        },
+        {
+          "name": "transformations",
+          "type": "Json",
+          "line": 2600
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2601
+        },
+        {
+          "name": "payload",
+          "type": "BridgePayload",
+          "line": 2603
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2604
+        }
+      ],
+      "relationships": [
+        {
+          "field": "payload",
+          "target": "BridgePayload",
+          "line": 2603
+        },
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2604
+        }
+      ]
+    },
+    {
+      "name": "TrainingDataset",
+      "start": 2616,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2617
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2618
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2619
+        },
+        {
+          "name": "description",
+          "type": "String?",
+          "line": 2620
+        },
+        {
+          "name": "taskType",
+          "type": "String",
+          "line": 2621
+        },
+        {
+          "name": "format",
+          "type": "String",
+          "line": 2622
+        },
+        {
+          "name": "sampleCount",
+          "type": "Int",
+          "line": 2623
+        },
+        {
+          "name": "trainCount",
+          "type": "Int",
+          "line": 2624
+        },
+        {
+          "name": "validationCount",
+          "type": "Int",
+          "line": 2625
+        },
+        {
+          "name": "testCount",
+          "type": "Int",
+          "line": 2626
+        },
+        {
+          "name": "labelDistribution",
+          "type": "Json?",
+          "line": 2627
+        },
+        {
+          "name": "qualityScore",
+          "type": "Float?",
+          "line": 2628
+        },
+        {
+          "name": "version",
+          "type": "Int",
+          "line": 2629
+        },
+        {
+          "name": "storagePath",
+          "type": "String",
+          "line": 2630
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2631
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2632
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2633
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2635
+        },
+        {
+          "name": "jobs",
+          "type": "TrainingJob[]",
+          "line": 2636
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2635
+        }
+      ]
+    },
+    {
+      "name": "TrainingJob",
+      "start": 2643,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2644
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2645
+        },
+        {
+          "name": "datasetId",
+          "type": "String",
+          "line": 2646
+        },
+        {
+          "name": "modelConfigId",
+          "type": "String?",
+          "line": 2647
+        },
+        {
+          "name": "baseModel",
+          "type": "String",
+          "line": 2648
+        },
+        {
+          "name": "taskType",
+          "type": "String",
+          "line": 2649
+        },
+        {
+          "name": "hyperparameters",
+          "type": "Json",
+          "line": 2650
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2651
+        },
+        {
+          "name": "metrics",
+          "type": "Json?",
+          "line": 2652
+        },
+        {
+          "name": "epochs",
+          "type": "Int",
+          "line": 2653
+        },
+        {
+          "name": "currentEpoch",
+          "type": "Int",
+          "line": 2654
+        },
+        {
+          "name": "trainingLoss",
+          "type": "Float?",
+          "line": 2655
+        },
+        {
+          "name": "validationLoss",
+          "type": "Float?",
+          "line": 2656
+        },
+        {
+          "name": "externalJobId",
+          "type": "String?",
+          "line": 2657
+        },
+        {
+          "name": "startedAt",
+          "type": "DateTime?",
+          "line": 2658
+        },
+        {
+          "name": "completedAt",
+          "type": "DateTime?",
+          "line": 2659
+        },
+        {
+          "name": "errorMessage",
+          "type": "String?",
+          "line": 2660
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2661
+        },
+        {
+          "name": "dataset",
+          "type": "TrainingDataset",
+          "line": 2663
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2664
+        },
+        {
+          "name": "model",
+          "type": "ModelRegistry?",
+          "line": 2665
+        }
+      ],
+      "relationships": [
+        {
+          "field": "dataset",
+          "target": "TrainingDataset",
+          "line": 2663
+        },
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2664
+        }
+      ]
+    },
+    {
+      "name": "ModelRegistry",
+      "start": 2672,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2673
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2674
+        },
+        {
+          "name": "jobId",
+          "type": "String",
+          "line": 2675
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "line": 2676
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "line": 2677
+        },
+        {
+          "name": "taskType",
+          "type": "String",
+          "line": 2678
+        },
+        {
+          "name": "baseModel",
+          "type": "String",
+          "line": 2679
+        },
+        {
+          "name": "metrics",
+          "type": "Json",
+          "line": 2680
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "line": 2681
+        },
+        {
+          "name": "deploymentId",
+          "type": "String?",
+          "line": 2682
+        },
+        {
+          "name": "artifactPath",
+          "type": "String",
+          "line": 2683
+        },
+        {
+          "name": "metadata",
+          "type": "Json?",
+          "line": 2684
+        },
+        {
+          "name": "promotedAt",
+          "type": "DateTime?",
+          "line": 2685
+        },
+        {
+          "name": "archivedAt",
+          "type": "DateTime?",
+          "line": 2686
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2687
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2688
+        },
+        {
+          "name": "job",
+          "type": "TrainingJob",
+          "line": 2690
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2691
+        }
+      ],
+      "relationships": [
+        {
+          "field": "job",
+          "target": "TrainingJob",
+          "line": 2690
+        },
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2691
+        }
+      ]
+    },
+    {
+      "name": "ContextMemoryLong",
+      "start": 2702,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2703
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2704
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2705
+        },
+        {
+          "name": "category",
+          "type": "String",
+          "line": 2706
+        },
+        {
+          "name": "key",
+          "type": "String",
+          "line": 2707
+        },
+        {
+          "name": "value",
+          "type": "Json",
+          "line": 2708
+        },
+        {
+          "name": "accessCount",
+          "type": "Int",
+          "line": 2709
+        },
+        {
+          "name": "lastAccessedAt",
+          "type": "DateTime",
+          "line": 2710
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2711
+        },
+        {
+          "name": "updatedAt",
+          "type": "DateTime",
+          "line": 2712
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2714
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2714
+        }
+      ]
+    },
+    {
+      "name": "EpisodeMemory",
+      "start": 2722,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2723
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2724
+        },
+        {
+          "name": "userId",
+          "type": "String",
+          "line": 2725
+        },
+        {
+          "name": "requestText",
+          "type": "String",
+          "line": 2726
+        },
+        {
+          "name": "intent",
+          "type": "String",
+          "line": 2727
+        },
+        {
+          "name": "actions",
+          "type": "Json",
+          "line": 2728
+        },
+        {
+          "name": "outcome",
+          "type": "String",
+          "line": 2729
+        },
+        {
+          "name": "satisfaction",
+          "type": "Float?",
+          "line": 2730
+        },
+        {
+          "name": "duration",
+          "type": "Int?",
+          "line": 2731
+        },
+        {
+          "name": "context",
+          "type": "Json?",
+          "line": 2732
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2733
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2735
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2735
+        }
+      ]
+    },
+    {
+      "name": "SemanticFact",
+      "start": 2742,
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "line": 2743
+        },
+        {
+          "name": "tenantId",
+          "type": "String",
+          "line": 2744
+        },
+        {
+          "name": "subject",
+          "type": "String",
+          "line": 2745
+        },
+        {
+          "name": "predicate",
+          "type": "String",
+          "line": 2746
+        },
+        {
+          "name": "object",
+          "type": "String",
+          "line": 2747
+        },
+        {
+          "name": "confidence",
+          "type": "Float",
+          "line": 2748
+        },
+        {
+          "name": "source",
+          "type": "String",
+          "line": 2749
+        },
+        {
+          "name": "validatedAt",
+          "type": "DateTime?",
+          "line": 2750
+        },
+        {
+          "name": "createdAt",
+          "type": "DateTime",
+          "line": 2751
+        },
+        {
+          "name": "tenant",
+          "type": "Tenant",
+          "line": 2753
+        }
+      ],
+      "relationships": [
+        {
+          "field": "tenant",
+          "target": "Tenant",
+          "line": 2753
+        }
+      ]
+    }
+  ]
+}

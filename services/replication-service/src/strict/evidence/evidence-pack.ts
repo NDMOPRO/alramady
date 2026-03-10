@@ -29,6 +29,7 @@ export class EvidencePackBuilder {
     float_norm_policy: 'locked',
     random_seed_locked: true,
   };
+  private determinismPass = false;
   private actionGraphSnapshot: string = '';
 
   init(runId: string, farmImageId: string, fontSnapshotId: string): void {
@@ -42,6 +43,7 @@ export class EvidencePackBuilder {
     this.toolVersions = {};
     this.auditLogEntryIds = [];
     this.functionalTests = {};
+    this.determinismPass = false;
     this.actionGraphSnapshot = '';
   }
 
@@ -73,8 +75,9 @@ export class EvidencePackBuilder {
     this.functionalTests = tests;
   }
 
-  setDeterminismChecks(checks: DeterminismCheck): void {
+  setDeterminismChecks(checks: DeterminismCheck, pass: boolean): void {
     this.determinismChecks = checks;
+    this.determinismPass = pass;
   }
 
   setActionGraphSnapshot(snapshot: string): void {
@@ -108,9 +111,6 @@ export class EvidencePackBuilder {
       throw new Error('Evidence Pack MUST NOT be built when pixel diff reports contain failures');
     }
 
-    // Verify same-input rerun determinism
-    const sameInputRerunEquals = this.sourceRenders.length >= 1 && this.targetRenders.length >= 1;
-
     return {
       run_id: this.runId,
       timestamp: new Date().toISOString(),
@@ -119,7 +119,7 @@ export class EvidencePackBuilder {
       pixel_diff_reports: this.diffReports,
       structural_hashes: this.structuralHashes,
       determinism_report: {
-        same_input_rerun_equals: sameInputRerunEquals,
+        same_input_rerun_equals: this.determinismPass,
         checks: this.determinismChecks,
       },
       functional_tests_report: this.functionalTests,
@@ -149,8 +149,19 @@ export class EvidencePackBuilder {
     if (!pack.source_renders?.length) errors.push('Missing source renders');
     if (!pack.target_renders?.length) errors.push('Missing target renders');
     if (!pack.pixel_diff_reports?.length) errors.push('Missing pixel diff reports');
+    if (!pack.structural_hashes?.length) errors.push('Missing structural hashes');
     if (!pack.farm_image_id) errors.push('Missing farm_image_id');
     if (!pack.font_snapshot_id) errors.push('Missing font_snapshot_id');
+    if (!pack.action_graph_snapshot) errors.push('Missing action_graph_snapshot');
+    if (!pack.tool_versions || Object.keys(pack.tool_versions).length === 0) errors.push('Missing tool_versions');
+    if (!pack.audit_log_entry_ids?.length) errors.push('Missing audit_log_entry_ids');
+
+    if ((pack.source_renders?.length ?? 0) !== (pack.target_renders?.length ?? 0)) {
+      errors.push('Source/target render count mismatch');
+    }
+    if ((pack.pixel_diff_reports?.length ?? 0) !== (pack.target_renders?.length ?? 0)) {
+      errors.push('Pixel diff report count mismatch');
+    }
 
     // Every diff must pass
     for (const diff of pack.pixel_diff_reports ?? []) {

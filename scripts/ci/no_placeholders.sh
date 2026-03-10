@@ -4,7 +4,16 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT_DIR"
 
-node.exe ./scripts/check-runtime-integrity.mjs
+if command -v node >/dev/null 2>&1; then
+  NODE_BIN="node"
+elif command -v node.exe >/dev/null 2>&1; then
+  NODE_BIN="node.exe"
+else
+  echo "runtime-integrity:failed (node runtime not found)" >&2
+  exit 1
+fi
+
+"$NODE_BIN" ./scripts/check-runtime-integrity.mjs
 
 if git grep -nEI '\bFIXME\b|\bPLACEHOLDER\b|return\s+true\s*//|return\s+["'"'"']?ok["'"'"']?\s*[;)]' -- services frontend packages \
   ':(exclude)**/__tests__/**' \

@@ -78,7 +78,7 @@ export class SpreadsheetEngineService {
             if (typeof cellValue === 'string' && cellValue.startsWith('=')) {
               cell.value = { formula: cellValue.substring(1) } as ExcelJS.CellFormulaValue;
             } else {
-              cell.value = cellValue;
+              cell.value = cellValue as any;
             }
           }
           maxCols = Math.max(maxCols, rowData.length);
@@ -333,7 +333,7 @@ export class SpreadsheetEngineService {
           if (typeof val === 'string' && val.startsWith('=')) {
             cell.value = { formula: val.substring(1) } as ExcelJS.CellFormulaValue;
           } else {
-            cell.value = val;
+            cell.value = val as any;
           }
         }
         row.commit();

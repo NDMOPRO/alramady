@@ -42,7 +42,7 @@ export class FormulaWorkersService {
   /**
    * Evaluate a single formula expression using the registry.
    */
-  private evaluateSingle(expression: string, contextObj: Record<string, unknown>): unknown {
+  private evaluateSingle(expression: string, contextObj: Record<string, unknown>): any {
     const clean = expression.startsWith('=') ? expression.substring(1) : expression;
 
     // Parse function calls like FUNC(args)
@@ -75,7 +75,7 @@ export class FormulaWorkersService {
   /**
    * Parse comma-separated arguments, respecting nested parentheses and strings.
    */
-  private parseArguments(argsStr: string, context: Record<string, unknown>): unknown[] {
+  private parseArguments(argsStr: string, context: Record<string, unknown>): any[] {
     const args: unknown[] = [];
     let current = '';
     let depth = 0;

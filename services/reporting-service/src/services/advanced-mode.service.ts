@@ -26,7 +26,7 @@ export class ReportAdvancedModeService {
     const cached = await cacheGet<{ data: unknown[]; total: number }>(cacheKey);
     if (cached) return cached;
 
-    const where: Record<string, unknown> = { mode: 'ADVANCED', deletedAt: null };
+    const where: Record<string, any> = { mode: 'ADVANCED', deletedAt: null };
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
@@ -59,7 +59,7 @@ export class ReportAdvancedModeService {
     return record;
   }
 
-  async create(data: Record<string, unknown>) {
+  async create(data: Record<string, any>) {
     const { name, description, queryConfig, dataSources, transformations, customFormulas,
       crossTabConfig, drillDownConfig, parameterizedFilters, outputFormats,
       cacheStrategy, metadata, tenantId, userId } = data;
@@ -93,16 +93,16 @@ export class ReportAdvancedModeService {
     return record;
   }
 
-  async update(id: string, data: Record<string, unknown>) {
-    const existing = await this.getById(id) as Record<string, unknown>;
-    const updateData: Record<string, unknown> = {};
+  async update(id: string, data: Record<string, any>) {
+    const existing = await this.getById(id) as Record<string, any>;
+    const updateData: Record<string, any> = {};
 
     if (data.name) updateData.name = data.name;
     if (data.description !== undefined) updateData.description = data.description;
     if (data.dataSources) updateData.dataSources = JSON.parse(JSON.stringify(data.dataSources));
 
-    const existingConfig = (existing.config as Record<string, unknown>) || {};
-    const configUpdates: Record<string, unknown> = {};
+    const existingConfig = (existing.config as Record<string, any>) || {};
+    const configUpdates: Record<string, any> = {};
     for (const key of ['queryConfig', 'transformations', 'customFormulas',
       'crossTabConfig', 'drillDownConfig', 'parameterizedFilters',
       'outputFormats', 'cacheStrategy', 'metadata']) {
@@ -133,31 +133,31 @@ export class ReportAdvancedModeService {
   /**
    * Execute a query against the report's data sources using the data-source service.
    */
-  async executeQuery(id: string, queryParams: Record<string, unknown>) {
-    const report = await this.getById(id) as Record<string, unknown>;
-    const config = report.config as Record<string, unknown>;
+  async executeQuery(id: string, queryParams: Record<string, any>) {
+    const report = await this.getById(id) as Record<string, any>;
+    const config = report.config as Record<string, any>;
     const queryConfig = config.queryConfig || {};
 
     const dataSources = (report.dataSources as Array<{ datasetId: string }>) || [];
-    const results: Record<string, Record<string, unknown>[]> = {};
+    const results: Record<string, Record<string, any>[]> = {};
 
     for (const ds of dataSources) {
       const dataset = await prisma.dataset.findUnique({ where: { id: ds.datasetId } });
       if (dataset) {
-        const datasetRecord = dataset as unknown as Record<string, unknown>;
-        let rows: Record<string, unknown>[] = Array.isArray(datasetRecord.data) ? datasetRecord.data as Record<string, unknown>[] : [];
+        const datasetRecord = dataset as unknown as Record<string, any>;
+        let rows: Record<string, any>[] = Array.isArray(datasetRecord.data) ? datasetRecord.data as Record<string, any>[] : [];
 
         if (queryParams?.filters) {
-          const filters = queryParams.filters as Record<string, unknown>;
+          const filters = queryParams.filters as Record<string, any>;
           for (const [key, value] of Object.entries(filters)) {
-            rows = rows.filter((row: Record<string, unknown>) => row[key] === value);
+            rows = rows.filter((row: Record<string, any>) => row[key] === value);
           }
         }
 
         if (queryParams?.sortBy) {
           const sortBy = queryParams.sortBy as string;
           const dir = queryParams.sortOrder === 'desc' ? -1 : 1;
-          rows.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
+          rows.sort((a: Record<string, any>, b: Record<string, any>) => {
             if ((a[sortBy] as string) < (b[sortBy] as string)) return -1 * dir;
             if ((a[sortBy] as string) > (b[sortBy] as string)) return 1 * dir;
             return 0;
@@ -184,8 +184,8 @@ export class ReportAdvancedModeService {
    * Generate report in multiple formats.
    */
   async generate(id: string, formats?: string[]) {
-    const report = await this.getById(id) as Record<string, unknown>;
-    const config = report.config as Record<string, unknown>;
+    const report = await this.getById(id) as Record<string, any>;
+    const config = report.config as Record<string, any>;
     const outputFormats = formats || (config.outputFormats as string[]) || ['pdf'];
 
     logger.info('Generating advanced report', { id, formats: outputFormats });

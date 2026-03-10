@@ -47,17 +47,21 @@ prisma.$on('warn' as never, (e: { message: string }) => {
   logger.warn('Prisma warning', { message: e.message });
 });
 
-const redis = new Redis({
+const redisUrl = process.env.REDIS_URL;
+const redis = redisUrl ? new Redis(redisUrl, {
+  maxRetriesPerRequest: 3,
+  retryStrategy(times: number) {
+    if (times > 10) return null;
+    return Math.min(times * 200, 5000);
+  },
+  lazyConnect: true,
+}) : new Redis({
   host: process.env.REDIS_HOST || 'localhost',
   port: parseInt(process.env.REDIS_PORT || '6379', 10),
   password: process.env.REDIS_PASSWORD || undefined,
-  db: parseInt(process.env.REDIS_DB || '0', 10),
   maxRetriesPerRequest: 3,
   retryStrategy(times: number) {
-    if (times > 10) {
-      logger.error('Redis max retries reached, giving up');
-      return null;
-    }
+    if (times > 10) return null;
     return Math.min(times * 200, 5000);
   },
   lazyConnect: true,
@@ -110,7 +114,7 @@ app.get('/health', async (_req, res) => {
     redisConnected = false;
   }
 
-  const healthy = dbConnected && redisConnected;
+  const healthy = dbConnected;
 
   res.status(healthy ? 200 : 503).json({
     status: healthy ? 'healthy' : 'degraded',
@@ -191,9 +195,14 @@ async function bootstrap(): Promise<void> {
     dbConnected = true;
     logger.info('Database connected');
 
-    await redis.connect();
-    redisConnected = true;
-    logger.info('Redis connected');
+    try {
+      await redis.connect();
+      redisConnected = true;
+      logger.info('Redis connected');
+    } catch (redisErr) {
+      logger.warn('Redis connection failed, continuing without cache', { error: redisErr });
+      redisConnected = false;
+    }
 
     app.listen(PORT, () => {
       logger.info(`presentation-service running on port ${PORT}`);

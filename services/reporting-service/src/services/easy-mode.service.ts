@@ -27,7 +27,7 @@ export class ReportEasyModeService {
     const cached = await cacheGet<{ data: unknown[]; total: number; page: number; limit: number; totalPages: number }>(cacheKey);
     if (cached) return cached;
 
-    const where: Record<string, unknown> = { mode: 'EASY', deletedAt: null };
+    const where: Record<string, any> = { mode: 'EASY', deletedAt: null };
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
@@ -62,7 +62,7 @@ export class ReportEasyModeService {
     return record;
   }
 
-  async create(data: Record<string, unknown>) {
+  async create(data: Record<string, any>) {
     const { name, description, reportType, dataSourceId, datasetId, layoutConfig,
       chartConfig, filterConfig, groupByFields, aggregations, colorScheme,
       outputFormat, scheduleConfig, isPublic, tags, metadata, tenantId, userId } = data;
@@ -92,17 +92,17 @@ export class ReportEasyModeService {
     return record;
   }
 
-  async update(id: string, data: Record<string, unknown>) {
-    const existing = await this.getById(id) as Record<string, unknown>;
-    const updateData: Record<string, unknown> = {};
+  async update(id: string, data: Record<string, any>) {
+    const existing = await this.getById(id) as Record<string, any>;
+    const updateData: Record<string, any> = {};
 
     if (data.name) updateData.name = data.name;
     if (data.description !== undefined) updateData.description = data.description;
     if (data.reportType) updateData.reportType = data.reportType;
     if (data.outputFormat) updateData.outputFormat = (data.outputFormat as string).toUpperCase();
 
-    const existingConfig = (existing.config as Record<string, unknown>) || {};
-    const configUpdates: Record<string, unknown> = {};
+    const existingConfig = (existing.config as Record<string, any>) || {};
+    const configUpdates: Record<string, any> = {};
     for (const key of ['dataSourceId', 'datasetId', 'layoutConfig', 'chartConfig',
       'filterConfig', 'groupByFields', 'aggregations', 'colorScheme',
       'scheduleConfig', 'isPublic', 'tags', 'metadata']) {
@@ -131,7 +131,7 @@ export class ReportEasyModeService {
   }
 
   async duplicate(id: string) {
-    const source = await this.getById(id) as Record<string, unknown>;
+    const source = await this.getById(id) as Record<string, any>;
     const record = await prisma.reportDefinition.create({
       data: {
         name: `${source.name} (Copy)`,
@@ -152,14 +152,14 @@ export class ReportEasyModeService {
   }
 
   async generate(id: string, outputFormat?: string) {
-    const report = await this.getById(id) as Record<string, unknown>;
+    const report = await this.getById(id) as Record<string, any>;
     logger.info('Generating easy-mode report', { id, format: outputFormat || report.outputFormat });
 
     // Use the report-builder pipeline
     const buildResult = await reportBuilderService.buildReport(id);
     const format = (outputFormat || report.outputFormat || 'PDF').toLowerCase();
 
-    let exportResult: Record<string, unknown> = { buildId: buildResult.buildId };
+    let exportResult: Record<string, any> = { buildId: buildResult.buildId };
     switch (format) {
       case 'pdf':
         exportResult.buffer = await templateEngineService.exportToPDF(id);
@@ -196,9 +196,9 @@ export class ReportEasyModeService {
     return { reportId: id, format, status: 'completed', ...exportResult };
   }
 
-  async schedule(id: string, scheduleConfig: Record<string, unknown>) {
-    const report = await this.getById(id) as Record<string, unknown>;
-    const existingConfig = (report.config as Record<string, unknown>) || {};
+  async schedule(id: string, scheduleConfig: Record<string, any>) {
+    const report = await this.getById(id) as Record<string, any>;
+    const existingConfig = (report.config as Record<string, any>) || {};
     const updated = await prisma.reportDefinition.update({
       where: { id },
       data: {
@@ -211,7 +211,7 @@ export class ReportEasyModeService {
   }
 
   async preview(id: string) {
-    const report = await this.getById(id) as Record<string, unknown>;
+    const report = await this.getById(id) as Record<string, any>;
     const buildResult = await reportBuilderService.buildReport(id);
     return {
       reportId: id,
@@ -230,8 +230,8 @@ export class ReportEasyModeService {
    * Auto-compose: one-click generation using report type defaults.
    */
   async autoCompose(id: string) {
-    const report = await this.getById(id) as Record<string, unknown>;
-    const config = (report.config as Record<string, unknown>) || {};
+    const report = await this.getById(id) as Record<string, any>;
+    const config = (report.config as Record<string, any>) || {};
 
     const buildResult = await reportBuilderService.buildReport(id);
 

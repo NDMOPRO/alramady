@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as crypto from 'crypto';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
@@ -157,12 +157,12 @@ export default class BackupService {
         name: fullConfig.name,
         type: fullConfig.type,
         schedule: fullConfig.schedule,
-        databases: fullConfig.databases as Prisma.InputJsonValue,
-        storageTarget: fullConfig.storageTarget as Prisma.InputJsonValue,
-        retention: fullConfig.retention as Prisma.InputJsonValue,
-        encryption: fullConfig.encryption as Prisma.InputJsonValue,
-        compression: fullConfig.compression as Prisma.InputJsonValue,
-        notifications: fullConfig.notifications as Prisma.InputJsonValue,
+        databases: fullConfig.databases as unknown as Prisma.InputJsonValue,
+        storageTarget: fullConfig.storageTarget as unknown as Prisma.InputJsonValue,
+        retention: fullConfig.retention as unknown as Prisma.InputJsonValue,
+        encryption: fullConfig.encryption as unknown as Prisma.InputJsonValue,
+        compression: fullConfig.compression as unknown as Prisma.InputJsonValue,
+        notifications: fullConfig.notifications as unknown as Prisma.InputJsonValue,
         enabled: fullConfig.enabled,
         createdAt: new Date(),
         updatedAt: new Date(),

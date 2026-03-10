@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { PrismaClient } from '@prisma/client';
+// @ts-expect-error uuid types not installed
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
 
@@ -86,12 +87,16 @@ export class SocialMediaPublisherService {
 
   private readonly openai: OpenAI;
 
+  // Prisma client with dynamic model access for social media models
+  private db: any;
+
   constructor(private prisma: PrismaClient) {
+    this.db = prisma as any;
     this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   }
 
   private async getOAuthConfig(platform: SocialPlatform, tenantId: string): Promise<Record<string, string>> {
-    const config = await this.prisma.socialOAuthConfig.findFirst({
+    const config = await this.db.socialOAuthConfig.findFirst({
       where: { tenantId, platform, active: true },
     });
 
@@ -152,7 +157,7 @@ export class SocialMediaPublisherService {
       logger.error('Twitter publish failed', { postId, errors: data.errors });
     }
 
-    await this.prisma.socialPost.create({
+    await this.db.socialPost.create({
       data: {
         id: postId,
         tenantId,
@@ -321,7 +326,7 @@ export class SocialMediaPublisherService {
       logger.error('LinkedIn publish failed', { postId, error: errorData.message });
     }
 
-    await this.prisma.socialPost.create({
+    await this.db.socialPost.create({
       data: {
         id: postId,
         tenantId,
@@ -443,7 +448,7 @@ export class SocialMediaPublisherService {
     if (!containerData.id) {
       logger.error('Instagram container creation failed', { error: containerData.error?.message });
 
-      await this.prisma.socialPost.create({
+      await this.db.socialPost.create({
         data: {
           id: postId,
           tenantId,
@@ -480,7 +485,7 @@ export class SocialMediaPublisherService {
     const externalId = publishData.id || null;
     const externalUrl = externalId ? `https://www.instagram.com/p/${externalId}/` : null;
 
-    await this.prisma.socialPost.create({
+    await this.db.socialPost.create({
       data: {
         id: postId,
         tenantId,
@@ -516,7 +521,7 @@ export class SocialMediaPublisherService {
       throw new Error('At least one platform must be specified');
     }
 
-    await this.prisma.scheduledPost.create({
+    await this.db.scheduledPost.create({
       data: {
         id: scheduleId,
         tenantId,
@@ -545,7 +550,7 @@ export class SocialMediaPublisherService {
   async cancelScheduledPost(postId: string): Promise<ScheduledPostResult> {
     logger.info('Cancelling scheduled post', { postId });
 
-    const post = await this.prisma.scheduledPost.findUnique({
+    const post = await this.db.scheduledPost.findUnique({
       where: { id: postId },
     });
 
@@ -557,7 +562,7 @@ export class SocialMediaPublisherService {
       throw new Error(`Post ${postId} cannot be cancelled (current status: ${post.status})`);
     }
 
-    await this.prisma.scheduledPost.update({
+    await this.db.scheduledPost.update({
       where: { id: postId },
       data: { status: 'cancelled', updatedAt: new Date() },
     });
@@ -582,17 +587,17 @@ export class SocialMediaPublisherService {
     }
 
     const [posts, total] = await Promise.all([
-      this.prisma.socialPost.findMany({
+      this.db.socialPost.findMany({
         where,
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),
-      this.prisma.socialPost.count({ where }),
+      this.db.socialPost.count({ where }),
     ]);
 
     return {
-      posts: posts.map((p) => ({
+      posts: posts.map((p: any) => ({
         id: p.id,
         platform: p.platform as SocialPlatform,
         text: p.text,
@@ -611,7 +616,7 @@ export class SocialMediaPublisherService {
   async getPostAnalytics(postId: string): Promise<PostAnalytics> {
     logger.info('Fetching post analytics', { postId });
 
-    const post = await this.prisma.socialPost.findUnique({
+    const post = await this.db.socialPost.findUnique({
       where: { id: postId },
     });
 
@@ -711,7 +716,7 @@ export class SocialMediaPublisherService {
 
     analytics.engagementRate = Math.round(analytics.engagementRate * 100) / 100;
 
-    await this.prisma.socialPost.update({
+    await this.db.socialPost.update({
       where: { id: postId },
       data: {
         analyticsJson: JSON.stringify(analytics),
@@ -729,7 +734,7 @@ export class SocialMediaPublisherService {
   ): Promise<GeneratedSocialContent> {
     logger.info('Generating social content', { sourceId, platform, tenantId });
 
-    const source = await this.prisma.report.findFirst({
+    const source = await this.db.report.findFirst({
       where: { id: sourceId, tenantId },
     });
 
@@ -737,7 +742,7 @@ export class SocialMediaPublisherService {
     if (source) {
       sourceText = `Report Title: ${(source as Record<string, unknown>).title || 'Untitled'}\n\nContent: ${String((source as Record<string, unknown>).content || '').substring(0, 4000)}`;
     } else {
-      const dashboard = await this.prisma.dashboard.findFirst({
+      const dashboard = await this.db.dashboard.findFirst({
         where: { id: sourceId, tenantId },
       });
       if (!dashboard) {

@@ -287,8 +287,8 @@ export async function renderScatterPlot(
       backgroundColor: Color(color).alpha(0.7).rgb().string(),
       borderColor: color,
       borderWidth: 1,
-      pointRadius: ds.pointRadius ?? 5,
-      pointHoverRadius: ds.pointHoverRadius ?? 8,
+      pointRadius: (ds as any).pointRadius ?? 5,
+      pointHoverRadius: (ds as any).pointHoverRadius ?? 8,
       showLine: false,
     };
   });

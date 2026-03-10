@@ -90,7 +90,7 @@ export interface Bookmark {
 }
 
 export interface BookmarkState {
-  filterValues: Record<string, unknown>;
+  filterValues: Record<string, any>;
   sortState: { field: string; direction: 'asc' | 'desc' }[];
   drillDownState: Record<string, { level: number; filterValue: unknown }>;
   scrollPosition: { x: number; y: number };
@@ -255,11 +255,11 @@ export class InteractiveReportService {
 
   async executeWithParameters(
     reportId: string,
-    paramValues: Record<string, unknown>,
-  ): Promise<{ data: unknown[]; appliedParams: Record<string, unknown>; executionTimeMs: number }> {
+    paramValues: Record<string, any>,
+  ): Promise<{ data: unknown[]; appliedParams: Record<string, any>; executionTimeMs: number }> {
     const report = await this.getReport(reportId);
     const startTime = Date.now();
-    const appliedParams: Record<string, unknown> = {};
+    const appliedParams: Record<string, any> = {};
 
     for (const param of report.parameters) {
       const value = paramValues[param.name];
@@ -290,7 +290,7 @@ export class InteractiveReportService {
       throw new Error(`Base report definition ${report.baseReportId} not found`);
     }
 
-    const config = baseReportDef.config as Record<string, unknown> || {};
+    const config = baseReportDef.config as Record<string, any> || {};
     const dataSources = config.dataSources || (baseReportDef.dataSources as unknown[]) || [];
     const primaryDataset = dataSources[0]?.datasetId;
 
@@ -301,8 +301,8 @@ export class InteractiveReportService {
 
     let data: unknown[] = [];
     if (dataset) {
-      const rawData = (dataset as unknown as Record<string, unknown>).data;
-      let rows: Record<string, unknown>[] = Array.isArray(rawData) ? rawData : [];
+      const rawData = (dataset as unknown as Record<string, any>).data;
+      let rows: Record<string, any>[] = Array.isArray(rawData) ? rawData : [];
 
       // Apply parameter filters in-memory (safe from injection)
       for (const [name, value] of Object.entries(appliedParams)) {
@@ -325,7 +325,7 @@ export class InteractiveReportService {
     reportId: string,
     elementId: string,
     drillValue: unknown,
-    currentParams?: Record<string, unknown>,
+    currentParams?: Record<string, any>,
   ): Promise<{ data: unknown[]; breadcrumb: DrillDownConfig['breadcrumb']; currentLevel: number }> {
     const report = await this.getReport(reportId);
     const element = report.elements.find(e => e.id === elementId);
@@ -356,7 +356,7 @@ export class InteractiveReportService {
       throw new Error(`Base report definition ${report.baseReportId} not found`);
     }
 
-    const defConfig = baseReportDef.config as Record<string, unknown> || {};
+    const defConfig = baseReportDef.config as Record<string, any> || {};
     const dataSources = defConfig.dataSources || (baseReportDef.dataSources as unknown[]) || [];
     const primaryDataset = dataSources[0]?.datasetId;
 
@@ -366,8 +366,8 @@ export class InteractiveReportService {
 
     let data: unknown[] = [];
     if (dataset) {
-      const rawData = (dataset as unknown as Record<string, unknown>).data;
-      let rows: Record<string, unknown>[] = Array.isArray(rawData) ? rawData : [];
+      const rawData = (dataset as unknown as Record<string, any>).data;
+      let rows: Record<string, any>[] = Array.isArray(rawData) ? rawData : [];
 
       // Apply breadcrumb filters in-memory (safe from injection)
       for (const crumb of breadcrumb) {
@@ -543,7 +543,7 @@ export class InteractiveReportService {
     reportId: string,
     options?: { sectionId?: string; resolved?: boolean },
   ): Promise<ReportComment[]> {
-    const where: Record<string, unknown> = { reportId };
+    const where: Record<string, any> = { reportId };
     if (options?.sectionId) where.sectionId = options.sectionId;
     if (options?.resolved !== undefined) where.resolved = options.resolved;
 

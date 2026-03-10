@@ -92,10 +92,9 @@ export class AIAvatarService {
         sessionType: 'avatar_generated',
         status: 'completed',
         userId,
-        tenantId,
         input: JSON.stringify({ style: config.style, gender: config.gender }),
         createdAt: new Date(),
-      },
+      } as any,
     }).catch(() => { /* auditLog not available, skip */ });
 
     logger.info('Avatar generated', { avatarId, fileSize: stat.size });

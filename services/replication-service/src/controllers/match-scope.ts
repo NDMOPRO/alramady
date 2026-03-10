@@ -74,7 +74,7 @@ export async function analyzeScope(req: AuthenticatedRequest, res: Response, nex
 
 export async function getCapabilities(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const format = req.params.format! as string;
+    const format = req.params.format! as "pdf" | "pptx" | "dashboard" | "image" | "infographic" | "word" | "excel";
     const capabilities = service.getFormatCapabilities(format);
     res.json({ success: true, data: capabilities });
   } catch (error) {
@@ -94,8 +94,8 @@ export async function getSupportedFormats(_req: AuthenticatedRequest, res: Respo
 export async function checkConversion(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
   try {
     const supported = service.isConversionSupported(
-      req.query.sourceFormat as string,
-      req.query.targetFormat as string,
+      req.query.sourceFormat as "pdf" | "pptx" | "dashboard" | "image" | "infographic" | "word" | "excel",
+      req.query.targetFormat as "pdf" | "pptx" | "dashboard" | "image" | "infographic" | "word" | "excel",
     );
     res.json({ success: true, data: { supported } });
   } catch (error) {

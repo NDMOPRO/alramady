@@ -21,10 +21,10 @@ export class FingerprintService {
     return workbook;
   }
 
-  private getSheetsArray(sheetsJson: Record<string, unknown>): Record<string, unknown>[] {
+  private getSheetsArray(sheetsJson: Record<string, any>): Record<string, any>[] {
     if (!sheetsJson) return [];
-    if (Array.isArray(sheetsJson.sheets)) return sheetsJson.sheets as Record<string, unknown>[];
-    if (Array.isArray(sheetsJson)) return sheetsJson as Record<string, unknown>[];
+    if (Array.isArray(sheetsJson.sheets)) return sheetsJson.sheets as Record<string, any>[];
+    if (Array.isArray(sheetsJson)) return sheetsJson as Record<string, any>[];
     return [];
   }
 
@@ -44,7 +44,7 @@ export class FingerprintService {
   async generateFingerprint(workbookId: string): Promise<Fingerprint> {
     logger.info('Generating fingerprint', { workbookId });
     const workbook = await this.loadWorkbook(workbookId);
-    const sheetsJson = ((workbook as unknown as Record<string, unknown>).sheetsJson ?? {}) as Record<string, unknown>;
+    const sheetsJson = ((workbook as any).sheetsJson ?? {}) as Record<string, any>;
     const sheetsArray = this.getSheetsArray(sheetsJson);
 
     // -- Dimensions section ---------------------------------------------------
@@ -216,8 +216,8 @@ export class FingerprintService {
    * Returns a similarity score 0-100 for the section.
    */
   private compareSections(
-    a: Record<string, unknown>,
-    b: Record<string, unknown>,
+    a: Record<string, any>,
+    b: Record<string, any>,
     sectionName: string,
     differences: string[],
   ): number {
@@ -281,7 +281,7 @@ export class FingerprintService {
   ): Promise<BrandComplianceResult> {
     logger.info('Verifying brand compliance', { workbookId, brand: brand.name });
     const workbook = await this.loadWorkbook(workbookId);
-    const sheetsJson = ((workbook as unknown as Record<string, unknown>).sheetsJson ?? {}) as Record<string, unknown>;
+    const sheetsJson = ((workbook as any).sheetsJson ?? {}) as Record<string, any>;
     const sheetsArray = this.getSheetsArray(sheetsJson);
 
     const checks: BrandComplianceResult['checks'] = [];

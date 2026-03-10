@@ -172,7 +172,7 @@ export default class ChartRendererService {
     const canvas = this.getCanvas(width, height, theme.background);
 
     const config = this.buildConfiguration(request, theme);
-    let buffer = await canvas.renderToBuffer(config as unknown as Record<string, unknown>);
+    let buffer = await canvas.renderToBuffer(config as unknown as Record<string, any>);
 
     if (request.branding) {
       buffer = await this.applyBranding(buffer, width, height, request.branding);
@@ -309,7 +309,7 @@ export default class ChartRendererService {
     chartType: string,
     theme: ChartThemeConfig,
     datasets: ChartDataset[],
-  ): Record<string, unknown> | undefined {
+  ): Record<string, any> | undefined {
     if (['pie', 'doughnut', 'radar'].includes(chartType)) {
       if (chartType === 'radar') {
         return {
@@ -333,7 +333,7 @@ export default class ChartRendererService {
     const isStacked = chartType === 'stackedBar';
     const hasSecondAxis = datasets.some(ds => ds.yAxisID === 'y2');
 
-    const scales: Record<string, unknown> = {
+    const scales: Record<string, any> = {
       x: {
         display: true,
         grid: { color: theme.grid, lineWidth: 1, drawBorder: true },

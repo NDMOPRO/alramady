@@ -120,14 +120,14 @@ Return ONLY valid JSON, no markdown.`,
   }
 
   const analysis: VisualAnalysis = {
-    layout: parsed.layout || {
+    layout: (parsed.layout || {
       gridStructure: 'single-column',
       columns: 1,
       rows: 1,
       elements: [],
       spacing: 'normal',
       alignment: 'left',
-    },
+    }) as LayoutDescription,
     colors: Array.isArray(parsed.colors) ? parsed.colors : [],
     fonts: Array.isArray(parsed.fonts) ? parsed.fonts : [],
     textContent: Array.isArray(parsed.textContent) ? parsed.textContent : [],
@@ -278,10 +278,10 @@ Include every piece of text visible in the image. Return ONLY valid JSON array, 
       width: Number((block.position as Record<string, unknown>)?.width) || 100,
       height: Number((block.position as Record<string, unknown>)?.height) || 10,
     },
-    fontSize: block.fontSize || 'medium',
-    fontWeight: block.fontWeight || 'normal',
-    alignment: block.alignment || 'left',
-  }));
+    fontSize: String(block.fontSize || 'medium'),
+    fontWeight: String(block.fontWeight || 'normal'),
+    alignment: String(block.alignment || 'left'),
+  })) as TextBlock[];
 
   return textBlocks;
 }
@@ -337,24 +337,24 @@ Return ONLY valid JSON, no markdown.`,
   }
 
   const layout: LayoutDescription = {
-    gridStructure: parsed.gridStructure || 'unknown',
+    gridStructure: String(parsed.gridStructure || 'unknown'),
     columns: Number(parsed.columns) || 1,
     rows: Number(parsed.rows) || 1,
     elements: Array.isArray(parsed.elements)
       ? (parsed.elements as Array<Record<string, unknown>>).map((el: Record<string, unknown>) => ({
-          type: el.type || 'unknown',
+          type: String(el.type || 'unknown'),
           position: {
             x: Number((el.position as Record<string, unknown>)?.x) || 0,
             y: Number((el.position as Record<string, unknown>)?.y) || 0,
             width: Number((el.position as Record<string, unknown>)?.width) || 100,
             height: Number((el.position as Record<string, unknown>)?.height) || 100,
           },
-          description: el.description || '',
+          description: String(el.description || ''),
           zIndex: Number(el.zIndex) || 0,
-        }))
+        })) as LayoutElement[]
       : [],
-    spacing: parsed.spacing || 'normal',
-    alignment: parsed.alignment || 'left',
+    spacing: String(parsed.spacing || 'normal'),
+    alignment: String(parsed.alignment || 'left'),
   };
 
   return layout;
@@ -410,8 +410,8 @@ If no charts are found, return an empty array []. Return ONLY valid JSON, no mar
   }
 
   const charts: ChartDetection[] = parsed.map((chart: Record<string, unknown>) => ({
-    type: chart.type || 'unknown',
-    title: chart.title || 'Untitled Chart',
+    type: String(chart.type || 'unknown'),
+    title: String(chart.title || 'Untitled Chart'),
     dataPoints: Array.isArray(chart.dataPoints)
       ? (chart.dataPoints as Array<Record<string, unknown>>).map((dp: Record<string, unknown>) => ({
           label: String(dp.label || ''),
@@ -424,8 +424,8 @@ If no charts are found, return an empty array []. Return ONLY valid JSON, no mar
       width: Number((chart.position as Record<string, unknown>)?.width) || 50,
       height: Number((chart.position as Record<string, unknown>)?.height) || 50,
     },
-    colors: Array.isArray(chart.colors) ? chart.colors : [],
-  }));
+    colors: Array.isArray(chart.colors) ? chart.colors as string[] : [],
+  })) as ChartDetection[];
 
   return charts;
 }

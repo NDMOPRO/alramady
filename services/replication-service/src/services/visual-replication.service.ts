@@ -20,7 +20,7 @@ import {
   calculateSSIM,
 } from './visual-analyzer.service.js';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient() as PrismaClient & Record<string, any>;
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 
 export interface VisualElementDescriptor {

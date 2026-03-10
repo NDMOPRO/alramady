@@ -65,7 +65,7 @@ Available entities and their key fields:
 - Datasets: id, name, status, format, rowCount, createdAt
 - Dashboards: id, title, visibility, widgetCount, createdAt
 - Reports: id, title, status, format, createdAt
-- AuditLogs: id, action, entityType, entityId, userId, performedAt
+- AuditLogs: id, action, entityType, entityId, userId, createdAt
 - Permissions: id, userId, resource, action, roleId
 
 When the admin asks a question, determine what data to query and respond with a JSON object:
@@ -133,7 +133,7 @@ When the admin asks a question, determine what data to query and respond with a 
           result = await this.prisma.auditLog.findMany({
             where,
             take: limit,
-            orderBy: { performedAt: 'desc' },
+            orderBy: { createdAt: 'desc' },
           });
         }
         break;
@@ -141,7 +141,7 @@ When the admin asks a question, determine what data to query and respond with a 
       case 'stats': {
         const [userCount, activeUsers, totalLogs] = await Promise.all([
           this.prisma.user.count({ where: { tenantId } }),
-          this.prisma.user.count({ where: { tenantId, status: 'active' } }),
+          this.prisma.user.count({ where: { tenantId, status: 'ACTIVE' } }),
           this.prisma.auditLog.count({ where: { tenantId } }),
         ]);
         result = { userCount, activeUsers, totalAuditLogs: totalLogs };
@@ -152,7 +152,7 @@ When the admin asks a question, determine what data to query and respond with a 
         result = await this.prisma.auditLog.findMany({
           where,
           take: limit,
-          orderBy: { performedAt: 'desc' },
+          orderBy: { createdAt: 'desc' },
         });
       }
     }
@@ -165,7 +165,7 @@ When the admin asks a question, determine what data to query and respond with a 
         userId,
         tenantId,
         details: JSON.stringify({ query, interpretation: plan.interpretation }),
-        performedAt: new Date(),
+        createdAt: new Date(),
       },
     });
 
@@ -197,14 +197,14 @@ When the admin asks a question, determine what data to query and respond with a 
       where: {
         tenantId,
         action: { contains: 'error' },
-        performedAt: { gte: new Date(now - 3600000) },
+        createdAt: { gte: new Date(now - 3600000) },
       },
     });
 
     const totalActions = await this.prisma.auditLog.count({
       where: {
         tenantId,
-        performedAt: { gte: new Date(now - 3600000) },
+        createdAt: { gte: new Date(now - 3600000) },
       },
     });
 
@@ -242,12 +242,12 @@ When the admin asks a question, determine what data to query and respond with a 
     const since = new Date(Date.now() - days * 86400000);
 
     const [activeUsers, totalActions, recentLogs] = await Promise.all([
-      this.prisma.user.count({ where: { tenantId, status: 'active' } }),
-      this.prisma.auditLog.count({ where: { tenantId, performedAt: { gte: since } } }),
+      this.prisma.user.count({ where: { tenantId, status: 'ACTIVE' } }),
+      this.prisma.auditLog.count({ where: { tenantId, createdAt: { gte: since } } }),
       this.prisma.auditLog.findMany({
-        where: { tenantId, performedAt: { gte: since } },
-        select: { action: true, performedAt: true },
-        orderBy: { performedAt: 'desc' },
+        where: { tenantId, createdAt: { gte: since } },
+        select: { action: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
         take: 10000,
       }),
     ]);
@@ -258,7 +258,7 @@ When the admin asks a question, determine what data to query and respond with a 
     for (const log of recentLogs) {
       const feature = log.action.split('_')[0] || log.action;
       featureCounts.set(feature, (featureCounts.get(feature) || 0) + 1);
-      const hour = new Date(log.performedAt).getHours();
+      const hour = new Date(log.createdAt).getHours();
       hourCounts[hour]++;
     }
 
@@ -272,7 +272,7 @@ When the admin asks a question, determine what data to query and respond with a 
     const previousPeriodActions = await this.prisma.auditLog.count({
       where: {
         tenantId,
-        performedAt: {
+        createdAt: {
           gte: new Date(since.getTime() - days * 86400000),
           lt: since,
         },
@@ -304,9 +304,9 @@ When the admin asks a question, determine what data to query and respond with a 
       where: {
         tenantId,
         action: 'login_failed',
-        performedAt: { gte: new Date(now - 3600000) },
+        createdAt: { gte: new Date(now - 3600000) },
       },
-      select: { userId: true, performedAt: true },
+      select: { userId: true, createdAt: true },
     });
 
     const failedByUser = new Map<string, number>();
@@ -336,9 +336,9 @@ When the admin asks a question, determine what data to query and respond with a 
       where: {
         tenantId,
         action: { in: ['permission_escalation', 'bulk_delete', 'export_all', 'admin_override'] },
-        performedAt: { gte: new Date(now - 86400000) },
+        createdAt: { gte: new Date(now - 86400000) },
       },
-      select: { userId: true, action: true, performedAt: true, entityType: true },
+      select: { userId: true, action: true, createdAt: true, entityType: true },
     });
 
     for (const action of suspiciousActions) {
@@ -350,7 +350,7 @@ When the admin asks a question, determine what data to query and respond with a 
         description: `User ${action.userId} performed ${action.action} on ${action.entityType}`,
         affectedUsers: action.userId ? [action.userId] : [],
         suggestedAction: 'Review the action in audit logs and verify with the user',
-        detectedAt: action.performedAt.toISOString(),
+        detectedAt: action.createdAt.toISOString(),
         resolved: false,
       });
     }
@@ -360,7 +360,7 @@ When the admin asks a question, determine what data to query and respond with a 
         tenantId,
         role: 'admin',
         lastLoginAt: { lt: new Date(now - 90 * 86400000) },
-        status: 'active',
+        status: 'ACTIVE',
       },
       select: { id: true, name: true, lastLoginAt: true },
     });

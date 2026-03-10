@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+// @ts-expect-error - uuid has no type declarations in this project
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
 
@@ -130,7 +131,7 @@ export class WhatsAppIntegrationService {
   private readonly phoneNumberId: string;
   private readonly businessId: string;
 
-  constructor(private prisma: PrismaClient) {
+  constructor(private prisma: PrismaClient & Record<string, any>) {
     this.apiToken = process.env.WHATSAPP_API_TOKEN || '';
     this.phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || '';
     this.businessId = process.env.WHATSAPP_BUSINESS_ID || '';
@@ -508,7 +509,7 @@ export class WhatsAppIntegrationService {
     ]);
 
     return {
-      messages: messages.map((m) => ({
+      messages: messages.map((m: any) => ({
         id: m.id,
         to: m.to,
         body: m.body,

@@ -71,7 +71,7 @@ export class CulturalFormattingService {
       throw new Error(`Workbook not found: ${workbookId}`);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._culturalFormatting) {
       sheetsJson._culturalFormatting = {};
     }
@@ -112,7 +112,7 @@ export class CulturalFormattingService {
       throw new Error(`Workbook not found: ${workbookId}`);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._culturalFormatting) {
       sheetsJson._culturalFormatting = {};
     }
@@ -163,7 +163,7 @@ export class CulturalFormattingService {
       throw new Error(`Workbook not found: ${workbookId}`);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._culturalFormatting) {
       sheetsJson._culturalFormatting = {};
     }
@@ -217,7 +217,7 @@ export class CulturalFormattingService {
       throw new Error(`Workbook not found: ${workbookId}`);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._culturalFormatting) {
       sheetsJson._culturalFormatting = {};
     }
@@ -274,7 +274,7 @@ export class CulturalFormattingService {
       throw new Error(`Workbook not found: ${workbookId}`);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._culturalFormatting) {
       sheetsJson._culturalFormatting = {};
     }

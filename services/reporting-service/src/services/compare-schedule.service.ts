@@ -26,7 +26,7 @@ export class CompareScheduleService {
     const cached = await cacheGet<{ data: unknown[]; total: number }>(cacheKey);
     if (cached) return cached;
 
-    const where: Record<string, unknown> = {};
+    const where: Record<string, any> = {};
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
@@ -59,7 +59,7 @@ export class CompareScheduleService {
     return record;
   }
 
-  async create(data: Record<string, unknown>) {
+  async create(data: Record<string, any>) {
     const record = await prisma.reportCompareSchedule.create({
       data: {
         ...data,
@@ -73,7 +73,7 @@ export class CompareScheduleService {
     return record;
   }
 
-  async update(id: string, data: Record<string, unknown>) {
+  async update(id: string, data: Record<string, any>) {
     await this.getById(id);
     const updated = await prisma.reportCompareSchedule.update({ where: { id }, data });
     logger.info('Compare schedule updated', { id });
@@ -90,7 +90,7 @@ export class CompareScheduleService {
   }
 
   async execute(id: string) {
-    const record = await this.getById(id) as Record<string, unknown>;
+    const record = await this.getById(id) as Record<string, any>;
 
     logger.info('Compare schedule execution started', { id, reportA: record.reportIdA, reportB: record.reportIdB });
 
@@ -107,25 +107,25 @@ export class CompareScheduleService {
     if (!reportA) throw new NotFoundError('Report', record.reportIdA);
     if (!reportB) throw new NotFoundError('Report', record.reportIdB);
 
-    const reportAData = reportA as Record<string, unknown>;
-    const reportBData = reportB as Record<string, unknown>;
-    const comparisonConfig = record.comparisonConfig as Record<string, unknown> ?? {};
-    const thresholds = record.thresholds as Record<string, unknown> ?? {};
+    const reportAData = reportA as Record<string, any>;
+    const reportBData = reportB as Record<string, any>;
+    const comparisonConfig = record.comparisonConfig as Record<string, any> ?? {};
+    const thresholds = record.thresholds as Record<string, any> ?? {};
 
-    const reportAConfig = reportAData.config as Record<string, unknown> | undefined;
-    const reportBConfig = reportBData.config as Record<string, unknown> | undefined;
-    const sectionsA = ((reportAData.sections ?? reportAConfig?.sections ?? []) as Record<string, unknown>[]);
-    const sectionsB = ((reportBData.sections ?? reportBConfig?.sections ?? []) as Record<string, unknown>[]);
+    const reportAConfig = reportAData.config as Record<string, any> | undefined;
+    const reportBConfig = reportBData.config as Record<string, any> | undefined;
+    const sectionsA = ((reportAData.sections ?? reportAConfig?.sections ?? []) as Record<string, any>[]);
+    const sectionsB = ((reportBData.sections ?? reportBConfig?.sections ?? []) as Record<string, any>[]);
 
-    const sectionDiffs: Array<Record<string, unknown>> = [];
+    const sectionDiffs: Array<Record<string, any>> = [];
     const allSectionIds = new Set([
-      ...sectionsA.map((s: Record<string, unknown>) => s.id || s.sectionId),
-      ...sectionsB.map((s: Record<string, unknown>) => s.id || s.sectionId),
+      ...sectionsA.map((s: Record<string, any>) => s.id || s.sectionId),
+      ...sectionsB.map((s: Record<string, any>) => s.id || s.sectionId),
     ]);
 
     for (const sectionId of allSectionIds) {
-      const sectionA = sectionsA.find((s: Record<string, unknown>) => (s.id || s.sectionId) === sectionId);
-      const sectionB = sectionsB.find((s: Record<string, unknown>) => (s.id || s.sectionId) === sectionId);
+      const sectionA = sectionsA.find((s: Record<string, any>) => (s.id || s.sectionId) === sectionId);
+      const sectionB = sectionsB.find((s: Record<string, any>) => (s.id || s.sectionId) === sectionId);
 
       if (!sectionA) {
         sectionDiffs.push({ sectionId, status: 'added_in_b', diffType: 'section_missing_in_a' });
@@ -147,7 +147,7 @@ export class CompareScheduleService {
     const identicalCount = sectionDiffs.filter(d => d.status === 'identical').length;
     const matchPercentage = totalSections > 0 ? Math.round((identicalCount / totalSections) * 100) : 100;
 
-    const resultData: Record<string, unknown> = {
+    const resultData: Record<string, any> = {
       executedAt: new Date().toISOString(),
       comparisonType: record.comparisonType,
       reportIdA: record.reportIdA,
@@ -189,7 +189,7 @@ export class CompareScheduleService {
   }
 
   async getResults(id: string) {
-    const record = await this.getById(id) as Record<string, unknown>;
+    const record = await this.getById(id) as Record<string, any>;
     return {
       id,
       name: record.name,

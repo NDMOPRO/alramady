@@ -639,8 +639,8 @@ export async function generateDiffReport(
       colorMatchScore: Math.round(colorMatchScore * 100) / 100,
     },
     layoutComparison: {
-      originalLayout,
-      replicaLayout,
+      originalLayout: originalLayout as unknown as Record<string, unknown>,
+      replicaLayout: replicaLayout as unknown as Record<string, unknown>,
       layoutMatchScore: Math.round(layoutMatchScore * 100) / 100,
       differences: layoutDifferences,
     },
@@ -718,10 +718,10 @@ Return JSON:
     parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { suggestions: [], priority: [], estimatedImpact: {} };
   }
 
-  const result = {
-    suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
-    priority: Array.isArray(parsed.priority) ? parsed.priority : [],
-    estimatedImpact: parsed.estimatedImpact || {
+  const result: { suggestions: string[]; priority: string[]; estimatedImpact: Record<string, unknown> } = {
+    suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions as string[] : [],
+    priority: Array.isArray(parsed.priority) ? parsed.priority as string[] : [],
+    estimatedImpact: (parsed.estimatedImpact as Record<string, unknown>) || {
       pixelImprovement: 0,
       colorImprovement: 0,
       layoutImprovement: 0,

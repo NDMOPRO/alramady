@@ -67,7 +67,7 @@ export async function getById(id: string) {
 }
 
 export async function create(data: Record<string, unknown>) {
-  const record = await prisma.version.create({ data });
+  const record = await prisma.version.create({ data: data as any });
   logger.info('Version created', { id: record.id, versionNumber: record.versionNumber });
   await cacheDel(`${CACHE_PREFIX}:list:*`);
   return record;

@@ -34,7 +34,7 @@ export class PostEditController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = await postEditService.create(req.body);
-      logger.info('Post edit created', { id: data.id });
+      logger.info('Post edit created', { id: (data as any).id });
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);

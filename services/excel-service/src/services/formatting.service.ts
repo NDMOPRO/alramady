@@ -348,7 +348,7 @@ export class FormattingService {
       cfRules.push(cfRule);
     }
 
-    worksheet.addConditionalFormatting({ ref: range, rules: cfRules });
+    worksheet.addConditionalFormatting({ ref: range, rules: cfRules as any });
 
     const arrayBuffer = await workbook.xlsx.writeBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -439,7 +439,7 @@ export class FormattingService {
             dv.prompt = 'Select a value';
         }
 
-        cell.dataValidation = dv;
+        cell.dataValidation = dv as any;
       }
     }
 
@@ -510,7 +510,7 @@ export class FormattingService {
     const imageId = workbook.addImage({
       buffer: imageBuffer,
       extension: 'png',
-    });
+    } as any);
 
     worksheet.addImage(imageId, {
       tl: { col: position.col - 1, row: position.row - 1 },
@@ -604,7 +604,7 @@ export class FormattingService {
   /**
    * Generate a minimal 1x1 transparent PNG image as chart fallback.
    */
-  private generateChartFallbackImage(): Buffer {
+  private generateChartFallbackImage(): any {
     const pngHeader = Buffer.from([
       0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
       0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,

@@ -91,8 +91,8 @@ export class UniversalService {
     const job = await prisma.conversionJob.create({
       data: {
         tenantId: data.tenantId,
-        sourceFormat: sourceFormat.toUpperCase() as string,
-        targetFormat: data.targetFormat.toUpperCase() as string,
+        sourceFormat: sourceFormat.toUpperCase() as any,
+        targetFormat: data.targetFormat.toUpperCase() as any,
         sourcePath: data.sourcePath,
         outputPath: outputPath,
         status: 'PENDING',
@@ -160,8 +160,8 @@ export class UniversalService {
     const job = await prisma.conversionJob.create({
       data: {
         tenantId: tenantId,
-        sourceFormat: sourceFormat.toUpperCase() as string,
-        targetFormat: targetFormat.toUpperCase() as string,
+        sourceFormat: sourceFormat.toUpperCase() as any,
+        targetFormat: targetFormat.toUpperCase() as any,
         sourcePath: sourcePath,
         outputPath: outputPath,
         status: 'PROCESSING',

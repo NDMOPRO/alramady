@@ -16,6 +16,8 @@ interface SheetMetadata {
   columnCount: number;
   index?: number;
   formulaCount?: number;
+  styles?: Record<string, any>;
+  [key: string]: any;
 }
 
 interface FormulaParserInternal extends FormulaParser {
@@ -334,7 +336,7 @@ export class SpreadsheetService {
     const workbook = await prisma.workbook.findUnique({ where: { id: workbookId } });
     if (!workbook) throw new Error('Workbook not found');
 
-    const sheets = (workbook.sheetsJson as SheetMetadata[]) || [];
+    const sheets = (workbook.sheetsJson as unknown as SheetMetadata[]) || [];
     sheets.push({ name, rowCount: 0, columnCount: 0 });
 
     await prisma.workbook.update({
@@ -349,7 +351,7 @@ export class SpreadsheetService {
     const workbook = await prisma.workbook.findUnique({ where: { id: workbookId } });
     if (!workbook) throw new Error('Workbook not found');
 
-    const sheets = (workbook.sheetsJson as SheetMetadata[]) || [];
+    const sheets = (workbook.sheetsJson as unknown as SheetMetadata[]) || [];
     if (sheetIndex < 0 || sheetIndex >= sheets.length) throw new Error('Invalid sheet index');
     if (sheets.length <= 1) throw new Error('Cannot delete the last sheet');
 
@@ -372,7 +374,7 @@ export class SpreadsheetService {
 
     const wb = new ExcelJS.Workbook();
     wb.creator = 'Rasid Platform';
-    const sheets = (workbook.sheetsJson as SheetMetadata[]) || [];
+    const sheets = (workbook.sheetsJson as unknown as SheetMetadata[]) || [];
 
     for (const sheetDef of sheets) {
       const ws = wb.addWorksheet(sheetDef.name);
@@ -427,7 +429,7 @@ export class SpreadsheetService {
     const workbook = await prisma.workbook.findUnique({ where: { id: workbookId } });
     if (!workbook) throw new Error('Workbook not found');
 
-    const sheets = (workbook.sheetsJson as SheetMetadata[]) || [];
+    const sheets = (workbook.sheetsJson as unknown as SheetMetadata[]) || [];
     const sheet = sheets.find((s: SheetMetadata) => s.name === sheetName);
     if (!sheet) throw new Error('Sheet not found');
 
@@ -453,8 +455,8 @@ export class SpreadsheetService {
     }
 
     const [workbooks, total] = await Promise.all([
-      prisma.workbook.findMany({ where, skip, take: limit, orderBy: { createdAt: 'desc' } }),
-      prisma.workbook.count({ where }),
+      prisma.workbook.findMany({ where: where as any, skip, take: limit, orderBy: { createdAt: 'desc' } }),
+      prisma.workbook.count({ where: where as any }),
     ]);
 
     return {

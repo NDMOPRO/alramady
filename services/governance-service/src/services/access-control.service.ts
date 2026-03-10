@@ -528,7 +528,7 @@ export class AccessControlService {
     };
   }
 
-  private async getApplicablePolicies(resourceType: string, resourceId: string): Promise<unknown[]> {
+  private async getApplicablePolicies(resourceType: string, resourceId: string): Promise<Array<{ enabled: boolean; name: string; rules: unknown; [key: string]: unknown }>> {
     const cacheKey = `policies:${resourceType}:${resourceId}`;
     const cached = await this.redis.get(cacheKey);
     if (cached) return JSON.parse(cached);

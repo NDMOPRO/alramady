@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import Redis from 'ioredis';
 import { z } from 'zod';
 import { Queue } from 'bullmq';

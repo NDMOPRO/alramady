@@ -69,10 +69,10 @@ router.post(
     const parsed = executeSchema.parse(req.body);
 
     const result = await getOrchestrator().execute({
-      layoutGraph: parsed.layoutGraph as Record<string, unknown>,
+      layoutGraph: parsed.layoutGraph as any,
       generator: parsed.generator as GeneratorType,
       outputFormat: parsed.outputFormat as OutputFormat,
-      options: parsed.options as Record<string, unknown>,
+      options: parsed.options as any,
     });
 
     res.json({

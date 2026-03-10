@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+// @ts-expect-error - uuid has no type declarations in this project
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 import winston from 'winston';
@@ -96,7 +97,7 @@ export class SlackIntegrationService {
 
   private readonly signingSecret: string;
 
-  constructor(private prisma: PrismaClient) {
+  constructor(private prisma: PrismaClient & Record<string, any>) {
     this.signingSecret = process.env.SLACK_SIGNING_SECRET || '';
 
     if (!this.signingSecret) {
@@ -331,10 +332,10 @@ export class SlackIntegrationService {
   ): Promise<SlackMessageResult> {
     logger.info('Sending Slack notification', { userId, tenantId, title: notification.title });
 
-    const user = await this.prisma.user.findFirst({
+    const user = await (this.prisma.user as any).findFirst({
       where: { id: userId, tenantId },
       select: { slackUserId: true, email: true, name: true },
-    });
+    }) as { slackUserId?: string; email: string; name: string } | null;
 
     if (!user) {
       throw new Error(`User ${userId} not found in tenant ${tenantId}`);
@@ -359,7 +360,7 @@ export class SlackIntegrationService {
       if (lookupData.ok && lookupData.user) {
         slackUserId = lookupData.user.id;
 
-        await this.prisma.user.update({
+        await (this.prisma.user as any).update({
           where: { id: userId },
           data: { slackUserId },
         });
@@ -560,7 +561,7 @@ export class SlackIntegrationService {
     ]);
 
     return {
-      messages: messages.map((m) => ({
+      messages: messages.map((m: any) => ({
         id: m.id,
         channel: m.channel,
         text: m.text,

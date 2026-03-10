@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import sharp from 'sharp';
 import * as crypto from 'crypto';
 
@@ -281,8 +281,8 @@ export default class ComparisonEngineService {
         structuralScore: result.structuralScore,
         contentScore: result.contentScore,
         status: result.status,
-        differences: result.differences as Prisma.InputJsonValue,
-        statistics: result.statistics as Prisma.InputJsonValue,
+        differences: result.differences as unknown as Prisma.InputJsonValue,
+        statistics: result.statistics as unknown as Prisma.InputJsonValue,
         createdAt: result.createdAt,
       },
     });
@@ -310,14 +310,14 @@ export default class ComparisonEngineService {
       const width = Math.round(((page.width as number) || 595) * dpi / 72);
       const height = Math.round(((page.height as number) || 842) * dpi / 72);
 
-      const pageElements: PageElement[] = (((page as Record<string, unknown>).elements as Array<Record<string, unknown>>) || []).map(el => ({
+      const pageElements: PageElement[] = (((page as Record<string, unknown>).elements as Array<Record<string, any>>) || []).map(el => ({
         id: el.id || crypto.randomUUID(),
         type: el.type || 'text',
         bounds: el.bounds || { x: 0, y: 0, width: 100, height: 20 },
         content: el.content,
         style: el.style,
         children: el.children || [],
-      }));
+      })) as PageElement[];
 
       let imageBuffer: Buffer;
       if (page.imageData) {
@@ -827,7 +827,7 @@ export default class ComparisonEngineService {
         id: report.id,
         comparisonId: report.comparisonId,
         overallFidelity: report.overallFidelity,
-        categories: report.categories as Prisma.InputJsonValue,
+        categories: report.categories as unknown as Prisma.InputJsonValue,
         recommendations: report.recommendations,
         generatedAt: report.generatedAt,
       },

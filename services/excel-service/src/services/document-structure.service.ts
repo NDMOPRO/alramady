@@ -73,8 +73,8 @@ class DocumentStructureService {
    * Safely extract sheets_json from a workbook record, ensuring a valid
    * structure with a sheets array.
    */
-  private extractSheetsJson(workbook: Record<string, unknown>): SheetsJson {
-    const raw = (workbook as Record<string, unknown>).sheetsJson || {} as Record<string, unknown>;
+  private extractSheetsJson(workbook: Record<string, any>): SheetsJson {
+    const raw = (workbook as any).sheetsJson || {} as Record<string, any>;
     const sheetsJson: SheetsJson = {
       ...raw,
       sheets: Array.isArray(raw.sheets) ? raw.sheets : [],

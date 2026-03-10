@@ -215,8 +215,8 @@ export class FormatPreservationService {
       data: {
         tenantId,
         userId,
-        sourceFormat: sourceFormat.toUpperCase() as string,
-        targetFormat: `${targetFormat.toUpperCase()}_VALIDATION` as string,
+        sourceFormat: sourceFormat.toUpperCase() as any,
+        targetFormat: `${targetFormat.toUpperCase()}_VALIDATION` as any,
         sourceFilename: `validation_source.${sourceFormat}`,
         outputFilename: `preservation_report.json`,
         sourceSizeBytes: sourceBuffer.length,

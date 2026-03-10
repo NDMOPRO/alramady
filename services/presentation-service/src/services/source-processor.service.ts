@@ -651,7 +651,7 @@ async function processExcelFallback(buffer: Buffer): Promise<ProcessedSource> {
 
   for (const sheetName of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheetName];
-    const jsonData: string[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+    const jsonData: string[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' }) as string[][];
 
     const headers = (jsonData[0] || []).map((h: unknown) => String(h));
     const rows = jsonData.slice(1).map((row: unknown[]) => row.map((c: unknown) => String(c)));
@@ -985,9 +985,9 @@ Requirements:
     if (slideData.chartType && slideData.chartData) {
       await slideBuilder.addChart(
         presentation.id,
-        addedSlide.slideIndex,
-        slideData.chartType,
-        slideData.chartData,
+        addedSlide.slideIndex as number,
+        slideData.chartType as any,
+        slideData.chartData as any,
         { x: 0.5, y: 2.0, w: 8.0, h: 4.0 }
       );
     }
@@ -1002,7 +1002,7 @@ Requirements:
       const imgBuffer = Buffer.from(asset.data.split(',')[1] || '', 'base64');
       await slideBuilder.addImage(
         presentation.id,
-        targetSlide.slideIndex,
+        targetSlide.slideIndex as number,
         imgBuffer,
         { x: 6.5, y: 1.5, w: 3.0, h: 3.5 }
       );

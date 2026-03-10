@@ -249,7 +249,7 @@ export default class ExportEngineService {
       },
     };
 
-    const imageBuffer = await this.chartRenderer.renderToBuffer(chartConfig as ChartConfiguration);
+    const imageBuffer = await this.chartRenderer.renderToBuffer(chartConfig as unknown as ChartConfiguration);
 
     if (imageBuffer.length < 1000) {
       throw new Error(`Chart rendering produced insufficient data for widget ${widgetId}: ${imageBuffer.length} bytes`);

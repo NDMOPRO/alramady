@@ -188,7 +188,7 @@ export class AdvancedEditService {
     if (currentPresentation) {
       const currentSnapshot: PresentationSnapshot = {
         presentationId,
-        title: currentPresentation.title,
+        title: currentPresentation.title as string,
         theme: (currentPresentation.theme as Record<string, unknown>) || {},
         slides: ((currentPresentation.slides as Record<string, unknown>[]) || []).map((slide: Record<string, unknown>) => ({
           id: slide.id as string,
@@ -266,7 +266,7 @@ export class AdvancedEditService {
     if (currentPresentation) {
       const currentSnapshot: PresentationSnapshot = {
         presentationId,
-        title: currentPresentation.title,
+        title: currentPresentation.title as string,
         theme: (currentPresentation.theme as Record<string, unknown>) || {},
         slides: ((currentPresentation.slides as Record<string, unknown>[]) || []).map((slide: Record<string, unknown>) => ({
           id: slide.id as string,

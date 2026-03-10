@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import Redis from 'ioredis';
 import { z } from 'zod';
 import { logger } from '../utils/logger';
@@ -600,7 +600,7 @@ export class LdapService {
         filter: searchFilter,
         attributes: [usernameAttr, emailAttr, displayNameAttr, groupAttr, 'dn', 'department', 'title', 'userAccountControl'],
         timeLimit: ((config.searchTimeout as number) || 10000) / 1000,
-      }, (err: Error | null, res: { on: (event: string, callback: (...args: unknown[]) => void) => void }) => {
+      }, (err: Error | null, res: { on: (event: string, callback: (...args: any[]) => void) => void }) => {
         if (err) return reject(new Error(`Search failed: ${err.message}`));
 
         res.on('searchEntry', (entry: { dn: { toString: () => string }; ppiAttributes?: Record<string, { values?: string[] }>; attributes?: Array<{ type: string; values: string[] }> }) => {
@@ -700,7 +700,7 @@ export class LdapService {
         attributes: [usernameAttr, emailAttr, displayNameAttr, groupAttr, 'dn', 'department', 'title', 'userAccountControl', 'whenChanged'],
         paged: true,
         sizeLimit: 10000,
-      }, (err: Error | null, res: { on: (event: string, callback: (...args: unknown[]) => void) => void }) => {
+      }, (err: Error | null, res: { on: (event: string, callback: (...args: any[]) => void) => void }) => {
         if (err) return reject(new Error(`Search failed: ${err.message}`));
 
         res.on('searchEntry', (entry: { dn: { toString: () => string }; attributes?: Array<{ type: string; values: string[] }> }) => {
@@ -785,7 +785,7 @@ export class LdapService {
           scope: 'base',
           filter: '(objectClass=*)',
           attributes: ['namingContexts', 'subschemaSubentry', 'supportedLDAPVersion', 'vendorName', 'vendorVersion'],
-        }, (err: Error | null, res: { on: (event: string, callback: (...args: unknown[]) => void) => void }) => {
+        }, (err: Error | null, res: { on: (event: string, callback: (...args: any[]) => void) => void }) => {
           if (err) return reject(err);
           const result: Record<string, unknown> = {};
           res.on('searchEntry', (entry: { attributes?: Array<{ type: string; values: string[] }> }) => {

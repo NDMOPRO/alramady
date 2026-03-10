@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { logger } from '../utils/logger';
 
 const prisma = new PrismaClient();
@@ -122,7 +122,7 @@ export class NotificationService {
     let sendResult: Record<string, unknown>;
 
     try {
-      sendResult = await mailTransport.sendMail(mailOptions);
+      sendResult = await mailTransport.sendMail(mailOptions) as unknown as Record<string, unknown>;
       logger.info('Email sent successfully', {
         messageId,
         to: to.trim(),

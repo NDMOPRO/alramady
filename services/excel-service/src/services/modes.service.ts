@@ -75,7 +75,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', id);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     const modeData = {
       ...workbook,
       currentMode: sheetsJson._modeConfig?.currentMode || 'easy',
@@ -184,7 +184,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', workbookId);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._modeConfig) {
       sheetsJson._modeConfig = {};
     }
@@ -213,7 +213,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', workbookId);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     const modeConfig = sheetsJson._modeConfig || {
       currentMode: 'easy',
       easy: { enabledFeatures: [] },
@@ -229,7 +229,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', workbookId);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     const complexity = this.analyzeFileComplexity(sheetsJson);
     const reasons: string[] = [];
     let recommendedMode: ModeName = 'easy';
@@ -279,7 +279,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', workbookId);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._modeConfig) sheetsJson._modeConfig = { currentMode: 'easy' };
     sheetsJson._modeConfig.detailLevel = level;
     sheetsJson._modeConfig.detailLevelUpdatedAt = new Date().toISOString();
@@ -303,7 +303,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', workbookId);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
 
     if (operation.type === 'sheet' && Array.isArray(sheetsJson.sheets)) {
       const sheets = sheetsJson.sheets;
@@ -328,7 +328,7 @@ export class ModesService {
     return { workbook: updated, operation };
   }
 
-  private analyzeFileComplexity(sheetsJson: Record<string, unknown>): FileComplexity {
+  private analyzeFileComplexity(sheetsJson: Record<string, any>): FileComplexity {
     let formulaCount = 0;
     const uniqueFunctions = new Set<string>();
     let sheetCount = 0;
@@ -401,7 +401,7 @@ export class ModesService {
       throw new NotFoundError('Workbook', workbookId);
     }
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson || {};
+    const sheetsJson: Record<string, any> = ((workbook as any).sheetsJson as Record<string, any>) || {};
     if (!sheetsJson._modeConfig) {
       sheetsJson._modeConfig = { currentMode: 'easy' };
     }

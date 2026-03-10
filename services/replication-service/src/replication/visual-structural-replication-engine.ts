@@ -5,7 +5,7 @@
 
 import crypto from 'crypto';
 import sharp from 'sharp';
-import { logger } from '../../utils/logger.js';
+import { logger } from '../utils/logger.js';
 import { SRCEnforcement } from './constitution/src-enforcement.js';
 import { CompositeMode } from './modes/composite-modes.js';
 import {

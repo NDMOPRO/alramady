@@ -794,7 +794,7 @@ router.post(
         layoutGraph: parsed.layoutGraph as Parameters<MultiFormatGeneratorService['generate']>[0]['layoutGraph'],
         outputFormat: parsed.outputFormat,
         outputPath,
-        options: parsed.options,
+        options: parsed.options as any,
       });
 
       const buffer = await fs.readFile(outputPath);

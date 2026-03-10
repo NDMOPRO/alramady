@@ -34,7 +34,7 @@ export class ExternalSimulationController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = await externalSimulationService.create(req.body);
-      logger.info('External simulation created', { id: data.id });
+      logger.info('External simulation created', { id: (data as any).id });
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);

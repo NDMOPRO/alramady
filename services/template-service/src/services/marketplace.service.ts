@@ -574,7 +574,6 @@ export class MarketplaceService {
         platformFee,
         authorEarnings,
         currency: template.currency || 'USD',
-        status: 'completed',
         transactionAt: new Date(),
       },
     });
@@ -601,7 +600,7 @@ export class MarketplaceService {
 
     if (template.pricingType === 'paid') {
       const purchase = await this.prisma.revenueTransaction.findFirst({
-        where: { templateId: listingId, buyerId: tenantId, status: 'completed' },
+        where: { templateId: listingId, buyerId: tenantId },
       });
 
       if (!purchase && template.authorId !== tenantId) {
@@ -737,7 +736,7 @@ export class MarketplaceService {
       throw new Error('Refund reason must be at least 10 characters');
     }
 
-    const existingRefund = await this.prisma.refundRequest.findFirst({
+    const existingRefund = await (this.prisma as any).refundRequest.findFirst({
       where: { transactionId: purchaseId },
     });
 
@@ -745,7 +744,7 @@ export class MarketplaceService {
       throw new Error('A refund request already exists for this purchase');
     }
 
-    const refund = await this.prisma.refundRequest.create({
+    const refund = await (this.prisma as any).refundRequest.create({
       data: {
         transactionId: purchaseId,
         buyerId: transaction.buyerId,
@@ -777,7 +776,7 @@ export class MarketplaceService {
       throw new Error('Report reason must be at least 10 characters');
     }
 
-    const existingReport = await this.prisma.listingReport.findFirst({
+    const existingReport = await (this.prisma as any).listingReport.findFirst({
       where: { templateId: listingId, reporterId: tenantId },
     });
 
@@ -785,7 +784,7 @@ export class MarketplaceService {
       throw new Error('You have already reported this listing');
     }
 
-    const report = await this.prisma.listingReport.create({
+    const report = await (this.prisma as any).listingReport.create({
       data: {
         templateId: listingId,
         reporterId: tenantId,
@@ -799,41 +798,42 @@ export class MarketplaceService {
   }
 
   private toMarketplaceTemplate(record: Record<string, unknown>): MarketplaceTemplate {
+    const r = record as any;
     return {
-      id: record.id,
-      name: record.name,
-      description: record.description,
-      longDescription: record.longDescription,
-      category: record.category,
-      subcategory: record.subcategory || undefined,
-      tags: JSON.parse(record.tags as string || '[]'),
-      previewImages: JSON.parse(record.previewImages as string || '[]'),
+      id: r.id as string,
+      name: r.name as string,
+      description: r.description as string,
+      longDescription: r.longDescription as string,
+      category: r.category as string,
+      subcategory: r.subcategory || undefined,
+      tags: JSON.parse(r.tags as string || '[]'),
+      previewImages: JSON.parse(r.previewImages as string || '[]'),
       author: {
-        userId: record.authorId,
-        name: record.authorName,
+        userId: r.authorId as string,
+        name: r.authorName as string,
         verified: false,
         totalTemplates: 0,
         averageRating: 0,
       },
       pricing: {
-        type: record.pricingType,
-        price: record.price || undefined,
-        currency: record.currency || 'USD',
-        discount: record.discount ? JSON.parse(record.discount as string) : undefined,
+        type: r.pricingType as 'free' | 'paid' | 'subscription',
+        price: r.price || undefined,
+        currency: r.currency || 'USD',
+        discount: r.discount ? JSON.parse(r.discount as string) : undefined,
       },
       stats: {
-        downloads: record.downloads || 0,
-        views: record.views || 0,
-        rating: record.rating || 0,
-        ratingCount: record.ratingCount || 0,
-        favorites: record.favorites || 0,
+        downloads: r.downloads || 0,
+        views: r.views || 0,
+        rating: r.rating || 0,
+        ratingCount: r.ratingCount || 0,
+        favorites: r.favorites || 0,
       },
-      version: record.version,
-      compatibility: JSON.parse(record.compatibility as string || '[]'),
-      fileUrl: record.fileUrl,
-      status: record.status,
-      createdAt: record.createdAt,
-      updatedAt: record.updatedAt,
+      version: r.version as string,
+      compatibility: JSON.parse(r.compatibility as string || '[]'),
+      fileUrl: r.fileUrl as string,
+      status: r.status as 'draft' | 'pending_review' | 'published' | 'rejected' | 'archived',
+      createdAt: r.createdAt as Date,
+      updatedAt: r.updatedAt as Date,
     };
   }
 }

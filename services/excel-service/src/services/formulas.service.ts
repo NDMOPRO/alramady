@@ -144,7 +144,7 @@ export class FormulasService {
 
   async executeFormula(workbookId: string, cellRef: string, expression: string) {
     const workbook = await this.getById(workbookId);
-    const formulasJson = (workbook as Record<string, unknown>).formulasJson || {};
+    const formulasJson: Record<string, any> = ((workbook as any).formulasJson as Record<string, any>) || {};
 
     formulasJson[cellRef] = {
       expression,
@@ -167,7 +167,7 @@ export class FormulasService {
 
   async batchExecute(workbookId: string, formulas: Array<{ cellRef: string; expression: string }>) {
     const workbook = await this.getById(workbookId);
-    const formulasJson = (workbook as Record<string, unknown>).formulasJson || {};
+    const formulasJson: Record<string, any> = ((workbook as any).formulasJson as Record<string, any>) || {};
 
     for (const formula of formulas) {
       formulasJson[formula.cellRef] = {

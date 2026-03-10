@@ -142,7 +142,7 @@ describe('ChartEngineService', () => {
     it('should render chart config to PNG', async () => {
       const config = { type: 'bar', data: { labels: ['A'], datasets: [{ data: [1] }] } };
 
-      const result = await chartEngine.renderChartToImage(config, 'png', 800, 600);
+      const result = await chartEngine.renderChartToImage(config as any, 'png', 800, 600);
 
       expect(result).toBeInstanceOf(Buffer);
     });
@@ -150,7 +150,7 @@ describe('ChartEngineService', () => {
     it('should render chart config to JPEG', async () => {
       const config = { type: 'line', data: { labels: ['A'], datasets: [{ data: [1] }] } };
 
-      const result = await chartEngine.renderChartToImage(config, 'jpeg', 800, 600);
+      const result = await chartEngine.renderChartToImage(config as any, 'jpeg', 800, 600);
 
       expect(result).toBeInstanceOf(Buffer);
     });

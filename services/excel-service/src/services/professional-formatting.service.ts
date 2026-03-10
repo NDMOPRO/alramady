@@ -76,28 +76,28 @@ class ProfessionalFormattingService {
     return workbook;
   }
 
-  private getSheetsJson(workbook: Record<string, unknown>): Record<string, unknown>[] {
-    if (Array.isArray(workbook.sheetsJson)) return workbook.sheetsJson as Record<string, unknown>[];
+  private getSheetsJson(workbook: Record<string, any>): Record<string, any>[] {
+    if (Array.isArray(workbook.sheetsJson)) return workbook.sheetsJson as Record<string, any>[];
     if (typeof workbook.sheetsJson === 'string') return JSON.parse(workbook.sheetsJson);
     return [];
   }
 
-  private findSheet(sheets: Record<string, unknown>[], sheetName: string): Record<string, unknown> {
-    const sheet = sheets.find((s: Record<string, unknown>) => s.name === sheetName);
+  private findSheet(sheets: Record<string, any>[], sheetName: string): Record<string, any> {
+    const sheet = sheets.find((s: Record<string, any>) => s.name === sheetName);
     if (!sheet) {
       throw new Error(`Sheet "${sheetName}" not found in workbook`);
     }
     return sheet;
   }
 
-  private ensureFormatting(sheet: Record<string, unknown>): Record<string, unknown> {
+  private ensureFormatting(sheet: Record<string, any>): Record<string, any> {
     if (!sheet._formatting) {
       sheet._formatting = {};
     }
-    return sheet._formatting as Record<string, unknown>;
+    return sheet._formatting as Record<string, any>;
   }
 
-  private async persistSheets(workbookId: string, sheetsJson: Record<string, unknown>[]): Promise<void> {
+  private async persistSheets(workbookId: string, sheetsJson: Record<string, any>[]): Promise<void> {
     const { prisma } = await import('../utils/prisma.js');
     const { cacheDel } = await import('../utils/redis.js');
 
@@ -611,7 +611,7 @@ class ProfessionalFormattingService {
       if (sourceRules.length === 0) continue;
 
       // Find matching target sheet by name, or apply to first target sheet
-      let targetSheet = targetSheets.find((t: Record<string, unknown>) => t.name === sourceSheet.name);
+      let targetSheet = targetSheets.find((t: Record<string, any>) => t.name === sourceSheet.name);
       if (!targetSheet && targetSheets.length > 0) {
         targetSheet = targetSheets[0];
       }

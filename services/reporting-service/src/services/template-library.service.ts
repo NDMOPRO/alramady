@@ -60,22 +60,22 @@ export class ReportTemplateLibraryService {
     return record;
   }
 
-  async create(data: Record<string, unknown>) {
+  async create(data: Record<string, any>) {
     const record = await prisma.reportTemplate.create({
       data: {
         ...data,
         tenantId: data.tenantId,
         createdBy: data.userId || data.createdBy,
-      },
+      } as any,
     });
     logger.info('Report template created', { id: record.id, category: data.category });
     await cacheDel(`${CACHE_PREFIX}:list:*`);
     return record;
   }
 
-  async update(id: string, data: Record<string, unknown>) {
+  async update(id: string, data: Record<string, any>) {
     await this.getById(id);
-    const updated = await prisma.reportTemplate.update({ where: { id }, data });
+    const updated = await prisma.reportTemplate.update({ where: { id }, data: data as any });
     logger.info('Report template updated', { id });
     await Promise.all([cacheDel(`${CACHE_PREFIX}:${id}`), cacheDel(`${CACHE_PREFIX}:list:*`)]);
     return updated;
@@ -90,7 +90,7 @@ export class ReportTemplateLibraryService {
   }
 
   async duplicate(id: string) {
-    const source = await this.getById(id) as Record<string, unknown>;
+    const source = await this.getById(id) as Record<string, any>;
     const {
       id: _id,
       createdAt,
@@ -122,7 +122,7 @@ export class ReportTemplateLibraryService {
         isSystem: false,
         tags: rest.tags,
         settings: rest.settings,
-      },
+      } as any,
     });
     logger.info('Report template duplicated', { sourceId: id, newId: record.id });
     await cacheDel(`${CACHE_PREFIX}:list:*`);
@@ -138,19 +138,19 @@ export class ReportTemplateLibraryService {
       select: { category: true },
       distinct: ['category'],
     });
-    const result = categories.map((c: { category: string }) => c.category);
+    const result = categories.map((c) => c.category as string);
     await cacheSet(cacheKey, result, CACHE_TTL);
     return result;
   }
 
   async applyTemplate(id: string, targetReportId: string) {
-    const template = await this.getById(id) as Record<string, unknown>;
+    const template = await this.getById(id) as Record<string, any>;
     logger.info('Report template applied', { templateId: id, targetReportId });
     return { templateId: id, targetReportId, config: template.templateConfig, applied: true };
   }
 
   async saveReportAsTemplate(reportId: string, name: string, category: string, userId: string, tenantId: string) {
-    const report = await prisma.report.findUnique({ where: { id: reportId } }) as Record<string, unknown>;
+    const report = await prisma.report.findUnique({ where: { id: reportId } }) as unknown as Record<string, any>;
     if (!report) throw new NotFoundError('Report', reportId);
 
     const record = await prisma.reportTemplate.create({
@@ -174,7 +174,7 @@ export class ReportTemplateLibraryService {
         version: 1,
         tags: [],
         settings: {},
-      },
+      } as any,
     });
 
     logger.info('Report saved as template', { reportId, templateId: record.id, name, category });
@@ -183,7 +183,7 @@ export class ReportTemplateLibraryService {
   }
 
   async getPreview(id: string) {
-    const template = await this.getById(id) as Record<string, unknown>;
+    const template = await this.getById(id) as Record<string, any>;
 
     const variables = template.variables as Record<string, unknown> ?? {};
     const sampleData: Record<string, string> = {};

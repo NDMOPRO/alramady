@@ -100,18 +100,18 @@ export async function importFromSource(id: string, userId: string) {
 
   const sourceInput = {
     type: source.sourceType as 'text' | 'pdf' | 'word' | 'url' | 'email' | 'csv' | 'json',
-    content: source.content,
-    filePath: source.filePath,
-    url: source.url,
-    metadata: source.metadata || {},
+    content: source.content as string | undefined,
+    filePath: source.filePath as string | undefined,
+    url: source.url as string | undefined,
+    metadata: (source.metadata || {}) as Record<string, unknown>,
   };
 
   await processSource(sourceInput);
 
   const presentation = await createPresentationFromSource(
     sourceInput,
-    { language: source.language || 'ar', slideCount: source.slideCount, style: source.style },
-    source.tenantId || '',
+    { language: (source.language as string) || 'ar', slideCount: source.slideCount as number | undefined, style: source.style as string | undefined },
+    (source.tenantId as string) || '',
     userId,
   );
 
@@ -149,10 +149,10 @@ export async function previewSource(id: string, userId: string) {
 
   const processed = await processSource({
     type: source.sourceType as 'text' | 'pdf' | 'word' | 'url' | 'email' | 'csv' | 'json',
-    content: source.content,
-    filePath: source.filePath,
-    url: source.url,
-    metadata: source.metadata || {},
+    content: source.content as string | undefined,
+    filePath: source.filePath as string | undefined,
+    url: source.url as string | undefined,
+    metadata: (source.metadata || {}) as Record<string, unknown>,
   });
 
   const structure = await suggestPresentationStructure(processed.title || '', JSON.stringify(processed.sections || []));

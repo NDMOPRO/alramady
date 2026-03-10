@@ -848,7 +848,7 @@ export class AutoDashboardGeneratorService {
 
     // Check categorical vs text
     const uniqueRatio = new Set(sample.map((v: unknown) => String(v))).size / sampleSize;
-    const avgLength = sample.reduce((sum: number, v: unknown) => sum + String(v).length, 0) / sampleSize;
+    const avgLength = (sample.reduce((sum: number, v: unknown) => sum + String(v).length, 0) as number) / sampleSize;
 
     if (uniqueRatio < 0.5 && avgLength < 50) return 'categorical';
     if (avgLength > 100) return 'text';

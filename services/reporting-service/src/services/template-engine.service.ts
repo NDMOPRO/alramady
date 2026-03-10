@@ -38,13 +38,13 @@ interface DataSourceRef {
 }
 
 interface ReportConfig {
-  sections: Array<{ id: string; type: string; content: Record<string, unknown>; position: number; createdAt: string }>;
+  sections: Array<{ id: string; type: string; content: Record<string, any>; position: number; createdAt: string }>;
   header: { logo?: string; title?: string; showPageNumbers: boolean } | null;
   footer: { text?: string; showDate: boolean; showPageNumbers: boolean } | null;
   coverPage: CoverPageConfig | null;
   tableOfContents: Array<{ title: string; page: number; level: number }> | null;
   dataSources: DataSourceRef[];
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
 }
 
 export class TemplateEngineService {

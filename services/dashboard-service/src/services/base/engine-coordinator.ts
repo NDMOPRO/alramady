@@ -27,27 +27,27 @@ export class EngineCoordinator {
 
     switch (type) {
       case 'bar':
-        return chartEngine.renderBarChart(data, config);
+        return chartEngine.renderBarChart(data as any, config);
       case 'line':
-        return chartEngine.renderLineChart(data, config);
+        return chartEngine.renderLineChart(data as any, config);
       case 'pie':
-        return chartEngine.renderPieChart(data, config);
+        return chartEngine.renderPieChart(data as any, config);
       case 'doughnut':
-        return chartEngine.renderPieChart(data, { ...config, doughnut: true });
+        return chartEngine.renderPieChart(data as any, { ...config, doughnut: true });
       case 'scatter':
-        return chartEngine.renderScatterPlot(data, config);
+        return chartEngine.renderScatterPlot(data as any, config);
       case 'area':
-        return chartEngine.renderAreaChart(data, config);
+        return chartEngine.renderAreaChart(data as any, config);
       case 'radar':
-        return chartEngine.renderRadarChart(data, config);
+        return chartEngine.renderRadarChart(data as any, config);
       case 'gauge':
-        return chartEngine.renderGaugeChart(data.value, data.max, config);
+        return chartEngine.renderGaugeChart(data.value as any, data.max as any, config);
       case 'waterfall':
-        return chartEngine.renderWaterfallChart(data, config);
+        return chartEngine.renderWaterfallChart(data as any, config);
       case 'combined':
-        return chartEngine.renderCombinedChart(data, config);
+        return chartEngine.renderCombinedChart(data as any, config);
       default:
-        return chartEngine.renderBarChart(data, config);
+        return chartEngine.renderBarChart(data as any, config);
     }
   }
 
@@ -57,7 +57,7 @@ export class EngineCoordinator {
     width: number,
     height: number,
   ): Promise<Buffer> {
-    return chartEngine.renderChartToImage(chartConfig, format, width, height);
+    return chartEngine.renderChartToImage(chartConfig as any, format, width, height);
   }
 
   // ─── Filter Engine ────────────────────────────────────────────────
@@ -134,7 +134,7 @@ export class EngineCoordinator {
   }
 
   async addWidget(dashboardId: string, widget: Record<string, unknown>): Promise<Record<string, unknown>> {
-    return dashboardBuilder.addWidget(dashboardId, widget);
+    return dashboardBuilder.addWidget(dashboardId, widget as any);
   }
 
   async removeWidget(dashboardId: string, widgetId: string): Promise<Record<string, unknown>> {
@@ -146,7 +146,7 @@ export class EngineCoordinator {
   }
 
   async reorderWidgets(dashboardId: string, positions: Record<string, unknown>[]): Promise<Record<string, unknown>> {
-    return dashboardBuilder.reorderWidgets(dashboardId, positions);
+    return dashboardBuilder.reorderWidgets(dashboardId, positions as any);
   }
 
   async duplicateDashboard(dashboardId: string, userId: string): Promise<Record<string, unknown>> {

@@ -26,7 +26,7 @@ export class ReportPostEditService {
     const cached = await cacheGet<{ data: unknown[]; total: number; page: number; limit: number; totalPages: number }>(cacheKey);
     if (cached) return cached;
 
-    const where: Record<string, unknown> = {};
+    const where: Record<string, any> = {};
     if (search) {
       where.OR = [
         { editType: { contains: search, mode: 'insensitive' } },
@@ -59,7 +59,7 @@ export class ReportPostEditService {
     return record;
   }
 
-  async create(data: Record<string, unknown>) {
+  async create(data: Record<string, any>) {
     const record = await prisma.reportPostEdit.create({
       data: {
         ...data,
@@ -71,7 +71,7 @@ export class ReportPostEditService {
     return record;
   }
 
-  async update(id: string, data: Record<string, unknown>) {
+  async update(id: string, data: Record<string, any>) {
     await this.getById(id);
     const updated = await prisma.reportPostEdit.update({ where: { id }, data });
     logger.info('Report post-edit updated', { id });
@@ -98,7 +98,7 @@ export class ReportPostEditService {
   }
 
   async revert(id: string) {
-    const record = await this.getById(id) as Record<string, unknown>;
+    const record = await this.getById(id) as Record<string, any>;
     const updated = await prisma.reportPostEdit.update({
       where: { id },
       data: { isPublished: false, version: record.version + 1 },
@@ -116,7 +116,7 @@ export class ReportPostEditService {
     return { reportId, totalEdits: edits.length, edits };
   }
 
-  async applyWatermark(id: string, watermarkConfig: Record<string, unknown>) {
+  async applyWatermark(id: string, watermarkConfig: Record<string, any>) {
     const updated = await prisma.reportPostEdit.update({
       where: { id },
       data: { watermarkConfig },
@@ -126,7 +126,7 @@ export class ReportPostEditService {
     return updated;
   }
 
-  async applySectionEdit(reportId: string, sectionId: string, changes: Record<string, unknown>, userId: string) {
+  async applySectionEdit(reportId: string, sectionId: string, changes: Record<string, any>, userId: string) {
     const latestEdit = await prisma.reportPostEdit.findFirst({
       where: { reportId, targetSectionId: sectionId },
       orderBy: { version: 'desc' },
@@ -154,7 +154,7 @@ export class ReportPostEditService {
   }
 
   async getVersionDiff(id: string) {
-    const current = await this.getById(id) as Record<string, unknown>;
+    const current = await this.getById(id) as Record<string, any>;
 
     const previousVersion = await prisma.reportPostEdit.findFirst({
       where: {
@@ -168,14 +168,14 @@ export class ReportPostEditService {
     const previousChanges = previousVersion?.changes ?? {};
 
     const allKeys = new Set([
-      ...Object.keys(currentChanges as Record<string, unknown>),
-      ...Object.keys(previousChanges as Record<string, unknown>),
+      ...Object.keys(currentChanges as Record<string, any>),
+      ...Object.keys(previousChanges as Record<string, any>),
     ]);
 
     const diff: Record<string, { previous: unknown; current: unknown }> = {};
     for (const key of allKeys) {
-      const prev = (previousChanges as Record<string, unknown>)[key];
-      const curr = (currentChanges as Record<string, unknown>)[key];
+      const prev = (previousChanges as Record<string, any>)[key];
+      const curr = (currentChanges as Record<string, any>)[key];
       if (JSON.stringify(prev) !== JSON.stringify(curr)) {
         diff[key] = { previous: prev ?? null, current: curr ?? null };
       }
@@ -193,7 +193,7 @@ export class ReportPostEditService {
   }
 
   async reexport(id: string, format: string) {
-    const record = await this.getById(id) as Record<string, unknown>;
+    const record = await this.getById(id) as Record<string, any>;
 
     logger.info('Re-exporting report with applied edits', { id, reportId: record.reportId, format });
 
@@ -202,9 +202,9 @@ export class ReportPostEditService {
       orderBy: { version: 'asc' },
     });
 
-    const mergedChanges: Record<string, unknown> = {};
+    const mergedChanges: Record<string, any> = {};
     for (const edit of allEdits) {
-      const changes = edit.changes as Record<string, unknown> | null;
+      const changes = edit.changes as Record<string, any> | null;
       if (changes) {
         Object.assign(mergedChanges, changes);
       }

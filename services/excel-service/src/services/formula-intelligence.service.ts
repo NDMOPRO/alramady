@@ -237,14 +237,14 @@ export class FormulaIntelligenceService {
     const workbook = await prisma.workbook.findUnique({ where: { id: workbookId } });
     if (!workbook) return [];
 
-    const sheetsJson = (workbook as unknown as Record<string, unknown>).sheetsJson as Record<string, unknown> || {};
+    const sheetsJson = ((workbook as any).sheetsJson as Record<string, any>) || {};
     const formulas: Array<{ cell: string; formula: string }> = [];
 
     if (sheetsJson.sheets && Array.isArray(sheetsJson.sheets)) {
-      const sheetData = (sheetsJson.sheets as Array<Record<string, unknown>>).find((s: Record<string, unknown>) => s.name === sheet);
+      const sheetData = (sheetsJson.sheets as Array<Record<string, any>>).find((s: Record<string, any>) => s.name === sheet);
       if (sheetData?.cells) {
         for (const [cellRef, cellData] of Object.entries(sheetData.cells)) {
-          const data = cellData as Record<string, unknown>;
+          const data = cellData as Record<string, any>;
           if (data?.formula) {
             formulas.push({ cell: cellRef, formula: data.formula });
           }

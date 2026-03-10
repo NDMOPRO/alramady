@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as ExcelJS from 'exceljs';
 import * as crypto from 'crypto';
 
@@ -253,7 +253,7 @@ export default class MacroEngineService {
         id: recording.id,
         name: recording.name,
         description: recording.description,
-        actions: recording.actions as Prisma.InputJsonValue,
+        actions: recording.actions as unknown as Prisma.InputJsonValue,
         createdBy: recording.createdBy,
         variables: recording.variables as Prisma.InputJsonValue,
         createdAt: recording.createdAt,
@@ -896,7 +896,7 @@ export default class MacroEngineService {
       update: {
         name: recording.name,
         description: recording.description,
-        actions: recording.actions as Prisma.InputJsonValue,
+        actions: recording.actions as unknown as Prisma.InputJsonValue,
         variables: recording.variables as Prisma.InputJsonValue,
         updatedAt: new Date(),
       },
@@ -904,7 +904,7 @@ export default class MacroEngineService {
         id: recording.id,
         name: recording.name,
         description: recording.description,
-        actions: recording.actions as Prisma.InputJsonValue,
+        actions: recording.actions as unknown as Prisma.InputJsonValue,
         createdBy: recording.createdBy,
         variables: recording.variables as Prisma.InputJsonValue,
         createdAt: recording.createdAt,

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { logger } from '../utils/logger';
 
 // ─── Interfaces ──────────────────────────────────────────────────────────────

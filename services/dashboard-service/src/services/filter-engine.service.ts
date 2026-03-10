@@ -30,6 +30,7 @@ interface WidgetRow {
   title: string;
   config: string | Record<string, unknown>;
   dataset_id: string | null;
+  dashboard_id: string;
   position_x: number;
   position_y: number;
   position_w: number;
@@ -211,7 +212,7 @@ export async function applyFilter(
         paramIdx++;
       } else if (filterType === 'dropdown' && sanitizedValue) {
         whereClause = `WHERE "${column}" = $${paramIdx}`;
-        queryParams.push(sanitizedValue);
+        queryParams.push(sanitizedValue as string | number);
         paramIdx++;
       } else if (filterType === 'slider') {
         whereClause = `WHERE "${column}"::float <= $${paramIdx}`;

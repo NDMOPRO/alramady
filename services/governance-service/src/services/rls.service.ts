@@ -227,7 +227,7 @@ export class RLSService {
         description: config.description || `RLS policy for ${resourceType}`,
         config: {
           actions: config.actions,
-          conditions: config.conditions as Record<string, unknown>,
+          conditions: config.conditions as unknown as Record<string, unknown>,
         } as Prisma.InputJsonValue,
         priority: existingCount + 1,
         active: true,

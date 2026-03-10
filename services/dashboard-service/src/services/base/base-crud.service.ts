@@ -96,7 +96,7 @@ export abstract class BaseCrudService<T = unknown> {
     ]);
 
     const result: ListResult<T> = {
-      data,
+      data: data as T[],
       total,
       page,
       limit,
@@ -116,14 +116,14 @@ export abstract class BaseCrudService<T = unknown> {
     if (!record) throw new NotFoundError(this.entityLabel, id);
 
     await cacheSet(cacheKey, record, this.cacheTtl);
-    return record;
+    return record as T;
   }
 
   async create(data: Record<string, unknown>): Promise<T> {
     const record = await this.model.create({ data });
-    logger.info(`${this.entityLabel} created`, { id: record.id });
+    logger.info(`${this.entityLabel} created`, { id: (record as any).id });
     await cacheDel(`${this.cachePrefix}:list:*`);
-    return record;
+    return record as T;
   }
 
   async update(id: string, data: Record<string, unknown>): Promise<T> {
@@ -134,7 +134,7 @@ export abstract class BaseCrudService<T = unknown> {
       cacheDel(`${this.cachePrefix}:${id}`),
       cacheDel(`${this.cachePrefix}:list:*`),
     ]);
-    return updated;
+    return updated as T;
   }
 
   async remove(id: string): Promise<{ deleted: boolean }> {
@@ -154,9 +154,9 @@ export abstract class BaseCrudService<T = unknown> {
     const record = await this.model.create({
       data: { ...rest, name: `${rest.name} (Copy)` },
     });
-    logger.info(`${this.entityLabel} duplicated`, { sourceId: id, newId: record.id });
+    logger.info(`${this.entityLabel} duplicated`, { sourceId: id, newId: (record as any).id });
     await cacheDel(`${this.cachePrefix}:list:*`);
-    return record;
+    return record as T;
   }
 
   /**

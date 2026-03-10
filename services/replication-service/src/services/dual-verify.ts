@@ -106,13 +106,13 @@ export async function list(params: ListParams) {
   if (verificationMethod) where.matchMode = verificationMethod;
 
   const [data, total] = await Promise.all([
-    (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).findMany({
+    (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).findMany({
       where,
       skip: (page - 1) * limit,
       take: limit,
       orderBy: { [sortBy]: sortOrder },
     }),
-    (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).count({ where }),
+    (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).count({ where }),
   ]);
 
   const result = { data, total, page, limit, totalPages: Math.ceil(total / limit) };
@@ -126,7 +126,7 @@ export async function getById(id: string) {
   const cached = await cacheGet(cacheKey);
   if (cached) return cached;
 
-  const record = await (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).findUnique({ where: { id } });
+  const record = await (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).findUnique({ where: { id } });
   if (!record) throw new NotFoundError('DualVerify', id);
 
   await cacheSet(cacheKey, record);
@@ -134,27 +134,27 @@ export async function getById(id: string) {
 }
 
 export async function create(data: Record<string, unknown>) {
-  const record = await (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).create({ data });
+  const record = await (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).create({ data });
   await cacheDel(`${CACHE_PREFIX}:list`);
   logger.info('Created dual-verify', { id: record.id });
   return record;
 }
 
 export async function update(id: string, data: Record<string, unknown>) {
-  const existing = await (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).findUnique({ where: { id } });
+  const existing = await (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).findUnique({ where: { id } });
   if (!existing) throw new NotFoundError('DualVerify', id);
 
-  const record = await (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).update({ where: { id }, data });
+  const record = await (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).update({ where: { id }, data });
   await Promise.all([cacheDel(`${CACHE_PREFIX}:${id}`), cacheDel(`${CACHE_PREFIX}:list`)]);
   logger.info('Updated dual-verify', { id });
   return record;
 }
 
 export async function remove(id: string) {
-  const existing = await (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).findUnique({ where: { id } });
+  const existing = await (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).findUnique({ where: { id } });
   if (!existing) throw new NotFoundError('DualVerify', id);
 
-  await (prisma[MODEL as keyof typeof prisma] as Record<string, Function>).delete({ where: { id } });
+  await (prisma[MODEL as keyof typeof prisma] as unknown as Record<string, Function>).delete({ where: { id } });
   await Promise.all([cacheDel(`${CACHE_PREFIX}:${id}`), cacheDel(`${CACHE_PREFIX}:list`)]);
   logger.info('Deleted dual-verify', { id });
   return { success: true };

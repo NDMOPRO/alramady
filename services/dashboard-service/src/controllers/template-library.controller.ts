@@ -34,7 +34,7 @@ export class TemplateLibraryController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = await templateLibraryService.create(req.body);
-      logger.info('Template created', { id: data.id });
+      logger.info('Template created', { id: (data as any).id });
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);

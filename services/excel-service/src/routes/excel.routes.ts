@@ -408,7 +408,7 @@ router.post(
   validate(evaluateFormulaSchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { formula, cellContext } = req.body;
-    const contextMap = new Map<string, unknown>(Object.entries(cellContext));
+    const contextMap = new Map<string, any>(Object.entries(cellContext));
     const result = formulaEngineService.evaluateFormula(formula, contextMap);
     res.status(200).json({ success: true, data: result });
   })

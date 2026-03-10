@@ -244,7 +244,7 @@ export class AdvancedOperationsService {
     for (let r = 0; r < rows.length; r++) {
       for (let c = 0; c < rows[r].length; c++) {
         const cell = worksheet.getCell(parsedRange.startRow + r, parsedRange.startCol + c);
-        cell.value = rows[r][c];
+        cell.value = rows[r][c] as any;
       }
     }
 

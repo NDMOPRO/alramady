@@ -131,7 +131,7 @@ export class AIIntegrationService {
 
   // --- Private helpers ---
 
-  private async callAIService(endpoint: string, data: unknown): Promise<unknown> {
+  private async callAIService(endpoint: string, data: unknown): Promise<any> {
     try {
       const response = await fetch(`${AI_SERVICE_URL}${endpoint}`, {
         method: 'POST',

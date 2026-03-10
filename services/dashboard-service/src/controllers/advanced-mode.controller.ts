@@ -32,7 +32,7 @@ export class AdvancedModeController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = await advancedModeService.create(req.body);
-      logger.info('Advanced-mode dashboard created', { id: data.id });
+      logger.info('Advanced-mode dashboard created', { id: (data as any).id });
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);

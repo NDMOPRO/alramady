@@ -149,7 +149,7 @@ describe('BaseCrudService', () => {
 
       const result = await service.update('1', { name: 'Updated' });
 
-      expect(result.name).toBe('Updated');
+      expect((result as any).name).toBe('Updated');
       expect(cacheDel).toHaveBeenCalledWith('test:entity:1');
       expect(cacheDel).toHaveBeenCalledWith('test:entity:list:*');
     });

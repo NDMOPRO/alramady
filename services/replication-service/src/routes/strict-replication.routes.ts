@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import crypto from 'crypto';
 import { authMiddleware } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
@@ -1353,7 +1353,7 @@ router.post(
     };
     const mode = modeMap[config.mode] || CompositeMode.STRICT_REPLICATION;
 
-    const report = enforcement.enforceSRC(config.thresholds, mode as CompositeMode);
+    const report = enforcement.enforceSRC(config.thresholds, mode as typeof CompositeMode[keyof typeof CompositeMode]);
 
     res.status(200).json({ success: true, data: report });
   })

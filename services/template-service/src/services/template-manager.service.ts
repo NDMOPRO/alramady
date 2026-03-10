@@ -2,7 +2,7 @@ import handlebars from 'handlebars';
 import Mustache from 'mustache';
 import ejs from 'ejs';
 import nunjucks from 'nunjucks';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import crypto from 'crypto';
 import winston from 'winston';
 
@@ -71,7 +71,7 @@ export async function createTemplate(
       type: type,
       engine: engine,
       content: content,
-      variables: variables as Prisma.InputJsonValue[],
+      variables: variables as unknown as Prisma.InputJsonValue[],
       category: category,
       tenantId: tenantId,
       userId: userId,
@@ -416,7 +416,7 @@ export async function duplicateTemplate(
       type: originalTemplate.type,
       engine: originalTemplate.engine,
       content: originalTemplate.content,
-      variables: originalTemplate.variables as Prisma.InputJsonValue[],
+      variables: originalTemplate.variables as unknown as Prisma.InputJsonValue[],
       category: originalTemplate.category,
       tenantId: originalTemplate.tenantId,
       userId: userId,
@@ -508,7 +508,7 @@ export async function createFromExisting(
       type: 'report',
       engine: 'handlebars',
       content: templateContent,
-      variables: extractedVariables as Prisma.InputJsonValue[],
+      variables: extractedVariables as unknown as Prisma.InputJsonValue[],
       category: 'auto-generated',
       tenantId: tenantId,
       userId: userId,
@@ -582,7 +582,7 @@ export async function addVariable(
   const updatedTemplate = await prisma.template.update({
     where: { id: templateId },
     data: {
-      variables: updatedVariables as Prisma.InputJsonValue[],
+      variables: updatedVariables as unknown as Prisma.InputJsonValue[],
       updatedAt: new Date(),
     },
   });

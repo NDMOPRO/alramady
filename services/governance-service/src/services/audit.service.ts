@@ -122,13 +122,14 @@ export class AuditService {
       where.entityType = filters.resource;
     }
     if (filters.dateRange) {
-      where.createdAt = {};
+      const dateFilter: Record<string, Date> = {};
       if (filters.dateRange.start) {
-        where.createdAt.gte = new Date(filters.dateRange.start);
+        dateFilter.gte = new Date(filters.dateRange.start);
       }
       if (filters.dateRange.end) {
-        where.createdAt.lte = new Date(filters.dateRange.end);
+        dateFilter.lte = new Date(filters.dateRange.end);
       }
+      where.createdAt = dateFilter;
     }
 
     const [logs, total] = await Promise.all([
@@ -332,12 +333,14 @@ export class AuditService {
       where.entityType = filters.resource;
     }
     if (filters.startDate) {
-      where.createdAt = where.createdAt || {};
-      where.createdAt.gte = new Date(filters.startDate);
+      const dateFilter = (where.createdAt || {}) as Record<string, Date>;
+      dateFilter.gte = new Date(filters.startDate as string);
+      where.createdAt = dateFilter;
     }
     if (filters.endDate) {
-      where.createdAt = where.createdAt || {};
-      where.createdAt.lte = new Date(filters.endDate);
+      const dateFilter = (where.createdAt || {}) as Record<string, Date>;
+      dateFilter.lte = new Date(filters.endDate as string);
+      where.createdAt = dateFilter;
     }
 
     const logs = await prisma.auditLog.findMany({

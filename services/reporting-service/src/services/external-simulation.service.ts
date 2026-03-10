@@ -26,7 +26,7 @@ export class ReportExternalSimulationService {
     const cached = await cacheGet<{ data: unknown[]; total: number }>(cacheKey);
     if (cached) return cached;
 
-    const where: Record<string, unknown> = {};
+    const where: Record<string, any> = {};
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
@@ -59,7 +59,7 @@ export class ReportExternalSimulationService {
     return record;
   }
 
-  async create(data: Record<string, unknown>) {
+  async create(data: Record<string, any>) {
     const record = await prisma.reportExternalSimulation.create({
       data: {
         ...data,
@@ -72,7 +72,7 @@ export class ReportExternalSimulationService {
     return record;
   }
 
-  async update(id: string, data: Record<string, unknown>) {
+  async update(id: string, data: Record<string, any>) {
     await this.getById(id);
     const updated = await prisma.reportExternalSimulation.update({ where: { id }, data });
     logger.info('Report external simulation updated', { id });
@@ -89,18 +89,18 @@ export class ReportExternalSimulationService {
   }
 
   async execute(id: string) {
-    const simulation = await this.getById(id) as Record<string, unknown>;
+    const simulation = await this.getById(id) as Record<string, any>;
     await prisma.reportExternalSimulation.update({
       where: { id },
       data: { status: 'running' },
     });
     logger.info('Report external simulation started', { id });
 
-    const inputParams = (simulation.inputParameters as Record<string, unknown>) ?? {};
-    const scenarioConfig = (simulation.scenarioConfig as Record<string, unknown>) ?? {};
+    const inputParams = (simulation.inputParameters as Record<string, any>) ?? {};
+    const scenarioConfig = (simulation.scenarioConfig as Record<string, any>) ?? {};
     const simulationType = simulation.simulationType as string;
 
-    const resultData: Record<string, unknown> = {
+    const resultData: Record<string, any> = {
       executedAt: new Date().toISOString(),
       simulationType,
     };
@@ -180,7 +180,7 @@ export class ReportExternalSimulationService {
   }
 
   async getResults(id: string) {
-    const record = await this.getById(id) as Record<string, unknown>;
+    const record = await this.getById(id) as Record<string, any>;
     return { id, status: record.status, resultData: record.resultData };
   }
 
@@ -191,7 +191,7 @@ export class ReportExternalSimulationService {
     description?: string;
     simulationType: string;
     createdBy: string;
-    metadata?: Record<string, unknown>;
+    metadata?: Record<string, any>;
   }) {
     logger.info('Analyzing external report', { sourceUrl: input.sourceUrl, name: input.name });
 
@@ -207,7 +207,7 @@ export class ReportExternalSimulationService {
       else detectedFormat = 'html';
     }
 
-    const existingReportData: Record<string, unknown> = {};
+    const existingReportData: Record<string, any> = {};
     if (input.reportId) {
       let report: Awaited<ReturnType<typeof prisma.report.findUnique>> | null = null;
       try {
@@ -248,7 +248,7 @@ export class ReportExternalSimulationService {
       });
     }
 
-    const extractedStructure: Record<string, unknown> = {
+    const extractedStructure: Record<string, any> = {
       sourceUrl: input.sourceUrl,
       analyzedAt: new Date().toISOString(),
       sections,
@@ -264,7 +264,7 @@ export class ReportExternalSimulationService {
       existingReportData,
     };
 
-    const scenarioConfig: Record<string, unknown> = {
+    const scenarioConfig: Record<string, any> = {
       analysisType: 'structure_extraction',
       sourceType: input.sourceUrl ? 'url' : 'internal',
       parameters: {
@@ -295,7 +295,7 @@ export class ReportExternalSimulationService {
   }
 
   async reproduceReport(id: string) {
-    const simulation = await this.getById(id) as Record<string, unknown>;
+    const simulation = await this.getById(id) as Record<string, any>;
 
     logger.info('Attempting to reproduce external report', { id, name: simulation.name });
 
@@ -304,8 +304,8 @@ export class ReportExternalSimulationService {
       data: { status: 'reproducing' },
     });
 
-    const resultData = simulation.resultData as Record<string, unknown> ?? {};
-    const inputParameters = simulation.inputParameters as Record<string, unknown> ?? {};
+    const resultData = simulation.resultData as Record<string, any> ?? {};
+    const inputParameters = simulation.inputParameters as Record<string, any> ?? {};
 
     const originalSections = ((resultData.sections ?? []) as Array<
       string | { title: string; type?: string; order?: number; estimatedWordCount?: number }
@@ -364,7 +364,7 @@ export class ReportExternalSimulationService {
       }
     }
 
-    const comparisonResult: Record<string, unknown> = {
+    const comparisonResult: Record<string, any> = {
       reproducedAt: new Date().toISOString(),
       originalSource: simulation.externalSourceUrl,
       matchScore: overallMatchScore,

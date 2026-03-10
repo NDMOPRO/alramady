@@ -68,7 +68,7 @@ export async function getById(id: string) {
 }
 
 export async function create(data: Record<string, unknown>) {
-  const record = await prisma.engineIntegration.create({ data });
+  const record = await prisma.engineIntegration.create({ data: data as any });
   logger.info('Engine integration created', { id: record.id, name: record.name });
   await cacheDel(`${CACHE_PREFIX}:list:*`);
   return record;

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as crypto from 'crypto';
 
 // ─── Interfaces ──────────────────────────────────────────────────────
@@ -219,7 +219,7 @@ export default class ComplianceService {
         id: result.id,
         status: result.status,
         overallScore: result.overallScore,
-        regulations: result.regulations as Prisma.InputJsonValue,
+        regulations: result.regulations as unknown as Prisma.InputJsonValue,
         issueCount: allIssues.length,
         checkedAt: result.checkedAt,
         duration: result.duration,
@@ -606,7 +606,7 @@ export default class ComplianceService {
         resourceType: fullPolicy.resourceType,
         retentionPeriodDays: fullPolicy.retentionPeriodDays,
         action: fullPolicy.action,
-        conditions: fullPolicy.conditions as Prisma.InputJsonValue,
+        conditions: fullPolicy.conditions as unknown as Prisma.InputJsonValue,
         enabled: fullPolicy.enabled,
         createdAt: new Date(),
         updatedAt: new Date(),

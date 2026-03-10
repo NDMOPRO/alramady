@@ -136,7 +136,7 @@ export async function suggestDesigns(presentationId: string, userId: string) {
       id: `suggestion-${idx}`,
       name: `Style ${idx + 1}`,
       palette,
-      preview: { primaryColor: color, accentColors: palette.slice(1) },
+      preview: { primaryColor: color, accentColors: (palette as unknown as string[]).slice(1) },
     };
   });
 
@@ -151,7 +151,7 @@ export async function analyzeBrand(brandGuideId: string, userId: string) {
 
   const { generateColorPalette } = await import('./design-engine.service.js');
   const palette = brandGuide.primaryColor
-    ? generateColorPalette(brandGuide.primaryColor, 8)
+    ? generateColorPalette(brandGuide.primaryColor as string, 8)
     : [];
 
   return {

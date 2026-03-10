@@ -33,7 +33,7 @@ export class DragElementsController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = await dragElementsService.create(req.body);
-      logger.info('Drag element created', { id: data.id });
+      logger.info('Drag element created', { id: (data as any).id });
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);

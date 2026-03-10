@@ -82,7 +82,7 @@ describe('EasyModeService', () => {
 
       const result = await service.create(input);
 
-      expect(result.name).toBe('Sales Dashboard');
+      expect((result as any).name).toBe('Sales Dashboard');
     });
   });
 

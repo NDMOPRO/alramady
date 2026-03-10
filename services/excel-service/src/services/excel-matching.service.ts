@@ -156,8 +156,8 @@ export class ExcelMatchingService {
       const mergedCells: Array<{ start: string; end: string }> = [];
       if (Array.isArray(sheet.mergedCells)) {
         for (const mc of sheet.mergedCells) {
-          if (mc.start && mc.end) {
-            mergedCells.push({ start: String(mc.start), end: String(mc.end) });
+          if (typeof mc === 'object' && mc !== null && (mc as any).start && (mc as any).end) {
+            mergedCells.push({ start: String((mc as any).start), end: String((mc as any).end) });
           } else if (typeof mc === 'string' && mc.includes(':')) {
             const [start, end] = mc.split(':');
             mergedCells.push({ start, end });
@@ -172,7 +172,7 @@ export class ExcelMatchingService {
         columnWidths,
         rowHeights,
         mergedCells,
-        frozenPane: sheet.frozenPane ?? undefined,
+        frozenPane: (sheet.frozenPane as any) ?? undefined,
         hiddenRows: Array.isArray(sheet.hiddenRows) ? sheet.hiddenRows.map(Number) : [],
         hiddenCols: Array.isArray(sheet.hiddenCols) ? sheet.hiddenCols.map(Number) : [],
       };

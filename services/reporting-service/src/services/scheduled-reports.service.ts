@@ -20,7 +20,7 @@ interface ScheduleHistoryRecord {
   recipientCount?: number;
   fileSize?: number;
   executedAt: Date;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 interface ReportRecord {
@@ -74,7 +74,7 @@ export class ScheduledReportsService {
     format: 'pdf' | 'docx' | 'html',
     tenantId: string,
     userId: string
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, any>> {
     logger.info('Scheduling report', { reportId, cronExpression, recipients, format });
 
     const report = await prisma.reportDefinition.findUnique({
@@ -90,8 +90,8 @@ export class ScheduledReportsService {
       tenantId,
       userId,
       name: (report as unknown as ReportRecord).name || 'Report',
-      description: ((report as unknown as Record<string, unknown>).description as string | null | undefined) ?? null,
-      dataSources: ((report as unknown as Record<string, unknown>).dataSources as unknown) ?? ((report as unknown as Record<string, unknown>).config as Record<string, unknown> | undefined)?.dataSources,
+      description: ((report as unknown as Record<string, any>).description as string | null | undefined) ?? null,
+      dataSources: ((report as unknown as Record<string, any>).dataSources as unknown) ?? ((report as unknown as Record<string, any>).config as Record<string, any> | undefined)?.dataSources,
       format,
     });
 
@@ -183,7 +183,7 @@ export class ScheduledReportsService {
     reportId: string,
     recipients: string[],
     format: string
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, any>> {
     const normalizedFormat = String(format || 'pdf').toLowerCase();
     logger.info('Sending report', { reportId, recipients, format: normalizedFormat });
 
@@ -305,7 +305,7 @@ export class ScheduledReportsService {
   /**
    * List all schedules for a given report.
    */
-  async listSchedules(reportId: string): Promise<Record<string, unknown>> {
+  async listSchedules(reportId: string): Promise<Record<string, any>> {
     logger.info('Listing schedules for report', { reportId });
 
     const report = await prisma.reportDefinition.findUnique({
@@ -352,7 +352,7 @@ export class ScheduledReportsService {
   /**
    * Pause a cron job. Update status in DB.
    */
-  async pauseSchedule(scheduleId: string): Promise<Record<string, unknown>> {
+  async pauseSchedule(scheduleId: string): Promise<Record<string, any>> {
     logger.info('Pausing schedule', { scheduleId });
 
     const schedule = await prisma.reportSchedule.findUnique({
@@ -381,7 +381,7 @@ export class ScheduledReportsService {
         status: 'paused',
         updatedAt: new Date(),
         metadata: JSON.parse(JSON.stringify({
-          ...((schedule.metadata as Record<string, unknown>) || {}),
+          ...((schedule.metadata as Record<string, any>) || {}),
           pausedAt: new Date().toISOString(),
         })),
       },
@@ -403,7 +403,7 @@ export class ScheduledReportsService {
   /**
    * Resume a paused cron job.
    */
-  async resumeSchedule(scheduleId: string): Promise<Record<string, unknown>> {
+  async resumeSchedule(scheduleId: string): Promise<Record<string, any>> {
     logger.info('Resuming schedule', { scheduleId });
 
     const schedule = await prisma.reportSchedule.findUnique({
@@ -449,7 +449,7 @@ export class ScheduledReportsService {
         nextRunAt: this.calculateNextRun(schedule.cronExpression),
         updatedAt: new Date(),
         metadata: JSON.parse(JSON.stringify({
-          ...((schedule.metadata as Record<string, unknown>) || {}),
+          ...((schedule.metadata as Record<string, any>) || {}),
           resumedAt: new Date().toISOString(),
         })),
       },
@@ -472,7 +472,7 @@ export class ScheduledReportsService {
   /**
    * Get execution history for a schedule.
    */
-  async getScheduleHistory(scheduleId: string): Promise<Record<string, unknown>> {
+  async getScheduleHistory(scheduleId: string): Promise<Record<string, any>> {
     logger.info('Fetching schedule history', { scheduleId });
 
     const schedule = await prisma.reportSchedule.findUnique({

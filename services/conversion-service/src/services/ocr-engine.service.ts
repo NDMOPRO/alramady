@@ -276,7 +276,7 @@ export class OcrEngineService {
     });
 
     // Extract words from Tesseract output
-    const words: OcrWord[] = ((data as Record<string, unknown>).words as Tesseract.Word[] ?? []).map((w: Tesseract.Word) => ({
+    const words: OcrWord[] = ((data as unknown as Record<string, unknown>).words as Tesseract.Word[] ?? []).map((w: Tesseract.Word) => ({
       text: w.text,
       confidence: w.confidence,
       boundingBox: {
@@ -289,7 +289,7 @@ export class OcrEngineService {
     }));
 
     // Extract lines from Tesseract output
-    const lines: OcrLine[] = ((data as Record<string, unknown>).lines as Tesseract.Line[] ?? []).map((line: Tesseract.Line) => {
+    const lines: OcrLine[] = ((data as unknown as Record<string, unknown>).lines as Tesseract.Line[] ?? []).map((line: Tesseract.Line) => {
       const lineWords: OcrWord[] = (line.words ?? []).map((w: Tesseract.Word) => ({
         text: w.text,
         confidence: w.confidence,

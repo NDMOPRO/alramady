@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as crypto from 'crypto';
 
 // ─── Interfaces ──────────────────────────────────────────────────────
@@ -150,7 +150,7 @@ export default class VersionControlService {
         version: version.version,
         content: version.content as Prisma.InputJsonValue,
         contentHash: version.contentHash,
-        changes: version.changes as Prisma.InputJsonValue[],
+        changes: version.changes as unknown as Prisma.InputJsonValue[],
         createdBy: version.createdBy,
         createdAt: version.createdAt,
         message: version.message,

@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { logger } from '../utils/logger';
 
 const prisma = new PrismaClient();
@@ -159,7 +159,7 @@ export class WorkflowService {
     if (firstStep) {
       const approvers = await prisma.user.findMany({
         where: {
-          role: firstStep.approverRole,
+          role: firstStep.approverRole as string,
           tenantId: workflowLogs[0].tenantId,
           status: 'ACTIVE',
         },
@@ -287,12 +287,12 @@ export class WorkflowService {
       if (nextIndex < steps.length) {
         steps[nextIndex].status = 'awaiting_approval';
         steps[nextIndex].assignedAt = new Date().toISOString();
-        nextStepName = steps[nextIndex].name;
+        nextStepName = steps[nextIndex].name as string | null;
         workflowStatus = 'in_progress';
 
         const nextApprovers = await prisma.user.findMany({
           where: {
-            role: steps[nextIndex].approverRole,
+            role: steps[nextIndex].approverRole as string,
             tenantId: instanceLogs[0].tenantId,
             status: 'ACTIVE',
           },

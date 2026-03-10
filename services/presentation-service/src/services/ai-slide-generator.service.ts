@@ -112,8 +112,8 @@ Requirements:
     throw new Error('OpenAI response did not contain valid slides array');
   }
 
-  const presentationTitle = parsed.title || 'AI Generated Presentation';
-  const theme = parsed.theme || {
+  const presentationTitle = (parsed.title as string) || 'AI Generated Presentation';
+  const theme = (parsed.theme as any) || {
     primaryColor: '#1a73e8',
     secondaryColor: '#ffffff',
     fontFamily: 'Arial',
@@ -129,7 +129,7 @@ Requirements:
   );
 
   const createdSlides: Record<string, unknown>[] = [];
-  for (const slideData of parsed.slides) {
+  for (const slideData of (parsed.slides as any[])) {
     const layout = slideData.layout || 'content';
     const content: Record<string, unknown> = {
       title: slideData.title || '',
@@ -238,13 +238,13 @@ Requirements:
 
   const responseText = completion.choices[0]?.message?.content || '{}';
   const parsed = parseJsonPayload(responseText);
-  const presTitle = parsed.title || 'Data Analysis Presentation';
-  const theme = parsed.theme || { primaryColor: '#0d47a1', secondaryColor: '#e3f2fd', fontFamily: 'Arial', backgroundColor: '#ffffff' };
+  const presTitle = (parsed.title as string) || 'Data Analysis Presentation';
+  const theme = (parsed.theme as any) || { primaryColor: '#0d47a1', secondaryColor: '#e3f2fd', fontFamily: 'Arial', backgroundColor: '#ffffff' };
 
   const presentation = await slideBuilder.createPresentation(presTitle, theme, undefined, tenantId, userId);
 
   const createdSlides: Record<string, unknown>[] = [];
-  for (const slideData of (parsed.slides || [])) {
+  for (const slideData of ((parsed.slides || []) as any[])) {
     const addedSlide = await slideBuilder.addSlide(presentation.id, slideData.layout || 'content', {
       title: slideData.title || '',
       body: slideData.body || '',
@@ -331,13 +331,13 @@ Requirements:
 
   const responseText = completion.choices[0]?.message?.content || '{}';
   const parsed = parseJsonPayload(responseText);
-  const presTitle = parsed.title || 'Outline Presentation';
-  const theme = parsed.theme || { primaryColor: '#1a73e8', secondaryColor: '#ffffff', fontFamily: 'Arial', backgroundColor: '#ffffff' };
+  const presTitle = (parsed.title as string) || 'Outline Presentation';
+  const theme = (parsed.theme as any) || { primaryColor: '#1a73e8', secondaryColor: '#ffffff', fontFamily: 'Arial', backgroundColor: '#ffffff' };
 
   const presentation = await slideBuilder.createPresentation(presTitle, theme, undefined, tenantId, userId);
 
   const createdSlides: Record<string, unknown>[] = [];
-  for (const slideData of (parsed.slides || [])) {
+  for (const slideData of ((parsed.slides || []) as any[])) {
     const addedSlide = await slideBuilder.addSlide(presentation.id, slideData.layout || 'content', {
       title: slideData.title || '',
       body: slideData.body || '',
@@ -473,7 +473,7 @@ Requirements:
 
   const responseText = completion.choices[0]?.message?.content || '{}';
   const parsed = parseJsonPayload(responseText);
-  const notesArray = parsed.notes || [];
+  const notesArray = (parsed.notes || []) as any[];
 
   const updatedSlides: Record<string, unknown>[] = [];
   for (const noteItem of notesArray) {
@@ -559,7 +559,7 @@ ${allTexts}`;
 
   const responseText = completion.choices[0]?.message?.content || '{}';
   const parsed = parseJsonPayload(responseText);
-  const translations = parsed.translations || [];
+  const translations = (parsed.translations || []) as any[];
 
   const translationMap = new Map<number, string>();
   for (const t of translations) {

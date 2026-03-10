@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import PptxGenJS from 'pptxgenjs';
 import * as crypto from 'crypto';
 
@@ -422,10 +422,10 @@ export default class TemplateManagerService {
         category: template.category,
         layout: template.layout,
         masterSlideId: template.masterSlideId,
-        elements: template.elements as Prisma.InputJsonValue,
+        elements: template.elements as unknown as Prisma.InputJsonValue,
         backgroundColor: template.backgroundColor,
-        transitions: template.transitions as Prisma.InputJsonValue,
-        metadata: template.metadata as Prisma.InputJsonValue,
+        transitions: template.transitions as unknown as Prisma.InputJsonValue,
+        metadata: template.metadata as unknown as Prisma.InputJsonValue,
         version: template.version,
         createdBy: template.createdBy,
         createdAt: template.createdAt,
@@ -487,10 +487,10 @@ export default class TemplateManagerService {
         category: updated.category,
         layout: updated.layout,
         masterSlideId: updated.masterSlideId,
-        elements: updated.elements as Prisma.InputJsonValue,
+        elements: updated.elements as unknown as Prisma.InputJsonValue,
         backgroundColor: updated.backgroundColor,
-        transitions: updated.transitions as Prisma.InputJsonValue,
-        metadata: updated.metadata as Prisma.InputJsonValue,
+        transitions: updated.transitions as unknown as Prisma.InputJsonValue,
+        metadata: updated.metadata as unknown as Prisma.InputJsonValue,
         version: updated.version,
         updatedAt: updated.updatedAt,
       },

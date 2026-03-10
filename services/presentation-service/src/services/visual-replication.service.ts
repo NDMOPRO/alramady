@@ -233,7 +233,7 @@ async function callVisionAnalysis(
     throw new Error(`AI Vision API returned ${response.status}: ${errorBody}`);
   }
 
-  const result = await response.json();
+  const result: any = await response.json();
   const content: string = result.data?.content || result.content || '{}';
   const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
   return JSON.parse(cleaned) as VisionAnalysisResponse;
@@ -389,7 +389,7 @@ Fidelity level: ${fidelity}. Positions in pixels assuming ${fidelity === 'exact'
     ) / 100;
 
     // Step 7: Store replication record
-    await prisma.visualReplication.create({
+    await (prisma as any).visualReplication.create({
       data: {
         id: replicationId,
         tenantId: request.tenantId,
@@ -445,7 +445,7 @@ Fidelity level: ${fidelity}. Positions in pixels assuming ${fidelity === 'exact'
     logger.info('Starting comparison with original', { replicationId, originalImagePath });
 
     // Step 1: Load the replication record
-    const replication = await prisma.visualReplication.findUnique({
+    const replication = await (prisma as any).visualReplication.findUnique({
       where: { id: replicationId },
     });
 
@@ -544,7 +544,7 @@ Score each metric from 0 to 1 (1 = perfect match).`;
     };
 
     // Update replication record with comparison results
-    await prisma.visualReplication.update({
+    await (prisma as any).visualReplication.update({
       where: { id: replicationId },
       data: {
         comparisonJson: JSON.stringify(result),

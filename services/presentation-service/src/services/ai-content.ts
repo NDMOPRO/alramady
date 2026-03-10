@@ -102,9 +102,9 @@ export async function generate(id: string, userId: string) {
 
   const { generateSlideContent } = await import('./ai-content-generator.service.js');
   const generated = await generateSlideContent(String(content.prompt || content.title || ''), {
-    tone: (content.tone as string) || 'formal',
+    tone: ((content.tone as string) || 'formal') as any,
     language: (content.language as string) || 'ar',
-    contentType: (content.contentType as string) || 'slide',
+    contentType: ((content.contentType as string) || 'slide') as any,
     targetAudience: content.targetAudience as string,
     industry: content.industry as string,
   });
@@ -128,9 +128,9 @@ export async function regenerate(id: string, userId: string, options?: Record<st
 
   const { generateSlideContent } = await import('./ai-content-generator.service.js');
   const generated = await generateSlideContent(String(content.prompt || content.title || ''), {
-    tone: (options?.tone as string) || (content.tone as string) || 'formal',
+    tone: ((options?.tone as string) || (content.tone as string) || 'formal') as any,
     language: (options?.language as string) || (content.language as string) || 'ar',
-    contentType: (content.contentType as string) || 'slide',
+    contentType: ((content.contentType as string) || 'slide') as any,
     targetAudience: (options?.targetAudience as string) || (content.targetAudience as string),
   });
 

@@ -35,7 +35,7 @@ export class EasyModeController {
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = await easyModeService.create(req.body);
-      logger.info('Easy-mode dashboard created', { id: data.id });
+      logger.info('Easy-mode dashboard created', { id: (data as any).id });
       res.status(201).json({ success: true, data });
     } catch (error) {
       next(error);

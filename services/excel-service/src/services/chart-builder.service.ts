@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import * as ExcelJS from 'exceljs';
@@ -224,7 +224,7 @@ export default class ChartBuilderService {
         id: chartId,
         type: request.chartType,
         title: request.title,
-        config: chartConfig as Prisma.InputJsonValue,
+        config: chartConfig as unknown as Prisma.InputJsonValue,
         theme: themeName,
         width,
         height,
@@ -636,7 +636,7 @@ export default class ChartBuilderService {
     width?: number,
     height?: number,
     scale: number = 2,
-  ): Promise<Buffer> {
+  ): Promise<any> {
     const chartRecord = await this.prisma.chart.findUnique({
       where: { id: chartId },
     });
@@ -660,7 +660,7 @@ export default class ChartBuilderService {
       .png({ quality: 90, compressionLevel: 6 })
       .toBuffer();
 
-    return optimized;
+    return optimized as Buffer;
   }
 
   async exportChartToSVG(chartId: string): Promise<string> {
@@ -685,7 +685,7 @@ export default class ChartBuilderService {
       : '';
 
     if (titleText) {
-      svgParts.push(`<text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#212121">${this.escapeXml(titleText)}</text>`);
+      svgParts.push(`<text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#212121">${this.escapeXml(String(titleText))}</text>`);
     }
 
     const data = config.data;
@@ -694,7 +694,7 @@ export default class ChartBuilderService {
       const chartWidth = chartArea.right - chartArea.left;
       const chartHeight = chartArea.bottom - chartArea.top;
 
-      const allValues = data.datasets.flatMap((ds: Record<string, unknown>) => ds.data as number[]);
+      const allValues = (data.datasets as any[]).flatMap((ds: Record<string, any>) => ds.data as number[]);
       const maxVal = Math.max(...allValues.filter(v => typeof v === 'number'), 1);
       const minVal = Math.min(...allValues.filter(v => typeof v === 'number'), 0);
       const range = maxVal - minVal || 1;
@@ -752,9 +752,9 @@ export default class ChartBuilderService {
     }
 
     const imageId = workbook.addImage({
-      buffer: chartBuffer as unknown as Buffer,
+      buffer: chartBuffer,
       extension: 'png',
-    });
+    } as any);
 
     worksheet.addImage(imageId, {
       tl: { col: position.col, row: position.row },

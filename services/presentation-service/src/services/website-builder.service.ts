@@ -76,7 +76,7 @@ export class WebsiteBuilderService {
     });
     if (!presentation) throw new Error(`Presentation ${presentationId} not found`);
 
-    const slidesData = (presentation.slides ?? presentation.data) as Array<Record<string, unknown>>;
+    const slidesData = (presentation.slides ?? (presentation as any).data) as Array<Record<string, unknown>>;
     if (!slidesData) throw new Error('No slides data');
 
     const lang = config.language || 'ar';
@@ -118,7 +118,7 @@ ${pages.map((p) => `  <url><loc>/${p.filename}</loc><lastmod>${new Date().toISOS
 
     const totalSize = await this.calculateDirSize(outputDir);
 
-    await prisma.auditLog.create({
+    await (prisma as any).auditLog.create({
       data: {
         action: 'website_generated',
         entityType: 'presentation',
@@ -151,7 +151,7 @@ ${pages.map((p) => `  <url><loc>/${p.filename}</loc><lastmod>${new Date().toISOS
     });
     if (!presentation) throw new Error(`Presentation ${presentationId} not found`);
 
-    const slidesData = (presentation.slides ?? presentation.data) as Array<Record<string, unknown>>;
+    const slidesData = (presentation.slides ?? (presentation as any).data) as Array<Record<string, unknown>>;
     const firstSlide = slidesData?.[0];
     if (!firstSlide) throw new Error('No slides');
 
@@ -189,7 +189,7 @@ ${elements.map((t) => `<p>${this.escapeHtml(t)}</p>`).join('\n')}
   }
 
   async exportStaticSite(websiteId: string): Promise<Buffer> {
-    const archiver = (await import('archiver')).default;
+    const archiver = (await import('archiver' as any)).default;
     const { createWriteStream } = await import('fs');
     const websiteDir = path.join(this.outputBase, websiteId);
 
@@ -216,7 +216,7 @@ ${elements.map((t) => `<p>${this.escapeHtml(t)}</p>`).join('\n')}
     });
     if (!presentation) throw new Error(`Presentation ${presentationId} not found`);
 
-    const slidesData = (presentation.slides ?? presentation.data) as Array<Record<string, unknown>>;
+    const slidesData = (presentation.slides ?? (presentation as any).data) as Array<Record<string, unknown>>;
     const allText = slidesData?.map((s) => {
       const title = (s.title as string) || '';
       const elements = ((s.elements as Array<Record<string, unknown>>) || [])
@@ -287,13 +287,13 @@ Respond in JSON:
     pageSize: number;
   }> {
     const [records, total] = await Promise.all([
-      prisma.generatedWebsite.findMany({
+      (prisma as any).generatedWebsite.findMany({
         where: { tenantId },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * pageSize,
         take: pageSize,
       }),
-      prisma.generatedWebsite.count({ where: { tenantId } }),
+      (prisma as any).generatedWebsite.count({ where: { tenantId } }),
     ]);
 
     return {
@@ -316,7 +316,7 @@ Respond in JSON:
       const html = await fs.readFile(path.join(websiteDir, 'index.html'), 'utf-8');
       return html;
     } catch {
-      const record = await prisma.generatedWebsite.findUnique({ where: { id: websiteId } });
+      const record = await (prisma as any).generatedWebsite.findUnique({ where: { id: websiteId } });
       if (record && record.html) {
         return record.html as string;
       }

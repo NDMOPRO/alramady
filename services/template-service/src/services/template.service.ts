@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import Mustache from 'mustache';
 import ejs from 'ejs';
 import nunjucks from 'nunjucks';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { logger } from '../utils/logger';
 
 const prisma = new PrismaClient();
@@ -35,7 +35,7 @@ export class TemplateService {
         name,
         category: category as string,
         engine,
-        templateJson: { content, variables, engine } as Prisma.InputJsonValue,
+        templateJson: { content, variables, engine } as unknown as Prisma.InputJsonValue,
         isSystem: false,
         createdBy: userId,
       },
@@ -48,7 +48,7 @@ export class TemplateService {
     const template = await prisma.template.findUnique({ where: { id: templateId } });
     if (!template) throw new Error('Template not found');
 
-    const config = template.templateJson as TemplateJsonConfig;
+    const config = template.templateJson as unknown as TemplateJsonConfig;
     const content = config.content;
     const engine = config.engine || template.engine || 'handlebars';
 
@@ -88,7 +88,7 @@ export class TemplateService {
     const template = await prisma.template.findUnique({ where: { id: templateId } });
     if (!template) throw new Error('Template not found');
 
-    const config = template.templateJson as TemplateJsonConfig;
+    const config = template.templateJson as unknown as TemplateJsonConfig;
     const variables = config.variables || [];
     const preview = previewData || this.generatePreviewData(variables);
 
@@ -146,7 +146,7 @@ export class TemplateService {
     const template = await prisma.template.findUnique({ where: { id: templateId } });
     if (!template) throw new Error('Template not found');
 
-    const config = template.templateJson as TemplateJsonConfig;
+    const config = template.templateJson as unknown as TemplateJsonConfig;
     const content = config.content;
     const engine = config.engine || template.engine || 'handlebars';
 
@@ -179,7 +179,7 @@ export class TemplateService {
   private generatePreviewData(variables: TemplateVariable[]): Record<string, unknown> {
     const data: Record<string, unknown> = {};
     for (const v of variables) {
-      const name = v.name || v;
+      const name = v.name || String(v);
       switch (v.type || 'string') {
         case 'number': data[name] = 42; break;
         case 'boolean': data[name] = true; break;

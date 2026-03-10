@@ -86,12 +86,12 @@ router.post(
     const result = await getController().generateFromLayout({
       inputSource: {
         type: parsed.inputSource.type as InputSourceType,
-        layoutGraph: parsed.inputSource.layoutGraph as Record<string, unknown>,
+        layoutGraph: parsed.inputSource.layoutGraph as any,
       },
       outputs: parsed.outputs as Array<{ generator: GeneratorType; format: OutputFormat }>,
       localization: parsed.localization,
       datasets: parsed.datasets,
-      options: parsed.options as Record<string, unknown>,
+      options: parsed.options as any,
     });
 
     res.json({

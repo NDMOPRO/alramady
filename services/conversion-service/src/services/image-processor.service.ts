@@ -1177,7 +1177,7 @@ class ImageProcessorService {
     outputDir: string,
     operations: Array<{
       type: 'resize' | 'crop' | 'rotate' | 'convert' | 'thumbnail' | 'filter' | 'watermark';
-      options: Record<string, unknown>;
+      options: Record<string, any>;
     }>,
     concurrency: number = 4,
   ): Promise<BatchProcessingResult> {
@@ -1213,7 +1213,7 @@ class ImageProcessorService {
               result = await this.resize(currentInput, outputPath, op.options);
               break;
             case 'crop':
-              result = await this.crop(currentInput, outputPath, op.options);
+              result = await this.crop(currentInput, outputPath, op.options as CropOptions);
               break;
             case 'rotate':
               result = await this.rotate(currentInput, outputPath, op.options);

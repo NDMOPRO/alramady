@@ -313,7 +313,7 @@ export class AuthenticationService {
   ): Promise<Record<string, unknown>> {
     let payload: { id: string; type: string; email?: string; tenantId?: string; role?: string };
     try {
-      payload = jwt.verify(refreshTokenValue, JWT_SECRET);
+      payload = jwt.verify(refreshTokenValue, JWT_SECRET) as { id: string; type: string; email?: string; tenantId?: string; role?: string };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       logger.warn('Invalid refresh token presented', { error: message });

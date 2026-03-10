@@ -64,7 +64,7 @@ export async function getById(id: string) {
 }
 
 export async function create(data: Record<string, unknown>) {
-  const record = await prisma.oneClickOp.create({ data });
+  const record = await prisma.oneClickOp.create({ data: data as any });
   logger.info('One-click operation created', { id: record.id, name: record.name });
   await cacheDel(`${CACHE_PREFIX}:list:*`);
   return record;

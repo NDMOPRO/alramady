@@ -211,7 +211,7 @@ function buildGraphFromVisualAnalysis(
         textDecoration: 'none',
         listType: 'none',
         listLevel: 0,
-      } as TextContent,
+      } as unknown as TextContent,
       semanticRole: font.usage,
       readingOrder: readingOrder++,
     });
@@ -268,7 +268,7 @@ function buildGraphFromVisualAnalysis(
           font: headerFont,
           color: '#ffffff',
         },
-      } as TableContent,
+      } as unknown as TableContent,
       semanticRole: 'table',
       readingOrder: readingOrder++,
     });
@@ -636,7 +636,7 @@ export class LayoutGenerationController {
     if (request.localization?.enabled && request.localization.targetLanguage === 'ar') {
       try {
         const locResult = await this.arabicLocalizer.localizeLayout({
-          layoutGraph: graph as Record<string, unknown>,
+          layoutGraph: graph as any,
           sourceLanguage: request.localization.sourceLanguage || 'en',
         });
         graph = locResult.translatedGraph as unknown as typeof graph;
@@ -724,7 +724,7 @@ export class LayoutGenerationController {
           generator: output.generator,
           format: output.format,
           buffer: result.outputBuffer || Buffer.from(result.html, 'utf-8'),
-          mimeType: result.mimeType,
+          mimeType: (result as any).mimeType,
           html: result.html,
           pageCount: result.pageCount,
           elementsRendered: result.elementsRendered,

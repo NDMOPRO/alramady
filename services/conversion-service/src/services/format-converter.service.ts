@@ -28,8 +28,8 @@ function collectPDFBuffer(doc: InstanceType<typeof PDFDocument>): Promise<Buffer
   });
 }
 
-function parseXMLNode(xmlStr: string): Record<string, unknown> | string {
-  const result: Record<string, unknown> = {};
+function parseXMLNode(xmlStr: string): Record<string, any> | string {
+  const result: Record<string, any> = {};
   const tagRegex = /<(\w[\w.-]*)([^>]*)>([\s\S]*?)<\/\1>/g;
   const selfCloseRegex = /<(\w[\w.-]*)([^>]*)\/>/g;
   const attrRegex = /(\w+)="([^"]*)"/g;

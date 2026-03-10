@@ -15,7 +15,7 @@ interface DataSourceConfig {
   schema?: string;
   apiEndpoint?: string;
   apiHeaders?: Record<string, string>;
-  options: Record<string, unknown>;
+  options: Record<string, any>;
   status: 'active' | 'inactive' | 'error';
   lastTestedAt?: Date;
 }
@@ -67,11 +67,11 @@ interface AggregationPipeline {
 
 interface AggregationStage {
   type: 'group' | 'filter' | 'project' | 'sort' | 'limit' | 'unwind' | 'lookup' | 'compute';
-  config: Record<string, unknown>;
+  config: Record<string, any>;
 }
 
 interface CrossJoinResult {
-  data: Record<string, unknown>[];
+  data: Record<string, any>[];
   metadata: {
     sourceA: string;
     sourceB: string;
@@ -128,7 +128,7 @@ export default class DataSourceService {
   private prisma: PrismaClient;
   private dataSources: Map<string, DataSourceConfig> = new Map();
   private schemaCache: Map<string, { schema: SchemaInfo; expiry: number }> = new Map();
-  private queryCache: Map<string, { data: Record<string, unknown>[]; expiry: number }> = new Map();
+  private queryCache: Map<string, { data: Record<string, any>[]; expiry: number }> = new Map();
   private readonly SCHEMA_CACHE_TTL = 600000;
   private readonly QUERY_CACHE_TTL = 30000;
 
@@ -169,7 +169,7 @@ export default class DataSourceService {
       update: {
         name: config.name,
         type: this.mapTypeToEnum(config.type) as string,
-        connectionConfig: this.sanitizeConfig(config) as Record<string, unknown>,
+        connectionConfig: this.sanitizeConfig(config) as Record<string, any>,
         status: this.mapStatusToEnum(config.status) as string,
         lastTestedAt: config.lastTestedAt,
         updatedAt: new Date(),
@@ -180,7 +180,7 @@ export default class DataSourceService {
         tenantId: resolvedTenantId,
         name: config.name,
         type: this.mapTypeToEnum(config.type) as string,
-        connectionConfig: this.sanitizeConfig(config) as Record<string, unknown>,
+        connectionConfig: this.sanitizeConfig(config) as Record<string, any>,
         status: this.mapStatusToEnum(config.status) as string,
         lastTestedAt: config.lastTestedAt,
         createdAt: new Date(),
@@ -191,8 +191,8 @@ export default class DataSourceService {
     return sourceId;
   }
 
-  private sanitizeConfig(config: DataSourceConfig): Record<string, unknown> {
-    const sanitized = { ...config } as Record<string, unknown>;
+  private sanitizeConfig(config: DataSourceConfig): Record<string, any> {
+    const sanitized = { ...config } as Record<string, any>;
     if (sanitized.password) {
       sanitized.password = '***ENCRYPTED***';
     }
@@ -208,13 +208,13 @@ export default class DataSourceService {
 
     try {
       if (config.type === 'postgresql' || config.type === 'mysql' || config.type === 'mssql') {
-        const result: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe('SELECT 1 as test');
+        const result: Record<string, any>[] = await this.prisma.$queryRawUnsafe('SELECT 1 as test');
         const latency = Date.now() - startTime;
 
-        const versionResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe('SELECT version() as ver');
+        const versionResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe('SELECT version() as ver');
         const serverVersion = versionResult[0]?.ver || 'unknown';
 
-        const tablesResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+        const tablesResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
           SELECT table_name
           FROM information_schema.tables
           WHERE table_schema = '${config.schema || 'public'}'
@@ -268,7 +268,7 @@ export default class DataSourceService {
 
     const schemaName = config.schema || 'public';
 
-    const tablesResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const tablesResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT
         t.table_name,
         t.table_schema,
@@ -280,7 +280,7 @@ export default class DataSourceService {
 
     const tables: TableInfo[] = [];
     for (const tableRow of tablesResult) {
-      const columnsResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+      const columnsResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
         SELECT
           c.column_name,
           c.data_type,
@@ -325,7 +325,7 @@ export default class DataSourceService {
 
       const primaryKeys = columns.filter(c => c.isPrimaryKey).map(c => c.name);
 
-      const indexResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+      const indexResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
         SELECT indexname
         FROM pg_indexes
         WHERE tablename = '${tableRow.table_name}' AND schemaname = '${schemaName}'
@@ -341,7 +341,7 @@ export default class DataSourceService {
       });
     }
 
-    const viewsResult: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+    const viewsResult: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
       SELECT table_name, view_definition
       FROM information_schema.views
       WHERE table_schema = '${schemaName}'
@@ -350,7 +350,7 @@ export default class DataSourceService {
 
     const views: ViewInfo[] = [];
     for (const viewRow of viewsResult) {
-      const viewCols: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(`
+      const viewCols: Record<string, any>[] = await this.prisma.$queryRawUnsafe(`
         SELECT column_name, data_type, is_nullable
         FROM information_schema.columns
         WHERE table_name = '${viewRow.table_name}' AND table_schema = '${schemaName}'
@@ -491,7 +491,7 @@ export default class DataSourceService {
     return conditions.join(' ');
   }
 
-  async executeQuery(sourceId: string, query: string, useCache: boolean = true): Promise<Record<string, unknown>[]> {
+  async executeQuery(sourceId: string, query: string, useCache: boolean = true): Promise<Record<string, any>[]> {
     if (useCache) {
       const cacheKey = `${sourceId}:${crypto.createHash('md5').update(query).digest('hex')}`;
       const cached = this.queryCache.get(cacheKey);
@@ -500,7 +500,7 @@ export default class DataSourceService {
       }
     }
 
-    const data: Record<string, unknown>[] = await this.prisma.$queryRawUnsafe(query);
+    const data: Record<string, any>[] = await this.prisma.$queryRawUnsafe(query);
 
     if (useCache) {
       const cacheKey = `${sourceId}:${crypto.createHash('md5').update(query).digest('hex')}`;
@@ -514,8 +514,8 @@ export default class DataSourceService {
     sourceId: string,
     tableName: string,
     pipeline: AggregationPipeline,
-  ): Promise<Record<string, unknown>[]> {
-    let currentData: Record<string, unknown>[] = await this.executeQuery(
+  ): Promise<Record<string, any>[]> {
+    let currentData: Record<string, any>[] = await this.executeQuery(
       sourceId,
       `SELECT * FROM "${tableName}"`,
       false,
@@ -527,7 +527,7 @@ export default class DataSourceService {
 
     if (pipeline.outputFields.length > 0) {
       currentData = currentData.map(row => {
-        const projected: Record<string, unknown> = {};
+        const projected: Record<string, any> = {};
         for (const field of pipeline.outputFields) {
           projected[field] = row[field];
         }
@@ -539,9 +539,9 @@ export default class DataSourceService {
   }
 
   private applyPipelineStage(
-    data: Record<string, unknown>[],
+    data: Record<string, any>[],
     stage: AggregationStage,
-  ): Record<string, unknown>[] {
+  ): Record<string, any>[] {
     switch (stage.type) {
       case 'filter': {
         const field = stage.config.field as string;
@@ -567,14 +567,14 @@ export default class DataSourceService {
         const aggField = stage.config.aggregateField as string;
         const aggType = stage.config.aggregationType as string;
 
-        const groups = new Map<string, Record<string, unknown>[]>();
+        const groups = new Map<string, Record<string, any>[]>();
         for (const row of data) {
           const key = String(row[groupField] || 'null');
           if (!groups.has(key)) groups.set(key, []);
           groups.get(key)!.push(row);
         }
 
-        const result: Record<string, unknown>[] = [];
+        const result: Record<string, any>[] = [];
         for (const [key, rows] of groups) {
           const values = rows.map(r => Number(r[aggField]) || 0);
           let aggValue: number;
@@ -644,7 +644,7 @@ export default class DataSourceService {
       case 'project': {
         const fields = stage.config.fields as string[];
         return data.map(row => {
-          const projected: Record<string, unknown> = {};
+          const projected: Record<string, any> = {};
           for (const f of fields) {
             projected[f] = row[f];
           }
@@ -672,14 +672,14 @@ export default class DataSourceService {
       this.executeQuery(sourceIdB, `SELECT * FROM "${tableB}"`),
     ]);
 
-    const indexB = new Map<string, Record<string, unknown>[]>();
+    const indexB = new Map<string, Record<string, any>[]>();
     for (const row of dataB) {
       const key = String(row[joinField] || '');
       if (!indexB.has(key)) indexB.set(key, []);
       indexB.get(key)!.push(row);
     }
 
-    const joined: Record<string, unknown>[] = [];
+    const joined: Record<string, any>[] = [];
     const matchedBKeys = new Set<string>();
     let matchedRows = 0;
     let unmatchedA = 0;
@@ -690,7 +690,7 @@ export default class DataSourceService {
 
       if (matchingB && matchingB.length > 0) {
         for (const rowB of matchingB) {
-          const merged: Record<string, unknown> = {};
+          const merged: Record<string, any> = {};
           for (const [k, v] of Object.entries(rowA)) {
             merged[`a_${k}`] = v;
           }
@@ -703,7 +703,7 @@ export default class DataSourceService {
         }
         matchedBKeys.add(key);
       } else if (joinType === 'left' || joinType === 'full') {
-        const merged: Record<string, unknown> = {};
+        const merged: Record<string, any> = {};
         for (const [k, v] of Object.entries(rowA)) {
           merged[`a_${k}`] = v;
         }
@@ -718,7 +718,7 @@ export default class DataSourceService {
       for (const rowB of dataB) {
         const key = String(rowB[joinField] || '');
         if (!matchedBKeys.has(key)) {
-          const merged: Record<string, unknown> = {};
+          const merged: Record<string, any> = {};
           for (const [k, v] of Object.entries(rowB)) {
             merged[`b_${k}`] = v;
           }

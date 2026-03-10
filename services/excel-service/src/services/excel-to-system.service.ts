@@ -60,7 +60,7 @@ interface SheetAnalysis {
 export class ExcelToSystemService {
   async analyzeWorkbook(workbookBuffer: Buffer): Promise<SheetAnalysis[]> {
     const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(workbookBuffer);
+    await workbook.xlsx.load(workbookBuffer as any);
     const analyses: SheetAnalysis[] = [];
 
     for (const sheet of workbook.worksheets) {
@@ -150,7 +150,7 @@ export class ExcelToSystemService {
       throw new Error(`Workbook ${config.sourceWorkbookId} not found`);
     }
 
-    const workbookData = workbookRecord.data as Record<string, unknown>;
+    const workbookData = (workbookRecord as any).data as Record<string, any>;
     const sheets = (workbookData.sheets || []) as Array<{
       name: string;
       headers: string[];
@@ -172,7 +172,7 @@ export class ExcelToSystemService {
               status: 'active',
               rowCount: sheet.rows.length,
               columnCount: sheet.headers.length,
-            },
+            } as any,
           });
 
           for (let ci = 0; ci < sheet.headers.length; ci++) {
@@ -182,7 +182,7 @@ export class ExcelToSystemService {
                 name: sheet.headers[ci],
                 dataType: 'string',
                 position: ci,
-              },
+              } as any,
             });
           }
 
@@ -236,7 +236,7 @@ export class ExcelToSystemService {
             const category = categoryIdx >= 0 ? String(row[categoryIdx] || 'general') : 'general';
 
             try {
-              const kpi = await prisma.kpi.create({
+              const kpi = await (prisma as any).kpi.create({
                 data: {
                   name,
                   tenantId: config.tenantId,
@@ -257,7 +257,7 @@ export class ExcelToSystemService {
         }
 
         case 'dashboard': {
-          const dashboard = await prisma.dashboard.create({
+          const dashboard = await (prisma as any).dashboard.create({
             data: {
               title: `Dashboard: ${sheet.name}`,
               tenantId: config.tenantId,
@@ -287,7 +287,7 @@ export class ExcelToSystemService {
             const sum = values.reduce((s, v) => s + v, 0);
             const avg = values.length > 0 ? sum / values.length : 0;
 
-            await prisma.dashboardWidget.create({
+            await (prisma as any).dashboardWidget.create({
               data: {
                 dashboardId: dashboard.id,
                 type: 'metric',
@@ -309,7 +309,7 @@ export class ExcelToSystemService {
           }
 
           if (numericColumns.length > 0 && categoryColumns.length > 0) {
-            await prisma.dashboardWidget.create({
+            await (prisma as any).dashboardWidget.create({
               data: {
                 dashboardId: dashboard.id,
                 type: 'chart',
@@ -334,7 +334,7 @@ export class ExcelToSystemService {
         }
 
         case 'report': {
-          const report = await prisma.report.create({
+          const report = await (prisma as any).report.create({
             data: {
               title: `Report: ${sheet.name}`,
               tenantId: config.tenantId,
@@ -344,7 +344,7 @@ export class ExcelToSystemService {
             },
           });
 
-          await prisma.reportSection.create({
+          await (prisma as any).reportSection.create({
             data: {
               reportId: report.id,
               title: 'Data Summary',
@@ -381,7 +381,7 @@ export class ExcelToSystemService {
             order: ri + 1,
           }));
 
-          const workflow = await prisma.workflow.create({
+          const workflow = await (prisma as any).workflow.create({
             data: {
               name: `Workflow: ${sheet.name}`,
               tenantId: config.tenantId,

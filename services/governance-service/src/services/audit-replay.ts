@@ -70,7 +70,7 @@ export async function getById(id: string) {
 }
 
 export async function create(data: Record<string, unknown>) {
-  const record = await prisma.auditLog.create({ data });
+  const record = await prisma.auditLog.create({ data: data as any });
   logger.info('Audit log created', { id: record.id, action: record.action });
   await cacheDel(`${CACHE_PREFIX}:list:*`);
   return record;
@@ -79,7 +79,7 @@ export async function create(data: Record<string, unknown>) {
 export async function update(id: string, data: Record<string, unknown>) {
   const record = await prisma.auditLog.update({
     where: { id },
-    data: { ...data, updatedAt: new Date() },
+    data: { ...data, updatedAt: new Date() } as any,
   });
   logger.info('Audit log updated', { id });
   await cacheDel(`${CACHE_PREFIX}:*`);

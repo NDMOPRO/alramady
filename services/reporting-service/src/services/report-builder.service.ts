@@ -12,12 +12,12 @@ const CACHE_TTL = 300;
 
 interface DataSourceRef {
   datasetId: string;
-  query?: Record<string, unknown>;
+  query?: Record<string, any> | null;
 }
 
 interface SectionDefinition {
   type: 'text' | 'chart' | 'table' | 'image' | 'pagebreak';
-  content: Record<string, unknown>;
+  content: Record<string, any>;
   position: number;
 }
 
@@ -56,7 +56,7 @@ interface ReportConfig {
   coverPage: CoverPageConfig | null;
   tableOfContents: Array<{ title: string; page: number; level: number }> | null;
   dataSources: DataSourceRef[];
-  metadata: Record<string, unknown>;
+  metadata: Record<string, any>;
 }
 
 export class ReportBuilderService {
@@ -279,7 +279,7 @@ export class ReportBuilderService {
           const variablePattern = /\{\{(\w+(?:\.\w+)*)\}\}/g;
           textContent = textContent.replace(variablePattern, (_match: string, path: string) => {
             const parts = path.split('.');
-            let value: unknown = fetchedDataMap;
+            let value: any = fetchedDataMap;
             for (const part of parts) {
               if (value && typeof value === 'object' && part in value) {
                 value = value[part];
@@ -296,13 +296,12 @@ export class ReportBuilderService {
           const tableDatasetId = section.content?.datasetId;
           const columns = section.content?.columns || [];
           const tableData = tableDatasetId ? (fetchedDataMap[tableDatasetId] || []) : [];
-          const headerRow = columns.map((col: unknown) => {
-            const colObj = col as Record<string, unknown>;
-            return typeof col === 'string' ? col : colObj.label || colObj.field || col;
+          const headerRow = columns.map((col: any) => {
+            return typeof col === 'string' ? col : col.label || col.field || col;
           });
-          const bodyRows = tableData.map((row: Record<string, unknown>) =>
-            columns.map((col: unknown) => {
-              const colObj = col as Record<string, unknown>;
+          const bodyRows = tableData.map((row: Record<string, any>) =>
+            columns.map((col: any) => {
+              const colObj = col as Record<string, any>;
               const field = (colObj.field || col) as string;
               const value = row[field];
               if (colObj.formatter === 'currency') return `$${Number(value || 0).toFixed(2)}`;

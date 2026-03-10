@@ -15,7 +15,7 @@ export interface Report {
   id: string;
   title?: string;
   sections: ReportSection[];
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 export type ChangeType = 'added' | 'removed' | 'changed' | 'unchanged';
@@ -168,8 +168,8 @@ function deepEqual(a: unknown, b: unknown): boolean {
     return a.every((v, i) => deepEqual(v, b[i]));
   }
 
-  const objA = a as Record<string, unknown>;
-  const objB = b as Record<string, unknown>;
+  const objA = a as Record<string, any>;
+  const objB = b as Record<string, any>;
   const keysA = Object.keys(objA);
   const keysB = Object.keys(objB);
   if (keysA.length !== keysB.length) return false;
@@ -180,7 +180,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
  * Attempts to determine a row key from a data row.
  * Uses 'id', 'key', 'name', or falls back to the first string field.
  */
-function getRowKey(row: Record<string, unknown>): string {
+function getRowKey(row: Record<string, any>): string {
   for (const candidate of ['id', 'key', 'name', 'label', 'category']) {
     if (row[candidate] !== undefined) return String(row[candidate]);
   }
@@ -357,13 +357,13 @@ export class ReportDiffService {
    * rows and computing value change percentages for numeric fields.
    */
   compareData(
-    dataA: Record<string, unknown>[],
-    dataB: Record<string, unknown>[],
-  ): { added: Record<string, unknown>[]; removed: Record<string, unknown>[]; changed: RowDiff[] } {
+    dataA: Record<string, any>[],
+    dataB: Record<string, any>[],
+  ): { added: Record<string, any>[]; removed: Record<string, any>[]; changed: RowDiff[] } {
     logger.debug('Comparing data', { rowsA: dataA.length, rowsB: dataB.length });
 
-    const mapA = new Map<string, Record<string, unknown>>();
-    const mapB = new Map<string, Record<string, unknown>>();
+    const mapA = new Map<string, Record<string, any>>();
+    const mapB = new Map<string, Record<string, any>>();
 
     for (const row of dataA) {
       mapA.set(getRowKey(row), row);
@@ -372,8 +372,8 @@ export class ReportDiffService {
       mapB.set(getRowKey(row), row);
     }
 
-    const added: Record<string, unknown>[] = [];
-    const removed: Record<string, unknown>[] = [];
+    const added: Record<string, any>[] = [];
+    const removed: Record<string, any>[] = [];
     const changed: RowDiff[] = [];
 
     // Find removed and changed rows
@@ -607,17 +607,17 @@ export class ReportDiffService {
    * an object with a `rows` property.
    */
   private diffTableData(contentA: unknown, contentB: unknown): RowDiff[] {
-    const contentAObj = contentA as Record<string, unknown> | undefined;
-    const contentBObj = contentB as Record<string, unknown> | undefined;
-    const rowsA: Record<string, unknown>[] = Array.isArray(contentA)
+    const contentAObj = contentA as Record<string, any> | undefined;
+    const contentBObj = contentB as Record<string, any> | undefined;
+    const rowsA: Record<string, any>[] = Array.isArray(contentA)
       ? contentA
-      : (contentAObj?.rows ?? contentAObj?.data ?? []) as Record<string, unknown>[];
-    const rowsB: Record<string, unknown>[] = Array.isArray(contentB)
+      : (contentAObj?.rows ?? contentAObj?.data ?? []) as Record<string, any>[];
+    const rowsB: Record<string, any>[] = Array.isArray(contentB)
       ? contentB
-      : (contentBObj?.rows ?? contentBObj?.data ?? []) as Record<string, unknown>[];
+      : (contentBObj?.rows ?? contentBObj?.data ?? []) as Record<string, any>[];
 
-    const mapA = new Map<string, Record<string, unknown>>();
-    const mapB = new Map<string, Record<string, unknown>>();
+    const mapA = new Map<string, Record<string, any>>();
+    const mapB = new Map<string, Record<string, any>>();
 
     for (const row of rowsA) mapA.set(getRowKey(row), row);
     for (const row of rowsB) mapB.set(getRowKey(row), row);
@@ -646,7 +646,7 @@ export class ReportDiffService {
    * Compares individual cells of two rows and computes percentage changes
    * for numeric values.
    */
-  private diffRowCells(rowA: Record<string, unknown>, rowB: Record<string, unknown>): ValueChange[] {
+  private diffRowCells(rowA: Record<string, any>, rowB: Record<string, any>): ValueChange[] {
     const allFields = new Set([...Object.keys(rowA), ...Object.keys(rowB)]);
     const changes: ValueChange[] = [];
 
@@ -680,8 +680,8 @@ export class ReportDiffService {
    * or be an array directly. Falls back to generic deep comparison.
    */
   private diffChartData(contentA: unknown, contentB: unknown): ValueChange[] {
-    const contentAObj = contentA as Record<string, unknown> | undefined;
-    const contentBObj = contentB as Record<string, unknown> | undefined;
+    const contentAObj = contentA as Record<string, any> | undefined;
+    const contentBObj = contentB as Record<string, any> | undefined;
     const pointsA: unknown[] = Array.isArray(contentA)
       ? contentA
       : (contentAObj?.dataPoints ?? contentAObj?.data ?? contentAObj?.datasets ?? []) as unknown[];

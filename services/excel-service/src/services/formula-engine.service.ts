@@ -10,8 +10,8 @@ interface FormulaCoord {
   row: { index: number };
 }
 
-interface FormulaParserInternal extends FormulaParser {
-  on(event: string, callback: (...args: unknown[]) => void): void;
+interface FormulaParserInternal {
+  on(event: string, callback: (...args: any[]) => void): void;
 }
 
 type CellValue = string | number | boolean | null | undefined;
@@ -38,17 +38,17 @@ export class FormulaEngineService {
       done(0);
     });
 
-    (this.parser as FormulaParserInternal).on('callFunction', (name: string, params: CellValue[], done: (val: unknown) => void) => {
+    (this.parser as unknown as FormulaParserInternal).on('callFunction', (name: string, params: any[], done: (val: unknown) => void) => {
       const upperName = name.toUpperCase();
       switch (upperName) {
         case 'SUM':
-          done(this.computeSUM(params));
+          done(this.computeSUM(params as CellValue[]));
           break;
         case 'AVERAGE':
-          done(this.computeAVERAGE(params));
+          done(this.computeAVERAGE(params as CellValue[]));
           break;
         case 'IF':
-          done(this.computeIF(params[0], params[1], params[2]));
+          done(this.computeIF(params[0] as CellValue, params[1] as CellValue, params[2] as CellValue));
           break;
         case 'COUNTIF':
           done(this.computeCOUNTIF(Array.isArray(params[0]) ? params[0] : [params[0]], String(params[1])));
@@ -61,13 +61,13 @@ export class FormulaEngineService {
           ));
           break;
         case 'VLOOKUP':
-          done(this.computeVLOOKUP(params[0], params[1], params[2], params[3] !== false));
+          done(this.computeVLOOKUP(params[0], params[1] as any, Number(params[2]), params[3] !== false));
           break;
         case 'INDEX':
-          done(this.computeINDEX(params[0], params[1], params[2] || 1));
+          done(this.computeINDEX(params[0] as any, Number(params[1]), Number(params[2]) || 1));
           break;
         case 'MATCH':
-          done(this.computeMATCH(params[0], params[1], params[2] !== undefined ? params[2] : 1));
+          done(this.computeMATCH(params[0], params[1] as any, params[2] !== undefined ? Number(params[2]) : 1));
           break;
         default:
           done(undefined);
@@ -163,36 +163,36 @@ export class FormulaEngineService {
       done(values);
     });
 
-    (evalParser as FormulaParserInternal).on('callFunction', (name: string, params: CellValue[], done: (val: unknown) => void) => {
+    (evalParser as unknown as FormulaParserInternal).on('callFunction', (name: string, params: any[], done: (val: unknown) => void) => {
       const upperName = name.toUpperCase();
       switch (upperName) {
         case 'SUM':
-          done(this.computeSUM(this.flattenParams(params)));
+          done(this.computeSUM(this.flattenParams(params as CellValue[])));
           break;
         case 'AVERAGE':
-          done(this.computeAVERAGE(this.flattenParams(params)));
+          done(this.computeAVERAGE(this.flattenParams(params as CellValue[])));
           break;
         case 'IF':
-          done(this.computeIF(params[0], params[1], params[2]));
+          done(this.computeIF(params[0] as CellValue, params[1] as CellValue, params[2] as CellValue));
           break;
         case 'COUNTIF':
-          done(this.computeCOUNTIF(this.flattenParams([params[0]]), String(params[1])));
+          done(this.computeCOUNTIF(this.flattenParams([params[0]] as CellValue[]), String(params[1])));
           break;
         case 'SUMIF':
           done(this.computeSUMIF(
-            this.flattenParams([params[0]]),
+            this.flattenParams([params[0]] as CellValue[]),
             String(params[1]),
-            this.flattenParams([params[2]])
+            this.flattenParams([params[2]] as CellValue[])
           ));
           break;
         case 'VLOOKUP':
-          done(this.computeVLOOKUP(params[0], params[1], params[2], params[3] !== false));
+          done(this.computeVLOOKUP(params[0], params[1] as any, Number(params[2]), params[3] !== false));
           break;
         case 'INDEX':
-          done(this.computeINDEX(params[0], params[1], params[2] || 1));
+          done(this.computeINDEX(params[0] as any, Number(params[1]), Number(params[2]) || 1));
           break;
         case 'MATCH':
-          done(this.computeMATCH(params[0], params[1], params[2] !== undefined ? params[2] : 1));
+          done(this.computeMATCH(params[0], params[1] as any, params[2] !== undefined ? Number(params[2]) : 1));
           break;
         default:
           done(undefined);
@@ -366,7 +366,7 @@ export class FormulaEngineService {
       const evalResult = this.evaluateFormula(node.formula, cellValues);
 
       if (evalResult.error === null && evalResult.result !== undefined) {
-        cellValues.set(cellRef, evalResult.result);
+        cellValues.set(cellRef, evalResult.result as CellValue);
 
         const coords = this.parseCellRef(cellRef);
         if (coords) {
@@ -545,8 +545,8 @@ export class FormulaEngineService {
       for (let i = 0; i < tableRange.length; i++) {
         const row = tableRange[i];
         if (!Array.isArray(row)) continue;
-        const firstCol = row[0];
-        if (firstCol <= lookupValue) {
+        const firstCol = row[0] as any;
+        if (firstCol <= (lookupValue as any)) {
           bestIdx = i;
         } else {
           break;
@@ -564,7 +564,7 @@ export class FormulaEngineService {
   /**
    * Compute IF: evaluate condition and return trueValue or falseValue.
    */
-  computeIF(condition: boolean | number | string, trueValue: unknown, falseValue: unknown): unknown {
+  computeIF(condition: CellValue, trueValue: unknown, falseValue: unknown): unknown {
     logger.debug('Computing IF', { condition, trueValue, falseValue });
 
     let boolCondition: boolean;
@@ -777,8 +777,8 @@ export class FormulaEngineService {
     } else if (matchType === 1) {
       let bestIdx = -1;
       for (let i = 0; i < flatArray.length; i++) {
-        const val = flatArray[i];
-        if (val <= lookupValue) {
+        const val = flatArray[i] as any;
+        if (val <= (lookupValue as any)) {
           bestIdx = i;
         } else {
           break;
@@ -792,8 +792,8 @@ export class FormulaEngineService {
     } else {
       let bestIdx = -1;
       for (let i = 0; i < flatArray.length; i++) {
-        const val = flatArray[i];
-        if (val >= lookupValue) {
+        const val = flatArray[i] as any;
+        if (val >= (lookupValue as any)) {
           bestIdx = i;
         } else {
           break;

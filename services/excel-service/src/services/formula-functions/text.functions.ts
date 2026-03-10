@@ -10,7 +10,7 @@ function toString(val: FormulaValue): string {
   return String(val);
 }
 
-function toNumber(val: FormulaValue): number {
+function toNumber(val: FormulaValue): any {
   if (val === null || val === undefined) return 0;
   if (typeof val === 'boolean') return val ? 1 : 0;
   if (typeof val === 'number') return val;

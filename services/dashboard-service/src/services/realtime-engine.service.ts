@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import IORedis from 'ioredis';
 import * as crypto from 'crypto';
@@ -725,8 +725,8 @@ export default class RealtimeEngineService extends EventEmitter {
         dataSourceId: config.dataSourceId,
         refreshInterval: config.refreshInterval,
         query: config.query,
-        aggregation: config.aggregation as Prisma.InputJsonValue,
-        filters: config.filters as Prisma.InputJsonValue,
+        aggregation: config.aggregation as unknown as Prisma.InputJsonValue,
+        filters: config.filters as unknown as Prisma.InputJsonValue,
         maxDataPoints: config.maxDataPoints,
         enabled: config.enabled,
       },
@@ -737,8 +737,8 @@ export default class RealtimeEngineService extends EventEmitter {
         dataSourceId: config.dataSourceId,
         refreshInterval: config.refreshInterval,
         query: config.query,
-        aggregation: config.aggregation as Prisma.InputJsonValue,
-        filters: config.filters as Prisma.InputJsonValue,
+        aggregation: config.aggregation as unknown as Prisma.InputJsonValue,
+        filters: config.filters as unknown as Prisma.InputJsonValue,
         maxDataPoints: config.maxDataPoints,
         enabled: config.enabled,
       },

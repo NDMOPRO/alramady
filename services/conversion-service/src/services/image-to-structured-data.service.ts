@@ -186,8 +186,8 @@ export class ImageToStructuredDataService {
       data: {
         tenantId: validated.tenantId,
         userId: validated.userId,
-        sourceFormat: ext.toUpperCase() as string,
-        targetFormat: validated.outputFormat.toUpperCase().replace('-', '_') as string,
+        sourceFormat: ext.toUpperCase() as any,
+        targetFormat: validated.outputFormat.toUpperCase().replace('-', '_') as any,
         sourceFilename: filename,
         outputFilename: `${filename.replace(/\.[^.]+$/, '')}.${validated.outputFormat === 'xlsx-json' ? 'xlsx' : validated.outputFormat}`,
         sourceSizeBytes: imageBuffer.length,

@@ -143,7 +143,7 @@ router.get(
     const { page, limit, sortBy, sortOrder, search } = req.query as Record<string, string | undefined>;
 
     const skip = ((page || 1) - 1) * (limit || 20);
-    const where: Record<string, unknown> = {};
+    const where: Record<string, any> = {};
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
@@ -202,9 +202,9 @@ router.get(
       orderBy: { createdAt: 'desc' },
     });
 
-    const reportRecord = report as unknown as Record<string, unknown>;
-    const config = (reportRecord.config as Record<string, unknown> | null) ?? {};
-    const configSections = Array.isArray(config.sections) ? config.sections as Array<Record<string, unknown>> : [];
+    const reportRecord = report as unknown as Record<string, any>;
+    const config = (reportRecord.config as Record<string, any> | null) ?? {};
+    const configSections = Array.isArray(config.sections) ? config.sections as Array<Record<string, any>> : [];
     const latestSchedule = schedules[0];
     const latestBuild = buildOutputs[0];
 
@@ -239,11 +239,11 @@ router.get(
       createdBy: report.createdBy,
       sections: configSections.map((section, index) => ({
         id: String(section.id ?? `${report.id}-section-${index}`),
-        title: String((section.content as Record<string, unknown> | undefined)?.title ?? section.type ?? `Section ${index + 1}`),
-        titleAr: String((section.content as Record<string, unknown> | undefined)?.titleAr ?? (section.content as Record<string, unknown> | undefined)?.title ?? section.type ?? `Section ${index + 1}`),
+        title: String((section.content as Record<string, any> | undefined)?.title ?? section.type ?? `Section ${index + 1}`),
+        titleAr: String((section.content as Record<string, any> | undefined)?.titleAr ?? (section.content as Record<string, any> | undefined)?.title ?? section.type ?? `Section ${index + 1}`),
         type: String(section.type ?? 'text'),
-        content: typeof (section.content as Record<string, unknown> | undefined)?.text === 'string'
-          ? String((section.content as Record<string, unknown>).text)
+        content: typeof (section.content as Record<string, any> | undefined)?.text === 'string'
+          ? String((section.content as Record<string, any>).text)
           : JSON.stringify(section.content ?? {}, null, 2),
         order: Number(section.position ?? index),
       })),
@@ -286,13 +286,13 @@ router.put(
       return;
     }
 
-    const updateData: Record<string, unknown> = { updatedAt: new Date(), updatedBy: req.user!.userId };
+    const updateData: Record<string, any> = { updatedAt: new Date(), updatedBy: req.user!.userId };
     if (req.body.name) updateData.name = req.body.name;
     if (req.body.templateId !== undefined) updateData.templateId = req.body.templateId;
     if (req.body.status) updateData.status = req.body.status;
 
     if (req.body.dataSources) {
-      const config = existing.config as Record<string, unknown>;
+      const config = existing.config as Record<string, any>;
       config.dataSources = req.body.dataSources;
       config.metadata.lastModified = new Date().toISOString();
       updateData.config = JSON.parse(JSON.stringify(config));

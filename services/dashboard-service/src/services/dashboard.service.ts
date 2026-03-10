@@ -72,7 +72,7 @@ export class DashboardService {
     const dbWidget = await prisma.dashboardWidget.create({
       data: {
         dashboardId,
-        type: widget.type as string,
+        type: widget.type as any,
         title: (widget.config as Record<string, unknown>)?.title as string || 'Untitled',
         config: widget.config as Prisma.InputJsonValue,
         datasetId: widget.datasetId,

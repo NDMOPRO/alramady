@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { logger } from '../utils/logger';
 
 const prisma = new PrismaClient();

@@ -1,0 +1,26 @@
+{
+  "evidence_id": "evidence_cbea2d491cd4494d",
+  "status": "closed",
+  "created_at": "2026-03-10T16:39:14.704Z",
+  "context": {
+    "workspace_id": "workspace-01",
+    "user_id": "user-01"
+  },
+  "summary": {
+    "goal": "strict-export"
+  },
+  "attachments": [
+    {
+      "kind": "artifact",
+      "artifact_id": "artifact-01",
+      "attached_at": "2026-03-10T16:39:14.712Z"
+    }
+  ],
+  "closure": {
+    "pass": true,
+    "artifact_ids": [
+      "artifact-01"
+    ]
+  },
+  "closed_at": "2026-03-10T16:39:14.716Z"
+}

@@ -1,0 +1,20 @@
+{
+  "evidence_id": "evidence_a10b954a69244c4d",
+  "status": "closed",
+  "created_at": "2026-03-10T18:00:49.820Z",
+  "context": {
+    "workspace_id": "workspace-immutable",
+    "user_id": "user-immutable"
+  },
+  "summary": {
+    "goal": "immutability-check"
+  },
+  "attachments": [],
+  "closure": {
+    "pass": true,
+    "artifact_ids": [
+      "artifact-immutable"
+    ]
+  },
+  "closed_at": "2026-03-10T18:00:49.825Z"
+}

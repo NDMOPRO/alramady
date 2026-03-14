@@ -24,7 +24,7 @@ router.get('/audit/user/:userId', (req, res, next) => authController.getUserActi
 // ──────────────────────────────────────────────
 router.post('/seed-owner', asyncRouteHandler(async (req: Request, res: Response) => {
   const { PrismaClient } = await import('@prisma/client');
-  const bcrypt = await import('bcryptjs');
+  const bcrypt = await import('bcrypt');
   const prisma = new PrismaClient();
 
   try {

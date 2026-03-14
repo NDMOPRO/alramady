@@ -1,5 +1,5 @@
 FROM node:20-alpine AS dev
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl python3 make g++
 WORKDIR /app
 COPY package*.json .npmrc* ./
 RUN npm ci

@@ -26,15 +26,15 @@
     "ci:platform-gates": "npm run ci:no-cheat && npm run ci:tool-contracts && npm run ci:evidence-required && npm run baseline:report && npm run ci:frontend && npm run ci:governance-runtime && npm run ci:ai-runtime && npm run ci:strict && npm run ci:strict-enforce && npm run ci:golden-corpus"
   },
   "devDependencies": {
-    "prisma": "^5.22.0",
-    "puppeteer": "^24.38.0",
-    "tsx": "^4.21.0"
-  },
-  "dependencies": {
     "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
-    "@prisma/client": "^5.22.0",
     "@tailwindcss/vite": "^4.2.1",
     "@vitejs/plugin-react": "^4.7.0",
+    "prisma": "^5.22.0",
+    "puppeteer": "^24.38.0",
+    "tsx": "^4.21.0",
     "vite-plugin-manus-runtime": "^0.0.57"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
   }
 }

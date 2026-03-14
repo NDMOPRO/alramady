@@ -26,7 +26,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (emailOrUsername: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
@@ -46,7 +46,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function mapApiUser(apiUser: Record<string, unknown>): User {
   const isOwner = Boolean(apiUser.isOwner || apiUser.is_owner);
-  const role = isOwner ? 'root_admin' : ((apiUser.role as string) || 'viewer');
+  const firstRole = (apiUser.roles as Array<{ name?: string }> | undefined)?.[0]?.name;
+  const role = isOwner ? 'root_admin' : ((firstRole || (apiUser.role as string)) || 'viewer');
   return {
     id: (apiUser.id as string) || '',
     name: (apiUser.display_name_ar as string) || (apiUser.displayName as string) || (apiUser.name as string) || (apiUser.username as string) || '',
@@ -81,28 +82,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // تسجيل الدخول — بالـ username
-  const login = useCallback(async (username: string, password: string) => {
+  const login = useCallback(async (emailOrUsername: string, password: string) => {
     setIsLoading(true);
     try {
-      const result = await governanceService.login(username.trim(), password);
+      const result = await governanceService.login(emailOrUsername.trim(), password);
       if (result.success && result.data) {
-        const { accessToken, refreshToken, user: apiUser } = result.data;
-        const mappedUser = mapApiUser(apiUser as unknown as Record<string, unknown>);
-        localStorage.setItem('rasid_auth', JSON.stringify({
-          token: accessToken,
-          refreshToken,
-          user: apiUser,
-        }));
+        const { accessToken, refreshToken, user: apiUser } = result.data as { accessToken: string; refreshToken: string; user: Record<string, unknown> };
+        const mappedUser = mapApiUser(apiUser);
+        localStorage.setItem('rasid_auth', JSON.stringify({ token: accessToken, refreshToken, user: apiUser }));
         setUser(mappedUser);
-        setIsLoading(false);
         return { success: true };
       }
-      setIsLoading(false);
       return { success: false, error: 'فشل تسجيل الدخول' };
     } catch (err: unknown) {
-      setIsLoading(false);
-      const message = (err as Error)?.message || 'خطأ في الاتصال بالخادم';
+      const message = (err as Error)?.message || 'خطأ في الاتصال';
       return { success: false, error: message };
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -131,7 +127,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(() => {
     setUser(null);
     localStorage.removeItem('rasid_auth');
-    localStorage.removeItem('rasid_user');
   }, []);
 
   // نسيت كلمة المرور

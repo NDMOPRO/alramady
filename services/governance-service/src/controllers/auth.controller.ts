@@ -20,9 +20,10 @@ export class AuthController {
 
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { email, password } = req.body;
-      if (!email || !password) { res.status(400).json({ error: 'email and password required' }); return; }
-      const result = await authService.login(email, password);
+      const { email, username, password } = req.body;
+      const loginIdentifier = username || email;
+      if (!loginIdentifier || !password) { res.status(400).json({ error: 'username/password required' }); return; }
+      const result = await authService.login(loginIdentifier, password);
       res.json({ success: true, data: result });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

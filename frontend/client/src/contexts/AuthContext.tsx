@@ -1,13 +1,17 @@
-/* RASID Visual DNA — Auth Context
-   Local authentication system (no OAuth)
-   Manages user state, login, register, logout, password recovery */
+/**
+ * RASID Auth Context — مصادقة حقيقية عبر governance-service
+ * لا DEMO_USERS — لا mock — لا بيانات وهمية
+ * تسجيل الدخول بالـ username (وليس email)
+ */
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { governanceService } from '@/services/governanceService';
 
-export type UserRole = 'admin' | 'editor' | 'viewer' | 'analyst';
+export type UserRole = 'root_admin' | 'admin' | 'editor' | 'viewer' | 'analyst';
 
 export interface User {
   id: string;
   name: string;
+  username: string;
   email: string;
   role: UserRole;
   avatar?: string;
@@ -15,13 +19,14 @@ export interface User {
   lastLogin?: string;
   status: 'active' | 'inactive' | 'suspended';
   permissions: string[];
+  isOwner?: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
@@ -31,132 +36,135 @@ interface AuthContextType {
 
 interface RegisterData {
   name: string;
-  email: string;
+  username: string;
   password: string;
+  email?: string;
   department?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Demo users for local simulation
-const DEMO_USERS: (User & { password: string })[] = [
-  {
-    id: '1',
-    name: 'أحمد المالكي',
-    email: 'admin@ndmo.gov.sa',
-    password: 'admin123',
-    role: 'admin',
-    department: 'إدارة البيانات الوطنية',
+function mapApiUser(apiUser: Record<string, unknown>): User {
+  const isOwner = Boolean(apiUser.isOwner || apiUser.is_owner);
+  const role = isOwner ? 'root_admin' : ((apiUser.role as string) || 'viewer');
+  return {
+    id: (apiUser.id as string) || '',
+    name: (apiUser.display_name_ar as string) || (apiUser.displayName as string) || (apiUser.name as string) || (apiUser.username as string) || '',
+    username: (apiUser.username as string) || (apiUser.name as string) || '',
+    email: (apiUser.email as string) || '',
+    role: role as UserRole,
+    avatar: (apiUser.avatarUrl as string) || (apiUser.avatar_url as string) || undefined,
+    department: (apiUser.department as string) || undefined,
+    lastLogin: (apiUser.lastLoginAt as string) || (apiUser.last_login_at as string) || undefined,
     status: 'active',
-    lastLogin: '2026-03-13T10:00:00',
-    permissions: ['manage_users', 'manage_content', 'manage_roles', 'view_analytics', 'manage_settings', 'manage_data', 'create_reports', 'approve_content'],
-  },
-  {
-    id: '2',
-    name: 'سارة العتيبي',
-    email: 'editor@ndmo.gov.sa',
-    password: 'editor123',
-    role: 'editor',
-    department: 'تحليل البيانات',
-    status: 'active',
-    lastLogin: '2026-03-12T14:30:00',
-    permissions: ['manage_content', 'view_analytics', 'manage_data', 'create_reports'],
-  },
-  {
-    id: '3',
-    name: 'خالد الشمري',
-    email: 'viewer@ndmo.gov.sa',
-    password: 'viewer123',
-    role: 'viewer',
-    department: 'الرصد والمتابعة',
-    status: 'active',
-    lastLogin: '2026-03-11T09:15:00',
-    permissions: ['view_analytics', 'view_data'],
-  },
-];
+    permissions: (apiUser.permissions as string[]) || [],
+    isOwner,
+  };
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for stored session on mount
+  // استعادة الجلسة من localStorage
   useEffect(() => {
-    const stored = localStorage.getItem('rasid_user');
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch { /* ignore */ }
-    }
+    try {
+      const stored = localStorage.getItem('rasid_auth');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.token && parsed.user) {
+          setUser(mapApiUser(parsed.user));
+        }
+      }
+    } catch { /* ignore */ }
     setIsLoading(false);
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
+  // تسجيل الدخول — بالـ username
+  const login = useCallback(async (username: string, password: string) => {
     setIsLoading(true);
-    // Simulate API delay
-    await new Promise(r => setTimeout(r, 800));
-    
-    const found = DEMO_USERS.find(u => u.email === email && u.password === password);
-    if (found) {
-      const { password: _, ...userData } = found;
-      setUser(userData);
-      localStorage.setItem('rasid_user', JSON.stringify(userData));
+    try {
+      const result = await governanceService.login(username.trim(), password);
+      if (result.success && result.data) {
+        const { accessToken, refreshToken, user: apiUser } = result.data;
+        const mappedUser = mapApiUser(apiUser as unknown as Record<string, unknown>);
+        localStorage.setItem('rasid_auth', JSON.stringify({
+          token: accessToken,
+          refreshToken,
+          user: apiUser,
+        }));
+        setUser(mappedUser);
+        setIsLoading(false);
+        return { success: true };
+      }
       setIsLoading(false);
-      return { success: true };
+      return { success: false, error: 'فشل تسجيل الدخول' };
+    } catch (err: unknown) {
+      setIsLoading(false);
+      const message = (err as Error)?.message || 'خطأ في الاتصال بالخادم';
+      return { success: false, error: message };
     }
-    setIsLoading(false);
-    return { success: false, error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' };
   }, []);
 
+  // إنشاء حساب جديد
   const register = useCallback(async (data: RegisterData) => {
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 800));
-    
-    const exists = DEMO_USERS.find(u => u.email === data.email);
-    if (exists) {
+    try {
+      const result = await governanceService.register({
+        username: data.username.trim(),
+        password: data.password,
+        email: data.email,
+        name: data.name,
+      });
       setIsLoading(false);
-      return { success: false, error: 'البريد الإلكتروني مسجل مسبقاً' };
+      if (result.success) {
+        return { success: true };
+      }
+      return { success: false, error: (result as { message?: string }).message || 'فشل إنشاء الحساب' };
+    } catch (err: unknown) {
+      setIsLoading(false);
+      return { success: false, error: (err as Error)?.message || 'خطأ في الاتصال' };
     }
-
-    const newUser: User = {
-      id: String(Date.now()),
-      name: data.name,
-      email: data.email,
-      role: 'viewer',
-      department: data.department || '',
-      status: 'active',
-      lastLogin: new Date().toISOString(),
-      permissions: ['view_analytics', 'view_data'],
-    };
-    setUser(newUser);
-    localStorage.setItem('rasid_user', JSON.stringify(newUser));
-    setIsLoading(false);
-    return { success: true };
   }, []);
 
+  // تسجيل الخروج
   const logout = useCallback(() => {
     setUser(null);
+    localStorage.removeItem('rasid_auth');
     localStorage.removeItem('rasid_user');
   }, []);
 
+  // نسيت كلمة المرور
   const forgotPassword = useCallback(async (email: string) => {
-    await new Promise(r => setTimeout(r, 800));
-    const found = DEMO_USERS.find(u => u.email === email);
-    if (found) {
-      return { success: true };
+    try {
+      const result = await governanceService.forgotPassword(email.trim());
+      return { success: result.success };
+    } catch (err: unknown) {
+      return { success: false, error: (err as Error)?.message || 'خطأ في الاتصال' };
     }
-    return { success: false, error: 'البريد الإلكتروني غير مسجل في النظام' };
   }, []);
 
-  const resetPassword = useCallback(async (_token: string, _password: string) => {
-    await new Promise(r => setTimeout(r, 800));
-    return { success: true };
+  // إعادة تعيين كلمة المرور
+  const resetPassword = useCallback(async (token: string, password: string) => {
+    try {
+      const result = await governanceService.resetPassword(token, password);
+      return { success: result.success };
+    } catch (err: unknown) {
+      return { success: false, error: (err as Error)?.message || 'خطأ في الاتصال' };
+    }
   }, []);
 
+  // تحديث الملف الشخصي
   const updateProfile = useCallback((data: Partial<User>) => {
     setUser(prev => {
       if (!prev) return prev;
       const updated = { ...prev, ...data };
-      localStorage.setItem('rasid_user', JSON.stringify(updated));
+      const stored = localStorage.getItem('rasid_auth');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        parsed.user = { ...parsed.user, ...data };
+        localStorage.setItem('rasid_auth', JSON.stringify(parsed));
+      }
       return updated;
     });
   }, []);

@@ -2,6 +2,7 @@
    Professional file upload with drag-and-drop, source type tabs, mobile-responsive */
 import { useState, useRef, useEffect, type DragEvent } from 'react';
 import MaterialIcon from './MaterialIcon';
+import { dataService } from '@/services/dataService';
 
 interface AddSourceDialogProps {
   isOpen: boolean;
@@ -31,9 +32,35 @@ export default function AddSourceDialog({ isOpen, onClose }: AddSourceDialogProp
 
   if (!isOpen) return null;
 
+  const [uploading, setUploading] = useState(false);
+  const [uploadResult, setUploadResult] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleFileUpload = async (files: FileList | File[]) => {
+    if (!files.length) return;
+    setUploading(true);
+    setUploadResult(null);
+    setUploadError(null);
+    try {
+      for (const file of Array.from(files)) {
+        await dataService.importDataset(file);
+      }
+      setUploadResult(`تم رفع ${files.length} ملف بنجاح`);
+      setTimeout(() => onClose(), 1500);
+    } catch (err: unknown) {
+      setUploadError((err as Error)?.message || 'فشل رفع الملف');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleDragOver = (e: DragEvent) => { e.preventDefault(); setIsDragging(true); };
   const handleDragLeave = () => setIsDragging(false);
-  const handleDrop = (e: DragEvent) => { e.preventDefault(); setIsDragging(false); };
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files.length) handleFileUpload(e.dataTransfer.files);
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-dialog-backdrop" onClick={onClose}>
@@ -86,7 +113,10 @@ export default function AddSourceDialog({ isOpen, onClose }: AddSourceDialogProp
             <p className="text-[13px] font-medium text-foreground mt-2.5">أسقط الملفات هنا</p>
             <p className="text-[11px] text-muted-foreground mt-1">أو اضغط لاختيار الملفات</p>
             <p className="text-[9px] text-muted-foreground/60 mt-1">الحد الأقصى: 50MB لكل ملف</p>
-            <input ref={fileInputRef} type="file" className="hidden" multiple />
+            <input ref={fileInputRef} type="file" className="hidden" multiple onChange={e => e.target.files && handleFileUpload(e.target.files)} />
+            {uploading && <p className="text-[11px] text-primary mt-2 animate-pulse">جاري الرفع...</p>}
+            {uploadResult && <p className="text-[11px] text-green-600 mt-2">{uploadResult}</p>}
+            {uploadError && <p className="text-[11px] text-destructive mt-2">{uploadError}</p>}
           </div>
 
           {/* Source Types Grid */}

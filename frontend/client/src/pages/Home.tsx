@@ -17,6 +17,10 @@ import SettingsMenu from '@/components/SettingsMenu';
 import WorkspaceView from '@/components/WorkspaceView';
 import { WORKSPACE_VIEWS } from '@/lib/assets';
 import { useTheme } from '@/contexts/ThemeContext';
+import { dataService } from '@/services/dataService';
+import { reportingService } from '@/services/reportingService';
+import { dashboardService } from '@/services/dashboardService';
+import { presentationService } from '@/services/presentationService';
 
 export interface DataItem {
   id: string;
@@ -157,22 +161,42 @@ export default function Home() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const [dataItems] = useState<DataItem[]>([
-    { id: '1', title: 'بيانات الجهات الحكومية Q4', type: 'file', status: 'ready', icon: 'table_chart', size: '2.4 MB' },
-    { id: '2', title: 'تقرير الامتثال السنوي', type: 'file', status: 'ready', icon: 'description', size: '1.1 MB' },
-    { id: '3', title: 'مؤشرات النضج الوطنية', type: 'table', status: 'processing', icon: 'grid_on', size: '850 KB' },
-    { id: '4', title: 'بيانات الربع الثالث', type: 'file', status: 'review', icon: 'table_chart', size: '3.2 MB' },
-    { id: '5', title: 'الجداول الموحدة', type: 'group', status: 'merged', icon: 'folder', size: '12 ملف' },
-    { id: '6', title: 'جدول تصنيف البيانات', type: 'table', status: 'ready', icon: 'grid_on', size: '420 KB' },
-    { id: '7', title: 'سجل البيانات الشخصية', type: 'file', status: 'ready', icon: 'person_search', size: '780 KB' },
-    { id: '8', title: 'تدفق معالجة البيانات', type: 'flow', status: 'ready', icon: 'account_tree', size: '—' },
-  ]);
+  const [dataItems, setDataItems] = useState<DataItem[]>([]);
+  const [studioOutputs, setStudioOutputs] = useState<StudioOutput[]>([]);
 
-  const [studioOutputs] = useState<StudioOutput[]>([
-    { id: '1', title: 'لوحة مؤشرات نضج البيانات', type: 'dashboard', time: 'منذ ساعتين', icon: 'dashboard' },
-    { id: '2', title: 'تقرير الرصد الربعي', type: 'report', time: 'منذ ٥ ساعات', icon: 'description' },
-    { id: '3', title: 'عرض نتائج التقييم', type: 'presentation', time: 'أمس', icon: 'slideshow' },
-  ]);
+  // جلب البيانات الحقيقية من المحركات
+  useEffect(() => {
+    async function loadRealData() {
+      try {
+        // جلب مجموعات البيانات
+        const datasetsRes = await dataService.listDatasets(1, 20).catch(() => ({ data: [] }));
+        const datasets = ((datasetsRes as { data: Array<Record<string, unknown>> }).data || []).map((d: Record<string, unknown>, i: number) => ({
+          id: String(d.id || i + 1),
+          title: String(d.name || d.title || `مجموعة بيانات ${i + 1}`),
+          type: 'file' as const,
+          status: (String(d.status || 'active') === 'active' ? 'ready' : 'processing') as DataItem['status'],
+          icon: 'table_chart',
+          size: d.size_bytes ? `${Math.round(Number(d.size_bytes) / 1024)} KB` : undefined,
+        }));
+        setDataItems(datasets.length > 0 ? datasets : []);
+
+        // جلب المخرجات من المحركات
+        const outputs: StudioOutput[] = [];
+        const [reports, dashboards, presentations] = await Promise.all([
+          reportingService.listReports(1, 5).catch(() => ({ data: [] })),
+          dashboardService.listDashboards(1, 5).catch(() => ({ data: [] })),
+          presentationService.listPresentations(1, 5).catch(() => ({ data: [] })),
+        ]);
+        ((reports as { data: Array<Record<string, unknown>> }).data || []).forEach((r: Record<string, unknown>) => outputs.push({ id: String(r.id), title: String(r.name || 'تقرير'), type: 'report', time: String(r.createdAt || ''), icon: 'description' }));
+        ((dashboards as { data: Array<Record<string, unknown>> }).data || []).forEach((d: Record<string, unknown>) => outputs.push({ id: String(d.id), title: String(d.name || 'لوحة مؤشرات'), type: 'dashboard', time: String(d.createdAt || ''), icon: 'dashboard' }));
+        ((presentations as { data: Array<Record<string, unknown>> }).data || []).forEach((p: Record<string, unknown>) => outputs.push({ id: String(p.id), title: String(p.name || 'عرض'), type: 'presentation', time: String(p.createdAt || ''), icon: 'slideshow' }));
+        setStudioOutputs(outputs);
+      } catch (err) {
+        console.error('[Home] Failed to load data:', err);
+      }
+    }
+    loadRealData();
+  }, []);
 
   const [addSourceOpen, setAddSourceOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);

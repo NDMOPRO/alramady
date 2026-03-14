@@ -75,8 +75,8 @@ function AdminRoute({ component: Component }: { component: React.ComponentType }
     return <Redirect to="/login" />;
   }
   
-  // Allow admin and editor roles to access admin panel
-  if (user?.role !== 'admin' && user?.role !== 'editor') {
+  // Allow root_admin, admin and editor roles to access admin panel
+  if (user?.role !== 'root_admin' && user?.role !== 'admin' && user?.role !== 'editor') {
     return <Redirect to="/" />;
   }
   

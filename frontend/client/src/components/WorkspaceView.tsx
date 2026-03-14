@@ -1,10 +1,15 @@
 /* RASID Visual DNA — Workspace Views
    5 workspace areas: بياناتي، عروضي، تقاريري، مطابقة، مكتبتي
    Mobile-responsive layouts */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MaterialIcon from './MaterialIcon';
 import { CHARACTERS, REPORT_ACTIONS, PRESENTATION_ACTIONS, DASHBOARD_ACTIONS } from '@/lib/assets';
 import { useTheme } from '@/contexts/ThemeContext';
+import { dataService } from '@/services/dataService';
+import { reportingService } from '@/services/reportingService';
+import { presentationService } from '@/services/presentationService';
+import { libraryService } from '@/services/libraryService';
+import { excelService } from '@/services/excelService';
 
 interface WorkspaceViewProps {
   viewId: string;
@@ -25,17 +30,22 @@ export default function WorkspaceView({ viewId }: WorkspaceViewProps) {
 function DataWorkspace() {
   const [dragOver, setDragOver] = useState(false);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [datasets, setDatasets] = useState<Array<Record<string, unknown>>>([]);
+  const [loadingData, setLoadingData] = useState(true);
 
-  const sampleHeaders = ['الجهة', 'نسبة الامتثال', 'مستوى النضج', 'البيانات المفتوحة', 'التصنيف', 'الحالة'];
-  const sampleRows = [
-    ['وزارة المالية', '٩٤٪', 'متقدم', '٨٧٪', 'أ', 'مكتمل'],
-    ['وزارة الصحة', '٨٨٪', 'متقدم', '٧٩٪', 'أ', 'مكتمل'],
-    ['وزارة التعليم', '٧٦٪', 'متوسط', '٦٥٪', 'ب', 'قيد المراجعة'],
-    ['هيئة الاتصالات', '٩١٪', 'متقدم', '٨٣٪', 'أ', 'مكتمل'],
-    ['هيئة الزكاة', '٦٩٪', 'مبتدئ', '٤٢٪', 'ج', 'يحتاج تحسين'],
-    ['وزارة الداخلية', '٨٢٪', 'متوسط', '٧١٪', 'ب', 'مكتمل'],
-    ['هيئة السوق المالية', '٩٦٪', 'متقدم', '٩٠٪', 'أ+', 'مكتمل'],
-  ];
+  useEffect(() => {
+    dataService.listDatasets(1, 20)
+      .then(res => { if (res.success && res.data) setDatasets(res.data as Array<Record<string, unknown>>); })
+      .catch(() => {})
+      .finally(() => setLoadingData(false));
+  }, []);
+
+  const sampleHeaders = datasets.length > 0
+    ? Object.keys(datasets[0]).filter(k => !['id', 'tenantId', 'tenant_id', 'schema_json'].includes(k)).slice(0, 6)
+    : ['الاسم', 'النوع', 'الحالة', 'الصفوف', 'الأعمدة', 'تاريخ الإنشاء'];
+  const sampleRows = datasets.length > 0
+    ? datasets.map(d => sampleHeaders.map(h => String(d[h] ?? '')))
+    : [];
 
   const toggleRow = (i: number) => {
     setSelectedRows(prev => prev.includes(i) ? prev.filter(r => r !== i) : [...prev, i]);

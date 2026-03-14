@@ -8,6 +8,10 @@ import { useAuth, type User, type UserRole } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { LOGOS } from '@/lib/assets';
 import MaterialIcon from '@/components/MaterialIcon';
+import { governanceService, type UserSummary, type AuditLogEntry } from '@/services/governanceService';
+import { reportingService } from '@/services/reportingService';
+import { dashboardService } from '@/services/dashboardService';
+import { presentationService } from '@/services/presentationService';
 
 // ===== ADMIN SIDEBAR MENU =====
 interface MenuItem {
@@ -37,15 +41,7 @@ const MENU_ITEMS: MenuItem[] = [
   { id: 'logs', label: 'سجل النشاط', icon: 'history', group: 'system' },
 ];
 
-// ===== DEMO DATA =====
-const DEMO_MEMBERS: (User & { joinDate: string })[] = [
-  { id: '1', name: 'أحمد المالكي', email: 'admin@ndmo.gov.sa', role: 'admin', department: 'إدارة البيانات الوطنية', status: 'active', lastLogin: '2026-03-13', permissions: [], joinDate: '2025-01-15' },
-  { id: '2', name: 'سارة العتيبي', email: 'sara@ndmo.gov.sa', role: 'editor', department: 'تحليل البيانات', status: 'active', lastLogin: '2026-03-12', permissions: [], joinDate: '2025-03-20' },
-  { id: '3', name: 'خالد الشمري', email: 'khalid@ndmo.gov.sa', role: 'viewer', department: 'الرصد والمتابعة', status: 'active', lastLogin: '2026-03-11', permissions: [], joinDate: '2025-06-01' },
-  { id: '4', name: 'نورة القحطاني', email: 'noura@ndmo.gov.sa', role: 'analyst', department: 'الامتثال والحوكمة', status: 'active', lastLogin: '2026-03-10', permissions: [], joinDate: '2025-07-10' },
-  { id: '5', name: 'فهد الدوسري', email: 'fahad@ndmo.gov.sa', role: 'editor', department: 'التقنية والتطوير', status: 'inactive', lastLogin: '2026-02-28', permissions: [], joinDate: '2025-04-05' },
-  { id: '6', name: 'ريم الحربي', email: 'reem@ndmo.gov.sa', role: 'viewer', department: 'الشؤون الإدارية', status: 'suspended', lastLogin: '2026-01-15', permissions: [], joinDate: '2025-08-22' },
-];
+// ===== البيانات تُجلب من API حقيقي =====
 
 const ROLES_CONFIG: { id: UserRole; label: string; color: string; icon: string; desc: string; permissions: string[] }[] = [
   { id: 'admin', label: 'مدير النظام', color: '#dc2626', icon: 'shield', desc: 'صلاحيات كاملة على جميع أجزاء النظام', permissions: ['manage_users', 'manage_content', 'manage_roles', 'view_analytics', 'manage_settings', 'manage_data', 'create_reports', 'approve_content', 'delete_data', 'export_data'] },
@@ -68,14 +64,7 @@ const ALL_PERMISSIONS = [
   { id: 'manage_settings', label: 'إدارة الإعدادات', icon: 'settings', group: 'النظام' },
 ];
 
-const DEMO_CONTENT = [
-  { id: '1', title: 'تقرير نضج البيانات Q4', type: 'report', status: 'published', author: 'أحمد المالكي', date: '2026-03-10', views: 234 },
-  { id: '2', title: 'لوحة مؤشرات الامتثال', type: 'dashboard', status: 'draft', author: 'سارة العتيبي', date: '2026-03-08', views: 0 },
-  { id: '3', title: 'عرض نتائج التقييم السنوي', type: 'presentation', status: 'review', author: 'خالد الشمري', date: '2026-03-05', views: 56 },
-  { id: '4', title: 'تحليل مقارن للجهات الحكومية', type: 'report', status: 'published', author: 'نورة القحطاني', date: '2026-03-01', views: 189 },
-  { id: '5', title: 'قالب التقرير الربعي', type: 'template', status: 'published', author: 'أحمد المالكي', date: '2026-02-25', views: 412 },
-  { id: '6', title: 'لوحة مؤشرات البيانات الشخصية', type: 'dashboard', status: 'archived', author: 'فهد الدوسري', date: '2026-02-20', views: 78 },
-];
+// DEMO_CONTENT محذوف — البيانات تُجلب من المحركات الحقيقية
 
 // ===== MAIN COMPONENT =====
 export default function AdminPanel() {
@@ -89,6 +78,44 @@ export default function AdminPanel() {
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
 
   const logo = theme === 'dark' ? LOGOS.dark_header : LOGOS.light_header;
+
+  // ── جلب البيانات الحقيقية من API ──
+  const [members, setMembers] = useState<UserSummary[]>([]);
+  const [contentItems, setContentItems] = useState<Array<{ id: string; title: string; type: string; status: string; author: string; date: string }>>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    async function loadAdminData() {
+      setLoadingData(true);
+      try {
+        // جلب المستخدمين
+        const usersRes = await governanceService.listUsers(1, 50).catch(() => ({ success: false, data: [] }));
+        if (usersRes.success && usersRes.data) setMembers(usersRes.data);
+
+        // جلب سجل التدقيق
+        const auditRes = await governanceService.getAuditLogs({ page: 1, limit: 10 }).catch(() => ({ success: false, data: [] }));
+        if (auditRes.success && auditRes.data) setAuditLogs(auditRes.data);
+
+        // جلب المحتوى من المحركات
+        const content: Array<{ id: string; title: string; type: string; status: string; author: string; date: string }> = [];
+        const [reports, dashboards, presentations] = await Promise.all([
+          reportingService.listReports(1, 10).catch(() => ({ data: [] })),
+          dashboardService.listDashboards(1, 10).catch(() => ({ data: [] })),
+          presentationService.listPresentations(1, 10).catch(() => ({ data: [] })),
+        ]);
+        ((reports as { data: Array<Record<string, unknown>> }).data || []).forEach((r: Record<string, unknown>) => content.push({ id: String(r.id), title: String(r.name || r.title || ''), type: 'report', status: String(r.status || 'draft'), author: String(r.createdBy || ''), date: String(r.createdAt || '') }));
+        ((dashboards as { data: Array<Record<string, unknown>> }).data || []).forEach((d: Record<string, unknown>) => content.push({ id: String(d.id), title: String(d.name || d.title || ''), type: 'dashboard', status: String(d.status || 'draft'), author: String(d.userId || ''), date: String(d.createdAt || '') }));
+        ((presentations as { data: Array<Record<string, unknown>> }).data || []).forEach((p: Record<string, unknown>) => content.push({ id: String(p.id), title: String(p.name || p.title || ''), type: 'presentation', status: String(p.status || 'draft'), author: String(p.createdBy || ''), date: String(p.createdAt || '') }));
+        setContentItems(content);
+      } catch (err) {
+        console.error('[AdminPanel] Failed to load data:', err);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+    loadAdminData();
+  }, []);
 
   useEffect(() => {
     const check = () => {
@@ -377,7 +404,7 @@ function ContentPage() {
     template: 'dashboard_customize',
   };
 
-  const filtered = DEMO_CONTENT.filter(c => {
+  const filtered = contentItems.filter(c => {
     if (filter !== 'all' && c.status !== filter) return false;
     if (search && !c.title.includes(search)) return false;
     return true;
@@ -496,9 +523,9 @@ function MembersPage() {
     suspended: { label: 'معلّق', color: '#dc2626' },
   };
 
-  const filtered = DEMO_MEMBERS.filter(m => {
+  const filtered = members.filter(m => {
     if (roleFilter !== 'all' && m.role !== roleFilter) return false;
-    if (search && !m.name.includes(search) && !m.email.includes(search)) return false;
+    if (search && !(m.name || '').includes(search) && !(m.email || '').includes(search)) return false;
     return true;
   });
 

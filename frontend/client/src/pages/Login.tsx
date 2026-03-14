@@ -13,7 +13,7 @@ export default function Login() {
   const { login } = useAuth();
   const { theme } = useTheme();
   const [, navigate] = useLocation();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -25,19 +25,19 @@ export default function Login() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!email.trim() || !password.trim()) {
-      setError('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+    if (!username.trim() || !password.trim()) {
+      setError('يرجى إدخال اسم المستخدم وكلمة المرور');
       return;
     }
     setLoading(true);
-    const result = await login(email, password);
+    const result = await login(username, password);
     setLoading(false);
     if (result.success) {
       navigate('/');
     } else {
       setError(result.error || 'حدث خطأ في تسجيل الدخول');
     }
-  }, [email, password, login, navigate]);
+  }, [username, password, login, navigate]);
 
   return (
     <div className="min-h-screen flex bg-background" dir="rtl">
@@ -65,18 +65,18 @@ export default function Login() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
+            {/* Username */}
             <div>
-              <label className="block text-[12px] font-bold text-foreground mb-1.5">البريد الإلكتروني</label>
+              <label className="block text-[12px] font-bold text-foreground mb-1.5">اسم المستخدم</label>
               <div className="flex items-center gap-2 h-12 border border-border rounded-xl px-4 bg-card focus-within:border-primary/40 focus-within:shadow-md focus-within:shadow-primary/5 transition-all duration-200">
-                <MaterialIcon icon="mail" size={18} className="text-muted-foreground shrink-0" />
+                <MaterialIcon icon="person" size={18} className="text-muted-foreground shrink-0" />
                 <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="example@ndmo.gov.sa"
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  placeholder="اسم المستخدم"
                   className="flex-1 bg-transparent text-[13px] outline-none text-foreground placeholder:text-muted-foreground"
-                  autoComplete="email"
+                  autoComplete="username"
                   dir="ltr"
                 />
               </div>

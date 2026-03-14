@@ -24,7 +24,7 @@ export default function Register() {
   const { theme } = useTheme();
   const [, navigate] = useLocation();
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [department, setDepartment] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -52,7 +52,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
 
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    if (!name.trim() || !username.trim() || !password.trim()) {
       setError('يرجى تعبئة جميع الحقول المطلوبة');
       return;
     }
@@ -70,14 +70,14 @@ export default function Register() {
     }
 
     setLoading(true);
-    const result = await register({ name, email, password, department });
+    const result = await register({ name, username, password });
     setLoading(false);
     if (result.success) {
-      navigate('/');
+      navigate('/login');
     } else {
       setError(result.error || 'حدث خطأ في التسجيل');
     }
-  }, [name, email, password, confirmPassword, department, agreed, register, navigate]);
+  }, [name, username, password, confirmPassword, department, agreed, register, navigate]);
 
   return (
     <div className="min-h-screen flex bg-background" dir="rtl">
@@ -120,17 +120,18 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Email */}
+            {/* Username */}
             <div>
-              <label className="block text-[12px] font-bold text-foreground mb-1.5">البريد الإلكتروني <span className="text-destructive">*</span></label>
+              <label className="block text-[12px] font-bold text-foreground mb-1.5">اسم المستخدم <span className="text-destructive">*</span></label>
               <div className="flex items-center gap-2 h-11 border border-border rounded-xl px-3.5 bg-card focus-within:border-primary/40 focus-within:shadow-md focus-within:shadow-primary/5 transition-all duration-200">
-                <MaterialIcon icon="mail" size={18} className="text-muted-foreground shrink-0" />
+                <MaterialIcon icon="person" size={18} className="text-muted-foreground shrink-0" />
                 <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="example@ndmo.gov.sa"
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  placeholder="اسم المستخدم"
                   className="flex-1 bg-transparent text-[13px] outline-none text-foreground placeholder:text-muted-foreground"
+                  autoComplete="username"
                   dir="ltr"
                 />
               </div>

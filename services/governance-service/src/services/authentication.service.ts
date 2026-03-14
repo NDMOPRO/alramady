@@ -139,19 +139,18 @@ export class AuthenticationService {
   ): Promise<Record<string, unknown>> {
     const normalizedInput = email.trim().toLowerCase();
 
-    // Support login by email OR username
-    let user = await prisma.user.findUnique({
-      where: { email: normalizedInput },
+    // Support login by username OR email — username first
+    let user = await prisma.user.findFirst({
+      where: { username: { equals: email.trim(), mode: 'insensitive' } },
     });
     if (!user) {
-      user = await prisma.user.findUnique({
-        where: { username: normalizedInput },
+      user = await prisma.user.findFirst({
+        where: { email: { equals: normalizedInput, mode: 'insensitive' } },
       });
     }
     if (!user) {
-      // Try case-insensitive username match
       user = await prisma.user.findFirst({
-        where: { username: { equals: email.trim(), mode: 'insensitive' } },
+        where: { name: { equals: email.trim(), mode: 'insensitive' } },
       });
     }
     if (!user) {

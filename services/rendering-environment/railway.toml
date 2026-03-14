@@ -1,9 +1,8 @@
 [build]
-builder = "nixpacks"
-buildCommand = "npm ci"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "node src/index.js"
 healthcheckPath = "/health"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3

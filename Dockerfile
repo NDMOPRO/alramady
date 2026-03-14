@@ -13,4 +13,4 @@ RUN npm --prefix frontend run build
 
 EXPOSE 3000
 
-CMD ["node","dist/index.js"]
+CMD ["node","server/_core/index.js"]

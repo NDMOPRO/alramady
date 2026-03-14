@@ -26,26 +26,54 @@ export class RuntimeEvidenceServiceError extends Error {
   }
 }
 
-function resolveWorkspaceRoot(startDir = process.cwd()): string {
+function isWorkspaceRoot(candidate: string): boolean {
+  return existsSync(join(candidate, 'schemas')) && existsSync(join(candidate, 'services'));
+}
+
+function resolveWorkspaceRoot(startDir = process.cwd()): string | null {
+  const explicitRoot = process.env.RASED_WORKSPACE_ROOT;
+  if (explicitRoot) {
+    const resolvedExplicitRoot = resolve(explicitRoot);
+    if (isWorkspaceRoot(resolvedExplicitRoot)) {
+      return resolvedExplicitRoot;
+    }
+  }
+
   let current = resolve(startDir);
   while (true) {
-    if (existsSync(join(current, 'schemas')) && existsSync(join(current, 'services'))) {
+    if (isWorkspaceRoot(current)) {
       return current;
     }
 
     const parent = resolve(current, '..');
     if (parent === current) {
-      throw new Error(`Unable to resolve workspace root from ${startDir}`);
+      return null;
     }
     current = parent;
   }
 }
 
+function resolveEvidenceStorageDir(startDir = process.cwd()): string {
+  const explicitDir = process.env.RASED_RUNTIME_EVIDENCE_DIR;
+  if (explicitDir) {
+    return resolve(explicitDir);
+  }
+
+  const workspaceRoot = resolveWorkspaceRoot(startDir);
+  if (workspaceRoot) {
+    return join(workspaceRoot, '.governance-runtime', 'evidence');
+  }
+
+  return join(resolve(startDir), '.governance-runtime', 'evidence');
+}
+
 export class RuntimeEvidenceService {
   private readonly storageDir: string;
 
-  constructor(rootDir = resolveWorkspaceRoot()) {
-    this.storageDir = join(rootDir, '.governance-runtime', 'evidence');
+  constructor(rootDir?: string | null) {
+    this.storageDir = rootDir
+      ? join(resolve(rootDir), '.governance-runtime', 'evidence')
+      : resolveEvidenceStorageDir();
     mkdirSync(this.storageDir, { recursive: true });
   }
 

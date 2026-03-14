@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from 'fs';
-import { basename, join, resolve } from 'path';
+import { basename, join, relative, resolve } from 'path';
 
 export interface RuntimeRegistryEntry {
   tool_id: string;
@@ -31,6 +31,16 @@ const DEFAULT_SERVICE_PORTS: Record<string, string> = {
   'ai-service': process.env.AI_SERVICE_PORT || '8009',
 };
 
+const DEFAULT_INTERNAL_SERVICE_HOSTS: Record<string, string> = {
+  'presentation-service': process.env.PRESENTATION_SERVICE_HOST || 'presentation-service',
+  'excel-service': process.env.EXCEL_SERVICE_HOST || 'excel-service',
+  'dashboard-service': process.env.DASHBOARD_SERVICE_HOST || 'dashboard-service',
+  'reporting-service': process.env.REPORTING_SERVICE_HOST || 'reporting-service',
+  'conversion-service': process.env.CONVERSION_SERVICE_HOST || 'conversion-service',
+  'replication-service': process.env.REPLICATION_SERVICE_HOST || 'replication-service',
+  'ai-service': process.env.AI_SERVICE_HOST || 'ai-service',
+};
+
 const STRICT_TOOL_IDS = new Set([
   'verify.pixel_diff',
   'repair.loop_controller',
@@ -47,20 +57,81 @@ const STRICT_TOOL_IDS = new Set([
   'export.dashboard_from_cdr',
 ]);
 
-function resolveWorkspaceRoot(startDir = process.cwd()): string {
+function resolveBundledRegistryPath(startDir = process.cwd()): string | null {
+  const candidates = [
+    resolve(startDir, 'services/governance-service/src/assets/runtime-tool-registry.generated.json'),
+    resolve(startDir, 'src/assets/runtime-tool-registry.generated.json'),
+    resolve(__dirname, '../assets/runtime-tool-registry.generated.json'),
+    resolve(__dirname, '../../src/assets/runtime-tool-registry.generated.json'),
+  ];
+
+  return candidates.find((candidate) => existsSync(candidate)) ?? null;
+}
+
+function isWorkspaceRoot(candidate: string): boolean {
+  return existsSync(join(candidate, 'schemas')) && existsSync(join(candidate, 'services'));
+}
+
+function resolveWorkspaceRoot(startDir = process.cwd()): string | null {
+  const explicitRoot = process.env.RASED_WORKSPACE_ROOT;
+  if (explicitRoot) {
+    const resolvedExplicitRoot = resolve(explicitRoot);
+    if (isWorkspaceRoot(resolvedExplicitRoot)) {
+      return resolvedExplicitRoot;
+    }
+  }
+
   let current = resolve(startDir);
 
   while (true) {
-    if (existsSync(join(current, 'schemas')) && existsSync(join(current, 'services'))) {
+    if (isWorkspaceRoot(current)) {
       return current;
     }
 
     const parent = resolve(current, '..');
     if (parent === current) {
-      throw new Error(`Unable to resolve workspace root from ${startDir}`);
+      return null;
     }
     current = parent;
   }
+}
+
+function loadBundledRegistry(): RuntimeRegistryEntry[] {
+  const bundledRegistryPath = resolveBundledRegistryPath();
+  if (!bundledRegistryPath) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(readFileSync(bundledRegistryPath, 'utf8')) as {
+      tools?: RuntimeRegistryEntry[];
+    };
+
+    return Array.isArray(parsed.tools)
+      ? parsed.tools
+        .map((entry) => ({
+          ...entry,
+          execute_url: executeUrlForService(entry.service),
+          input_schema_path: normalizeSchemaPath(entry.input_schema_path),
+          output_schema_path: entry.output_schema_path ? normalizeSchemaPath(entry.output_schema_path) : null,
+        }))
+        .sort((left, right) => left.tool_id.localeCompare(right.tool_id, 'en'))
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function normalizeSchemaPath(schemaPath: string): string {
+  const normalized = schemaPath.replace(/\\/g, '/');
+  const marker = '/schemas/';
+  const markerIndex = normalized.lastIndexOf(marker);
+
+  if (markerIndex >= 0) {
+    return normalized.slice(markerIndex + 1);
+  }
+
+  return basename(normalized);
 }
 
 function walkJsonFiles(dir: string): string[] {
@@ -133,10 +204,29 @@ function inferPermissions(toolId: string): string[] {
 }
 
 function executeUrlForService(service: string): string {
+  const explicitServiceUrl = process.env[`${service.replace(/-/g, '_').toUpperCase()}_EXECUTE_URL`];
+  if (explicitServiceUrl) {
+    return explicitServiceUrl;
+  }
+
   const port = DEFAULT_SERVICE_PORTS[service];
   if (!port) {
     throw new Error(`Missing service port mapping for ${service}`);
   }
+
+  const serviceDiscoveryMode = process.env.RASED_TOOL_EXECUTION_BASE_MODE;
+  if (
+    serviceDiscoveryMode === 'internal'
+    || (serviceDiscoveryMode !== 'host'
+      && (process.env.SERVICE_NAME || process.env.RAILWAY_PROJECT_ID || process.env.RAILWAY_ENVIRONMENT))
+  ) {
+    const host = DEFAULT_INTERNAL_SERVICE_HOSTS[service];
+    if (!host) {
+      throw new Error(`Missing internal host mapping for ${service}`);
+    }
+    return `http://${host}:${port}/api/v1/tools/execute`;
+  }
+
   return `http://localhost:${port}/api/v1/tools/execute`;
 }
 
@@ -149,14 +239,24 @@ function inferAsyncMode(toolId: string): 'sync' | 'async' {
 }
 
 export class RuntimeRegistryService {
-  private readonly workspaceRoot: string;
+  private readonly workspaceRoot: string | null;
+  private readonly bundledTools: RuntimeRegistryEntry[];
 
-  constructor(workspaceRoot = resolveWorkspaceRoot()) {
-    this.workspaceRoot = workspaceRoot;
+  constructor(workspaceRoot?: string | null) {
+    this.workspaceRoot = workspaceRoot ?? resolveWorkspaceRoot();
+    this.bundledTools = loadBundledRegistry();
   }
 
-  listTools(): RuntimeRegistryEntry[] {
+  private listToolsFromWorkspace(): RuntimeRegistryEntry[] {
+    if (!this.workspaceRoot) {
+      return [];
+    }
+
     const schemasRoot = join(this.workspaceRoot, 'schemas');
+    if (!existsSync(schemasRoot)) {
+      return [];
+    }
+
     const inputSchemas = walkJsonFiles(schemasRoot);
 
     return inputSchemas
@@ -177,12 +277,30 @@ export class RuntimeRegistryService {
           evidence_required: inferEvidenceRequired(toolId),
           strict_profile: STRICT_TOOL_IDS.has(toolId) ? 'STRICT_PIXEL_LOCK_FINAL' : 'NONE',
           async_mode: inferAsyncMode(toolId),
-          input_schema_path: inputSchemaPath,
-          output_schema_path: existsSync(outputSchemaPath) ? outputSchemaPath : null,
+          input_schema_path: relative(this.workspaceRoot, inputSchemaPath).replace(/\\/g, '/'),
+          output_schema_path: existsSync(outputSchemaPath)
+            ? relative(this.workspaceRoot, outputSchemaPath).replace(/\\/g, '/')
+            : null,
         } satisfies RuntimeRegistryEntry;
       })
       .filter((entry): entry is RuntimeRegistryEntry => Boolean(entry))
       .sort((left, right) => left.tool_id.localeCompare(right.tool_id, 'en'));
+  }
+
+  listTools(): RuntimeRegistryEntry[] {
+    const workspaceTools = this.listToolsFromWorkspace();
+    if (workspaceTools.length > 0) {
+      return workspaceTools;
+    }
+
+    if (this.bundledTools.length > 0) {
+      return this.bundledTools;
+    }
+
+    const bundledRegistryPath = resolveBundledRegistryPath();
+    throw new Error(
+      `Unable to resolve runtime registry. Workspace root: ${this.workspaceRoot ?? 'unresolved'}, bundled registry path: ${bundledRegistryPath ?? 'unresolved'}`
+    );
   }
 
   getTool(toolId: string): RuntimeRegistryEntry | null {

@@ -66,19 +66,15 @@ router.post('/seed-owner', asyncRouteHandler(async (req: Request, res: Response)
     // Create owner account
     const hashedPassword = await bcrypt.hash(OWNER_PASSWORD, 12);
 
-    const owner = await prisma.user.create({
-      data: {
-        email: OWNER_EMAIL,
-        name: OWNER_USERNAME,
-        password: hashedPassword,
-        role: 'root_admin',
-        status: 'ACTIVE' as never,
-        isOwner: true,
-        phone: OWNER_PHONE,
-        tenantId: 'default',
-      } as never,
-      select: { id: true, email: true, name: true, role: true },
-    });
+    // Use raw SQL to create owner - avoids Prisma schema mismatch
+    const existingTenant = await prisma.$queryRaw<Array<{ id: string }>>`SELECT id FROM tenants LIMIT 1`;
+    const tenantId = existingTenant[0]?.id || 'default';
+
+    const [owner] = await prisma.$queryRaw<Array<{ id: string; email: string; name: string }>>`
+      INSERT INTO users (id, email, name, username, display_name, password_hash, role, status, is_owner, phone, tenant_id)
+      VALUES (gen_random_uuid(), ${OWNER_EMAIL}, ${OWNER_USERNAME}, ${OWNER_USERNAME}, ${OWNER_USERNAME}, ${hashedPassword}, 'root_admin', 'active', true, ${OWNER_PHONE}, ${tenantId}::uuid)
+      RETURNING id, email, name
+    `;
 
     res.status(201).json({
       success: true,

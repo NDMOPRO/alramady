@@ -1,6 +1,8 @@
 import express from 'express';
 import request from 'supertest';
 import runtimeRoutes from '../routes/runtime.routes';
+import { RuntimeRegistryService } from '../services/runtime-registry.service';
+import { RuntimeEvidenceService } from '../services/runtime-evidence.service';
 
 describe('governance runtime routes', () => {
   const app = express();
@@ -41,6 +43,43 @@ describe('governance runtime routes', () => {
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body.data.actions)).toBe(true);
     expect(response.body.data.actions.some((entry: { action: string }) => entry.action === 'slides.build_deck')).toBe(true);
+  });
+
+  it('falls back to the bundled registry when workspace schemas are unavailable', () => {
+    const registry = new RuntimeRegistryService('C:/__missing_workspace_root__');
+    const tools = registry.listTools();
+
+    expect(tools.length).toBeGreaterThan(0);
+    expect(tools.some((entry) => entry.tool_id === 'slides.build_deck')).toBe(true);
+  });
+
+  it('normalizes bundled registry paths and uses internal service urls inside containers', () => {
+    const previousServiceName = process.env.SERVICE_NAME;
+    process.env.SERVICE_NAME = 'governance-service';
+
+    try {
+      const registry = new RuntimeRegistryService('C:/__missing_workspace_root__');
+      const deckTool = registry.getTool('slides.build_deck');
+
+      expect(deckTool).toBeTruthy();
+      expect(deckTool?.execute_url).toBe('http://presentation-service:8005/api/v1/tools/execute');
+      expect(deckTool?.input_schema_path).toMatch(/^schemas\//);
+      expect(deckTool?.input_schema_path).not.toMatch(/^[A-Za-z]:/);
+    } finally {
+      if (previousServiceName === undefined) {
+        delete process.env.SERVICE_NAME;
+      } else {
+        process.env.SERVICE_NAME = previousServiceName;
+      }
+    }
+  });
+
+  it('stores evidence records even when workspace root is unavailable', () => {
+    const service = new RuntimeEvidenceService('C:/__missing_workspace_root__');
+    const record = service.create({ workspace_id: 'fallback' }, { goal: 'fallback-evidence' });
+
+    expect(record.evidence_id).toMatch(/^evidence_/);
+    expect(service.read(record.evidence_id).summary.goal).toBe('fallback-evidence');
   });
 
   it('creates, attaches, and closes runtime evidence packs', async () => {

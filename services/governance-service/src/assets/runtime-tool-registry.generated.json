@@ -1,0 +1,1656 @@
+{
+  "generated_at": "2026-03-10T16:33:44.485Z",
+  "tools": [
+    {
+      "tool_id": "ai.excel.auto_analyze",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\ai.excel.auto_analyze.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\ai.excel.auto_analyze.output.json"
+    },
+    {
+      "tool_id": "ai.excel.intent_parse",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\ai.excel.intent_parse.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\ai.excel.intent_parse.output.json"
+    },
+    {
+      "tool_id": "canvas.table.add_column",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\canvas.table.add_column.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\canvas.table.add_column.output.json"
+    },
+    {
+      "tool_id": "canvas.table.create_empty",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\canvas.table.create_empty.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\canvas.table.create_empty.output.json"
+    },
+    {
+      "tool_id": "catalog.build",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\catalog.build.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\catalog.build.output.json"
+    },
+    {
+      "tool_id": "catalog.unify_columns",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\catalog.unify_columns.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\catalog.unify_columns.output.json"
+    },
+    {
+      "tool_id": "cdr.build_design_from_image",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\cdr.build_design_from_image.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\cdr.build_design_from_image.output.json"
+    },
+    {
+      "tool_id": "cdr.build_design_from_pdf",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\cdr.build_design_from_pdf.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\cdr.build_design_from_pdf.output.json"
+    },
+    {
+      "tool_id": "cdr.build_table_from_image",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\cdr.build_table_from_image.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\cdr.build_table_from_image.output.json"
+    },
+    {
+      "tool_id": "compare.dataset_diff",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\compare.dataset_diff.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\compare.dataset_diff.output.json"
+    },
+    {
+      "tool_id": "dashboard.bind_data",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.bind_data.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.bind_data.output.json"
+    },
+    {
+      "tool_id": "dashboard.build",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.build.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.build.output.json"
+    },
+    {
+      "tool_id": "dashboard.catalog_search",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.catalog_search.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.catalog_search.output.json"
+    },
+    {
+      "tool_id": "dashboard.evidence_pack",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.evidence_pack.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.evidence_pack.output.json"
+    },
+    {
+      "tool_id": "dashboard.export",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.export.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.export.output.json"
+    },
+    {
+      "tool_id": "dashboard.intent_parse",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.intent_parse.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.intent_parse.output.json"
+    },
+    {
+      "tool_id": "dashboard.parity_verify",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.parity_verify.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.parity_verify.output.json"
+    },
+    {
+      "tool_id": "dashboard.plan",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.plan.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.plan.output.json"
+    },
+    {
+      "tool_id": "dashboard.publish",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.publish.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.publish.output.json"
+    },
+    {
+      "tool_id": "dashboard.qa_autofix",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.qa_autofix.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.qa_autofix.output.json"
+    },
+    {
+      "tool_id": "dashboard.qa_validate",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.qa_validate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.qa_validate.output.json"
+    },
+    {
+      "tool_id": "dashboard.render_preview",
+      "service": "dashboard-service",
+      "execute_url": "http://localhost:8003/api/v1/tools/execute",
+      "required_permissions": [
+        "dashboard:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.render_preview.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\dash\\tools\\dashboard.render_preview.output.json"
+    },
+    {
+      "tool_id": "data.ingest.batch",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\data.ingest.batch.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\data.ingest.batch.output.json"
+    },
+    {
+      "tool_id": "data.inspect.preflight",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\data.inspect.preflight.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\data.inspect.preflight.output.json"
+    },
+    {
+      "tool_id": "diagnose.diff_attribution",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\diagnose.diff_attribution.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\diagnose.diff_attribution.output.json"
+    },
+    {
+      "tool_id": "excel.svm.recalc",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\excel.svm.recalc.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\excel.svm.recalc.output.json"
+    },
+    {
+      "tool_id": "export.dashboard_from_cdr",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.dashboard_from_cdr.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.dashboard_from_cdr.output.json"
+    },
+    {
+      "tool_id": "export.docx_from_cdr",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.docx_from_cdr.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.docx_from_cdr.output.json"
+    },
+    {
+      "tool_id": "export.pptx_from_cdr",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.pptx_from_cdr.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.pptx_from_cdr.output.json"
+    },
+    {
+      "tool_id": "export.xlsx",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\export.xlsx.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\export.xlsx.output.json"
+    },
+    {
+      "tool_id": "export.xlsx_from_table_cdr",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.xlsx_from_table_cdr.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\export.xlsx_from_table_cdr.output.json"
+    },
+    {
+      "tool_id": "expr.tir.apply",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\expr.tir.apply.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\expr.tir.apply.output.json"
+    },
+    {
+      "tool_id": "extract.image_segments",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\extract.image_segments.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\extract.image_segments.output.json"
+    },
+    {
+      "tool_id": "extract.pdf_dom",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\extract.pdf_dom.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\extract.pdf_dom.output.json"
+    },
+    {
+      "tool_id": "fonts.embed_full_glyph",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\fonts.embed_full_glyph.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\fonts.embed_full_glyph.output.json"
+    },
+    {
+      "tool_id": "format.excel.beautify",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\format.excel.beautify.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\format.excel.beautify.output.json"
+    },
+    {
+      "tool_id": "lct.convert.cdr_build",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.convert.cdr_build.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.convert.cdr_build.output.json"
+    },
+    {
+      "tool_id": "lct.convert.export_targets",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.convert.export_targets.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.convert.export_targets.output.json"
+    },
+    {
+      "tool_id": "lct.evidence.pack",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.evidence.pack.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.evidence.pack.output.json"
+    },
+    {
+      "tool_id": "lct.export.multi_format",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.export.multi_format.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.export.multi_format.output.json"
+    },
+    {
+      "tool_id": "lct.extract.modality_detect",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.extract.modality_detect.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.extract.modality_detect.output.json"
+    },
+    {
+      "tool_id": "lct.localize.arabic_typeset_elite",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.localize.arabic_typeset_elite.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.localize.arabic_typeset_elite.output.json"
+    },
+    {
+      "tool_id": "lct.localize.lqa_gate_zero",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.localize.lqa_gate_zero.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.localize.lqa_gate_zero.output.json"
+    },
+    {
+      "tool_id": "lct.localize.termaware_translate",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.localize.termaware_translate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.localize.termaware_translate.output.json"
+    },
+    {
+      "tool_id": "lct.orch.any_to_any",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.orch.any_to_any.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.orch.any_to_any.output.json"
+    },
+    {
+      "tool_id": "lct.repair.loop_controller",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.repair.loop_controller.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.repair.loop_controller.output.json"
+    },
+    {
+      "tool_id": "lct.transcribe.asr_ensemble_strict",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.asr_ensemble_strict.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.asr_ensemble_strict.output.json"
+    },
+    {
+      "tool_id": "lct.transcribe.exactness_gate",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.exactness_gate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.exactness_gate.output.json"
+    },
+    {
+      "tool_id": "lct.transcribe.forced_alignment",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.forced_alignment.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.forced_alignment.output.json"
+    },
+    {
+      "tool_id": "lct.transcribe.ocr_on_screen",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.ocr_on_screen.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.ocr_on_screen.output.json"
+    },
+    {
+      "tool_id": "lct.transcribe.video_to_audio",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.video_to_audio.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.transcribe.video_to_audio.output.json"
+    },
+    {
+      "tool_id": "lct.verify.pixel_gate_zero",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.verify.pixel_gate_zero.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.verify.pixel_gate_zero.output.json"
+    },
+    {
+      "tool_id": "lct.verify.structural_editable_gate",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.verify.structural_editable_gate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\lct.verify.structural_editable_gate.output.json"
+    },
+    {
+      "tool_id": "rased.connector.call",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.connector.call.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.connector.call.output.json"
+    },
+    {
+      "tool_id": "rased.evidence.pack",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.evidence.pack.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.evidence.pack.output.json"
+    },
+    {
+      "tool_id": "rased.execute_action_graph",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.execute_action_graph.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.execute_action_graph.output.json"
+    },
+    {
+      "tool_id": "rased.explain.trace",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.explain.trace.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.explain.trace.output.json"
+    },
+    {
+      "tool_id": "rased.intent_parse",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.intent_parse.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.intent_parse.output.json"
+    },
+    {
+      "tool_id": "rased.knowledge.search",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.knowledge.search.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.knowledge.search.output.json"
+    },
+    {
+      "tool_id": "rased.observe_ui_state",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.observe_ui_state.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.observe_ui_state.output.json"
+    },
+    {
+      "tool_id": "rased.plan_action_graph",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.plan_action_graph.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.plan_action_graph.output.json"
+    },
+    {
+      "tool_id": "rased.policy.check",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.policy.check.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.policy.check.output.json"
+    },
+    {
+      "tool_id": "rased.preference.get",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.preference.get.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.preference.get.output.json"
+    },
+    {
+      "tool_id": "rased.preference.set",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.preference.set.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.preference.set.output.json"
+    },
+    {
+      "tool_id": "rased.training.eval.run",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.training.eval.run.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.training.eval.run.output.json"
+    },
+    {
+      "tool_id": "rased.training.pack.ingest",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.training.pack.ingest.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.training.pack.ingest.output.json"
+    },
+    {
+      "tool_id": "rased.training.playbook.upsert",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.training.playbook.upsert.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.training.playbook.upsert.output.json"
+    },
+    {
+      "tool_id": "rased.ui_action.dispatch",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_action.dispatch.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_action.dispatch.output.json"
+    },
+    {
+      "tool_id": "rased.ui_tour.end",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_tour.end.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_tour.end.output.json"
+    },
+    {
+      "tool_id": "rased.ui_tour.start",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_tour.start.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_tour.start.output.json"
+    },
+    {
+      "tool_id": "rased.ui_tour.step",
+      "service": "ai-service",
+      "execute_url": "http://localhost:8009/api/v1/tools/execute",
+      "required_permissions": [
+        "ai:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_tour.step.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\rased\\tools\\rased.ui_tour.step.output.json"
+    },
+    {
+      "tool_id": "recipe.apply",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\recipe.apply.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\recipe.apply.output.json"
+    },
+    {
+      "tool_id": "recipe.save",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\recipe.save.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\recipe.save.output.json"
+    },
+    {
+      "tool_id": "relation.suggest_joins",
+      "service": "excel-service",
+      "execute_url": "http://localhost:8002/api/v1/tools/execute",
+      "required_permissions": [
+        "excel:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\relation.suggest_joins.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\excel\\tools\\relation.suggest_joins.output.json"
+    },
+    {
+      "tool_id": "render.any_to_png",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\render.any_to_png.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\render.any_to_png.output.json"
+    },
+    {
+      "tool_id": "render.validate_determinism",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\render.validate_determinism.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\render.validate_determinism.output.json"
+    },
+    {
+      "tool_id": "repair.adjust_text_metrics",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\repair.adjust_text_metrics.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\repair.adjust_text_metrics.output.json"
+    },
+    {
+      "tool_id": "repair.loop_controller",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\repair.loop_controller.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\repair.loop_controller.output.json"
+    },
+    {
+      "tool_id": "repair.quantize_geometry",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\repair.quantize_geometry.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\repair.quantize_geometry.output.json"
+    },
+    {
+      "tool_id": "report.bind_data",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.bind_data.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.bind_data.output.json"
+    },
+    {
+      "tool_id": "report.build_doc_ir",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.build_doc_ir.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.build_doc_ir.output.json"
+    },
+    {
+      "tool_id": "report.classify_and_govern",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.classify_and_govern.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.classify_and_govern.output.json"
+    },
+    {
+      "tool_id": "report.evidence_pack",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.evidence_pack.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.evidence_pack.output.json"
+    },
+    {
+      "tool_id": "report.export_docx",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_docx.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_docx.output.json"
+    },
+    {
+      "tool_id": "report.export_html",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_html.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_html.output.json"
+    },
+    {
+      "tool_id": "report.export_pdf",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_pdf.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_pdf.output.json"
+    },
+    {
+      "tool_id": "report.export_pptx",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_pptx.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_pptx.output.json"
+    },
+    {
+      "tool_id": "report.export_xlsx",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_xlsx.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.export_xlsx.output.json"
+    },
+    {
+      "tool_id": "report.generate_content_literal",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.generate_content_literal.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.generate_content_literal.output.json"
+    },
+    {
+      "tool_id": "report.generate_content_smart",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.generate_content_smart.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.generate_content_smart.output.json"
+    },
+    {
+      "tool_id": "report.intent_parse",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.intent_parse.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.intent_parse.output.json"
+    },
+    {
+      "tool_id": "report.plan_outline",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.plan_outline.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.plan_outline.output.json"
+    },
+    {
+      "tool_id": "report.qa_autofix",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.qa_autofix.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.qa_autofix.output.json"
+    },
+    {
+      "tool_id": "report.qa_validate",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.qa_validate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.qa_validate.output.json"
+    },
+    {
+      "tool_id": "report.render_parity_verify",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.render_parity_verify.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.render_parity_verify.output.json"
+    },
+    {
+      "tool_id": "report.template_extract",
+      "service": "reporting-service",
+      "execute_url": "http://localhost:8004/api/v1/tools/execute",
+      "required_permissions": [
+        "report:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.template_extract.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\report\\tools\\report.template_extract.output.json"
+    },
+    {
+      "tool_id": "slides.apply_theme",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.apply_theme.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.apply_theme.output.json"
+    },
+    {
+      "tool_id": "slides.build_deck",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.build_deck.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.build_deck.output.json"
+    },
+    {
+      "tool_id": "slides.catalog_search",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.catalog_search.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.catalog_search.output.json"
+    },
+    {
+      "tool_id": "slides.control_manifest_build",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.control_manifest_build.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.control_manifest_build.output.json"
+    },
+    {
+      "tool_id": "slides.data_binding_apply",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.data_binding_apply.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.data_binding_apply.output.json"
+    },
+    {
+      "tool_id": "slides.data_picker_browse",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.data_picker_browse.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.data_picker_browse.output.json"
+    },
+    {
+      "tool_id": "slides.element_transform",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.element_transform.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.element_transform.output.json"
+    },
+    {
+      "tool_id": "slides.evidence_pack",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.evidence_pack.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.evidence_pack.output.json"
+    },
+    {
+      "tool_id": "slides.evidence_pack_export",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.evidence_pack_export.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.evidence_pack_export.output.json"
+    },
+    {
+      "tool_id": "slides.export_google_slides",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_google_slides.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_google_slides.output.json"
+    },
+    {
+      "tool_id": "slides.export_html",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_html.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_html.output.json"
+    },
+    {
+      "tool_id": "slides.export_pdf",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_pdf.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_pdf.output.json"
+    },
+    {
+      "tool_id": "slides.export_pptx",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_pptx.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.export_pptx.output.json"
+    },
+    {
+      "tool_id": "slides.insert_strict_slide_from_asset",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": true,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.insert_strict_slide_from_asset.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.insert_strict_slide_from_asset.output.json"
+    },
+    {
+      "tool_id": "slides.intent_parse",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.intent_parse.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.intent_parse.output.json"
+    },
+    {
+      "tool_id": "slides.media_import",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.media_import.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.media_import.output.json"
+    },
+    {
+      "tool_id": "slides.parity_matrix_verify",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.parity_matrix_verify.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.parity_matrix_verify.output.json"
+    },
+    {
+      "tool_id": "slides.plan_outline",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.plan_outline.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.plan_outline.output.json"
+    },
+    {
+      "tool_id": "slides.plan_storyboard",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.plan_storyboard.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.plan_storyboard.output.json"
+    },
+    {
+      "tool_id": "slides.preferences_get",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.preferences_get.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.preferences_get.output.json"
+    },
+    {
+      "tool_id": "slides.preferences_set",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.preferences_set.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.preferences_set.output.json"
+    },
+    {
+      "tool_id": "slides.preview_render",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.preview_render.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.preview_render.output.json"
+    },
+    {
+      "tool_id": "slides.qa_autofix",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.qa_autofix.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.qa_autofix.output.json"
+    },
+    {
+      "tool_id": "slides.qa_validate",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.qa_validate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.qa_validate.output.json"
+    },
+    {
+      "tool_id": "slides.reader_launch",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.reader_launch.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.reader_launch.output.json"
+    },
+    {
+      "tool_id": "slides.render_parity_verify",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "async",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.render_parity_verify.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.render_parity_verify.output.json"
+    },
+    {
+      "tool_id": "slides.variant_generate",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.variant_generate.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.variant_generate.output.json"
+    },
+    {
+      "tool_id": "slides.video_embed",
+      "service": "presentation-service",
+      "execute_url": "http://localhost:8005/api/v1/tools/execute",
+      "required_permissions": [
+        "slides:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.video_embed.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\slides\\tools\\slides.video_embed.output.json"
+    },
+    {
+      "tool_id": "verifier.ops.dispatch",
+      "service": "conversion-service",
+      "execute_url": "http://localhost:8013/api/v1/tools/execute",
+      "required_permissions": [
+        "conversion:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\verifier.ops.dispatch.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\lct\\tools\\verifier.ops.dispatch.output.json"
+    },
+    {
+      "tool_id": "verify.pixel_diff",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "STRICT_PIXEL_LOCK_FINAL",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\verify.pixel_diff.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\verify.pixel_diff.output.json"
+    },
+    {
+      "tool_id": "verify.structural_equivalence",
+      "service": "replication-service",
+      "execute_url": "http://localhost:8007/api/v1/tools/execute",
+      "required_permissions": [
+        "replication:execute"
+      ],
+      "evidence_required": false,
+      "strict_profile": "NONE",
+      "async_mode": "sync",
+      "input_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\verify.structural_equivalence.input.json",
+      "output_schema_path": "C:\\DATA_AI\\rasid\\schemas\\strict\\tools\\verify.structural_equivalence.output.json"
+    }
+  ]
+}

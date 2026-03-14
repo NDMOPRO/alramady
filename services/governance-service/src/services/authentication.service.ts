@@ -39,10 +39,10 @@ export class AuthenticationService {
     role: string,
     tenantId: string
   ): Promise<Record<string, unknown>> {
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedInput = email.trim().toLowerCase();
 
     const existingUser = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+      where: { email: normalizedInput },
     });
     if (existingUser) {
       throw new Error('A user with this email address already exists');
@@ -79,7 +79,7 @@ export class AuthenticationService {
     const user = await prisma.user.create({
       data: {
         tenantId,
-        email: normalizedEmail,
+        email: normalizedInput,
         name: name.trim(),
         role: assignedRole,
         passwordHash,
@@ -107,7 +107,7 @@ export class AuthenticationService {
         entityType: 'user',
         entityId: user.id,
         detailsJson: {
-          email: normalizedEmail,
+          email: normalizedInput,
           name: name.trim(),
           role: assignedRole,
           registeredAt: new Date().toISOString(),
@@ -117,7 +117,7 @@ export class AuthenticationService {
 
     logger.info('User registered successfully', {
       userId: user.id,
-      email: normalizedEmail,
+      email: normalizedInput,
       role: assignedRole,
       tenantId,
     });
@@ -137,13 +137,25 @@ export class AuthenticationService {
     email: string,
     password: string
   ): Promise<Record<string, unknown>> {
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedInput = email.trim().toLowerCase();
 
-    const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+    // Support login by email OR username
+    let user = await prisma.user.findUnique({
+      where: { email: normalizedInput },
     });
     if (!user) {
-      logger.warn('Login attempt with unknown email', { email: normalizedEmail });
+      user = await prisma.user.findUnique({
+        where: { username: normalizedInput },
+      });
+    }
+    if (!user) {
+      // Try case-insensitive username match
+      user = await prisma.user.findFirst({
+        where: { username: { equals: email.trim(), mode: 'insensitive' } },
+      });
+    }
+    if (!user) {
+      logger.warn('Login attempt with unknown credential', { input: normalizedInput });
       throw new Error('Invalid email or password');
     }
 
@@ -153,7 +165,7 @@ export class AuthenticationService {
       throw new Error('Account is not active. Please contact support.');
     }
 
-    const loginAttemptsKey = `login_attempts:${normalizedEmail}`;
+    const loginAttemptsKey = `login_attempts:${normalizedInput}`;
     const currentAttempts = await redis.get(loginAttemptsKey);
     const attemptCount = currentAttempts ? parseInt(currentAttempts, 10) : 0;
 
@@ -180,8 +192,8 @@ export class AuthenticationService {
 
     await redis.del(loginAttemptsKey);
 
-    const has2FA = user.mfaEnabled
-      ? (user.mfaSecret || await redis.get(`2fa_secret:${user.id}`))
+    const has2FA = user.two_factor_enabled
+      ? (user.two_factor_secret || await redis.get(`2fa_secret:${user.id}`))
       : await redis.get(`2fa_secret:${user.id}`);
     if (has2FA) {
       return {
@@ -240,14 +252,14 @@ export class AuthenticationService {
         entityType: 'user',
         entityId: user.id,
         detailsJson: {
-          email: normalizedEmail,
+          email: normalizedInput,
           loginAt: new Date().toISOString(),
           tokenId,
         },
       },
     });
 
-    logger.info('User logged in successfully', { userId: user.id, email: normalizedEmail });
+    logger.info('User logged in successfully', { userId: user.id, email: normalizedInput });
 
     return {
       user: {
@@ -399,13 +411,13 @@ export class AuthenticationService {
   async forgotPassword(
     email: string
   ): Promise<Record<string, unknown>> {
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedInput = email.trim().toLowerCase();
 
     const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+      where: { email: normalizedInput },
     });
     if (!user) {
-      logger.info('Password reset requested for non-existent email', { email: normalizedEmail });
+      logger.info('Password reset requested for non-existent email', { email: normalizedInput });
       return {
         success: true,
         message: 'If an account exists with this email, a password reset link has been sent',
@@ -428,7 +440,7 @@ export class AuthenticationService {
         entityType: 'user',
         entityId: user.id,
         detailsJson: {
-          email: normalizedEmail,
+          email: normalizedInput,
           expiresAt: expiresAt.toISOString(),
           requestedAt: new Date().toISOString(),
         },
@@ -439,7 +451,7 @@ export class AuthenticationService {
       `password_reset:${resetTokenHash}`,
       JSON.stringify({
         userId: user.id,
-        email: normalizedEmail,
+        email: normalizedInput,
         createdAt: new Date().toISOString(),
       }),
       'EX',
@@ -450,7 +462,7 @@ export class AuthenticationService {
 
     const mailOptions = {
       from: process.env.SMTP_FROM || 'noreply@rasid.ai',
-      to: normalizedEmail,
+      to: normalizedInput,
       subject: 'RASID Platform - Password Reset Request',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -470,10 +482,10 @@ export class AuthenticationService {
 
     try {
       await mailTransport.sendMail(mailOptions);
-      logger.info('Password reset email sent', { email: normalizedEmail });
+      logger.info('Password reset email sent', { email: normalizedInput });
     } catch (mailError: unknown) {
       logger.error('Failed to send password reset email', {
-        email: normalizedEmail,
+        email: normalizedInput,
         error: mailError instanceof Error ? mailError.message : String(mailError),
       });
     }
@@ -560,8 +572,8 @@ export class AuthenticationService {
       throw new Error('User not found');
     }
 
-    const existing2FA = user.mfaEnabled
-      ? (user.mfaSecret || await redis.get(`2fa_secret:${userId}`))
+    const existing2FA = user.two_factor_enabled
+      ? (user.two_factor_secret || await redis.get(`2fa_secret:${userId}`))
       : await redis.get(`2fa_secret:${userId}`);
     if (existing2FA) {
       throw new Error('Two-factor authentication is already enabled for this account');
@@ -646,8 +658,8 @@ export class AuthenticationService {
       await prisma.user.update({
         where: { id: userId },
         data: {
-          mfaEnabled: true,
-          mfaSecret: pendingSecret,
+          two_factor_enabled: true,
+          two_factor_secret: pendingSecret,
         },
       });
 
@@ -706,7 +718,7 @@ export class AuthenticationService {
     token: string
   ): Promise<Record<string, unknown>> {
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    const activeSecret = user?.mfaSecret || await redis.get(`2fa_secret:${userId}`);
+    const activeSecret = user?.two_factor_secret || await redis.get(`2fa_secret:${userId}`);
     if (!activeSecret) {
       throw new Error('Two-factor authentication is not enabled for this account');
     }
@@ -729,8 +741,8 @@ export class AuthenticationService {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        mfaEnabled: false,
-        mfaSecret: null,
+        two_factor_enabled: false,
+        two_factor_secret: null,
       },
     });
 

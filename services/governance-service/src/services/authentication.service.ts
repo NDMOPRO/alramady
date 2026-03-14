@@ -192,8 +192,8 @@ export class AuthenticationService {
 
     await redis.del(loginAttemptsKey);
 
-    const has2FA = user.two_factor_enabled
-      ? (user.two_factor_secret || await redis.get(`2fa_secret:${user.id}`))
+    const has2FA = user.mfa_enabled
+      ? (user.mfa_secret || await redis.get(`2fa_secret:${user.id}`))
       : await redis.get(`2fa_secret:${user.id}`);
     if (has2FA) {
       return {
@@ -572,8 +572,8 @@ export class AuthenticationService {
       throw new Error('User not found');
     }
 
-    const existing2FA = user.two_factor_enabled
-      ? (user.two_factor_secret || await redis.get(`2fa_secret:${userId}`))
+    const existing2FA = user.mfa_enabled
+      ? (user.mfa_secret || await redis.get(`2fa_secret:${userId}`))
       : await redis.get(`2fa_secret:${userId}`);
     if (existing2FA) {
       throw new Error('Two-factor authentication is already enabled for this account');
@@ -658,8 +658,8 @@ export class AuthenticationService {
       await prisma.user.update({
         where: { id: userId },
         data: {
-          two_factor_enabled: true,
-          two_factor_secret: pendingSecret,
+          mfa_enabled: true,
+          mfa_secret: pendingSecret,
         },
       });
 
@@ -718,7 +718,7 @@ export class AuthenticationService {
     token: string
   ): Promise<Record<string, unknown>> {
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    const activeSecret = user?.two_factor_secret || await redis.get(`2fa_secret:${userId}`);
+    const activeSecret = user?.mfa_secret || await redis.get(`2fa_secret:${userId}`);
     if (!activeSecret) {
       throw new Error('Two-factor authentication is not enabled for this account');
     }
@@ -741,8 +741,8 @@ export class AuthenticationService {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        two_factor_enabled: false,
-        two_factor_secret: null,
+        mfa_enabled: false,
+        mfa_secret: null,
       },
     });
 

@@ -186,7 +186,7 @@ app.get('/api/v1/governance/users', authMiddleware, asyncHandler(async (req: Req
     where: tenantId ? { tenantId } : {},
     skip: (page - 1) * limit,
     take: limit,
-    select: { id: true, email: true, name: true, role: true, status: true, createdAt: true, updatedAt: true, tenantId: true },
+    select: { id: true, email: true, name: true, role: true, status: true, isOwner: true, createdAt: true, updatedAt: true, tenantId: true },
     orderBy: { createdAt: 'desc' },
   });
   const total = await prisma.user.count({ where: tenantId ? { tenantId } : {} });
@@ -205,6 +205,7 @@ app.get('/api/v1/governance/users/:id', authMiddleware, asyncHandler(async (req:
       createdAt: true,
       updatedAt: true,
       tenantId: true,
+      isOwner: true,
       locale: true,
       timezone: true,
       preferences: true,
@@ -247,6 +248,7 @@ app.patch('/api/v1/governance/users/:id', authMiddleware, protectOwner, asyncHan
       createdAt: true,
       updatedAt: true,
       tenantId: true,
+      isOwner: true,
       locale: true,
       timezone: true,
       preferences: true,

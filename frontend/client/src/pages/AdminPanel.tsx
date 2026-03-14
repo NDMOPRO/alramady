@@ -545,6 +545,7 @@ function MembersPage({ members, loadingMembers }: { members: UserSummary[]; load
         <div className="flex items-center gap-2">
           <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="h-10 px-3 border border-border rounded-xl bg-card text-[12px] text-foreground outline-none cursor-pointer">
             <option value="all">جميع الأدوار</option>
+            <option value="root_admin">مالك النظام</option>
             <option value="admin">مدير</option>
             <option value="editor">محرر</option>
             <option value="analyst">محلل</option>

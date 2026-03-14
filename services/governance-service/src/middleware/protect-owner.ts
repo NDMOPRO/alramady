@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
  * للتواصل: prog.muhammed@gmail.com | +966553445533
  */
 export async function protectOwner(req: Request, res: Response, next: NextFunction): Promise<void> {
-  const targetUserId = req.params.id;
+  const targetUserId = req.params.id || req.params.userId;
   if (!targetUserId) {
     next();
     return;

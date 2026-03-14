@@ -50,6 +50,43 @@ async function startServer() {
     })
   );
 
+  // ── API Proxy to backend services via gateway ──
+  const GATEWAY_URL = process.env.GATEWAY_URL || process.env.INTERNAL_API_URL || 'http://gateway:80';
+
+  app.use("/api/v1", async (req, res) => {
+    try {
+      const targetUrl = `${GATEWAY_URL}/api/v1${req.url}`;
+      const headers: Record<string, string> = {};
+      if (req.headers['content-type']) headers['Content-Type'] = req.headers['content-type'] as string;
+      if (req.headers.authorization) headers['Authorization'] = req.headers.authorization as string;
+      if (req.headers['x-tenant-id']) headers['x-tenant-id'] = req.headers['x-tenant-id'] as string;
+
+      const fetchOptions: RequestInit = { method: req.method, headers };
+      if (['POST', 'PUT', 'PATCH'].includes(req.method) && req.body) {
+        fetchOptions.body = JSON.stringify(req.body);
+      }
+
+      const response = await fetch(targetUrl, fetchOptions);
+      const contentType = response.headers.get('content-type');
+      res.status(response.status);
+      if (contentType) res.setHeader('Content-Type', contentType);
+
+      if (contentType?.includes('application/json')) {
+        res.json(await response.json());
+      } else {
+        res.send(Buffer.from(await response.arrayBuffer()));
+      }
+    } catch (error) {
+      console.error('[API Proxy]', error);
+      res.status(502).json({ success: false, error: 'الخدمة غير متاحة حالياً' });
+    }
+  });
+
+  // Health check
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok", service: "rasid-frontend", gateway: GATEWAY_URL });
+  });
+
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);

@@ -72,6 +72,7 @@ export interface UserDetails extends UserSummary {
   locale?: string;
   timezone?: string;
   preferences?: Record<string, unknown>;
+  isOwner?: boolean;
 }
 
 export interface TeamSummary {

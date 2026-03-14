@@ -31,6 +31,10 @@
     "tsx": "^4.21.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0"
+    "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
+    "@prisma/client": "^5.22.0",
+    "@tailwindcss/vite": "^4.2.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "vite-plugin-manus-runtime": "^0.0.57"
   }
 }

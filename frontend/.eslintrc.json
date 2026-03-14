@@ -1,3 +1,96 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[value=/placeholder/i]",
+        "message": "REQ-020: Placeholder strings are prohibited in production code."
+      },
+      {
+        "selector": "Literal[value=/not\\s+implemented/i]",
+        "message": "REQ-020: 'not implemented' markers are prohibited. Implement fully or remove."
+      },
+      {
+        "selector": "Literal[value=/coming\\s+soon/i]",
+        "message": "REQ-020: 'coming soon' markers are prohibited in production code."
+      },
+      {
+        "selector": "Literal[value=/dummy\\s+data/i]",
+        "message": "REQ-020: Dummy data is prohibited. Use real data sources."
+      },
+      {
+        "selector": "ThrowStatement > NewExpression > Literal[value=/not\\s+implemented/i]",
+        "message": "REQ-020: throw 'not implemented' is a hard failure. Implement the function."
+      },
+      {
+        "selector": "Literal[value=/mock\\s*(data|response|result)/i]",
+        "message": "REQ-020: Mock data in production paths is prohibited. Use real data sources."
+      },
+      {
+        "selector": "Literal[value=/stub(bed)?/i]",
+        "message": "REQ-020: Stub implementations are prohibited. Implement fully or remove."
+      },
+      {
+        "selector": "Literal[value=/fake\\s*(data|response|result|api)/i]",
+        "message": "REQ-020: Fake data/responses are prohibited in production code."
+      },
+      {
+        "selector": "ReturnStatement > ObjectExpression[properties.length=0]",
+        "message": "REQ-020: Empty object returns may indicate missing implementation. Verify this is intentional."
+      },
+      {
+        "selector": "Literal[value=/lorem\\s+ipsum/i]",
+        "message": "REQ-021: Lorem ipsum text is prohibited in production code."
+      },
+      {
+        "selector": "Literal[value=/sample\\s*(data|value|content|text)/i]",
+        "message": "REQ-021: Sample data references are prohibited in production paths."
+      },
+      {
+        "selector": "Literal[value=/simulated?\\s*(data|response|delay|result)/i]",
+        "message": "REQ-021: Simulated data/behavior is prohibited in production code."
+      },
+      {
+        "selector": "ThrowStatement > NewExpression > Literal[value=/later|phase\\s*\\d|next\\s+sprint|backlog/i]",
+        "message": "REQ-021: Deferred-as-done — throwing 'later/phase/sprint' is a hard failure."
+      },
+      {
+        "selector": "Literal[value=/noop|no[_-]?op/i]",
+        "message": "REQ-021: No-op functions are prohibited in production code."
+      },
+      {
+        "selector": "Literal[value=/hardcoded|hard[_-]?coded/i]",
+        "message": "REQ-021: Hardcoded value markers detected — use proper configuration or data sources."
+      },
+      {
+        "selector": "FunctionDeclaration[body.body.length=0]",
+        "message": "REQ-021: Empty function body detected — implement fully or remove."
+      },
+      {
+        "selector": "ArrowFunctionExpression[body.type='BlockStatement'][body.body.length=0]",
+        "message": "REQ-021: Empty arrow function body detected — implement fully or remove."
+      },
+      {
+        "selector": "CatchClause[body.body.length=0]",
+        "message": "REQ-021: Empty catch block — errors must be handled, not swallowed."
+      }
+    ],
+    "no-warning-comments": [
+      "error",
+      {
+        "terms": ["TODO", "FIXME", "HACK", "WORKAROUND", "XXX", "TEMP"],
+        "location": "anywhere"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**", "**/*.test.*", "**/*.spec.*"],
+      "rules": {
+        "no-restricted-syntax": "off",
+        "no-warning-comments": "off"
+      }
+    }
+  ]
 }

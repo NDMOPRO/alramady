@@ -3,6 +3,6 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-healthcheckPath = "/"
+healthcheckPath = "/api/chat/conversations"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3

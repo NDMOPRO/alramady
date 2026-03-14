@@ -1,78 +1,47 @@
-FROM node:20-alpine AS base
-
-# ── Stage 0: Development ────────────────────────────────────────────────────
-FROM base AS dev
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  else npm install; \
-  fi
-COPY . .
-EXPOSE 3000
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-CMD ["npm", "run", "dev"]
+FROM node:22-alpine AS base
 
 # ── Stage 1: Install dependencies ───────────────────────────────────────────
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
+# Enable pnpm
+RUN corepack enable pnpm
 
-RUN \
-  if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  else npm install; \
-  fi
+COPY package.json pnpm-lock.yaml ./
+COPY patches ./patches/
+RUN pnpm install --frozen-lockfile
 
-# ── Stage 2: Build the Next.js application ─────────────────────────────────
+# ── Stage 2: Build the application ──────────────────────────────────────────
 FROM base AS builder
 WORKDIR /app
+RUN corepack enable pnpm
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-
-# Accept build-time environment variables
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-
-RUN npm run build
+RUN pnpm run build
 
 # ── Stage 3: Production runner ──────────────────────────────────────────────
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN adduser --system --uid 1001 appuser
 
-# Copy public assets
-COPY --from=builder /app/public ./public
+# Copy built output
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
 
-# Create .next directory with correct ownership
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Copy standalone output and static files
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+USER appuser
 
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["node", "dist/index.js"]

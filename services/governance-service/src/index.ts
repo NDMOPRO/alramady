@@ -12,6 +12,7 @@ import winston from 'winston';
 import { Request, Response, NextFunction } from 'express';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
 import { authMiddleware } from './middleware/auth.js';
+import { protectOwner } from './middleware/protect-owner.js';
 
 function asyncHandler(fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) {
   return (req: Request, res: Response, next: NextFunction) => fn(req, res, next).catch(next);
@@ -213,7 +214,12 @@ app.get('/api/v1/governance/users/:id', authMiddleware, asyncHandler(async (req:
   res.json({ success: true, data: user });
 }));
 
-app.patch('/api/v1/governance/users/:id', authMiddleware, asyncHandler(async (req: Request, res: Response) => {
+app.delete('/api/v1/governance/users/:id', authMiddleware, protectOwner, asyncHandler(async (req: Request, res: Response) => {
+  const user = await prisma.user.delete({ where: { id: req.params.id } });
+  res.json({ success: true, data: { id: user.id, deleted: true } });
+}));
+
+app.patch('/api/v1/governance/users/:id', authMiddleware, protectOwner, asyncHandler(async (req: Request, res: Response) => {
   const payload = req.body as {
     role?: string;
     status?: string;

@@ -201,6 +201,7 @@ export const aiApi = createApiClient("/api/v1/ai");
 export const libraryApi = createApiClient("/api/v1/library");
 export const templateApi = createApiClient("/api/v1/template");
 export const conversionApi = createApiClient("/api/v1/conversion");
+export const renderingApi = createApiClient("/api/v1/render");
 export const strictApi = createApiClient("/api/v1/strict");
 export const bridgeApi = createApiClient("/api/bridge");
 export const trainingApi = createApiClient("/api/training");

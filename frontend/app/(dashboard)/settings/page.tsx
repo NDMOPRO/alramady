@@ -922,12 +922,14 @@ export default function SettingsPage() {
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 <span>الدور</span>
-                <select value={userRole} onChange={(event) => setUserRole(event.target.value)} className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:border-emerald-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100" data-testid="settings-user-role">
+                <select value={userRole} onChange={(event) => setUserRole(event.target.value)} className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:border-emerald-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100" data-testid="settings-user-role" disabled={selectedUser?.isOwner}>
+                  {selectedUser?.isOwner && <option value="root_admin">🛡️ مالك النظام (root_admin)</option>}
                   <option value="admin">admin</option>
                   <option value="manager">manager</option>
                   <option value="editor">editor</option>
                   <option value="viewer">viewer</option>
                 </select>
+                {selectedUser?.isOwner && <p className="text-xs font-bold text-amber-700 dark:text-amber-400">⚠️ مالك النظام — لا يمكن تغيير دوره أو تعطيله</p>}
               </label>
               <label className="space-y-2 text-sm font-semibold text-gray-700 dark:text-gray-200">
                 <span>الحالة</span>

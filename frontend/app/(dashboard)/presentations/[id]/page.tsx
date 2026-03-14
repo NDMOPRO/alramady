@@ -25,6 +25,7 @@ import {
   type Slide,
   type SlideLayout,
 } from '@/lib/api/presentation';
+import { renderPreview, type RenderJob } from '@/lib/api/rendering';
 
 function saveBlob(blob: Blob, filename: string) {
   const url = window.URL.createObjectURL(blob);
@@ -53,6 +54,8 @@ export default function PresentationEditorPage() {
   const [editorMessage, setEditorMessage] = React.useState('');
   const [editorError, setEditorError] = React.useState('');
   const [isExporting, setIsExporting] = React.useState(false);
+  const [renderJob, setRenderJob] = React.useState<RenderJob | null>(null);
+  const [isRendering, setIsRendering] = React.useState(false);
 
   const presentationQuery = useQuery({
     queryKey: ['presentation', presentationId],
@@ -182,6 +185,26 @@ export default function PresentationEditorPage() {
     }
   };
 
+  const handleRenderPreview = async () => {
+    setIsRendering(true);
+    setEditorError('');
+    try {
+      const job = await renderPreview({
+        templateId: presentationId,
+        format: 'png',
+        width: 1280,
+        height: 720,
+        data: { slideIndex: activeSlideIndex },
+      });
+      setRenderJob(job);
+      setEditorMessage('تم إرسال طلب المعاينة إلى خدمة العرض.');
+    } catch (error) {
+      setEditorError(error instanceof Error ? error.message : 'فشل طلب المعاينة.');
+    } finally {
+      setIsRendering(false);
+    }
+  };
+
   if (presentationQuery.isLoading) {
     return (
       <div className="flex h-[70vh] items-center justify-center">
@@ -227,6 +250,15 @@ export default function PresentationEditorPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={handleRenderPreview}
+            disabled={isRendering}
+            className="inline-flex items-center gap-2 rounded-lg border border-sky-300 px-3 py-2 text-sm font-medium text-sky-700 transition hover:bg-sky-50 disabled:opacity-50 dark:border-sky-600 dark:text-sky-300 dark:hover:bg-sky-900"
+            data-testid="presentation-render-preview"
+          >
+            {isRendering ? <Loader2 className="h-4 w-4 animate-spin" /> : <Layers className="h-4 w-4" />}
+            معاينة الشريحة
+          </button>
           <button
             onClick={() => handleExport('pptx')}
             disabled={isExporting}

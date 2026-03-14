@@ -14,6 +14,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { fetchInfographic, exportInfographic, type InfographicElement } from '@/lib/api/infographic';
+import { renderPreview, getRenderStatus, type RenderJob } from '@/lib/api/rendering';
 
 const elementTypeLabels: Record<string, string> = {
   text: 'نص',
@@ -29,6 +30,24 @@ export default function InfographicViewerPage() {
   const router = useRouter();
   const infographicId = typeof params?.id === "string" ? params.id : "";
   const [isExporting, setIsExporting] = useState(false);
+  const [renderJob, setRenderJob] = useState<RenderJob | null>(null);
+  const [isRendering, setIsRendering] = useState(false);
+
+  const handleRenderPreview = async () => {
+    setIsRendering(true);
+    try {
+      const job = await renderPreview({ templateId: infographicId, format: 'png', width: 1080, height: 1920 });
+      setRenderJob(job);
+      if (job.status === 'pending' || job.status === 'processing') {
+        const status = await getRenderStatus(job.jobId);
+        setRenderJob(status);
+      }
+    } catch (err) {
+      console.error('Render preview failed:', err);
+    } finally {
+      setIsRendering(false);
+    }
+  };
 
   const { data: infographic, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['infographic', infographicId],
@@ -89,6 +108,10 @@ export default function InfographicViewerPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <button onClick={handleRenderPreview} disabled={isRendering} className="inline-flex items-center gap-2 rounded-lg border border-sky-300 px-3 py-2 text-sm font-medium text-sky-700 hover:bg-sky-50 disabled:opacity-50 dark:border-sky-600 dark:text-sky-300 dark:hover:bg-sky-900" data-testid="infographic-render-preview">
+            {isRendering ? <Loader2 className="h-4 w-4 animate-spin" /> : <Layers className="h-4 w-4" />}
+            معاينة العرض
+          </button>
           <button onClick={() => handleExport('png')} disabled={isExporting} className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
             {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileImage className="h-4 w-4" />}
             تصدير PNG

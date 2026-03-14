@@ -2,13 +2,32 @@ import { create } from "zustand";
 import { governanceApi } from "@/lib/api/client";
 import { ensureE2EAuthStorage, isE2EAuthBypassed } from "@/lib/auth/e2e";
 
+export type UserRole = 'root_admin' | 'admin' | 'editor' | 'viewer' | string;
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  role: string;
+  role: UserRole;
   organizationId: string;
   avatar?: string;
+  isOwner?: boolean;
+}
+
+/**
+ * يُحدّد الدور الفعلي للمستخدم — مالك النظام يحصل دائمًا على root_admin.
+ */
+export function resolveRole(user: User | null): UserRole {
+  if (!user) return 'viewer';
+  if (user.isOwner) return 'root_admin';
+  return user.role || 'viewer';
+}
+
+/**
+ * يتحقق هل المستخدم هو مالك النظام (isOwner).
+ */
+export function isSystemOwner(user: User | null): boolean {
+  return user?.isOwner === true || user?.role === 'root_admin';
 }
 
 interface AuthState {

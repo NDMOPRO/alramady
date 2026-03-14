@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   dashboardEngine,
@@ -71,7 +72,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
 const GRID_COLS = 6;
 const GRID_ROWS = 8;
 
-const DEMO_DASHBOARD_ID = 'demo-dashboard-001';
+const FALLBACK_DASHBOARD_ID = 'default-workspace';
 
 // ════════════════════════════════════════════════════════════════
 // Component
@@ -79,6 +80,8 @@ const DEMO_DASHBOARD_ID = 'demo-dashboard-001';
 
 export default function DragElementsPage() {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const activeDashboardId = searchParams?.get('dashboardId') || FALLBACK_DASHBOARD_ID;
 
   // ── State ──
   const [canvasElements, setCanvasElements] = useState<CanvasElement[]>([]);
@@ -121,7 +124,7 @@ export default function DragElementsPage() {
   // ── Mutations ──
   const dropAndBindMutation = useMutation({
     mutationFn: (params: { elementType: string; columnName: string; position: { x: number; y: number; w: number; h: number } }) =>
-      dashboardEngine.dropAndBind(DEMO_DASHBOARD_ID, params.elementType, params.columnName, params.position),
+      dashboardEngine.dropAndBind(activeDashboardId, params.elementType, params.columnName, params.position),
     onSuccess: (res) => {
       showToast('success', 'تم إسقاط العنصر وربطه بنجاح');
       queryClient.invalidateQueries({ queryKey: ['drag-elements'] });
@@ -136,7 +139,7 @@ export default function DragElementsPage() {
           width: el.width,
           height: el.height,
           columnName: dropColumnName,
-          dashboardId: DEMO_DASHBOARD_ID,
+          dashboardId: activeDashboardId,
         }]);
       }
     },
@@ -145,7 +148,7 @@ export default function DragElementsPage() {
 
   const linkMutation = useMutation({
     mutationFn: (params: { sourceId: string; targetIds: string[]; filterColumn: string }) =>
-      dashboardEngine.linkElements(DEMO_DASHBOARD_ID, params.sourceId, params.targetIds, params.filterColumn),
+      dashboardEngine.linkElements(activeDashboardId, params.sourceId, params.targetIds, params.filterColumn),
     onSuccess: () => {
       showToast('success', 'تم ربط العناصر بنجاح');
       queryClient.invalidateQueries({ queryKey: ['drag-elements'] });
@@ -175,7 +178,7 @@ export default function DragElementsPage() {
 
   const updatePositionMutation = useMutation({
     mutationFn: (params: { elementId: string; position: { x: number; y: number; w: number; h: number } }) =>
-      dashboardEngine.updatePosition(params.elementId, DEMO_DASHBOARD_ID, params.position),
+      dashboardEngine.updatePosition(params.elementId, activeDashboardId, params.position),
     onSuccess: () => {
       showToast('success', 'تم تحديث الموضع بنجاح');
       queryClient.invalidateQueries({ queryKey: ['drag-elements'] });
@@ -214,7 +217,7 @@ export default function DragElementsPage() {
       width: 2,
       height: 2,
       columnName: dropColumnName,
-      dashboardId: DEMO_DASHBOARD_ID,
+      dashboardId: activeDashboardId,
     }]);
 
     setDraggingType(null);
@@ -545,7 +548,7 @@ export default function DragElementsPage() {
                           width: el.width,
                           height: el.height,
                           columnName: '',
-                          dashboardId: DEMO_DASHBOARD_ID,
+                          dashboardId: activeDashboardId,
                         }];
                       });
                     }}

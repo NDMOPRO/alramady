@@ -1,7 +1,3 @@
-/**
- * RASID Governance Service — إدارة المستخدمين والمصادقة والأدوار
- * متصل بـ governance-service (port 8010) عبر gateway
- */
 import { apiCall } from './apiClient';
 
 const BASE = '/api/v1/governance';
@@ -9,22 +5,10 @@ const BASE = '/api/v1/governance';
 export interface LoginResponse {
   success: boolean;
   data: {
-    user: {
-      id: string;
-      email: string;
-      name: string;
-      username?: string;
-      displayName?: string;
-      display_name_ar?: string;
-      role: string;
-      tenantId: string;
-      isOwner?: boolean;
-      phone?: string;
-      avatarUrl?: string;
-    };
     accessToken: string;
     refreshToken: string;
-    expiresIn: number;
+    user: Record<string, unknown>;
+    expiresIn?: number;
   };
 }
 
@@ -37,8 +21,11 @@ export interface UserSummary {
   role: string;
   status: string;
   isOwner?: boolean;
-  createdAt: string;
+  createdAt?: string;
   updatedAt?: string;
+  department?: string;
+  lastLogin?: string;
+  joinDate?: string;
 }
 
 export interface UsersListResponse {
@@ -57,16 +44,44 @@ export interface AuditLogEntry {
 }
 
 export const governanceService = {
-  // ──── المصادقة ────
-  async login(username: string, password: string): Promise<LoginResponse> {
+  // ⚠️ API يستقبل { username, password }
+  async login(usernameOrEmail: string, password: string): Promise<LoginResponse> {
     return apiCall<LoginResponse>(`${BASE}/auth/login`, {
       method: 'POST',
-      body: { email: username, password },
+      body: { username: usernameOrEmail, password },
     });
   },
 
-  async register(data: { username: string; password: string; email?: string; name?: string }): Promise<{ success: boolean; data?: unknown; message?: string }> {
-    return apiCall(`${BASE}/auth/register`, {
+  async createUser(data: { username: string; password: string; email?: string; displayName?: string; displayNameAr?: string; roleNames?: string[] }) {
+    return apiCall(`${BASE}/auth/users`, { method: 'POST', body: data });
+  },
+
+  async getUser(id: string): Promise<{ success: boolean; data: UserSummary }> {
+    return apiCall(`${BASE}/users/${id}`);
+  },
+
+  async listUsers(page = 1, limit = 20): Promise<UsersListResponse> {
+    return apiCall<UsersListResponse>(`${BASE}/users?page=${page}&limit=${limit}`);
+  },
+
+  async updateUserStatus(id: string, status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED') {
+    return apiCall(`${BASE}/auth/users/${id}/status`, { method: 'PATCH', body: { status } });
+  },
+
+  async assignRole(userId: string, roleName: string) {
+    return apiCall(`${BASE}/auth/users/${userId}/roles`, { method: 'POST', body: { roleName } });
+  },
+
+  async refreshToken(refreshToken: string): Promise<LoginResponse> {
+    return apiCall<LoginResponse>(`${BASE}/auth/refresh`, {
+      method: 'POST',
+      body: { refreshToken },
+    });
+  },
+
+  // existing flows used in UI
+  async register(data: { username: string; password: string; email?: string; name?: string }) {
+    return apiCall<{ success: boolean; data?: unknown; message?: string }>(`${BASE}/auth/register`, {
       method: 'POST',
       body: {
         email: data.email || `${data.username}@rasid.local`,
@@ -75,13 +90,6 @@ export const governanceService = {
         role: 'viewer',
         tenantId: 'default',
       },
-    });
-  },
-
-  async refreshToken(refreshToken: string): Promise<LoginResponse> {
-    return apiCall<LoginResponse>(`${BASE}/auth/refresh`, {
-      method: 'POST',
-      body: { refreshToken },
     });
   },
 
@@ -103,24 +111,6 @@ export const governanceService = {
     return apiCall(`${BASE}/auth/seed-owner`, { method: 'POST' });
   },
 
-  // ──── إدارة المستخدمين ────
-  async listUsers(page = 1, limit = 20): Promise<UsersListResponse> {
-    return apiCall<UsersListResponse>(`${BASE}/users?page=${page}&limit=${limit}`);
-  },
-
-  async getUser(id: string): Promise<{ success: boolean; data: UserSummary }> {
-    return apiCall(`${BASE}/users/${id}`);
-  },
-
-  async updateUser(id: string, data: Partial<{ role: string; status: string; locale: string; timezone: string }>): Promise<{ success: boolean; data: UserSummary }> {
-    return apiCall(`${BASE}/users/${id}`, { method: 'PATCH', body: data });
-  },
-
-  async deleteUser(id: string): Promise<{ success: boolean }> {
-    return apiCall(`${BASE}/users/${id}`, { method: 'DELETE' });
-  },
-
-  // ──── سجل التدقيق ────
   async getAuditLogs(params?: { page?: number; limit?: number; action?: string }): Promise<{ success: boolean; data: AuditLogEntry[]; pagination?: unknown }> {
     const query = new URLSearchParams();
     if (params?.page) query.set('page', String(params.page));
@@ -131,22 +121,5 @@ export const governanceService = {
 
   async exportAuditLogs(format: 'csv' | 'pdf' = 'csv'): Promise<Blob> {
     return apiCall<Blob>(`${BASE}/audit/export?format=${format}`);
-  },
-
-  // ──── الأدوار ────
-  async getRoles(): Promise<{ success: boolean; data: Array<{ id: string; name: string; description?: string; permissions?: unknown[] }> }> {
-    return apiCall(`${BASE}/roles`);
-  },
-
-  async assignRole(userId: string, roleId: string): Promise<{ success: boolean }> {
-    return apiCall(`${BASE}/roles/${roleId}/assign`, { method: 'POST', body: { userId } });
-  },
-
-  // ──── الفرق ────
-  async getTeams(params?: { page?: number; limit?: number }): Promise<{ success: boolean; data: Array<{ id: string; name: string; description?: string; type?: string }> }> {
-    const query = new URLSearchParams();
-    if (params?.page) query.set('page', String(params.page));
-    if (params?.limit) query.set('limit', String(params.limit));
-    return apiCall(`${BASE}/teamwork?${query}`);
   },
 };

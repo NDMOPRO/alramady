@@ -81,24 +81,28 @@ export default function AdminPanel() {
 
   // ── جلب البيانات الحقيقية من API ──
   const [members, setMembers] = useState<UserSummary[]>([]);
-  const [contentItems, setContentItems] = useState<Array<{ id: string; title: string; type: string; status: string; author: string; date: string }>>([]);
+  const [loadingMembers, setLoadingMembers] = useState(true);
+  const [contentItems, setContentItems] = useState<Array<{ id: string; title: string; type: string; status: string; author: string; date: string; views?: number }>>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
   const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    governanceService.listUsers(1, 50)
+      .then((res) => { if (res.success) setMembers(res.data || []); })
+      .catch(console.error)
+      .finally(() => setLoadingMembers(false));
+  }, []);
 
   useEffect(() => {
     async function loadAdminData() {
       setLoadingData(true);
       try {
-        // جلب المستخدمين
-        const usersRes = await governanceService.listUsers(1, 50).catch(() => ({ success: false, data: [] }));
-        if (usersRes.success && usersRes.data) setMembers(usersRes.data);
-
         // جلب سجل التدقيق
         const auditRes = await governanceService.getAuditLogs({ page: 1, limit: 10 }).catch(() => ({ success: false, data: [] }));
         if (auditRes.success && auditRes.data) setAuditLogs(auditRes.data);
 
         // جلب المحتوى من المحركات
-        const content: Array<{ id: string; title: string; type: string; status: string; author: string; date: string }> = [];
+        const content: Array<{ id: string; title: string; type: string; status: string; author: string; date: string; views?: number }> = [];
         const [reports, dashboards, presentations] = await Promise.all([
           reportingService.listReports(1, 10).catch(() => ({ data: [] })),
           dashboardService.listDashboards(1, 10).catch(() => ({ data: [] })),
@@ -283,8 +287,8 @@ export default function AdminPanel() {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           <div className="animate-fade-in-up">
             {activePage === 'dashboard' && <DashboardPage />}
-            {activePage === 'content' && <ContentPage />}
-            {activePage === 'members' && <MembersPage />}
+            {activePage === 'content' && <ContentPage contentItems={contentItems} />}
+            {activePage === 'members' && <MembersPage members={members} loadingMembers={loadingMembers} />}
             {activePage === 'roles' && <RolesPage />}
             {activePage === 'analytics' && <AnalyticsPage />}
             {activePage === 'settings' && <SettingsPage />}
@@ -386,7 +390,7 @@ function DashboardPage() {
 }
 
 // ===== CONTENT PAGE =====
-function ContentPage() {
+function ContentPage({ contentItems }: { contentItems: Array<{ id: string; title: string; type: string; status: string; author: string; date: string; views?: number }> }) {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
 
@@ -506,11 +510,12 @@ function ContentPage() {
 }
 
 // ===== MEMBERS PAGE =====
-function MembersPage() {
+function MembersPage({ members, loadingMembers }: { members: UserSummary[]; loadingMembers: boolean }) {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
 
   const roleLabels: Record<UserRole, { label: string; color: string }> = {
+    root_admin: { label: 'مالك النظام', color: '#7c3aed' },
     admin: { label: 'مدير', color: '#dc2626' },
     editor: { label: 'محرر', color: '#2563eb' },
     analyst: { label: 'محلل', color: '#7c3aed' },
@@ -540,6 +545,7 @@ function MembersPage() {
         <div className="flex items-center gap-2">
           <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="h-10 px-3 border border-border rounded-xl bg-card text-[12px] text-foreground outline-none cursor-pointer">
             <option value="all">جميع الأدوار</option>
+            <option value="root_admin">مالك النظام</option>
             <option value="admin">مدير</option>
             <option value="editor">محرر</option>
             <option value="analyst">محلل</option>
@@ -553,8 +559,9 @@ function MembersPage() {
 
       {/* Members Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {filtered.map((member, i) => {
-          const role = roleLabels[member.role];
+        {loadingMembers && <div className="text-[12px] text-muted-foreground">جاري تحميل المستخدمين...</div>}
+        {!loadingMembers && filtered.map((member, i) => {
+          const role = roleLabels[(member.role as UserRole) || 'viewer'];
           const status = statusLabels[member.status];
           return (
             <div key={member.id} className="bg-card rounded-xl border border-border p-4 card-hover animate-stagger-in" style={{ animationDelay: `${i * 0.06}s` }}>
@@ -568,9 +575,13 @@ function MembersPage() {
                     <p className="text-[10px] text-muted-foreground" dir="ltr">{member.email}</p>
                   </div>
                 </div>
-                <button className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-accent transition-all">
-                  <MaterialIcon icon="more_vert" size={16} className="text-muted-foreground" />
-                </button>
+                {member.isOwner ? (
+                  <span className="text-[16px]" title="مالك النظام">👑</span>
+                ) : (
+                  <button className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-accent transition-all">
+                    <MaterialIcon icon="more_vert" size={16} className="text-muted-foreground" />
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${role.color}15`, color: role.color }}>{role.label}</span>
@@ -581,6 +592,13 @@ function MembersPage() {
                 <p className="flex items-center gap-1"><MaterialIcon icon="schedule" size={12} /> آخر دخول: {member.lastLogin}</p>
                 <p className="flex items-center gap-1"><MaterialIcon icon="calendar_today" size={12} /> تاريخ الانضمام: {member.joinDate}</p>
               </div>
+
+              {!member.isOwner && (
+                <div className="mt-3 pt-3 border-t border-border flex items-center gap-3"> 
+                  <button className="text-[11px] text-primary hover:underline font-medium">تعديل</button>
+                  <button className="text-[11px] text-destructive hover:underline font-medium">حذف</button>
+                </div>
+              )}
             </div>
           );
         })}

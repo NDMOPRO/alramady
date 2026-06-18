@@ -67,14 +67,14 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Username */}
             <div>
-              <label className="block text-[12px] font-bold text-foreground mb-1.5">اسم المستخدم</label>
+              <label className="block text-[12px] font-bold text-foreground mb-1.5">اسم المستخدم أو البريد الإلكتروني</label>
               <div className="flex items-center gap-2 h-12 border border-border rounded-xl px-4 bg-card focus-within:border-primary/40 focus-within:shadow-md focus-within:shadow-primary/5 transition-all duration-200">
                 <MaterialIcon icon="person" size={18} className="text-muted-foreground shrink-0" />
                 <input
                   type="text"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
-                  placeholder="اسم المستخدم"
+                  placeholder="مثال: MRUHAILY أو user@example.com"
                   className="flex-1 bg-transparent text-[13px] outline-none text-foreground placeholder:text-muted-foreground"
                   autoComplete="username"
                   dir="ltr"
@@ -163,7 +163,7 @@ export default function Login() {
                 <button
                   key={cred.email}
                   type="button"
-                  onClick={() => { setEmail(cred.email); setPassword(cred.pass); }}
+                  onClick={() => { setUsername(cred.email); setPassword(cred.pass); }}
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-accent transition-all text-right"
                 >
                   <span className="text-[11px] font-medium text-foreground">{cred.label}</span>
